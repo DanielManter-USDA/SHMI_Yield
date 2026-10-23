@@ -1,0 +1,7 @@
+location_id,table,unit_id,new_unit_id,new_treatment_id,from_date,to_date,evidence
+NEMLTCRS,mgtamendments,NEMLTCRS_115S,NEMLTCRS_115M,,,,"N records of 115S (labelled ROT10, 0 N) and 115M (ROT11, 90 N) are swapped in AgCROS: 115S carries 90 kg N every year, 115M 0. Yields follow the labels: 115S mean corn yield 1983-2006 3416 kg/ha (other 0 N plot 208M: 3531), 115M 6497 kg/ha (other 90 N plot 208S: 6371); DRIVES codes agree (115S = R1N1, 115M = R1N2)"
+NEMLTCRS,mgtamendments,NEMLTCRS_115M,NEMLTCRS_115S,,,,"other half of the 115S/115M swap"
+NEMLTCRS,mgtamendments,NEMLTCRS_104N,NEMLTCRS_104S,,,,"104N/104S: AgCROS planting, tillage and amendment tables label 104N ROT70 (0 N) and 104S ROT71 (low N), the yield table the reverse. DRIVES codes (104N = R7N2, low N; 104S = R7N1, 0 N) and yields (104N 8341, 104S 7161 kg/ha in corn years to 2006) follow the yield table, so the N records are swapped and the treatments relabelled"
+NEMLTCRS,mgtamendments,NEMLTCRS_104S,NEMLTCRS_104N,,,,"other half of the 104N/104S swap"
+NEMLTCRS,*,NEMLTCRS_104N,,NEMLTCRS_ROT71,,,"104N is ROT71 (low N): DRIVES R7N2, AgCROS yield table, yields"
+NEMLTCRS,*,NEMLTCRS_104S,,NEMLTCRS_ROT70,,,"104S is ROT70 (0 N): DRIVES R7N1, AgCROS yield table, yields"

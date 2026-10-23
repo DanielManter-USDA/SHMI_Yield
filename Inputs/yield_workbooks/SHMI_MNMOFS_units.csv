@@ -1,0 +1,193 @@
+MGT_combo,unit_id,treatment_id,first_record,last_record,records,treatment_descriptor,rotation_descriptor,tillage_descriptor,n_treatment_descriptor,cover_crop,residue_removal,irrigation,organic_management
+AgCROS_MNMOFS_1_41,MNMOFS_1,MNMOFS_41,2002-05-15,2009-08-31,46,ConvSys 4yr rot ST YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,fertilized,,No,No,No
+AgCROS_MNMOFS_10_38,MNMOFS_10,MNMOFS_38,2002-05-14,2009-11-09,28,OrgSys 2yr rot ST YF,"Corn, Soybean",Strip Till,fertilized,,No,No,Yes
+AgCROS_MNMOFS_100_33,MNMOFS_100,MNMOFS_33,2002-05-15,2009-11-09,36,ConvSys 4yr rot ST NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,no fertilizer,,No,No,No
+AgCROS_MNMOFS_101_41,MNMOFS_101,MNMOFS_41,2002-05-15,2009-08-31,45,ConvSys 4yr rot ST YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,fertilized,,No,No,No
+AgCROS_MNMOFS_102_1,MNMOFS_102,MNMOFS_1,2002-05-15,2009-11-09,30,ConvSys 2yr rot CT NF,"Corn, Soybean",Conventional Till,no fertilizer,,No,No,No
+AgCROS_MNMOFS_103_39,MNMOFS_103,MNMOFS_39,2002-05-16,2008-10-02,34,ConvSys 2yr rot ST YF,"Corn, Soybean",Strip Till,fertilized,,No,No,No
+AgCROS_MNMOFS_104_25,MNMOFS_104,MNMOFS_25,2002-05-15,2009-11-09,28,ConvSys 2yr rot ST NF,"Corn, Soybean",Strip Till,no fertilizer,,No,No,No
+AgCROS_MNMOFS_105_34,MNMOFS_105,MNMOFS_34,2002-05-15,2009-11-09,26,OrgSys 4yr rot ST NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,no fertilizer,,No,No,Yes
+AgCROS_MNMOFS_106_38,MNMOFS_106,MNMOFS_38,2002-05-14,2009-11-09,27,OrgSys 2yr rot ST YF,"Corn, Soybean",Strip Till,fertilized,,No,No,Yes
+AgCROS_MNMOFS_107_48,MNMOFS_107,MNMOFS_48,2002-05-16,2009-08-31,24,OrgSys 4yr rot ST YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,fertilized,,No,No,Yes
+AgCROS_MNMOFS_108_6,MNMOFS_108,MNMOFS_6,2002-05-15,2009-08-31,26,OrgSys 4yr rot CT NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,no fertilizer,,No,No,Yes
+AgCROS_MNMOFS_109_2,MNMOFS_109,MNMOFS_2,2002-05-15,2009-11-09,29,OrgSys 2yr rot CT NF,"Corn, Soybean",Conventional Till,no fertilizer,,No,No,Yes
+AgCROS_MNMOFS_11_2,MNMOFS_11,MNMOFS_2,2002-05-15,2009-11-09,29,OrgSys 2yr rot CT NF,"Corn, Soybean",Conventional Till,no fertilizer,,No,No,Yes
+AgCROS_MNMOFS_110_46,MNMOFS_110,MNMOFS_46,2002-05-15,2009-11-09,31,OrgSys 4yr rot ST YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,fertilized,,No,No,Yes
+AgCROS_MNMOFS_111_44,MNMOFS_111,MNMOFS_44,2002-05-16,2008-08-28,25,OrgSys 4yr rot ST YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,fertilized,,No,No,Yes
+AgCROS_MNMOFS_112_28,MNMOFS_112,MNMOFS_28,2002-05-16,2008-10-02,21,OrgSys 2yr rot ST NF,"Corn, Soybean",Strip Till,no fertilizer,,No,No,Yes
+AgCROS_MNMOFS_113_11,MNMOFS_113,MNMOFS_11,2002-05-16,2009-08-25,26,ConvSys 4yr rot CT NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,no fertilizer,,No,No,No
+AgCROS_MNMOFS_114_31,MNMOFS_114,MNMOFS_31,2002-05-16,2008-08-27,34,ConvSys 4yr rot ST NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,no fertilizer,,No,No,No
+AgCROS_MNMOFS_115_5,MNMOFS_115,MNMOFS_5,2002-05-15,2009-08-31,28,ConvSys 4yr rot CT NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,no fertilizer,,No,No,No
+AgCROS_MNMOFS_116_19,MNMOFS_116,MNMOFS_19,2002-05-16,2008-08-27,36,ConvSys 4yr rot CT YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,fertilized,,No,No,No
+AgCROS_MNMOFS_117_17,MNMOFS_117,MNMOFS_17,2002-05-15,2009-08-31,34,ConvSys 4yr rot CT YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,fertilized,,No,No,No
+AgCROS_MNMOFS_118_3,MNMOFS_118,MNMOFS_3,2002-05-16,2008-10-02,29,ConvSys 2yr rot CT NF,"Corn, Soybean",Conventional Till,no fertilizer,,No,No,No
+AgCROS_MNMOFS_119_45,MNMOFS_119,MNMOFS_45,2002-05-07,2009-11-09,41,ConvSys 4yr rot ST YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,fertilized,,No,No,No
+AgCROS_MNMOFS_12_4,MNMOFS_12,MNMOFS_4,2002-05-16,2008-10-02,26,OrgSys 2yr rot CT NF,"Corn, Soybean",Conventional Till,no fertilizer,,No,No,Yes
+AgCROS_MNMOFS_120_43,MNMOFS_120,MNMOFS_43,2002-05-16,2008-08-28,40,ConvSys 4yr rot ST YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,fertilized,,No,No,No
+AgCROS_MNMOFS_121_18,MNMOFS_121,MNMOFS_18,2002-05-14,2009-08-31,29,OrgSys 4yr rot CT YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,fertilized,,No,No,Yes
+AgCROS_MNMOFS_122_26,MNMOFS_122,MNMOFS_26,2002-05-15,2009-11-09,23,OrgSys 2yr rot ST NF,"Corn, Soybean",Strip Till,no fertilizer,,No,No,Yes
+AgCROS_MNMOFS_123_40,MNMOFS_123,MNMOFS_40,2002-05-16,2008-10-02,22,OrgSys 2yr rot ST YF,"Corn, Soybean",Strip Till,fertilized,,No,No,Yes
+AgCROS_MNMOFS_124_4,MNMOFS_124,MNMOFS_4,2002-05-16,2008-10-02,26,OrgSys 2yr rot CT NF,"Corn, Soybean",Conventional Till,no fertilizer,,No,No,Yes
+AgCROS_MNMOFS_125_32,MNMOFS_125,MNMOFS_32,2002-05-16,2008-08-27,23,OrgSys 4yr rot ST NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,no fertilizer,,No,No,Yes
+AgCROS_MNMOFS_126_10,MNMOFS_126,MNMOFS_10,2002-05-15,2009-11-09,27,OrgSys 4yr rot CT NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,no fertilizer,,No,No,Yes
+AgCROS_MNMOFS_127_14,MNMOFS_127,MNMOFS_14,2002-05-14,2009-11-09,33,OrgSys 2yr rot CT YF,"Corn, Soybean",Conventional Till,fertilized,,No,No,Yes
+AgCROS_MNMOFS_128_16,MNMOFS_128,MNMOFS_16,2002-05-16,2008-10-02,31,OrgSys 2yr rot CT YF,"Corn, Soybean",Conventional Till,fertilized,,No,No,Yes
+AgCROS_MNMOFS_129_21,MNMOFS_129,MNMOFS_21,2002-05-15,2009-11-09,31,ConvSys 4yr rot CT YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,fertilized,,No,No,No
+AgCROS_MNMOFS_13_8,MNMOFS_13,MNMOFS_8,2002-05-16,2008-08-27,24,OrgSys 4yr rot CT NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,no fertilizer,,No,No,Yes
+AgCROS_MNMOFS_130_9,MNMOFS_130,MNMOFS_9,2002-05-15,2009-11-09,27,ConvSys 4yr rot CT NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,no fertilizer,,No,No,No
+AgCROS_MNMOFS_131_47,MNMOFS_131,MNMOFS_47,2002-05-16,2009-08-25,39,ConvSys 4yr rot ST YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,fertilized,,No,No,No
+AgCROS_MNMOFS_132_23,MNMOFS_132,MNMOFS_23,2002-05-16,2009-08-25,29,ConvSys 4yr rot CT YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,fertilized,,No,No,No
+AgCROS_MNMOFS_133_35,MNMOFS_133,MNMOFS_35,2002-05-16,2009-08-25,33,ConvSys 4yr rot ST NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,no fertilizer,,No,No,No
+AgCROS_MNMOFS_134_13,MNMOFS_134,MNMOFS_13,2002-05-07,2009-11-09,52,ConvSys 2yr rot CT YF,"Corn, Soybean",Conventional Till,fertilized,,No,No,No
+AgCROS_MNMOFS_135_27,MNMOFS_135,MNMOFS_27,2002-05-16,2008-10-02,27,ConvSys 2yr rot ST NF,"Corn, Soybean",Strip Till,no fertilizer,,No,No,No
+AgCROS_MNMOFS_136_29,MNMOFS_136,MNMOFS_29,2002-05-15,2009-08-31,37,ConvSys 4yr rot ST NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,no fertilizer,,No,No,No
+AgCROS_MNMOFS_137_24,MNMOFS_137,MNMOFS_24,2002-05-16,2009-08-31,27,OrgSys 4yr rot CT YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,fertilized,,No,No,Yes
+AgCROS_MNMOFS_138_12,MNMOFS_138,MNMOFS_12,2002-05-16,2009-08-31,25,OrgSys 4yr rot CT NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,no fertilizer,,No,No,Yes
+AgCROS_MNMOFS_139_36,MNMOFS_139,MNMOFS_36,2002-05-16,2009-08-31,20,OrgSys 4yr rot ST NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,no fertilizer,,No,No,Yes
+AgCROS_MNMOFS_14_6,MNMOFS_14,MNMOFS_6,2002-05-15,2009-08-31,26,OrgSys 4yr rot CT NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,no fertilizer,,No,No,Yes
+AgCROS_MNMOFS_140_20,MNMOFS_140,MNMOFS_20,2002-05-16,2008-08-27,25,OrgSys 4yr rot CT YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,fertilized,,No,No,Yes
+AgCROS_MNMOFS_141_42,MNMOFS_141,MNMOFS_42,2002-05-14,2009-08-31,27,OrgSys 4yr rot ST YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,fertilized,,No,No,Yes
+AgCROS_MNMOFS_142_30,MNMOFS_142,MNMOFS_30,2002-05-15,2009-08-31,21,OrgSys 4yr rot ST NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,no fertilizer,,No,No,Yes
+AgCROS_MNMOFS_143_8,MNMOFS_143,MNMOFS_8,2002-05-16,2008-08-27,24,OrgSys 4yr rot CT NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,no fertilizer,,No,No,Yes
+AgCROS_MNMOFS_144_22,MNMOFS_144,MNMOFS_22,2002-05-15,2009-11-09,28,OrgSys 4yr rot CT YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,fertilized,,No,No,Yes
+AgCROS_MNMOFS_145_27,MNMOFS_145,MNMOFS_27,2002-05-16,2008-10-02,27,ConvSys 2yr rot ST NF,"Corn, Soybean",Strip Till,no fertilizer,,No,No,No
+AgCROS_MNMOFS_146_13,MNMOFS_146,MNMOFS_13,2002-05-07,2009-11-09,52,ConvSys 2yr rot CT YF,"Corn, Soybean",Conventional Till,fertilized,,No,No,No
+AgCROS_MNMOFS_147_5,MNMOFS_147,MNMOFS_5,2002-05-15,2009-08-31,28,ConvSys 4yr rot CT NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,no fertilizer,,No,No,No
+AgCROS_MNMOFS_148_33,MNMOFS_148,MNMOFS_33,2002-05-15,2009-11-09,35,ConvSys 4yr rot ST NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,no fertilizer,,No,No,No
+AgCROS_MNMOFS_149_39,MNMOFS_149,MNMOFS_39,2002-05-16,2008-10-02,34,ConvSys 2yr rot ST YF,"Corn, Soybean",Strip Till,fertilized,,No,No,No
+AgCROS_MNMOFS_15_10,MNMOFS_15,MNMOFS_10,2002-05-15,2009-11-09,27,OrgSys 4yr rot CT NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,no fertilizer,,No,No,Yes
+AgCROS_MNMOFS_150_11,MNMOFS_150,MNMOFS_11,2002-05-16,2009-08-25,26,ConvSys 4yr rot CT NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,no fertilizer,,No,No,No
+AgCROS_MNMOFS_151_3,MNMOFS_151,MNMOFS_3,2002-05-16,2008-10-02,29,ConvSys 2yr rot CT NF,"Corn, Soybean",Conventional Till,no fertilizer,,No,No,No
+AgCROS_MNMOFS_152_17,MNMOFS_152,MNMOFS_17,2002-05-15,2009-08-31,34,ConvSys 4yr rot CT YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,fertilized,,No,No,No
+AgCROS_MNMOFS_153_24,MNMOFS_153,MNMOFS_24,2002-05-16,2009-08-31,27,OrgSys 4yr rot CT YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,fertilized,,No,No,Yes
+AgCROS_MNMOFS_154_36,MNMOFS_154,MNMOFS_36,2002-05-16,2009-08-31,21,OrgSys 4yr rot ST NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,no fertilizer,,No,No,Yes
+AgCROS_MNMOFS_155_2,MNMOFS_155,MNMOFS_2,2002-05-15,2009-11-09,29,OrgSys 2yr rot CT NF,"Corn, Soybean",Conventional Till,no fertilizer,,No,No,Yes
+AgCROS_MNMOFS_156_46,MNMOFS_156,MNMOFS_46,2002-05-15,2009-11-09,32,OrgSys 4yr rot ST YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,fertilized,,No,No,Yes
+AgCROS_MNMOFS_157_18,MNMOFS_157,MNMOFS_18,2002-05-14,2009-08-31,29,OrgSys 4yr rot CT YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,fertilized,,No,No,Yes
+AgCROS_MNMOFS_158_6,MNMOFS_158,MNMOFS_6,2002-05-15,2009-08-31,26,OrgSys 4yr rot CT NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,no fertilizer,,No,No,Yes
+AgCROS_MNMOFS_159_20,MNMOFS_159,MNMOFS_20,2002-05-16,2008-08-27,25,OrgSys 4yr rot CT YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,fertilized,,No,No,Yes
+AgCROS_MNMOFS_16_18,MNMOFS_16,MNMOFS_18,2002-05-14,2009-08-31,29,OrgSys 4yr rot CT YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,fertilized,,No,No,Yes
+AgCROS_MNMOFS_160_10,MNMOFS_160,MNMOFS_10,2002-05-15,2009-11-09,27,OrgSys 4yr rot CT NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,no fertilizer,,No,No,Yes
+AgCROS_MNMOFS_161_23,MNMOFS_161,MNMOFS_23,2002-05-16,2009-08-25,29,ConvSys 4yr rot CT YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,fertilized,,No,No,No
+AgCROS_MNMOFS_162_31,MNMOFS_162,MNMOFS_31,2002-05-16,2008-08-27,35,ConvSys 4yr rot ST NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,no fertilizer,,No,No,No
+AgCROS_MNMOFS_163_19,MNMOFS_163,MNMOFS_19,2002-05-16,2008-08-27,36,ConvSys 4yr rot CT YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,fertilized,,No,No,No
+AgCROS_MNMOFS_164_43,MNMOFS_164,MNMOFS_43,2002-05-16,2008-08-28,41,ConvSys 4yr rot ST YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,fertilized,,No,No,No
+AgCROS_MNMOFS_165_21,MNMOFS_165,MNMOFS_21,2002-05-15,2009-11-09,31,ConvSys 4yr rot CT YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,fertilized,,No,No,No
+AgCROS_MNMOFS_166_29,MNMOFS_166,MNMOFS_29,2002-05-15,2009-08-31,38,ConvSys 4yr rot ST NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,no fertilizer,,No,No,No
+AgCROS_MNMOFS_167_41,MNMOFS_167,MNMOFS_41,2002-05-15,2009-08-31,43,ConvSys 4yr rot ST YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,fertilized,,No,No,No
+AgCROS_MNMOFS_168_47,MNMOFS_168,MNMOFS_47,2002-05-16,2009-08-25,40,ConvSys 4yr rot ST YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,fertilized,,No,No,No
+AgCROS_MNMOFS_169_12,MNMOFS_169,MNMOFS_12,2002-05-16,2009-08-31,25,OrgSys 4yr rot CT NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,no fertilizer,,No,No,Yes
+AgCROS_MNMOFS_17_45,MNMOFS_17,MNMOFS_45,2002-05-07,2009-11-09,42,ConvSys 4yr rot ST YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,fertilized,,No,No,No
+AgCROS_MNMOFS_170_16,MNMOFS_170,MNMOFS_16,2002-05-16,2008-10-02,30,OrgSys 2yr rot CT YF,"Corn, Soybean",Conventional Till,fertilized,,No,No,Yes
+AgCROS_MNMOFS_171_48,MNMOFS_171,MNMOFS_48,2002-05-16,2009-08-31,27,OrgSys 4yr rot ST YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,fertilized,,No,No,Yes
+AgCROS_MNMOFS_172_38,MNMOFS_172,MNMOFS_38,2002-05-14,2009-11-09,28,OrgSys 2yr rot ST YF,"Corn, Soybean",Strip Till,fertilized,,No,No,Yes
+AgCROS_MNMOFS_173_4,MNMOFS_173,MNMOFS_4,2002-05-16,2008-10-02,25,OrgSys 2yr rot CT NF,"Corn, Soybean",Conventional Till,no fertilizer,,No,No,Yes
+AgCROS_MNMOFS_174_14,MNMOFS_174,MNMOFS_14,2002-05-14,2009-11-09,33,OrgSys 2yr rot CT YF,"Corn, Soybean",Conventional Till,fertilized,,No,No,Yes
+AgCROS_MNMOFS_175_22,MNMOFS_175,MNMOFS_22,2002-05-15,2009-11-09,28,OrgSys 4yr rot CT YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,fertilized,,No,No,Yes
+AgCROS_MNMOFS_176_40,MNMOFS_176,MNMOFS_40,2002-05-16,2008-10-02,22,OrgSys 2yr rot ST YF,"Corn, Soybean",Strip Till,fertilized,,No,No,Yes
+AgCROS_MNMOFS_177_1,MNMOFS_177,MNMOFS_1,2002-05-15,2009-11-09,30,ConvSys 2yr rot CT NF,"Corn, Soybean",Conventional Till,no fertilizer,,No,No,No
+AgCROS_MNMOFS_178_37,MNMOFS_178,MNMOFS_37,2002-05-15,2009-11-09,32,ConvSys 2yr rot ST YF,"Corn, Soybean",Strip Till,fertilized,,No,No,No
+AgCROS_MNMOFS_179_15,MNMOFS_179,MNMOFS_15,2002-05-07,2008-10-02,49,ConvSys 2yr rot CT YF,"Corn, Soybean",Conventional Till,fertilized,,No,No,No
+AgCROS_MNMOFS_18_15,MNMOFS_18,MNMOFS_15,2002-05-07,2008-10-02,49,ConvSys 2yr rot CT YF,"Corn, Soybean",Conventional Till,fertilized,,No,No,No
+AgCROS_MNMOFS_180_45,MNMOFS_180,MNMOFS_45,2002-05-07,2009-11-09,42,ConvSys 4yr rot ST YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,fertilized,,No,No,No
+AgCROS_MNMOFS_181_35,MNMOFS_181,MNMOFS_35,2002-05-16,2009-08-25,33,ConvSys 4yr rot ST NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,no fertilizer,,No,No,No
+AgCROS_MNMOFS_182_25,MNMOFS_182,MNMOFS_25,2002-05-15,2009-11-09,28,ConvSys 2yr rot ST NF,"Corn, Soybean",Strip Till,no fertilizer,,No,No,No
+AgCROS_MNMOFS_183_7,MNMOFS_183,MNMOFS_7,2002-05-16,2008-08-27,32,ConvSys 4yr rot CT NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,no fertilizer,,No,No,No
+AgCROS_MNMOFS_184_9,MNMOFS_184,MNMOFS_9,2002-05-15,2009-11-09,27,ConvSys 4yr rot CT NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,no fertilizer,,No,No,No
+AgCROS_MNMOFS_185_44,MNMOFS_185,MNMOFS_44,2002-05-16,2008-08-28,28,OrgSys 4yr rot ST YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,fertilized,,No,No,Yes
+AgCROS_MNMOFS_186_26,MNMOFS_186,MNMOFS_26,2002-05-15,2009-11-09,23,OrgSys 2yr rot ST NF,"Corn, Soybean",Strip Till,no fertilizer,,No,No,Yes
+AgCROS_MNMOFS_187_8,MNMOFS_187,MNMOFS_8,2002-05-16,2008-08-27,24,OrgSys 4yr rot CT NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,no fertilizer,,No,No,Yes
+AgCROS_MNMOFS_188_30,MNMOFS_188,MNMOFS_30,2002-05-15,2009-08-31,23,OrgSys 4yr rot ST NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,no fertilizer,,No,No,Yes
+AgCROS_MNMOFS_189_32,MNMOFS_189,MNMOFS_32,2002-05-16,2008-08-27,25,OrgSys 4yr rot ST NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,no fertilizer,,No,No,Yes
+AgCROS_MNMOFS_19_7,MNMOFS_19,MNMOFS_7,2002-05-16,2008-08-27,32,ConvSys 4yr rot CT NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,no fertilizer,,No,No,No
+AgCROS_MNMOFS_190_28,MNMOFS_190,MNMOFS_28,2002-05-16,2008-10-02,21,OrgSys 2yr rot ST NF,"Corn, Soybean",Strip Till,no fertilizer,,No,No,Yes
+AgCROS_MNMOFS_191_34,MNMOFS_191,MNMOFS_34,2002-05-15,2009-11-09,26,OrgSys 4yr rot ST NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,no fertilizer,,No,No,Yes
+AgCROS_MNMOFS_192_42,MNMOFS_192,MNMOFS_42,2002-05-14,2009-08-31,29,OrgSys 4yr rot ST YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,fertilized,,No,No,Yes
+AgCROS_MNMOFS_2_31,MNMOFS_2,MNMOFS_31,2002-05-16,2008-08-27,36,ConvSys 4yr rot ST NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,no fertilizer,,No,No,No
+AgCROS_MNMOFS_20_1,MNMOFS_20,MNMOFS_1,2002-05-15,2009-11-09,30,ConvSys 2yr rot CT NF,"Corn, Soybean",Conventional Till,no fertilizer,,No,No,No
+AgCROS_MNMOFS_21_21,MNMOFS_21,MNMOFS_21,2002-05-15,2009-11-09,31,ConvSys 4yr rot CT YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,fertilized,,No,No,No
+AgCROS_MNMOFS_22_19,MNMOFS_22,MNMOFS_19,2002-05-16,2008-08-27,36,ConvSys 4yr rot CT YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,fertilized,,No,No,No
+AgCROS_MNMOFS_23_17,MNMOFS_23,MNMOFS_17,2002-05-15,2009-08-31,34,ConvSys 4yr rot CT YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,fertilized,,No,No,No
+AgCROS_MNMOFS_24_43,MNMOFS_24,MNMOFS_43,2002-05-16,2008-08-28,41,ConvSys 4yr rot ST YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,fertilized,,No,No,No
+AgCROS_MNMOFS_25_14,MNMOFS_25,MNMOFS_14,2002-05-14,2009-11-09,32,OrgSys 2yr rot CT YF,"Corn, Soybean",Conventional Till,fertilized,,No,No,Yes
+AgCROS_MNMOFS_26_46,MNMOFS_26,MNMOFS_46,2002-05-15,2009-11-09,31,OrgSys 4yr rot ST YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,fertilized,,No,No,Yes
+AgCROS_MNMOFS_27_40,MNMOFS_27,MNMOFS_40,2002-05-16,2008-10-02,22,OrgSys 2yr rot ST YF,"Corn, Soybean",Strip Till,fertilized,,No,No,Yes
+AgCROS_MNMOFS_28_20,MNMOFS_28,MNMOFS_20,2002-05-16,2008-08-27,25,OrgSys 4yr rot CT YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,fertilized,,No,No,Yes
+AgCROS_MNMOFS_29_30,MNMOFS_29,MNMOFS_30,2002-05-15,2009-08-31,21,OrgSys 4yr rot ST NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,no fertilizer,,No,No,Yes
+AgCROS_MNMOFS_3_13,MNMOFS_3,MNMOFS_13,2002-05-07,2009-11-09,52,ConvSys 2yr rot CT YF,"Corn, Soybean",Conventional Till,fertilized,,No,No,No
+AgCROS_MNMOFS_30_28,MNMOFS_30,MNMOFS_28,2002-05-16,2008-10-02,21,OrgSys 2yr rot ST NF,"Corn, Soybean",Strip Till,no fertilizer,,No,No,Yes
+AgCROS_MNMOFS_31_48,MNMOFS_31,MNMOFS_48,2002-05-16,2009-08-31,26,OrgSys 4yr rot ST YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,fertilized,,No,No,Yes
+AgCROS_MNMOFS_32_12,MNMOFS_32,MNMOFS_12,2002-05-16,2009-08-31,25,OrgSys 4yr rot CT NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,no fertilizer,,No,No,Yes
+AgCROS_MNMOFS_33_3,MNMOFS_33,MNMOFS_3,2002-05-16,2008-10-02,29,ConvSys 2yr rot CT NF,"Corn, Soybean",Conventional Till,no fertilizer,,No,No,No
+AgCROS_MNMOFS_34_29,MNMOFS_34,MNMOFS_29,2002-05-15,2009-08-31,39,ConvSys 4yr rot ST NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,no fertilizer,,No,No,No
+AgCROS_MNMOFS_35_23,MNMOFS_35,MNMOFS_23,2002-05-16,2009-08-25,29,ConvSys 4yr rot CT YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,fertilized,,No,No,No
+AgCROS_MNMOFS_36_9,MNMOFS_36,MNMOFS_9,2002-05-15,2009-11-09,27,ConvSys 4yr rot CT NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,no fertilizer,,No,No,No
+AgCROS_MNMOFS_37_35,MNMOFS_37,MNMOFS_35,2002-05-16,2009-08-25,33,ConvSys 4yr rot ST NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,no fertilizer,,No,No,No
+AgCROS_MNMOFS_38_11,MNMOFS_38,MNMOFS_11,2002-05-16,2009-08-25,26,ConvSys 4yr rot CT NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,no fertilizer,,No,No,No
+AgCROS_MNMOFS_39_25,MNMOFS_39,MNMOFS_25,2002-05-15,2009-11-09,28,ConvSys 2yr rot ST NF,"Corn, Soybean",Strip Till,no fertilizer,,No,No,No
+AgCROS_MNMOFS_4_39,MNMOFS_4,MNMOFS_39,2002-05-16,2008-10-02,34,ConvSys 2yr rot ST YF,"Corn, Soybean",Strip Till,fertilized,,No,No,No
+AgCROS_MNMOFS_40_47,MNMOFS_40,MNMOFS_47,2002-05-16,2009-08-25,39,ConvSys 4yr rot ST YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,fertilized,,No,No,No
+AgCROS_MNMOFS_41_36,MNMOFS_41,MNMOFS_36,2002-05-16,2009-08-31,20,OrgSys 4yr rot ST NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,no fertilizer,,No,No,Yes
+AgCROS_MNMOFS_42_44,MNMOFS_42,MNMOFS_44,2002-05-16,2008-08-28,27,OrgSys 4yr rot ST YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,fertilized,,No,No,Yes
+AgCROS_MNMOFS_43_34,MNMOFS_43,MNMOFS_34,2002-05-15,2009-11-09,24,OrgSys 4yr rot ST NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,no fertilizer,,No,No,Yes
+AgCROS_MNMOFS_44_42,MNMOFS_44,MNMOFS_42,2002-05-14,2009-08-31,27,OrgSys 4yr rot ST YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,fertilized,,No,No,Yes
+AgCROS_MNMOFS_45_26,MNMOFS_45,MNMOFS_26,2002-05-15,2009-11-09,23,OrgSys 2yr rot ST NF,"Corn, Soybean",Strip Till,no fertilizer,,No,No,Yes
+AgCROS_MNMOFS_46_32,MNMOFS_46,MNMOFS_32,2002-05-16,2008-08-27,26,OrgSys 4yr rot ST NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,no fertilizer,,No,No,Yes
+AgCROS_MNMOFS_47_22,MNMOFS_47,MNMOFS_22,2002-05-15,2009-11-09,28,OrgSys 4yr rot CT YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,fertilized,,No,No,Yes
+AgCROS_MNMOFS_48_24,MNMOFS_48,MNMOFS_24,2002-05-16,2009-08-31,27,OrgSys 4yr rot CT YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,fertilized,,No,No,Yes
+AgCROS_MNMOFS_49_28,MNMOFS_49,MNMOFS_28,2002-05-16,2008-10-02,21,OrgSys 2yr rot ST NF,"Corn, Soybean",Strip Till,no fertilizer,,No,No,Yes
+AgCROS_MNMOFS_5_33,MNMOFS_5,MNMOFS_33,2002-05-15,2009-11-09,35,ConvSys 4yr rot ST NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,no fertilizer,,No,No,No
+AgCROS_MNMOFS_50_42,MNMOFS_50,MNMOFS_42,2002-05-14,2009-08-31,28,OrgSys 4yr rot ST YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,fertilized,,No,No,Yes
+AgCROS_MNMOFS_51_22,MNMOFS_51,MNMOFS_22,2002-05-15,2009-11-09,28,OrgSys 4yr rot CT YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,fertilized,,No,No,Yes
+AgCROS_MNMOFS_52_44,MNMOFS_52,MNMOFS_44,2002-05-16,2008-08-28,25,OrgSys 4yr rot ST YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,fertilized,,No,No,Yes
+AgCROS_MNMOFS_53_10,MNMOFS_53,MNMOFS_10,2002-05-15,2009-11-09,27,OrgSys 4yr rot CT NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,no fertilizer,,No,No,Yes
+AgCROS_MNMOFS_54_18,MNMOFS_54,MNMOFS_18,2002-05-14,2009-08-31,29,OrgSys 4yr rot CT YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,fertilized,,No,No,Yes
+AgCROS_MNMOFS_55_46,MNMOFS_55,MNMOFS_46,2002-05-15,2009-11-09,31,OrgSys 4yr rot ST YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,fertilized,,No,No,Yes
+AgCROS_MNMOFS_56_36,MNMOFS_56,MNMOFS_36,2002-05-16,2009-08-31,22,OrgSys 4yr rot ST NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,no fertilizer,,No,No,Yes
+AgCROS_MNMOFS_57_27,MNMOFS_57,MNMOFS_27,2002-05-16,2008-10-02,27,ConvSys 2yr rot ST NF,"Corn, Soybean",Strip Till,no fertilizer,,No,No,No
+AgCROS_MNMOFS_58_31,MNMOFS_58,MNMOFS_31,2002-05-16,2008-08-27,36,ConvSys 4yr rot ST NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,no fertilizer,,No,No,No
+AgCROS_MNMOFS_59_39,MNMOFS_59,MNMOFS_39,2002-05-16,2008-10-02,34,ConvSys 2yr rot ST YF,"Corn, Soybean",Strip Till,fertilized,,No,No,No
+AgCROS_MNMOFS_6_5,MNMOFS_6,MNMOFS_5,2002-05-15,2009-08-31,28,ConvSys 4yr rot CT NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,no fertilizer,,No,No,No
+AgCROS_MNMOFS_60_23,MNMOFS_60,MNMOFS_23,2002-05-16,2009-08-25,29,ConvSys 4yr rot CT YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,fertilized,,No,No,No
+AgCROS_MNMOFS_61_33,MNMOFS_61,MNMOFS_33,2002-05-15,2009-11-09,36,ConvSys 4yr rot ST NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,no fertilizer,,No,No,No
+AgCROS_MNMOFS_62_25,MNMOFS_62,MNMOFS_25,2002-05-15,2009-11-09,28,ConvSys 2yr rot ST NF,"Corn, Soybean",Strip Till,no fertilizer,,No,No,No
+AgCROS_MNMOFS_63_7,MNMOFS_63,MNMOFS_7,2002-05-16,2008-08-27,32,ConvSys 4yr rot CT NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,no fertilizer,,No,No,No
+AgCROS_MNMOFS_64_29,MNMOFS_64,MNMOFS_29,2002-05-15,2009-08-31,37,ConvSys 4yr rot ST NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,no fertilizer,,No,No,No
+AgCROS_MNMOFS_65_48,MNMOFS_65,MNMOFS_48,2002-05-16,2009-08-31,25,OrgSys 4yr rot ST YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,fertilized,,No,No,Yes
+AgCROS_MNMOFS_66_32,MNMOFS_66,MNMOFS_32,2002-05-16,2008-08-27,25,OrgSys 4yr rot ST NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,no fertilizer,,No,No,Yes
+AgCROS_MNMOFS_67_4,MNMOFS_67,MNMOFS_4,2002-05-16,2008-10-02,26,OrgSys 2yr rot CT NF,"Corn, Soybean",Conventional Till,no fertilizer,,No,No,Yes
+AgCROS_MNMOFS_68_26,MNMOFS_68,MNMOFS_26,2002-05-15,2009-11-09,23,OrgSys 2yr rot ST NF,"Corn, Soybean",Strip Till,no fertilizer,,No,No,Yes
+AgCROS_MNMOFS_69_30,MNMOFS_69,MNMOFS_30,2002-05-15,2009-08-31,23,OrgSys 4yr rot ST NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,no fertilizer,,No,No,Yes
+AgCROS_MNMOFS_7_37,MNMOFS_7,MNMOFS_37,2002-05-15,2009-11-09,32,ConvSys 2yr rot ST YF,"Corn, Soybean",Strip Till,fertilized,,No,No,No
+AgCROS_MNMOFS_70_14,MNMOFS_70,MNMOFS_14,2002-05-14,2009-11-09,33,OrgSys 2yr rot CT YF,"Corn, Soybean",Conventional Till,fertilized,,No,No,Yes
+AgCROS_MNMOFS_71_38,MNMOFS_71,MNMOFS_38,2002-05-14,2009-11-09,27,OrgSys 2yr rot ST YF,"Corn, Soybean",Strip Till,fertilized,,No,No,Yes
+AgCROS_MNMOFS_72_2,MNMOFS_72,MNMOFS_2,2002-05-15,2009-11-09,29,OrgSys 2yr rot CT NF,"Corn, Soybean",Conventional Till,no fertilizer,,No,No,Yes
+AgCROS_MNMOFS_73_15,MNMOFS_73,MNMOFS_15,2002-05-07,2008-10-02,48,ConvSys 2yr rot CT YF,"Corn, Soybean",Conventional Till,fertilized,,No,No,No
+AgCROS_MNMOFS_74_35,MNMOFS_74,MNMOFS_35,2002-05-16,2009-08-25,34,ConvSys 4yr rot ST NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,no fertilizer,,No,No,No
+AgCROS_MNMOFS_75_5,MNMOFS_75,MNMOFS_5,2002-05-15,2009-08-31,28,ConvSys 4yr rot CT NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,no fertilizer,,No,No,No
+AgCROS_MNMOFS_76_9,MNMOFS_76,MNMOFS_9,2002-05-15,2009-11-09,27,ConvSys 4yr rot CT NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,no fertilizer,,No,No,No
+AgCROS_MNMOFS_77_11,MNMOFS_77,MNMOFS_11,2002-05-16,2009-08-25,26,ConvSys 4yr rot CT NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,no fertilizer,,No,No,No
+AgCROS_MNMOFS_78_17,MNMOFS_78,MNMOFS_17,2002-05-15,2009-08-31,34,ConvSys 4yr rot CT YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,fertilized,,No,No,No
+AgCROS_MNMOFS_79_37,MNMOFS_79,MNMOFS_37,2002-05-15,2009-11-09,32,ConvSys 2yr rot ST YF,"Corn, Soybean",Strip Till,fertilized,,No,No,No
+AgCROS_MNMOFS_8_27,MNMOFS_8,MNMOFS_27,2002-05-16,2008-10-02,27,ConvSys 2yr rot ST NF,"Corn, Soybean",Strip Till,no fertilizer,,No,No,No
+AgCROS_MNMOFS_80_45,MNMOFS_80,MNMOFS_45,2002-05-07,2009-11-09,41,ConvSys 4yr rot ST YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,fertilized,,No,No,No
+AgCROS_MNMOFS_81_6,MNMOFS_81,MNMOFS_6,2002-05-15,2009-08-31,26,OrgSys 4yr rot CT NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,no fertilizer,,No,No,Yes
+AgCROS_MNMOFS_82_34,MNMOFS_82,MNMOFS_34,2002-05-15,2009-11-09,26,OrgSys 4yr rot ST NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,no fertilizer,,No,No,Yes
+AgCROS_MNMOFS_83_20,MNMOFS_83,MNMOFS_20,2002-05-16,2008-08-27,25,OrgSys 4yr rot CT YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,fertilized,,No,No,Yes
+AgCROS_MNMOFS_84_40,MNMOFS_84,MNMOFS_40,2002-05-16,2008-10-02,22,OrgSys 2yr rot ST YF,"Corn, Soybean",Strip Till,fertilized,,No,No,Yes
+AgCROS_MNMOFS_85_8,MNMOFS_85,MNMOFS_8,2002-05-16,2008-08-27,24,OrgSys 4yr rot CT NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,no fertilizer,,No,No,Yes
+AgCROS_MNMOFS_86_24,MNMOFS_86,MNMOFS_24,2002-05-16,2009-08-31,27,OrgSys 4yr rot CT YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,fertilized,,No,No,Yes
+AgCROS_MNMOFS_87_12,MNMOFS_87,MNMOFS_12,2002-05-16,2009-08-31,25,OrgSys 4yr rot CT NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,no fertilizer,,No,No,Yes
+AgCROS_MNMOFS_88_16,MNMOFS_88,MNMOFS_16,2002-05-16,2008-10-02,31,OrgSys 2yr rot CT YF,"Corn, Soybean",Conventional Till,fertilized,,No,No,Yes
+AgCROS_MNMOFS_89_21,MNMOFS_89,MNMOFS_21,2002-05-15,2009-11-09,31,ConvSys 4yr rot CT YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,fertilized,,No,No,No
+AgCROS_MNMOFS_9_16,MNMOFS_9,MNMOFS_16,2002-05-16,2008-10-02,30,OrgSys 2yr rot CT YF,"Corn, Soybean",Conventional Till,fertilized,,No,No,Yes
+AgCROS_MNMOFS_90_19,MNMOFS_90,MNMOFS_19,2002-05-16,2008-08-27,36,ConvSys 4yr rot CT YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,fertilized,,No,No,No
+AgCROS_MNMOFS_91_3,MNMOFS_91,MNMOFS_3,2002-05-16,2008-10-02,29,ConvSys 2yr rot CT NF,"Corn, Soybean",Conventional Till,no fertilizer,,No,No,No
+AgCROS_MNMOFS_92_43,MNMOFS_92,MNMOFS_43,2002-05-16,2008-08-28,40,ConvSys 4yr rot ST YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,fertilized,,No,No,No
+AgCROS_MNMOFS_93_47,MNMOFS_93,MNMOFS_47,2002-05-16,2009-08-25,39,ConvSys 4yr rot ST YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,fertilized,,No,No,No
+AgCROS_MNMOFS_94_1,MNMOFS_94,MNMOFS_1,2002-05-15,2009-11-09,30,ConvSys 2yr rot CT NF,"Corn, Soybean",Conventional Till,no fertilizer,,No,No,No
+AgCROS_MNMOFS_95_13,MNMOFS_95,MNMOFS_13,2002-05-07,2009-11-09,51,ConvSys 2yr rot CT YF,"Corn, Soybean",Conventional Till,fertilized,,No,No,No
+AgCROS_MNMOFS_96_41,MNMOFS_96,MNMOFS_41,2002-05-15,2009-08-31,45,ConvSys 4yr rot ST YF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Strip Till,fertilized,,No,No,No
+AgCROS_MNMOFS_97_7,MNMOFS_97,MNMOFS_7,2002-05-16,2008-08-27,32,ConvSys 4yr rot CT NF,"Corn, Soybean, Wheat/Alfalfa, Alfalfa",Conventional Till,no fertilizer,,No,No,No
+AgCROS_MNMOFS_98_37,MNMOFS_98,MNMOFS_37,2002-05-15,2009-11-09,32,ConvSys 2yr rot ST YF,"Corn, Soybean",Strip Till,fertilized,,No,No,No
+AgCROS_MNMOFS_99_15,MNMOFS_99,MNMOFS_15,2002-05-07,2008-10-02,49,ConvSys 2yr rot CT YF,"Corn, Soybean",Conventional Till,fertilized,,No,No,No

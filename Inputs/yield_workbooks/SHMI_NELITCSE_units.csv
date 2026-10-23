@@ -1,0 +1,397 @@
+MGT_combo,unit_id,treatment_id,first_record,last_record,records,treatment_descriptor,rotation_descriptor,tillage_descriptor,n_treatment_descriptor,cover_crop,residue_removal,irrigation,organic_management
+AgCROS_NELITCSE_101_CCCC,NELITCSE_101,NELITCSE_CCCC,2015-05-13,2015-08-14,5,"Continous Corn, Cover Crop",Corn,No Till,168 kg N/ha,"Secale cereale, Vicia villosa (Rye, Hairy Vetch)",No,No,No
+AgCROS_NELITCSE_101_RTCC,NELITCSE_101,NELITCSE_RTCC,1981-04-07,1984-06-15,15,"Ridge Till, Continuous corn",Corn,Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_101_RTSB,NELITCSE_101,NELITCSE_RTSB,1985-05-10,2014-05-15,88,"Ridge Till, Continuous soybean",Soybean,Conservation Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_102_RTCC,NELITCSE_102,NELITCSE_RTCC,1981-04-07,1984-06-15,15,"Ridge Till, Continuous corn",Corn,Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_102_RTCSB,NELITCSE_102,NELITCSE_RTCSB,1985-05-10,2014-06-20,103,"Ridge Till, Corn-soybean rotation","Corn, Soybean",Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_102_SBC,NELITCSE_102,NELITCSE_SBC,2015-05-13,2015-05-13,1,"Soybean,Corn","Soybean, Corn",No Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_103_CSB,NELITCSE_103,NELITCSE_CSB,2015-05-13,2015-06-24,2,"Corn,Soybean","Corn, Soybean",No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_103_RTCC,NELITCSE_103,NELITCSE_RTCC,1981-04-07,1984-06-15,15,"Ridge Till, Continuous corn",Corn,Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_103_RTSBC,NELITCSE_103,NELITCSE_RTSBC,1985-05-09,2014-05-15,103,"Ridge Till, Soybean-corn rotation","Soybean, Corn",Conservation Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_104_CC,NELITCSE_104,NELITCSE_CC,2015-05-13,2015-06-24,2,Continuous corn,Corn,Not Reported,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_104_RTCC,NELITCSE_104,NELITCSE_RTCC,1981-04-07,2014-06-20,133,"Ridge Till, Continuous corn",Corn,Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_105_CCCC,NELITCSE_105,NELITCSE_CCCC,2015-05-13,2015-08-14,5,"Continous Corn, Cover Crop",Corn,No Till,168 kg N/ha,"Secale cereale, Vicia villosa (Rye, Hairy Vetch)",No,No,No
+AgCROS_NELITCSE_105_CHCC,NELITCSE_105,NELITCSE_CHCC,1980-11-01,1984-11-20,24,"Chisel, Continuous corn",Corn,Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_105_CHSB,NELITCSE_105,NELITCSE_CHSB,1985-05-09,2014-05-15,143,"Chisel, Continuous soybean",Soybean,Conservation Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_106_CHCC,NELITCSE_106,NELITCSE_CHCC,1980-11-01,1984-11-20,24,"Chisel, Continuous corn",Corn,Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_106_CHCSB,NELITCSE_106,NELITCSE_CHCSB,1985-05-09,2014-06-20,158,"Chisel, Corn-soybean rotation","Corn, Soybean",Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_106_SBC,NELITCSE_106,NELITCSE_SBC,2015-05-13,2015-05-13,1,"Soybean,Corn","Soybean, Corn",No Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_107_CHCC,NELITCSE_107,NELITCSE_CHCC,1980-11-01,1984-11-20,24,"Chisel, Continuous corn",Corn,Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_107_CHSBC,NELITCSE_107,NELITCSE_CHSBC,1985-05-09,2014-05-15,158,"Chisel, Soybean-corn rotation","Soybean, Corn",Conservation Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_107_CSB,NELITCSE_107,NELITCSE_CSB,2015-05-13,2015-06-24,2,"Corn,Soybean","Corn, Soybean",No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_108_CC,NELITCSE_108,NELITCSE_CC,2015-05-13,2015-06-24,2,Continuous corn,Corn,Not Reported,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_108_CHCC,NELITCSE_108,NELITCSE_CHCC,1980-11-01,2014-06-20,197,"Chisel, Continuous corn",Corn,Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_109_CCCC,NELITCSE_109,NELITCSE_CCCC,2015-05-13,2015-08-14,5,"Continous Corn, Cover Crop",Corn,No Till,168 kg N/ha,"Secale cereale, Vicia villosa (Rye, Hairy Vetch)",No,No,No
+AgCROS_NELITCSE_109_SSCC,NELITCSE_109,NELITCSE_SSCC,1980-11-01,1984-11-20,24,"Subsoil, Continuous corn",Corn,Sub Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_109_SSSB,NELITCSE_109,NELITCSE_SSSB,1985-05-09,2014-05-15,143,"Subsoil, Continuous soybean",Soybean,Sub Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_110_CC,NELITCSE_110,NELITCSE_CC,2015-05-13,2015-06-24,2,Continuous corn,Corn,Not Reported,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_110_SSCC,NELITCSE_110,NELITCSE_SSCC,1980-11-01,2014-06-20,197,"Subsoil, Continuous corn",Corn,Sub Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_111_CSB,NELITCSE_111,NELITCSE_CSB,2015-05-13,2015-06-24,2,"Corn,Soybean","Corn, Soybean",No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_111_SSCC,NELITCSE_111,NELITCSE_SSCC,1980-11-01,1984-11-20,24,"Subsoil, Continuous corn",Corn,Sub Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_111_SSSBC,NELITCSE_111,NELITCSE_SSSBC,1985-05-09,2014-05-15,158,"Subsoil, Soybean-corn rotation","Soybean, Corn",Sub Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_112_SBC,NELITCSE_112,NELITCSE_SBC,2015-05-13,2015-05-13,1,"Soybean,Corn","Soybean, Corn",No Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_112_SSCC,NELITCSE_112,NELITCSE_SSCC,1980-11-01,1984-11-20,24,"Subsoil, Continuous corn",Corn,Sub Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_112_SSCSB,NELITCSE_112,NELITCSE_SSCSB,1985-05-09,2014-06-20,158,"Subsoil, Corn-soybean rotation","Corn, Soybean",Sub Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_113_CCCC,NELITCSE_113,NELITCSE_CCCC,2015-05-13,2015-08-14,5,"Continous Corn, Cover Crop",Corn,No Till,168 kg N/ha,"Secale cereale, Vicia villosa (Rye, Hairy Vetch)",No,No,No
+AgCROS_NELITCSE_113_DKCC,NELITCSE_113,NELITCSE_DKCC,1980-11-01,1984-11-20,24,"Disk, Continuous corn",Corn,Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_113_DKSB,NELITCSE_113,NELITCSE_DKSB,1985-05-09,2014-05-15,143,"Disk, Continuous soybean",Soybean,Conventional Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_114_CSB,NELITCSE_114,NELITCSE_CSB,2015-05-13,2015-06-24,2,"Corn,Soybean","Corn, Soybean",No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_114_DKCC,NELITCSE_114,NELITCSE_DKCC,1980-11-01,1984-11-20,24,"Disk, Continuous corn",Corn,Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_114_DKSBC,NELITCSE_114,NELITCSE_DKSBC,1985-05-09,2014-05-15,158,"Disk, Soybean-corn rotation","Soybean, Corn",Conventional Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_115_DKCC,NELITCSE_115,NELITCSE_DKCC,1980-11-01,1984-11-20,24,"Disk, Continuous corn",Corn,Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_115_DKCSB,NELITCSE_115,NELITCSE_DKCSB,1985-05-09,2014-06-20,158,"Disk, Corn-soybean rotation","Corn, Soybean",Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_115_SBC,NELITCSE_115,NELITCSE_SBC,2015-05-13,2015-05-13,1,"Soybean,Corn","Soybean, Corn",No Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_116_CC,NELITCSE_116,NELITCSE_CC,2015-05-13,2015-06-24,2,Continuous corn,Corn,Not Reported,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_116_DKCC,NELITCSE_116,NELITCSE_DKCC,1980-11-01,2014-06-20,197,"Disk, Continuous corn",Corn,Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_117_CC,NELITCSE_117,NELITCSE_CC,2015-05-13,2015-06-24,2,Continuous corn,Corn,Not Reported,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_117_NTCC,NELITCSE_117,NELITCSE_NTCC,1981-04-07,2014-06-20,120,"No Till, Continuous corn",Corn,No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_118_CSB,NELITCSE_118,NELITCSE_CSB,2015-05-13,2015-06-24,2,"Corn,Soybean","Corn, Soybean",No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_118_NTCC,NELITCSE_118,NELITCSE_NTCC,1981-04-07,1984-06-15,15,"No Till, Continuous corn",Corn,No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_118_NTSBC,NELITCSE_118,NELITCSE_NTSBC,1985-05-09,2014-05-15,90,"No Till, Soybean-corn rotation","Soybean, Corn",No Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_119_NTCC,NELITCSE_119,NELITCSE_NTCC,1981-04-07,1984-06-15,15,"No Till, Continuous corn",Corn,No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_119_NTCSB,NELITCSE_119,NELITCSE_NTCSB,1985-05-10,2014-06-20,90,"No Till, Corn-soybean rotation","Corn, Soybean",No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_119_SBC,NELITCSE_119,NELITCSE_SBC,2015-05-13,2015-05-13,1,"Soybean,Corn","Soybean, Corn",No Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_120_CCCC,NELITCSE_120,NELITCSE_CCCC,2015-05-13,2015-08-14,5,"Continous Corn, Cover Crop",Corn,No Till,168 kg N/ha,"Secale cereale, Vicia villosa (Rye, Hairy Vetch)",No,No,No
+AgCROS_NELITCSE_120_NTCC,NELITCSE_120,NELITCSE_NTCC,1981-04-07,1984-06-15,15,"No Till, Continuous corn",Corn,No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_120_NTSB,NELITCSE_120,NELITCSE_NTSB,1985-05-10,2014-05-15,75,"No Till, Continuous soybean",Soybean,No Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_121_MPCC,NELITCSE_121,NELITCSE_MPCC,1980-11-01,1984-11-20,24,"Moldboard Plow, Continuous corn",Corn,Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_121_MPCSB,NELITCSE_121,NELITCSE_MPCSB,1985-05-09,2014-06-20,158,"Moldboard Plow, Corn-soybean rotation","Corn, Soybean",Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_121_SBC,NELITCSE_121,NELITCSE_SBC,2015-05-13,2015-05-13,1,"Soybean,Corn","Soybean, Corn",No Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_122_CSB,NELITCSE_122,NELITCSE_CSB,2015-05-13,2015-06-24,2,"Corn,Soybean","Corn, Soybean",No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_122_MPCC,NELITCSE_122,NELITCSE_MPCC,1980-11-01,1984-11-20,24,"Moldboard Plow, Continuous corn",Corn,Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_122_MPSBC,NELITCSE_122,NELITCSE_MPSBC,1985-05-09,2014-05-15,158,"Moldboard Plow, Soybean-corn rotation","Soybean, Corn",Conventional Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_123_CCCC,NELITCSE_123,NELITCSE_CCCC,2015-05-13,2015-08-14,5,"Continous Corn, Cover Crop",Corn,No Till,168 kg N/ha,"Secale cereale, Vicia villosa (Rye, Hairy Vetch)",No,No,No
+AgCROS_NELITCSE_123_MPCC,NELITCSE_123,NELITCSE_MPCC,1980-11-01,1984-11-20,24,"Moldboard Plow, Continuous corn",Corn,Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_123_MPSB,NELITCSE_123,NELITCSE_MPSB,1985-05-09,2014-05-15,143,"Moldboard Plow, Continuous soybean",Soybean,Conventional Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_124_CC,NELITCSE_124,NELITCSE_CC,2015-05-13,2015-06-24,2,Continuous corn,Corn,Not Reported,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_124_MPCC,NELITCSE_124,NELITCSE_MPCC,1980-11-01,2014-06-20,197,"Moldboard Plow, Continuous corn",Corn,Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_201_CC,NELITCSE_201,NELITCSE_CC,2015-05-13,2015-06-24,2,Continuous corn,Corn,Not Reported,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_201_SSCC,NELITCSE_201,NELITCSE_SSCC,1980-11-01,2014-06-20,197,"Subsoil, Continuous corn",Corn,Sub Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_202_SBC,NELITCSE_202,NELITCSE_SBC,2015-05-13,2015-05-13,1,"Soybean,Corn","Soybean, Corn",No Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_202_SSCC,NELITCSE_202,NELITCSE_SSCC,1980-11-01,1984-11-20,24,"Subsoil, Continuous corn",Corn,Sub Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_202_SSCSB,NELITCSE_202,NELITCSE_SSCSB,1985-05-09,2014-06-20,158,"Subsoil, Corn-soybean rotation","Corn, Soybean",Sub Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_203_CSB,NELITCSE_203,NELITCSE_CSB,2015-05-13,2015-06-24,2,"Corn,Soybean","Corn, Soybean",No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_203_SSCC,NELITCSE_203,NELITCSE_SSCC,1980-11-01,1984-11-20,24,"Subsoil, Continuous corn",Corn,Sub Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_203_SSSBC,NELITCSE_203,NELITCSE_SSSBC,1985-05-09,2014-05-15,158,"Subsoil, Soybean-corn rotation","Soybean, Corn",Sub Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_204_CCCC,NELITCSE_204,NELITCSE_CCCC,2015-05-13,2015-08-14,5,"Continous Corn, Cover Crop",Corn,No Till,168 kg N/ha,"Secale cereale, Vicia villosa (Rye, Hairy Vetch)",No,No,No
+AgCROS_NELITCSE_204_SSCC,NELITCSE_204,NELITCSE_SSCC,1980-11-01,1984-11-20,24,"Subsoil, Continuous corn",Corn,Sub Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_204_SSSB,NELITCSE_204,NELITCSE_SSSB,1985-05-09,2014-05-15,143,"Subsoil, Continuous soybean",Soybean,Sub Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_205_CC,NELITCSE_205,NELITCSE_CC,2015-05-13,2015-06-24,2,Continuous corn,Corn,Not Reported,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_205_DKCC,NELITCSE_205,NELITCSE_DKCC,1980-11-01,2014-06-20,197,"Disk, Continuous corn",Corn,Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_206_CCCC,NELITCSE_206,NELITCSE_CCCC,2015-05-13,2015-08-14,5,"Continous Corn, Cover Crop",Corn,No Till,168 kg N/ha,"Secale cereale, Vicia villosa (Rye, Hairy Vetch)",No,No,No
+AgCROS_NELITCSE_206_DKCC,NELITCSE_206,NELITCSE_DKCC,1980-11-01,1984-11-20,24,"Disk, Continuous corn",Corn,Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_206_DKSB,NELITCSE_206,NELITCSE_DKSB,1985-05-09,2014-05-15,143,"Disk, Continuous soybean",Soybean,Conventional Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_207_DKCC,NELITCSE_207,NELITCSE_DKCC,1980-11-01,1984-11-20,24,"Disk, Continuous corn",Corn,Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_207_DKCSB,NELITCSE_207,NELITCSE_DKCSB,1985-05-09,2014-06-20,158,"Disk, Corn-soybean rotation","Corn, Soybean",Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_207_SBC,NELITCSE_207,NELITCSE_SBC,2015-05-13,2015-05-13,1,"Soybean,Corn","Soybean, Corn",No Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_208_CSB,NELITCSE_208,NELITCSE_CSB,2015-05-13,2015-06-24,2,"Corn,Soybean","Corn, Soybean",No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_208_DKCC,NELITCSE_208,NELITCSE_DKCC,1980-11-01,1984-11-20,24,"Disk, Continuous corn",Corn,Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_208_DKSBC,NELITCSE_208,NELITCSE_DKSBC,1985-05-09,2014-05-15,158,"Disk, Soybean-corn rotation","Soybean, Corn",Conventional Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_209_CHCC,NELITCSE_209,NELITCSE_CHCC,1980-11-01,1984-11-20,24,"Chisel, Continuous corn",Corn,Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_209_CHSBC,NELITCSE_209,NELITCSE_CHSBC,1985-05-09,2014-05-15,158,"Chisel, Soybean-corn rotation","Soybean, Corn",Conservation Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_209_CSB,NELITCSE_209,NELITCSE_CSB,2015-05-13,2015-06-24,2,"Corn,Soybean","Corn, Soybean",No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_210_CHCC,NELITCSE_210,NELITCSE_CHCC,1980-11-01,1984-11-20,24,"Chisel, Continuous corn",Corn,Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_210_CHCSB,NELITCSE_210,NELITCSE_CHCSB,1985-05-09,2014-06-20,158,"Chisel, Corn-soybean rotation","Corn, Soybean",Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_210_SBC,NELITCSE_210,NELITCSE_SBC,2015-05-13,2015-05-13,1,"Soybean,Corn","Soybean, Corn",No Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_211_CC,NELITCSE_211,NELITCSE_CC,2015-05-13,2015-06-24,2,Continuous corn,Corn,Not Reported,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_211_CHCC,NELITCSE_211,NELITCSE_CHCC,1980-11-01,2014-06-20,197,"Chisel, Continuous corn",Corn,Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_212_CCCC,NELITCSE_212,NELITCSE_CCCC,2015-05-13,2015-08-14,5,"Continous Corn, Cover Crop",Corn,No Till,168 kg N/ha,"Secale cereale, Vicia villosa (Rye, Hairy Vetch)",No,No,No
+AgCROS_NELITCSE_212_CHCC,NELITCSE_212,NELITCSE_CHCC,1980-11-01,1984-11-20,24,"Chisel, Continuous corn",Corn,Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_212_CHSB,NELITCSE_212,NELITCSE_CHSB,1985-05-09,2014-05-15,143,"Chisel, Continuous soybean",Soybean,Conservation Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_213_CC,NELITCSE_213,NELITCSE_CC,2015-05-13,2015-06-24,2,Continuous corn,Corn,Not Reported,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_213_RTCC,NELITCSE_213,NELITCSE_RTCC,1981-04-07,2014-06-20,133,"Ridge Till, Continuous corn",Corn,Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_214_CSB,NELITCSE_214,NELITCSE_CSB,2015-05-13,2015-06-24,2,"Corn,Soybean","Corn, Soybean",No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_214_RTCC,NELITCSE_214,NELITCSE_RTCC,1981-04-07,1984-06-15,15,"Ridge Till, Continuous corn",Corn,Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_214_RTSBC,NELITCSE_214,NELITCSE_RTSBC,1985-05-09,2014-05-15,103,"Ridge Till, Soybean-corn rotation","Soybean, Corn",Conservation Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_215_CCCC,NELITCSE_215,NELITCSE_CCCC,2015-05-13,2015-08-14,5,"Continous Corn, Cover Crop",Corn,No Till,168 kg N/ha,"Secale cereale, Vicia villosa (Rye, Hairy Vetch)",No,No,No
+AgCROS_NELITCSE_215_RTCC,NELITCSE_215,NELITCSE_RTCC,1981-04-07,1984-06-15,15,"Ridge Till, Continuous corn",Corn,Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_215_RTSB,NELITCSE_215,NELITCSE_RTSB,1985-05-10,2014-05-15,88,"Ridge Till, Continuous soybean",Soybean,Conservation Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_216_RTCC,NELITCSE_216,NELITCSE_RTCC,1981-04-07,1984-06-15,15,"Ridge Till, Continuous corn",Corn,Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_216_RTCSB,NELITCSE_216,NELITCSE_RTCSB,1985-05-10,2014-06-20,103,"Ridge Till, Corn-soybean rotation","Corn, Soybean",Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_216_SBC,NELITCSE_216,NELITCSE_SBC,2015-05-13,2015-05-13,1,"Soybean,Corn","Soybean, Corn",No Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_217_CSB,NELITCSE_217,NELITCSE_CSB,2015-05-13,2015-06-24,2,"Corn,Soybean","Corn, Soybean",No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_217_NTCC,NELITCSE_217,NELITCSE_NTCC,1981-04-07,1984-06-15,15,"No Till, Continuous corn",Corn,No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_217_NTSBC,NELITCSE_217,NELITCSE_NTSBC,1985-05-09,2014-05-15,90,"No Till, Soybean-corn rotation","Soybean, Corn",No Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_218_CC,NELITCSE_218,NELITCSE_CC,2015-05-13,2015-06-24,2,Continuous corn,Corn,Not Reported,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_218_NTCC,NELITCSE_218,NELITCSE_NTCC,1981-04-07,2014-06-20,120,"No Till, Continuous corn",Corn,No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_219_CCCC,NELITCSE_219,NELITCSE_CCCC,2015-05-13,2015-08-14,5,"Continous Corn, Cover Crop",Corn,No Till,168 kg N/ha,"Secale cereale, Vicia villosa (Rye, Hairy Vetch)",No,No,No
+AgCROS_NELITCSE_219_NTCC,NELITCSE_219,NELITCSE_NTCC,1981-04-07,1984-06-15,15,"No Till, Continuous corn",Corn,No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_219_NTSB,NELITCSE_219,NELITCSE_NTSB,1985-05-10,2014-05-15,75,"No Till, Continuous soybean",Soybean,No Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_220_NTCC,NELITCSE_220,NELITCSE_NTCC,1981-04-07,1984-06-15,15,"No Till, Continuous corn",Corn,No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_220_NTCSB,NELITCSE_220,NELITCSE_NTCSB,1985-05-10,2014-06-20,90,"No Till, Corn-soybean rotation","Corn, Soybean",No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_220_SBC,NELITCSE_220,NELITCSE_SBC,2015-05-13,2015-05-13,1,"Soybean,Corn","Soybean, Corn",No Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_221_MPCC,NELITCSE_221,NELITCSE_MPCC,1980-11-01,1984-11-20,24,"Moldboard Plow, Continuous corn",Corn,Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_221_MPCSB,NELITCSE_221,NELITCSE_MPCSB,1985-05-09,2014-06-20,158,"Moldboard Plow, Corn-soybean rotation","Corn, Soybean",Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_221_SBC,NELITCSE_221,NELITCSE_SBC,2015-05-13,2015-05-13,1,"Soybean,Corn","Soybean, Corn",No Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_222_CCCC,NELITCSE_222,NELITCSE_CCCC,2015-05-13,2015-08-14,5,"Continous Corn, Cover Crop",Corn,No Till,168 kg N/ha,"Secale cereale, Vicia villosa (Rye, Hairy Vetch)",No,No,No
+AgCROS_NELITCSE_222_MPCC,NELITCSE_222,NELITCSE_MPCC,1980-11-01,1984-11-20,24,"Moldboard Plow, Continuous corn",Corn,Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_222_MPSB,NELITCSE_222,NELITCSE_MPSB,1985-05-09,2014-05-15,143,"Moldboard Plow, Continuous soybean",Soybean,Conventional Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_223_CSB,NELITCSE_223,NELITCSE_CSB,2015-05-13,2015-06-24,2,"Corn,Soybean","Corn, Soybean",No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_223_MPCC,NELITCSE_223,NELITCSE_MPCC,1980-11-01,1984-11-20,24,"Moldboard Plow, Continuous corn",Corn,Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_223_MPSBC,NELITCSE_223,NELITCSE_MPSBC,1985-05-09,2014-05-15,158,"Moldboard Plow, Soybean-corn rotation","Soybean, Corn",Conventional Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_224_CC,NELITCSE_224,NELITCSE_CC,2015-05-13,2015-06-24,2,Continuous corn,Corn,Not Reported,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_224_MPCC,NELITCSE_224,NELITCSE_MPCC,1980-11-01,2014-06-20,197,"Moldboard Plow, Continuous corn",Corn,Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_301_RTCC,NELITCSE_301,NELITCSE_RTCC,1981-04-07,1984-06-15,15,"Ridge Till, Continuous corn",Corn,Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_301_RTCSB,NELITCSE_301,NELITCSE_RTCSB,1985-05-10,2014-06-20,103,"Ridge Till, Corn-soybean rotation","Corn, Soybean",Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_301_SBC,NELITCSE_301,NELITCSE_SBC,2015-05-13,2015-05-13,1,"Soybean,Corn","Soybean, Corn",No Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_302_CSB,NELITCSE_302,NELITCSE_CSB,2015-05-13,2015-06-24,2,"Corn,Soybean","Corn, Soybean",No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_302_RTCC,NELITCSE_302,NELITCSE_RTCC,1981-04-07,1984-06-15,15,"Ridge Till, Continuous corn",Corn,Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_302_RTSBC,NELITCSE_302,NELITCSE_RTSBC,1985-05-09,2014-05-15,103,"Ridge Till, Soybean-corn rotation","Soybean, Corn",Conservation Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_303_CCCC,NELITCSE_303,NELITCSE_CCCC,2015-05-13,2015-08-14,5,"Continous Corn, Cover Crop",Corn,No Till,168 kg N/ha,"Secale cereale, Vicia villosa (Rye, Hairy Vetch)",No,No,No
+AgCROS_NELITCSE_303_RTCC,NELITCSE_303,NELITCSE_RTCC,1981-04-07,1984-06-15,15,"Ridge Till, Continuous corn",Corn,Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_303_RTSB,NELITCSE_303,NELITCSE_RTSB,1985-05-10,2014-05-15,88,"Ridge Till, Continuous soybean",Soybean,Conservation Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_304_CC,NELITCSE_304,NELITCSE_CC,2015-05-13,2015-06-24,2,Continuous corn,Corn,Not Reported,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_304_RTCC,NELITCSE_304,NELITCSE_RTCC,1981-04-07,2014-06-20,133,"Ridge Till, Continuous corn",Corn,Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_305_CCCC,NELITCSE_305,NELITCSE_CCCC,2015-05-13,2015-08-14,5,"Continous Corn, Cover Crop",Corn,No Till,168 kg N/ha,"Secale cereale, Vicia villosa (Rye, Hairy Vetch)",No,No,No
+AgCROS_NELITCSE_305_CHCC,NELITCSE_305,NELITCSE_CHCC,1980-11-01,1984-11-20,24,"Chisel, Continuous corn",Corn,Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_305_CHSB,NELITCSE_305,NELITCSE_CHSB,1985-05-09,2014-05-15,143,"Chisel, Continuous soybean",Soybean,Conservation Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_306_CHCC,NELITCSE_306,NELITCSE_CHCC,1980-11-01,1984-11-20,24,"Chisel, Continuous corn",Corn,Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_306_CHSBC,NELITCSE_306,NELITCSE_CHSBC,1985-05-09,2014-05-15,158,"Chisel, Soybean-corn rotation","Soybean, Corn",Conservation Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_306_CSB,NELITCSE_306,NELITCSE_CSB,2015-05-13,2015-06-24,2,"Corn,Soybean","Corn, Soybean",No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_307_CC,NELITCSE_307,NELITCSE_CC,2015-05-13,2015-06-24,2,Continuous corn,Corn,Not Reported,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_307_CHCC,NELITCSE_307,NELITCSE_CHCC,1980-11-01,2014-06-20,197,"Chisel, Continuous corn",Corn,Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_308_CHCC,NELITCSE_308,NELITCSE_CHCC,1980-11-01,1984-11-20,24,"Chisel, Continuous corn",Corn,Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_308_CHCSB,NELITCSE_308,NELITCSE_CHCSB,1985-05-09,2014-06-20,158,"Chisel, Corn-soybean rotation","Corn, Soybean",Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_308_SBC,NELITCSE_308,NELITCSE_SBC,2015-05-13,2015-05-13,1,"Soybean,Corn","Soybean, Corn",No Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_309_MPCC,NELITCSE_309,NELITCSE_MPCC,1980-11-01,1984-11-20,24,"Moldboard Plow, Continuous corn",Corn,Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_309_MPCSB,NELITCSE_309,NELITCSE_MPCSB,1985-05-09,2014-06-20,158,"Moldboard Plow, Corn-soybean rotation","Corn, Soybean",Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_309_SBC,NELITCSE_309,NELITCSE_SBC,2015-05-13,2015-05-13,1,"Soybean,Corn","Soybean, Corn",No Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_310_CSB,NELITCSE_310,NELITCSE_CSB,2015-05-13,2015-06-24,2,"Corn,Soybean","Corn, Soybean",No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_310_MPCC,NELITCSE_310,NELITCSE_MPCC,1980-11-01,1984-11-20,24,"Moldboard Plow, Continuous corn",Corn,Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_310_MPSBC,NELITCSE_310,NELITCSE_MPSBC,1985-05-09,2014-05-15,158,"Moldboard Plow, Soybean-corn rotation","Soybean, Corn",Conventional Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_311_CCCC,NELITCSE_311,NELITCSE_CCCC,2015-05-13,2015-08-14,5,"Continous Corn, Cover Crop",Corn,No Till,168 kg N/ha,"Secale cereale, Vicia villosa (Rye, Hairy Vetch)",No,No,No
+AgCROS_NELITCSE_311_MPCC,NELITCSE_311,NELITCSE_MPCC,1980-11-01,1984-11-20,24,"Moldboard Plow, Continuous corn",Corn,Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_311_MPSB,NELITCSE_311,NELITCSE_MPSB,1985-05-09,2014-05-15,143,"Moldboard Plow, Continuous soybean",Soybean,Conventional Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_312_CC,NELITCSE_312,NELITCSE_CC,2015-05-13,2015-06-24,2,Continuous corn,Corn,Not Reported,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_312_MPCC,NELITCSE_312,NELITCSE_MPCC,1980-11-01,2014-06-20,197,"Moldboard Plow, Continuous corn",Corn,Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_313_CSB,NELITCSE_313,NELITCSE_CSB,2015-05-13,2015-06-24,2,"Corn,Soybean","Corn, Soybean",No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_313_NTCC,NELITCSE_313,NELITCSE_NTCC,1981-04-07,1984-06-15,15,"No Till, Continuous corn",Corn,No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_313_NTSBC,NELITCSE_313,NELITCSE_NTSBC,1985-05-09,2014-05-15,90,"No Till, Soybean-corn rotation","Soybean, Corn",No Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_314_CC,NELITCSE_314,NELITCSE_CC,2015-05-13,2015-06-24,2,Continuous corn,Corn,Not Reported,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_314_NTCC,NELITCSE_314,NELITCSE_NTCC,1981-04-07,2014-06-20,120,"No Till, Continuous corn",Corn,No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_315_NTCC,NELITCSE_315,NELITCSE_NTCC,1981-04-07,1984-06-15,15,"No Till, Continuous corn",Corn,No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_315_NTCSB,NELITCSE_315,NELITCSE_NTCSB,1985-05-10,2014-06-20,90,"No Till, Corn-soybean rotation","Corn, Soybean",No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_315_SBC,NELITCSE_315,NELITCSE_SBC,2015-05-13,2015-05-13,1,"Soybean,Corn","Soybean, Corn",No Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_316_CCCC,NELITCSE_316,NELITCSE_CCCC,2015-05-13,2015-08-14,5,"Continous Corn, Cover Crop",Corn,No Till,168 kg N/ha,"Secale cereale, Vicia villosa (Rye, Hairy Vetch)",No,No,No
+AgCROS_NELITCSE_316_NTCC,NELITCSE_316,NELITCSE_NTCC,1981-04-07,1984-06-15,15,"No Till, Continuous corn",Corn,No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_316_NTSB,NELITCSE_316,NELITCSE_NTSB,1985-05-10,2014-05-15,75,"No Till, Continuous soybean",Soybean,No Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_317_CCCC,NELITCSE_317,NELITCSE_CCCC,2015-05-13,2015-08-14,5,"Continous Corn, Cover Crop",Corn,No Till,168 kg N/ha,"Secale cereale, Vicia villosa (Rye, Hairy Vetch)",No,No,No
+AgCROS_NELITCSE_317_DKCC,NELITCSE_317,NELITCSE_DKCC,1980-11-01,1984-11-20,24,"Disk, Continuous corn",Corn,Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_317_DKSB,NELITCSE_317,NELITCSE_DKSB,1985-05-09,2014-05-15,143,"Disk, Continuous soybean",Soybean,Conventional Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_318_CC,NELITCSE_318,NELITCSE_CC,2015-05-13,2015-06-24,2,Continuous corn,Corn,Not Reported,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_318_DKCC,NELITCSE_318,NELITCSE_DKCC,1980-11-01,2014-06-20,197,"Disk, Continuous corn",Corn,Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_319_CSB,NELITCSE_319,NELITCSE_CSB,2015-05-13,2015-06-24,2,"Corn,Soybean","Corn, Soybean",No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_319_DKCC,NELITCSE_319,NELITCSE_DKCC,1980-11-01,1984-11-20,24,"Disk, Continuous corn",Corn,Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_319_DKSBC,NELITCSE_319,NELITCSE_DKSBC,1985-05-09,2014-05-15,158,"Disk, Soybean-corn rotation","Soybean, Corn",Conventional Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_320_DKCC,NELITCSE_320,NELITCSE_DKCC,1980-11-01,1984-11-20,24,"Disk, Continuous corn",Corn,Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_320_DKCSB,NELITCSE_320,NELITCSE_DKCSB,1985-05-09,2014-06-20,158,"Disk, Corn-soybean rotation","Corn, Soybean",Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_320_SBC,NELITCSE_320,NELITCSE_SBC,2015-05-13,2015-05-13,1,"Soybean,Corn","Soybean, Corn",No Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_321_CC,NELITCSE_321,NELITCSE_CC,2015-05-13,2015-06-24,2,Continuous corn,Corn,Not Reported,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_321_SSCC,NELITCSE_321,NELITCSE_SSCC,1980-11-01,2014-06-20,197,"Subsoil, Continuous corn",Corn,Sub Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_322_CSB,NELITCSE_322,NELITCSE_CSB,2015-05-13,2015-06-24,2,"Corn,Soybean","Corn, Soybean",No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_322_SSCC,NELITCSE_322,NELITCSE_SSCC,1980-11-01,1984-11-20,24,"Subsoil, Continuous corn",Corn,Sub Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_322_SSSBC,NELITCSE_322,NELITCSE_SSSBC,1985-05-09,2014-05-15,158,"Subsoil, Soybean-corn rotation","Soybean, Corn",Sub Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_323_CCCC,NELITCSE_323,NELITCSE_CCCC,2015-05-13,2015-08-14,5,"Continous Corn, Cover Crop",Corn,No Till,168 kg N/ha,"Secale cereale, Vicia villosa (Rye, Hairy Vetch)",No,No,No
+AgCROS_NELITCSE_323_SSCC,NELITCSE_323,NELITCSE_SSCC,1980-11-01,1984-11-20,24,"Subsoil, Continuous corn",Corn,Sub Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_323_SSSB,NELITCSE_323,NELITCSE_SSSB,1985-05-09,2014-05-15,143,"Subsoil, Continuous soybean",Soybean,Sub Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_324_SBC,NELITCSE_324,NELITCSE_SBC,2015-05-13,2015-05-13,1,"Soybean,Corn","Soybean, Corn",No Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_324_SSCC,NELITCSE_324,NELITCSE_SSCC,1980-11-01,1984-11-20,24,"Subsoil, Continuous corn",Corn,Sub Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_324_SSCSB,NELITCSE_324,NELITCSE_SSCSB,1985-05-09,2014-06-20,158,"Subsoil, Corn-soybean rotation","Corn, Soybean",Sub Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_401_CSB,NELITCSE_401,NELITCSE_CSB,2015-05-13,2015-06-24,2,"Corn,Soybean","Corn, Soybean",No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_401_SSCC,NELITCSE_401,NELITCSE_SSCC,1980-11-01,1984-11-20,24,"Subsoil, Continuous corn",Corn,Sub Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_401_SSSBC,NELITCSE_401,NELITCSE_SSSBC,1985-05-09,2014-05-15,158,"Subsoil, Soybean-corn rotation","Soybean, Corn",Sub Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_402_CCCC,NELITCSE_402,NELITCSE_CCCC,2015-05-13,2015-08-14,5,"Continous Corn, Cover Crop",Corn,No Till,168 kg N/ha,"Secale cereale, Vicia villosa (Rye, Hairy Vetch)",No,No,No
+AgCROS_NELITCSE_402_SSCC,NELITCSE_402,NELITCSE_SSCC,1980-11-01,1984-11-20,24,"Subsoil, Continuous corn",Corn,Sub Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_402_SSSB,NELITCSE_402,NELITCSE_SSSB,1985-05-09,2014-05-15,143,"Subsoil, Continuous soybean",Soybean,Sub Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_403_SBC,NELITCSE_403,NELITCSE_SBC,2015-05-13,2015-05-13,1,"Soybean,Corn","Soybean, Corn",No Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_403_SSCC,NELITCSE_403,NELITCSE_SSCC,1980-11-01,1984-11-20,24,"Subsoil, Continuous corn",Corn,Sub Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_403_SSCSB,NELITCSE_403,NELITCSE_SSCSB,1985-05-09,2014-06-20,158,"Subsoil, Corn-soybean rotation","Corn, Soybean",Sub Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_404_CC,NELITCSE_404,NELITCSE_CC,2015-05-13,2015-06-24,2,Continuous corn,Corn,Not Reported,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_404_SSCC,NELITCSE_404,NELITCSE_SSCC,1980-11-01,2014-06-20,197,"Subsoil, Continuous corn",Corn,Sub Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_405_CCCC,NELITCSE_405,NELITCSE_CCCC,2015-05-13,2015-08-14,5,"Continous Corn, Cover Crop",Corn,No Till,168 kg N/ha,"Secale cereale, Vicia villosa (Rye, Hairy Vetch)",No,No,No
+AgCROS_NELITCSE_405_DKCC,NELITCSE_405,NELITCSE_DKCC,1980-11-01,1984-11-20,24,"Disk, Continuous corn",Corn,Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_405_DKSB,NELITCSE_405,NELITCSE_DKSB,1985-05-09,2014-05-15,143,"Disk, Continuous soybean",Soybean,Conventional Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_406_CSB,NELITCSE_406,NELITCSE_CSB,2015-05-13,2015-06-24,2,"Corn,Soybean","Corn, Soybean",No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_406_DKCC,NELITCSE_406,NELITCSE_DKCC,1980-11-01,1984-11-20,24,"Disk, Continuous corn",Corn,Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_406_DKSBC,NELITCSE_406,NELITCSE_DKSBC,1985-05-09,2014-05-15,158,"Disk, Soybean-corn rotation","Soybean, Corn",Conventional Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_407_CC,NELITCSE_407,NELITCSE_CC,2015-05-13,2015-06-24,2,Continuous corn,Corn,Not Reported,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_407_DKCC,NELITCSE_407,NELITCSE_DKCC,1980-11-01,2014-06-20,197,"Disk, Continuous corn",Corn,Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_408_DKCC,NELITCSE_408,NELITCSE_DKCC,1980-11-01,1984-11-20,24,"Disk, Continuous corn",Corn,Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_408_DKCSB,NELITCSE_408,NELITCSE_DKCSB,1985-05-09,2014-06-20,158,"Disk, Corn-soybean rotation","Corn, Soybean",Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_408_SBC,NELITCSE_408,NELITCSE_SBC,2015-05-13,2015-05-13,1,"Soybean,Corn","Soybean, Corn",No Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_409_CC,NELITCSE_409,NELITCSE_CC,2015-05-13,2015-06-24,2,Continuous corn,Corn,Not Reported,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_409_NTCC,NELITCSE_409,NELITCSE_NTCC,1981-04-07,2014-06-20,120,"No Till, Continuous corn",Corn,No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_410_CCCC,NELITCSE_410,NELITCSE_CCCC,2015-05-13,2015-08-14,5,"Continous Corn, Cover Crop",Corn,No Till,168 kg N/ha,"Secale cereale, Vicia villosa (Rye, Hairy Vetch)",No,No,No
+AgCROS_NELITCSE_410_NTCC,NELITCSE_410,NELITCSE_NTCC,1981-04-07,1984-06-15,15,"No Till, Continuous corn",Corn,No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_410_NTSB,NELITCSE_410,NELITCSE_NTSB,1985-05-10,2014-05-15,75,"No Till, Continuous soybean",Soybean,No Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_411_NTCC,NELITCSE_411,NELITCSE_NTCC,1981-04-07,1984-06-15,15,"No Till, Continuous corn",Corn,No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_411_NTCSB,NELITCSE_411,NELITCSE_NTCSB,1985-05-10,2014-06-20,90,"No Till, Corn-soybean rotation","Corn, Soybean",No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_411_SBC,NELITCSE_411,NELITCSE_SBC,2015-05-13,2015-05-13,1,"Soybean,Corn","Soybean, Corn",No Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_412_CSB,NELITCSE_412,NELITCSE_CSB,2015-05-13,2015-06-24,2,"Corn,Soybean","Corn, Soybean",No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_412_NTCC,NELITCSE_412,NELITCSE_NTCC,1981-04-07,1984-06-15,15,"No Till, Continuous corn",Corn,No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_412_NTSBC,NELITCSE_412,NELITCSE_NTSBC,1985-05-09,2014-05-15,90,"No Till, Soybean-corn rotation","Soybean, Corn",No Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_413_CCCC,NELITCSE_413,NELITCSE_CCCC,2015-05-13,2015-08-14,5,"Continous Corn, Cover Crop",Corn,No Till,168 kg N/ha,"Secale cereale, Vicia villosa (Rye, Hairy Vetch)",No,No,No
+AgCROS_NELITCSE_413_CHCC,NELITCSE_413,NELITCSE_CHCC,1980-11-01,1984-11-20,24,"Chisel, Continuous corn",Corn,Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_413_CHSB,NELITCSE_413,NELITCSE_CHSB,1985-05-09,2014-05-15,143,"Chisel, Continuous soybean",Soybean,Conservation Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_414_CHCC,NELITCSE_414,NELITCSE_CHCC,1980-11-01,1984-11-20,24,"Chisel, Continuous corn",Corn,Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_414_CHSBC,NELITCSE_414,NELITCSE_CHSBC,1985-05-09,2014-05-15,158,"Chisel, Soybean-corn rotation","Soybean, Corn",Conservation Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_414_CSB,NELITCSE_414,NELITCSE_CSB,2015-05-13,2015-06-24,2,"Corn,Soybean","Corn, Soybean",No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_415_CHCC,NELITCSE_415,NELITCSE_CHCC,1980-11-01,1984-11-20,24,"Chisel, Continuous corn",Corn,Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_415_CHCSB,NELITCSE_415,NELITCSE_CHCSB,1985-05-09,2014-06-20,158,"Chisel, Corn-soybean rotation","Corn, Soybean",Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_415_SBC,NELITCSE_415,NELITCSE_SBC,2015-05-13,2015-05-13,1,"Soybean,Corn","Soybean, Corn",No Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_416_CC,NELITCSE_416,NELITCSE_CC,2015-05-13,2015-06-24,2,Continuous corn,Corn,Not Reported,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_416_CHCC,NELITCSE_416,NELITCSE_CHCC,1980-11-01,2014-06-20,197,"Chisel, Continuous corn",Corn,Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_417_CSB,NELITCSE_417,NELITCSE_CSB,2015-05-13,2015-06-24,2,"Corn,Soybean","Corn, Soybean",No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_417_RTCC,NELITCSE_417,NELITCSE_RTCC,1981-04-07,1984-06-15,15,"Ridge Till, Continuous corn",Corn,Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_417_RTSBC,NELITCSE_417,NELITCSE_RTSBC,1985-05-09,2014-05-15,103,"Ridge Till, Soybean-corn rotation","Soybean, Corn",Conservation Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_418_CCCC,NELITCSE_418,NELITCSE_CCCC,2015-05-13,2015-08-14,5,"Continous Corn, Cover Crop",Corn,No Till,168 kg N/ha,"Secale cereale, Vicia villosa (Rye, Hairy Vetch)",No,No,No
+AgCROS_NELITCSE_418_RTCC,NELITCSE_418,NELITCSE_RTCC,1981-04-07,1984-06-15,15,"Ridge Till, Continuous corn",Corn,Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_418_RTSB,NELITCSE_418,NELITCSE_RTSB,1985-05-10,2014-05-15,88,"Ridge Till, Continuous soybean",Soybean,Conservation Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_419_RTCC,NELITCSE_419,NELITCSE_RTCC,1981-04-07,1984-06-15,15,"Ridge Till, Continuous corn",Corn,Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_419_RTCSB,NELITCSE_419,NELITCSE_RTCSB,1985-05-10,2014-06-20,103,"Ridge Till, Corn-soybean rotation","Corn, Soybean",Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_419_SBC,NELITCSE_419,NELITCSE_SBC,2015-05-13,2015-05-13,1,"Soybean,Corn","Soybean, Corn",No Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_420_CC,NELITCSE_420,NELITCSE_CC,2015-05-13,2015-06-24,2,Continuous corn,Corn,Not Reported,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_420_RTCC,NELITCSE_420,NELITCSE_RTCC,1981-04-07,2014-06-20,133,"Ridge Till, Continuous corn",Corn,Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_421_CSB,NELITCSE_421,NELITCSE_CSB,2015-05-13,2015-06-24,2,"Corn,Soybean","Corn, Soybean",No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_421_MPCC,NELITCSE_421,NELITCSE_MPCC,1980-11-01,1984-11-20,24,"Moldboard Plow, Continuous corn",Corn,Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_421_MPSBC,NELITCSE_421,NELITCSE_MPSBC,1985-05-09,2014-05-15,158,"Moldboard Plow, Soybean-corn rotation","Soybean, Corn",Conventional Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_422_CC,NELITCSE_422,NELITCSE_CC,2015-05-13,2015-06-24,2,Continuous corn,Corn,Not Reported,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_422_MPCC,NELITCSE_422,NELITCSE_MPCC,1980-11-01,2014-06-20,197,"Moldboard Plow, Continuous corn",Corn,Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_423_CCCC,NELITCSE_423,NELITCSE_CCCC,2015-05-13,2015-08-14,5,"Continous Corn, Cover Crop",Corn,No Till,168 kg N/ha,"Secale cereale, Vicia villosa (Rye, Hairy Vetch)",No,No,No
+AgCROS_NELITCSE_423_MPCC,NELITCSE_423,NELITCSE_MPCC,1980-11-01,1984-11-20,24,"Moldboard Plow, Continuous corn",Corn,Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_423_MPSB,NELITCSE_423,NELITCSE_MPSB,1985-05-09,2014-05-15,143,"Moldboard Plow, Continuous soybean",Soybean,Conventional Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_424_MPCC,NELITCSE_424,NELITCSE_MPCC,1980-11-01,1984-11-20,24,"Moldboard Plow, Continuous corn",Corn,Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_424_MPCSB,NELITCSE_424,NELITCSE_MPCSB,1985-05-09,2014-06-20,158,"Moldboard Plow, Corn-soybean rotation","Corn, Soybean",Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_424_SBC,NELITCSE_424,NELITCSE_SBC,2015-05-13,2015-05-13,1,"Soybean,Corn","Soybean, Corn",No Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_501_CC,NELITCSE_501,NELITCSE_CC,2015-05-13,2015-06-24,2,Continuous corn,Corn,Not Reported,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_501_DKCC,NELITCSE_501,NELITCSE_DKCC,1980-11-01,2014-06-20,197,"Disk, Continuous corn",Corn,Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_502_DKCC,NELITCSE_502,NELITCSE_DKCC,1980-11-01,1984-11-20,24,"Disk, Continuous corn",Corn,Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_502_DKCSB,NELITCSE_502,NELITCSE_DKCSB,1985-05-09,2014-06-20,158,"Disk, Corn-soybean rotation","Corn, Soybean",Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_502_SBC,NELITCSE_502,NELITCSE_SBC,2015-05-13,2015-05-13,1,"Soybean,Corn","Soybean, Corn",No Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_503_CSB,NELITCSE_503,NELITCSE_CSB,2015-05-13,2015-06-24,2,"Corn,Soybean","Corn, Soybean",No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_503_DKCC,NELITCSE_503,NELITCSE_DKCC,1980-11-01,1984-11-20,24,"Disk, Continuous corn",Corn,Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_503_DKSBC,NELITCSE_503,NELITCSE_DKSBC,1985-05-09,2014-05-15,158,"Disk, Soybean-corn rotation","Soybean, Corn",Conventional Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_504_CCCC,NELITCSE_504,NELITCSE_CCCC,2015-05-13,2015-08-14,5,"Continous Corn, Cover Crop",Corn,No Till,168 kg N/ha,"Secale cereale, Vicia villosa (Rye, Hairy Vetch)",No,No,No
+AgCROS_NELITCSE_504_DKCC,NELITCSE_504,NELITCSE_DKCC,1980-11-01,1984-11-20,24,"Disk, Continuous corn",Corn,Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_504_DKSB,NELITCSE_504,NELITCSE_DKSB,1985-05-09,2014-05-15,143,"Disk, Continuous soybean",Soybean,Conventional Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_505_CCCC,NELITCSE_505,NELITCSE_CCCC,2015-05-13,2015-08-14,5,"Continous Corn, Cover Crop",Corn,No Till,168 kg N/ha,"Secale cereale, Vicia villosa (Rye, Hairy Vetch)",No,No,No
+AgCROS_NELITCSE_505_RTCC,NELITCSE_505,NELITCSE_RTCC,1981-04-07,1984-06-15,15,"Ridge Till, Continuous corn",Corn,Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_505_RTSB,NELITCSE_505,NELITCSE_RTSB,1985-05-10,2014-05-15,88,"Ridge Till, Continuous soybean",Soybean,Conservation Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_506_CSB,NELITCSE_506,NELITCSE_CSB,2015-05-13,2015-06-24,2,"Corn,Soybean","Corn, Soybean",No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_506_RTCC,NELITCSE_506,NELITCSE_RTCC,1981-04-07,1984-06-15,15,"Ridge Till, Continuous corn",Corn,Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_506_RTSBC,NELITCSE_506,NELITCSE_RTSBC,1985-05-09,2014-05-15,103,"Ridge Till, Soybean-corn rotation","Soybean, Corn",Conservation Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_507_RTCC,NELITCSE_507,NELITCSE_RTCC,1981-04-07,1984-06-15,15,"Ridge Till, Continuous corn",Corn,Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_507_RTCSB,NELITCSE_507,NELITCSE_RTCSB,1985-05-10,2014-06-20,103,"Ridge Till, Corn-soybean rotation","Corn, Soybean",Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_507_SBC,NELITCSE_507,NELITCSE_SBC,2015-05-13,2015-05-13,1,"Soybean,Corn","Soybean, Corn",No Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_508_CC,NELITCSE_508,NELITCSE_CC,2015-05-13,2015-06-24,2,Continuous corn,Corn,Not Reported,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_508_RTCC,NELITCSE_508,NELITCSE_RTCC,1981-04-07,2014-06-20,133,"Ridge Till, Continuous corn",Corn,Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_509_CHCC,NELITCSE_509,NELITCSE_CHCC,1980-11-01,1984-11-20,24,"Chisel, Continuous corn",Corn,Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_509_CHSBC,NELITCSE_509,NELITCSE_CHSBC,1985-05-09,2014-05-15,158,"Chisel, Soybean-corn rotation","Soybean, Corn",Conservation Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_509_CSB,NELITCSE_509,NELITCSE_CSB,2015-05-13,2015-06-24,2,"Corn,Soybean","Corn, Soybean",No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_510_CCCC,NELITCSE_510,NELITCSE_CCCC,2015-05-13,2015-08-14,5,"Continous Corn, Cover Crop",Corn,No Till,168 kg N/ha,"Secale cereale, Vicia villosa (Rye, Hairy Vetch)",No,No,No
+AgCROS_NELITCSE_510_CHCC,NELITCSE_510,NELITCSE_CHCC,1980-11-01,1984-11-20,24,"Chisel, Continuous corn",Corn,Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_510_CHSB,NELITCSE_510,NELITCSE_CHSB,1985-05-09,2014-05-15,143,"Chisel, Continuous soybean",Soybean,Conservation Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_511_CHCC,NELITCSE_511,NELITCSE_CHCC,1980-11-01,1984-11-20,24,"Chisel, Continuous corn",Corn,Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_511_CHCSB,NELITCSE_511,NELITCSE_CHCSB,1985-05-09,2014-06-20,158,"Chisel, Corn-soybean rotation","Corn, Soybean",Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_511_SBC,NELITCSE_511,NELITCSE_SBC,2015-05-13,2015-05-13,1,"Soybean,Corn","Soybean, Corn",No Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_512_CC,NELITCSE_512,NELITCSE_CC,2015-05-13,2015-06-24,2,Continuous corn,Corn,Not Reported,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_512_CHCC,NELITCSE_512,NELITCSE_CHCC,1980-11-01,2014-06-20,197,"Chisel, Continuous corn",Corn,Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_513_CCCC,NELITCSE_513,NELITCSE_CCCC,2015-05-13,2015-08-14,5,"Continous Corn, Cover Crop",Corn,No Till,168 kg N/ha,"Secale cereale, Vicia villosa (Rye, Hairy Vetch)",No,No,No
+AgCROS_NELITCSE_513_SSCC,NELITCSE_513,NELITCSE_SSCC,1980-11-01,1984-11-20,24,"Subsoil, Continuous corn",Corn,Sub Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_513_SSSB,NELITCSE_513,NELITCSE_SSSB,1985-05-09,2014-05-15,143,"Subsoil, Continuous soybean",Soybean,Sub Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_514_SBC,NELITCSE_514,NELITCSE_SBC,2015-05-13,2015-05-13,1,"Soybean,Corn","Soybean, Corn",No Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_514_SSCC,NELITCSE_514,NELITCSE_SSCC,1980-11-01,1984-11-20,24,"Subsoil, Continuous corn",Corn,Sub Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_514_SSCSB,NELITCSE_514,NELITCSE_SSCSB,1985-05-09,2014-06-20,158,"Subsoil, Corn-soybean rotation","Corn, Soybean",Sub Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_515_CSB,NELITCSE_515,NELITCSE_CSB,2015-05-13,2015-06-24,2,"Corn,Soybean","Corn, Soybean",No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_515_SSCC,NELITCSE_515,NELITCSE_SSCC,1980-11-01,1984-11-20,24,"Subsoil, Continuous corn",Corn,Sub Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_515_SSSBC,NELITCSE_515,NELITCSE_SSSBC,1985-05-09,2014-05-15,158,"Subsoil, Soybean-corn rotation","Soybean, Corn",Sub Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_516_CC,NELITCSE_516,NELITCSE_CC,2015-05-13,2015-06-24,2,Continuous corn,Corn,Not Reported,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_516_SSCC,NELITCSE_516,NELITCSE_SSCC,1980-11-01,2014-06-20,197,"Subsoil, Continuous corn",Corn,Sub Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_517_CC,NELITCSE_517,NELITCSE_CC,2015-05-13,2015-06-24,2,Continuous corn,Corn,Not Reported,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_517_NTCC,NELITCSE_517,NELITCSE_NTCC,1981-04-07,2014-06-20,120,"No Till, Continuous corn",Corn,No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_518_CSB,NELITCSE_518,NELITCSE_CSB,2015-05-13,2015-06-24,2,"Corn,Soybean","Corn, Soybean",No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_518_NTCC,NELITCSE_518,NELITCSE_NTCC,1981-04-07,1984-06-15,15,"No Till, Continuous corn",Corn,No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_518_NTSBC,NELITCSE_518,NELITCSE_NTSBC,1985-05-09,2014-05-15,90,"No Till, Soybean-corn rotation","Soybean, Corn",No Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_519_CCCC,NELITCSE_519,NELITCSE_CCCC,2015-05-13,2015-08-14,5,"Continous Corn, Cover Crop",Corn,No Till,168 kg N/ha,"Secale cereale, Vicia villosa (Rye, Hairy Vetch)",No,No,No
+AgCROS_NELITCSE_519_NTCC,NELITCSE_519,NELITCSE_NTCC,1981-04-07,1984-06-15,15,"No Till, Continuous corn",Corn,No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_519_NTSB,NELITCSE_519,NELITCSE_NTSB,1985-05-10,2014-05-15,75,"No Till, Continuous soybean",Soybean,No Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_520_NTCC,NELITCSE_520,NELITCSE_NTCC,1981-04-07,1984-06-15,15,"No Till, Continuous corn",Corn,No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_520_NTCSB,NELITCSE_520,NELITCSE_NTCSB,1985-05-10,2014-06-20,90,"No Till, Corn-soybean rotation","Corn, Soybean",No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_520_SBC,NELITCSE_520,NELITCSE_SBC,2015-05-13,2015-05-13,1,"Soybean,Corn","Soybean, Corn",No Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_521_CCCC,NELITCSE_521,NELITCSE_CCCC,2015-05-13,2015-08-14,5,"Continous Corn, Cover Crop",Corn,No Till,168 kg N/ha,"Secale cereale, Vicia villosa (Rye, Hairy Vetch)",No,No,No
+AgCROS_NELITCSE_521_MPCC,NELITCSE_521,NELITCSE_MPCC,1980-11-01,1984-11-20,24,"Moldboard Plow, Continuous corn",Corn,Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_521_MPSB,NELITCSE_521,NELITCSE_MPSB,1985-05-09,2014-05-15,143,"Moldboard Plow, Continuous soybean",Soybean,Conventional Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_522_CSB,NELITCSE_522,NELITCSE_CSB,2015-05-13,2015-06-24,2,"Corn,Soybean","Corn, Soybean",No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_522_MPCC,NELITCSE_522,NELITCSE_MPCC,1980-11-01,1984-11-20,24,"Moldboard Plow, Continuous corn",Corn,Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_522_MPSBC,NELITCSE_522,NELITCSE_MPSBC,1985-05-09,2014-05-15,158,"Moldboard Plow, Soybean-corn rotation","Soybean, Corn",Conventional Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_523_CC,NELITCSE_523,NELITCSE_CC,2015-05-13,2015-06-24,2,Continuous corn,Corn,Not Reported,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_523_MPCC,NELITCSE_523,NELITCSE_MPCC,1980-11-01,2014-06-20,197,"Moldboard Plow, Continuous corn",Corn,Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_524_MPCC,NELITCSE_524,NELITCSE_MPCC,1980-11-01,1984-11-20,24,"Moldboard Plow, Continuous corn",Corn,Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_524_MPCSB,NELITCSE_524,NELITCSE_MPCSB,1985-05-09,2014-06-20,158,"Moldboard Plow, Corn-soybean rotation","Corn, Soybean",Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_524_SBC,NELITCSE_524,NELITCSE_SBC,2015-05-13,2015-05-13,1,"Soybean,Corn","Soybean, Corn",No Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_601_CC,NELITCSE_601,NELITCSE_CC,2015-05-13,2015-06-24,2,Continuous corn,Corn,Not Reported,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_601_NTCC,NELITCSE_601,NELITCSE_NTCC,1981-04-07,2014-06-20,110,"No Till, Continuous corn",Corn,No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_602_CSB,NELITCSE_602,NELITCSE_CSB,2015-05-13,2015-06-24,2,"Corn,Soybean","Corn, Soybean",No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_602_NTCC,NELITCSE_602,NELITCSE_NTCC,1981-04-07,1984-06-15,15,"No Till, Continuous corn",Corn,No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_602_NTSBC,NELITCSE_602,NELITCSE_NTSBC,1985-05-09,2014-05-15,80,"No Till, Soybean-corn rotation","Soybean, Corn",No Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_603_CCCC,NELITCSE_603,NELITCSE_CCCC,2015-05-13,2015-08-14,5,"Continous Corn, Cover Crop",Corn,No Till,168 kg N/ha,"Secale cereale, Vicia villosa (Rye, Hairy Vetch)",No,No,No
+AgCROS_NELITCSE_603_NTCC,NELITCSE_603,NELITCSE_NTCC,1981-04-07,1984-06-15,15,"No Till, Continuous corn",Corn,No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_603_NTSB,NELITCSE_603,NELITCSE_NTSB,1985-05-10,2014-05-15,65,"No Till, Continuous soybean",Soybean,No Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_604_NTCC,NELITCSE_604,NELITCSE_NTCC,1981-04-07,1984-06-15,15,"No Till, Continuous corn",Corn,No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_604_NTCSB,NELITCSE_604,NELITCSE_NTCSB,1985-05-10,2014-06-20,80,"No Till, Corn-soybean rotation","Corn, Soybean",No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_604_SBC,NELITCSE_604,NELITCSE_SBC,2015-05-13,2015-05-13,1,"Soybean,Corn","Soybean, Corn",No Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_605_CC,NELITCSE_605,NELITCSE_CC,2015-05-13,2015-06-24,2,Continuous corn,Corn,Not Reported,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_605_DKCC,NELITCSE_605,NELITCSE_DKCC,1980-11-01,2014-06-20,187,"Disk, Continuous corn",Corn,Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_606_DKCC,NELITCSE_606,NELITCSE_DKCC,1980-11-01,1984-11-20,24,"Disk, Continuous corn",Corn,Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_606_DKCSB,NELITCSE_606,NELITCSE_DKCSB,1985-05-09,2014-06-20,148,"Disk, Corn-soybean rotation","Corn, Soybean",Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_606_SBC,NELITCSE_606,NELITCSE_SBC,2015-05-13,2015-05-13,1,"Soybean,Corn","Soybean, Corn",No Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_607_CCCC,NELITCSE_607,NELITCSE_CCCC,2015-05-13,2015-08-14,5,"Continous Corn, Cover Crop",Corn,No Till,168 kg N/ha,"Secale cereale, Vicia villosa (Rye, Hairy Vetch)",No,No,No
+AgCROS_NELITCSE_607_DKCC,NELITCSE_607,NELITCSE_DKCC,1980-11-01,1984-11-20,24,"Disk, Continuous corn",Corn,Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_607_DKSB,NELITCSE_607,NELITCSE_DKSB,1985-05-09,2014-05-15,133,"Disk, Continuous soybean",Soybean,Conventional Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_608_CSB,NELITCSE_608,NELITCSE_CSB,2015-05-13,2015-06-24,2,"Corn,Soybean","Corn, Soybean",No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_608_DKCC,NELITCSE_608,NELITCSE_DKCC,1980-11-01,1984-11-20,24,"Disk, Continuous corn",Corn,Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_608_DKSBC,NELITCSE_608,NELITCSE_DKSBC,1985-05-09,2014-05-15,148,"Disk, Soybean-corn rotation","Soybean, Corn",Conventional Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_609_CC,NELITCSE_609,NELITCSE_CC,2015-05-13,2015-06-24,2,Continuous corn,Corn,Not Reported,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_609_SSCC,NELITCSE_609,NELITCSE_SSCC,1980-11-01,2014-06-20,187,"Subsoil, Continuous corn",Corn,Sub Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_610_CCCC,NELITCSE_610,NELITCSE_CCCC,2015-05-13,2015-08-14,5,"Continous Corn, Cover Crop",Corn,No Till,168 kg N/ha,"Secale cereale, Vicia villosa (Rye, Hairy Vetch)",No,No,No
+AgCROS_NELITCSE_610_SSCC,NELITCSE_610,NELITCSE_SSCC,1980-11-01,1984-11-20,24,"Subsoil, Continuous corn",Corn,Sub Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_610_SSSB,NELITCSE_610,NELITCSE_SSSB,1985-05-09,2014-05-15,133,"Subsoil, Continuous soybean",Soybean,Sub Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_611_CSB,NELITCSE_611,NELITCSE_CSB,2015-05-13,2015-06-24,2,"Corn,Soybean","Corn, Soybean",No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_611_SSCC,NELITCSE_611,NELITCSE_SSCC,1980-11-01,1984-11-20,24,"Subsoil, Continuous corn",Corn,Sub Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_611_SSSBC,NELITCSE_611,NELITCSE_SSSBC,1985-05-09,2014-05-15,148,"Subsoil, Soybean-corn rotation","Soybean, Corn",Sub Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_612_SBC,NELITCSE_612,NELITCSE_SBC,2015-05-13,2015-05-13,1,"Soybean,Corn","Soybean, Corn",No Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_612_SSCC,NELITCSE_612,NELITCSE_SSCC,1980-11-01,1984-11-20,24,"Subsoil, Continuous corn",Corn,Sub Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_612_SSCSB,NELITCSE_612,NELITCSE_SSCSB,1985-05-09,2014-06-20,148,"Subsoil, Corn-soybean rotation","Corn, Soybean",Sub Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_613_RTCC,NELITCSE_613,NELITCSE_RTCC,1981-04-07,1984-06-15,15,"Ridge Till, Continuous corn",Corn,Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_613_RTCSB,NELITCSE_613,NELITCSE_RTCSB,1985-05-10,2014-06-20,93,"Ridge Till, Corn-soybean rotation","Corn, Soybean",Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_613_SBC,NELITCSE_613,NELITCSE_SBC,2015-05-13,2015-05-13,1,"Soybean,Corn","Soybean, Corn",No Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_614_CSB,NELITCSE_614,NELITCSE_CSB,2015-05-13,2015-06-24,2,"Corn,Soybean","Corn, Soybean",No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_614_RTCC,NELITCSE_614,NELITCSE_RTCC,1981-04-07,1984-06-15,15,"Ridge Till, Continuous corn",Corn,Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_614_RTSBC,NELITCSE_614,NELITCSE_RTSBC,1985-05-09,2014-05-15,93,"Ridge Till, Soybean-corn rotation","Soybean, Corn",Conservation Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_615_CCCC,NELITCSE_615,NELITCSE_CCCC,2015-05-13,2015-08-14,5,"Continous Corn, Cover Crop",Corn,No Till,168 kg N/ha,"Secale cereale, Vicia villosa (Rye, Hairy Vetch)",No,No,No
+AgCROS_NELITCSE_615_RTCC,NELITCSE_615,NELITCSE_RTCC,1981-04-07,1984-06-15,15,"Ridge Till, Continuous corn",Corn,Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_615_RTSB,NELITCSE_615,NELITCSE_RTSB,1985-05-10,2014-05-15,78,"Ridge Till, Continuous soybean",Soybean,Conservation Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_616_CC,NELITCSE_616,NELITCSE_CC,2015-05-13,2015-06-24,2,Continuous corn,Corn,Not Reported,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_616_RTCC,NELITCSE_616,NELITCSE_RTCC,1981-04-07,2014-06-20,123,"Ridge Till, Continuous corn",Corn,Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_617_MPCC,NELITCSE_617,NELITCSE_MPCC,1980-11-01,1984-11-20,24,"Moldboard Plow, Continuous corn",Corn,Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_617_MPCSB,NELITCSE_617,NELITCSE_MPCSB,1985-05-09,2014-06-20,148,"Moldboard Plow, Corn-soybean rotation","Corn, Soybean",Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_617_SBC,NELITCSE_617,NELITCSE_SBC,2015-05-13,2015-05-13,1,"Soybean,Corn","Soybean, Corn",No Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_618_CSB,NELITCSE_618,NELITCSE_CSB,2015-05-13,2015-06-24,2,"Corn,Soybean","Corn, Soybean",No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_618_MPCC,NELITCSE_618,NELITCSE_MPCC,1980-11-01,1984-11-20,24,"Moldboard Plow, Continuous corn",Corn,Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_618_MPSBC,NELITCSE_618,NELITCSE_MPSBC,1985-05-09,2014-05-15,148,"Moldboard Plow, Soybean-corn rotation","Soybean, Corn",Conventional Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_619_CCCC,NELITCSE_619,NELITCSE_CCCC,2015-05-13,2015-08-14,5,"Continous Corn, Cover Crop",Corn,No Till,168 kg N/ha,"Secale cereale, Vicia villosa (Rye, Hairy Vetch)",No,No,No
+AgCROS_NELITCSE_619_MPCC,NELITCSE_619,NELITCSE_MPCC,1980-11-01,1984-11-20,24,"Moldboard Plow, Continuous corn",Corn,Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_619_MPSB,NELITCSE_619,NELITCSE_MPSB,1985-05-09,2014-05-15,133,"Moldboard Plow, Continuous soybean",Soybean,Conventional Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_620_CC,NELITCSE_620,NELITCSE_CC,2015-05-13,2015-06-24,2,Continuous corn,Corn,Not Reported,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_620_MPCC,NELITCSE_620,NELITCSE_MPCC,1980-11-01,2014-06-20,187,"Moldboard Plow, Continuous corn",Corn,Conventional Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_621_CC,NELITCSE_621,NELITCSE_CC,2015-05-13,2015-06-24,2,Continuous corn,Corn,Not Reported,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_621_CHCC,NELITCSE_621,NELITCSE_CHCC,1980-11-01,2014-06-20,187,"Chisel, Continuous corn",Corn,Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_622_CHCC,NELITCSE_622,NELITCSE_CHCC,1980-11-01,1984-11-20,24,"Chisel, Continuous corn",Corn,Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_622_CHSBC,NELITCSE_622,NELITCSE_CHSBC,1985-05-09,2014-05-15,148,"Chisel, Soybean-corn rotation","Soybean, Corn",Conservation Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_622_CSB,NELITCSE_622,NELITCSE_CSB,2015-05-13,2015-06-24,2,"Corn,Soybean","Corn, Soybean",No Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_623_CCCC,NELITCSE_623,NELITCSE_CCCC,2015-05-13,2015-08-14,5,"Continous Corn, Cover Crop",Corn,No Till,168 kg N/ha,"Secale cereale, Vicia villosa (Rye, Hairy Vetch)",No,No,No
+AgCROS_NELITCSE_623_CHCC,NELITCSE_623,NELITCSE_CHCC,1980-11-01,1984-11-20,24,"Chisel, Continuous corn",Corn,Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_623_CHSB,NELITCSE_623,NELITCSE_CHSB,1985-05-09,2014-05-15,133,"Chisel, Continuous soybean",Soybean,Conservation Till,0 kg N/ha,,No,No,No
+AgCROS_NELITCSE_624_CHCC,NELITCSE_624,NELITCSE_CHCC,1980-11-01,1984-11-20,24,"Chisel, Continuous corn",Corn,Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_624_CHCSB,NELITCSE_624,NELITCSE_CHCSB,1985-05-09,2014-06-20,148,"Chisel, Corn-soybean rotation","Corn, Soybean",Conservation Till,168 kg N/ha,,No,No,No
+AgCROS_NELITCSE_624_SBC,NELITCSE_624,NELITCSE_SBC,2015-05-13,2015-05-13,1,"Soybean,Corn","Soybean, Corn",No Till,0 kg N/ha,,No,No,No

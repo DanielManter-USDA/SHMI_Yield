@@ -1,0 +1,89 @@
+MGT_combo,unit_id,treatment_id,first_record,last_record,records,treatment_descriptor,rotation_descriptor,tillage_descriptor,n_treatment_descriptor,cover_crop,residue_removal,irrigation,organic_management
+AgCROS_IAAM7071_101_18,IAAM7071_101,IAAM7071_18,2007-08-26,2012-12-12,84,Standard Management High Charcoal2,Corn,Conservation Till,Medium,,Yes,No,No
+AgCROS_IAAM7071_102_21,IAAM7071_102,IAAM7071_21,2008-05-06,2012-12-12,63,Standard Management Medium Perennial Cover Crop. Change to Corn with Rye/Soybean rotation in 2011,"White Clover/Corn, Corn/Rye, Soybean",No Till,Medium,,Partial,No,No
+AgCROS_IAAM7071_103_13,IAAM7071_103,IAAM7071_13,2007-08-26,2012-12-12,82,Standard Management Charcoal1,Corn,Conservation Till,Medium,,No,No,No
+AgCROS_IAAM7071_104_16,IAAM7071_104,IAAM7071_16,2007-08-26,2012-12-12,84,Standard Management Medium Charcoal2,Corn,Conservation Till,Medium,,Partial,No,No
+AgCROS_IAAM7071_105_9,IAAM7071_105,IAAM7071_9,2007-08-26,2012-12-12,83,Intensive Management Medium Chisel Plow,Corn,Conservation Till,High,,Partial,No,No
+AgCROS_IAAM7071_106_2,IAAM7071_106,IAAM7071_2,2008-04-16,2012-12-12,71,Standard Management NoTill,Corn,No Till,Medium,,No,No,No
+AgCROS_IAAM7071_107_15,IAAM7071_107,IAAM7071_15,2007-08-26,2012-12-12,83,Standard Management Medium Charcoal1,Corn,Conservation Till,Medium,,Partial,No,No
+AgCROS_IAAM7071_108_10,IAAM7071_108,IAAM7071_10,2008-04-16,2012-12-12,74,Intensive Management Medium NoTill,Corn,No Till,High,,Partial,No,No
+AgCROS_IAAM7071_109_17,IAAM7071_109,IAAM7071_17,2007-08-26,2012-12-12,83,Standard Management High Charcoal1,Corn,Conservation Till,Medium,,Yes,No,No
+AgCROS_IAAM7071_110_3,IAAM7071_110,IAAM7071_3,2007-08-26,2012-12-12,81,Standard Management Medium Chisel Plow,Corn,Conservation Till,Medium,,Partial,No,No
+AgCROS_IAAM7071_111_22,IAAM7071_111,IAAM7071_22,2008-05-06,2012-12-12,61,Standard Management High Perennial Cover Crop. Change to Soybean/Corn with Rye rotation in 2011,"White Clover/Corn, Corn/Rye, Soybean",No Till,Medium,,Yes,No,No
+AgCROS_IAAM7071_112_19,IAAM7071_112,IAAM7071_19,2008-04-16,2012-12-12,70,Standard Management Medium Annual Cover Crop,"Corn, Rye",No Till,Medium,Secale cereale (Rye),Partial,No,No
+AgCROS_IAAM7071_113_20,IAAM7071_113,IAAM7071_20,2008-04-16,2012-12-12,70,Standard Management High Annual Cover Crop,"Corn, Rye",No Till,Medium,Secale cereale (Rye),Yes,No,No
+AgCROS_IAAM7071_114_7,IAAM7071_114,IAAM7071_7,2007-08-26,2012-12-12,82,Intensive Management Control,Corn,Conservation Till,High,,No,No,No
+AgCROS_IAAM7071_115_1,IAAM7071_115,IAAM7071_1,2007-08-26,2012-12-12,80,Standard Management Control,Corn,Conservation Till,Medium,,No,No,No
+AgCROS_IAAM7071_116_4,IAAM7071_116,IAAM7071_4,2008-04-16,2012-12-12,72,Standard Management Medium NoTill,Corn,No Till,Medium,,Partial,No,No
+AgCROS_IAAM7071_117_14,IAAM7071_117,IAAM7071_14,2007-08-26,2012-12-12,83,Standard Management Charcoal2,Corn,Conservation Till,Medium,,No,No,No
+AgCROS_IAAM7071_118_11,IAAM7071_118,IAAM7071_11,2007-08-26,2012-12-12,83,Intensive Management High Chisel Plow,Corn,Conservation Till,High,,Yes,No,No
+AgCROS_IAAM7071_119_5,IAAM7071_119,IAAM7071_5,2007-08-26,2012-12-12,81,Standard Management High Chisel Plow,Corn,Conservation Till,Medium,,Yes,No,No
+AgCROS_IAAM7071_120_6,IAAM7071_120,IAAM7071_6,2008-04-16,2012-12-12,72,Standard Management High NoTill,Corn,No Till,Medium,,Yes,No,No
+AgCROS_IAAM7071_121_12,IAAM7071_121,IAAM7071_12,2008-04-16,2012-12-12,74,Intensive Management High NoTill,Corn,No Till,High,,Yes,No,No
+AgCROS_IAAM7071_122_8,IAAM7071_122,IAAM7071_8,2008-04-16,2012-12-12,73,Intensive Management NoTill,Corn,No Till,High,,No,No,No
+AgCROS_IAAM7071_201_6,IAAM7071_201,IAAM7071_6,2008-04-16,2012-12-12,72,Standard Management High NoTill,Corn,No Till,Medium,,Yes,No,No
+AgCROS_IAAM7071_202_13,IAAM7071_202,IAAM7071_13,2007-08-26,2012-12-12,82,Standard Management Charcoal1,Corn,Conservation Till,Medium,,No,No,No
+AgCROS_IAAM7071_203_19,IAAM7071_203,IAAM7071_19,2008-04-16,2012-12-12,70,Standard Management Medium Annual Cover Crop,"Corn, Rye",No Till,Medium,Secale cereale (Rye),Partial,No,No
+AgCROS_IAAM7071_204_16,IAAM7071_204,IAAM7071_16,2007-08-26,2012-12-12,84,Standard Management Medium Charcoal2,Corn,Conservation Till,Medium,,Partial,No,No
+AgCROS_IAAM7071_205_18,IAAM7071_205,IAAM7071_18,2007-08-26,2012-12-12,84,Standard Management High Charcoal2,Corn,Conservation Till,Medium,,Yes,No,No
+AgCROS_IAAM7071_206_4,IAAM7071_206,IAAM7071_4,2008-04-16,2012-12-12,72,Standard Management Medium NoTill,Corn,No Till,Medium,,Partial,No,No
+AgCROS_IAAM7071_207_5,IAAM7071_207,IAAM7071_5,2007-08-26,2012-12-12,81,Standard Management High Chisel Plow,Corn,Conservation Till,Medium,,Yes,No,No
+AgCROS_IAAM7071_208_1,IAAM7071_208,IAAM7071_1,2007-08-26,2012-12-12,80,Standard Management Control,Corn,Conservation Till,Medium,,No,No,No
+AgCROS_IAAM7071_209_7,IAAM7071_209,IAAM7071_7,2007-08-26,2012-12-12,82,Intensive Management Control,Corn,Conservation Till,High,,No,No,No
+AgCROS_IAAM7071_210_17,IAAM7071_210,IAAM7071_17,2007-08-26,2012-12-12,83,Standard Management High Charcoal1,Corn,Conservation Till,Medium,,Yes,No,No
+AgCROS_IAAM7071_211_15,IAAM7071_211,IAAM7071_15,2007-08-26,2012-12-12,83,Standard Management Medium Charcoal1,Corn,Conservation Till,Medium,,Partial,No,No
+AgCROS_IAAM7071_212_12,IAAM7071_212,IAAM7071_12,2008-04-16,2012-12-12,74,Intensive Management High NoTill,Corn,No Till,High,,Yes,No,No
+AgCROS_IAAM7071_213_3,IAAM7071_213,IAAM7071_3,2007-08-26,2012-12-12,81,Standard Management Medium Chisel Plow,Corn,Conservation Till,Medium,,Partial,No,No
+AgCROS_IAAM7071_214_20,IAAM7071_214,IAAM7071_20,2008-04-16,2012-12-12,70,Standard Management High Annual Cover Crop,"Corn, Rye",No Till,Medium,Secale cereale (Rye),Yes,No,No
+AgCROS_IAAM7071_215_21,IAAM7071_215,IAAM7071_21,2008-05-06,2012-12-12,63,Standard Management Medium Perennial Cover Crop. Change to Corn with Rye/Soybean rotation in 2011,"White Clover/Corn, Corn/Rye, Soybean",No Till,Medium,,Partial,No,No
+AgCROS_IAAM7071_216_14,IAAM7071_216,IAAM7071_14,2007-08-26,2012-12-12,83,Standard Management Charcoal2,Corn,Conservation Till,Medium,,No,No,No
+AgCROS_IAAM7071_217_9,IAAM7071_217,IAAM7071_9,2007-08-26,2012-12-12,83,Intensive Management Medium Chisel Plow,Corn,Conservation Till,High,,Partial,No,No
+AgCROS_IAAM7071_218_8,IAAM7071_218,IAAM7071_8,2008-04-16,2012-12-12,73,Intensive Management NoTill,Corn,No Till,High,,No,No,No
+AgCROS_IAAM7071_219_2,IAAM7071_219,IAAM7071_2,2008-04-16,2012-12-12,71,Standard Management NoTill,Corn,No Till,Medium,,No,No,No
+AgCROS_IAAM7071_220_11,IAAM7071_220,IAAM7071_11,2007-08-26,2012-12-12,83,Intensive Management High Chisel Plow,Corn,Conservation Till,High,,Yes,No,No
+AgCROS_IAAM7071_221_10,IAAM7071_221,IAAM7071_10,2008-04-16,2012-12-12,74,Intensive Management Medium NoTill,Corn,No Till,High,,Partial,No,No
+AgCROS_IAAM7071_222_22,IAAM7071_222,IAAM7071_22,2008-05-06,2012-12-12,61,Standard Management High Perennial Cover Crop. Change to Soybean/Corn with Rye rotation in 2011,"White Clover/Corn, Corn/Rye, Soybean",No Till,Medium,,Yes,No,No
+AgCROS_IAAM7071_301_15,IAAM7071_301,IAAM7071_15,2007-08-26,2012-12-12,83,Standard Management Medium Charcoal1,Corn,Conservation Till,Medium,,Partial,No,No
+AgCROS_IAAM7071_302_19,IAAM7071_302,IAAM7071_19,2008-04-16,2012-12-12,70,Standard Management Medium Annual Cover Crop,"Corn, Rye",No Till,Medium,Secale cereale (Rye),Partial,No,No
+AgCROS_IAAM7071_303_22,IAAM7071_303,IAAM7071_22,2008-05-06,2012-12-12,61,Standard Management High Perennial Cover Crop. Change to Soybean/Corn with Rye rotation in 2011,"White Clover/Corn, Corn/Rye, Soybean",No Till,Medium,,Yes,No,No
+AgCROS_IAAM7071_304_4,IAAM7071_304,IAAM7071_4,2008-04-16,2012-12-12,72,Standard Management Medium NoTill,Corn,No Till,Medium,,Partial,No,No
+AgCROS_IAAM7071_305_3,IAAM7071_305,IAAM7071_3,2007-08-26,2012-12-12,81,Standard Management Medium Chisel Plow,Corn,Conservation Till,Medium,,Partial,No,No
+AgCROS_IAAM7071_306_21,IAAM7071_306,IAAM7071_21,2008-05-06,2012-12-12,63,Standard Management Medium Perennial Cover Crop. Change to Corn with Rye/Soybean rotation in 2011,"White Clover/Corn, Corn/Rye, Soybean",No Till,Medium,,Partial,No,No
+AgCROS_IAAM7071_307_5,IAAM7071_307,IAAM7071_5,2007-08-26,2012-12-12,81,Standard Management High Chisel Plow,Corn,Conservation Till,Medium,,Yes,No,No
+AgCROS_IAAM7071_308_20,IAAM7071_308,IAAM7071_20,2008-04-16,2012-12-12,70,Standard Management High Annual Cover Crop,"Corn, Rye",No Till,Medium,Secale cereale (Rye),Yes,No,No
+AgCROS_IAAM7071_309_9,IAAM7071_309,IAAM7071_9,2007-08-26,2012-12-12,83,Intensive Management Medium Chisel Plow,Corn,Conservation Till,High,,Partial,No,No
+AgCROS_IAAM7071_310_8,IAAM7071_310,IAAM7071_8,2008-04-16,2012-12-12,73,Intensive Management NoTill,Corn,No Till,High,,No,No,No
+AgCROS_IAAM7071_311_17,IAAM7071_311,IAAM7071_17,2007-08-26,2012-12-12,83,Standard Management High Charcoal1,Corn,Conservation Till,Medium,,Yes,No,No
+AgCROS_IAAM7071_312_18,IAAM7071_312,IAAM7071_18,2007-08-26,2012-12-12,84,Standard Management High Charcoal2,Corn,Conservation Till,Medium,,Yes,No,No
+AgCROS_IAAM7071_313_11,IAAM7071_313,IAAM7071_11,2007-08-26,2012-12-12,83,Intensive Management High Chisel Plow,Corn,Conservation Till,High,,Yes,No,No
+AgCROS_IAAM7071_314_12,IAAM7071_314,IAAM7071_12,2008-04-16,2012-12-12,74,Intensive Management High NoTill,Corn,No Till,High,,Yes,No,No
+AgCROS_IAAM7071_315_14,IAAM7071_315,IAAM7071_14,2007-08-26,2012-12-12,83,Standard Management Charcoal2,Corn,Conservation Till,Medium,,No,No,No
+AgCROS_IAAM7071_316_7,IAAM7071_316,IAAM7071_7,2007-08-26,2012-12-12,82,Intensive Management Control,Corn,Conservation Till,High,,No,No,No
+AgCROS_IAAM7071_317_10,IAAM7071_317,IAAM7071_10,2008-04-16,2012-12-12,74,Intensive Management Medium NoTill,Corn,No Till,High,,Partial,No,No
+AgCROS_IAAM7071_318_2,IAAM7071_318,IAAM7071_2,2008-04-16,2012-12-12,71,Standard Management NoTill,Corn,No Till,Medium,,No,No,No
+AgCROS_IAAM7071_319_16,IAAM7071_319,IAAM7071_16,2007-08-26,2012-12-12,84,Standard Management Medium Charcoal2,Corn,Conservation Till,Medium,,Partial,No,No
+AgCROS_IAAM7071_320_13,IAAM7071_320,IAAM7071_13,2007-08-26,2012-12-12,82,Standard Management Charcoal1,Corn,Conservation Till,Medium,,No,No,No
+AgCROS_IAAM7071_321_6,IAAM7071_321,IAAM7071_6,2008-04-16,2012-12-12,72,Standard Management High NoTill,Corn,No Till,Medium,,Yes,No,No
+AgCROS_IAAM7071_322_1,IAAM7071_322,IAAM7071_1,2007-08-26,2012-12-12,80,Standard Management Control,Corn,Conservation Till,Medium,,No,No,No
+AgCROS_IAAM7071_401_9,IAAM7071_401,IAAM7071_9,2007-08-26,2012-12-12,83,Intensive Management Medium Chisel Plow,Corn,Conservation Till,High,,Partial,No,No
+AgCROS_IAAM7071_402_5,IAAM7071_402,IAAM7071_5,2007-08-26,2012-12-12,81,Standard Management High Chisel Plow,Corn,Conservation Till,Medium,,Yes,No,No
+AgCROS_IAAM7071_403_16,IAAM7071_403,IAAM7071_16,2007-08-26,2012-12-12,84,Standard Management Medium Charcoal2,Corn,Conservation Till,Medium,,Partial,No,No
+AgCROS_IAAM7071_404_11,IAAM7071_404,IAAM7071_11,2007-08-26,2012-12-12,83,Intensive Management High Chisel Plow,Corn,Conservation Till,High,,Yes,No,No
+AgCROS_IAAM7071_405_3,IAAM7071_405,IAAM7071_3,2007-08-26,2012-12-12,81,Standard Management Medium Chisel Plow,Corn,Conservation Till,Medium,,Partial,No,No
+AgCROS_IAAM7071_406_18,IAAM7071_406,IAAM7071_18,2007-08-26,2012-12-12,84,Standard Management High Charcoal2,Corn,Conservation Till,Medium,,Yes,No,No
+AgCROS_IAAM7071_407_17,IAAM7071_407,IAAM7071_17,2007-08-26,2012-12-12,83,Standard Management High Charcoal1,Corn,Conservation Till,Medium,,Yes,No,No
+AgCROS_IAAM7071_408_7,IAAM7071_408,IAAM7071_7,2007-08-26,2012-12-12,82,Intensive Management Control,Corn,Conservation Till,High,,No,No,No
+AgCROS_IAAM7071_409_19,IAAM7071_409,IAAM7071_19,2008-04-16,2012-12-12,70,Standard Management Medium Annual Cover Crop,"Corn, Rye",No Till,Medium,Secale cereale (Rye),Partial,No,No
+AgCROS_IAAM7071_410_10,IAAM7071_410,IAAM7071_10,2008-04-16,2012-12-12,74,Intensive Management Medium NoTill,Corn,No Till,High,,Partial,No,No
+AgCROS_IAAM7071_411_6,IAAM7071_411,IAAM7071_6,2008-04-16,2012-12-12,72,Standard Management High NoTill,Corn,No Till,Medium,,Yes,No,No
+AgCROS_IAAM7071_412_21,IAAM7071_412,IAAM7071_21,2008-05-06,2012-12-12,63,Standard Management Medium Perennial Cover Crop. Change to Corn with Rye/Soybean rotation in 2011,"White Clover/Corn, Corn/Rye, Soybean",No Till,Medium,,Partial,No,No
+AgCROS_IAAM7071_413_14,IAAM7071_413,IAAM7071_14,2007-08-26,2012-12-12,83,Standard Management Charcoal2,Corn,Conservation Till,Medium,,No,No,No
+AgCROS_IAAM7071_414_4,IAAM7071_414,IAAM7071_4,2008-04-16,2012-12-12,72,Standard Management Medium NoTill,Corn,No Till,Medium,,Partial,No,No
+AgCROS_IAAM7071_415_8,IAAM7071_415,IAAM7071_8,2008-04-16,2012-12-12,73,Intensive Management NoTill,Corn,No Till,High,,No,No,No
+AgCROS_IAAM7071_416_20,IAAM7071_416,IAAM7071_20,2008-04-16,2012-12-12,70,Standard Management High Annual Cover Crop,"Corn, Rye",No Till,Medium,Secale cereale (Rye),Yes,No,No
+AgCROS_IAAM7071_417_22,IAAM7071_417,IAAM7071_22,2008-05-06,2012-12-12,61,Standard Management High Perennial Cover Crop. Change to Soybean/Corn with Rye rotation in 2011,"White Clover/Corn, Corn/Rye, Soybean",No Till,Medium,,Yes,No,No
+AgCROS_IAAM7071_418_15,IAAM7071_418,IAAM7071_15,2007-08-26,2012-12-12,83,Standard Management Medium Charcoal1,Corn,Conservation Till,Medium,,Partial,No,No
+AgCROS_IAAM7071_419_13,IAAM7071_419,IAAM7071_13,2007-08-26,2012-12-12,82,Standard Management Charcoal1,Corn,Conservation Till,Medium,,No,No,No
+AgCROS_IAAM7071_420_1,IAAM7071_420,IAAM7071_1,2007-08-26,2012-12-12,80,Standard Management Control,Corn,Conservation Till,Medium,,No,No,No
+AgCROS_IAAM7071_421_12,IAAM7071_421,IAAM7071_12,2008-04-16,2012-12-12,74,Intensive Management High NoTill,Corn,No Till,High,,Yes,No,No
+AgCROS_IAAM7071_422_2,IAAM7071_422,IAAM7071_2,2008-04-16,2012-12-12,71,Standard Management NoTill,Corn,No Till,Medium,,No,No,No

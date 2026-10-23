@@ -1,0 +1,270 @@
+---
+title: "Capturing cropping-system complexities at scale: full analysis"
+subtitle: "SHMI calibration and corn-yield analyses (Moore & Manter)"
+date: "`r format(Sys.time(), '%d %B %Y %H:%M')`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    df_print: paged
+params:
+  run_napeshm_rebuild: false   # A0  rebuild NAPESHM_rebuilt.xlsx from the raw NAPESHM files
+  run_calibration: false       # A1-A8 SEM, SHMI calibration, SHAPE (hours; frozen for the paper)
+  run_conversion: false        # B0  rebuild the AgCROS workbooks even if present (python; they are built anyway when missing)
+  run_yield: false             # B1-B5, B7-B8 yield analyses and figures
+  run_n_scenarios: true        # B5b N-accounting sensitivity: 20 legume x manure scenarios (30-60 min)
+  run_weights: true            # B6  yield results under three SHMI weight sets (slow)
+  run_site_sensitivity: true   # B9  site-combination runs (7 sites, + INWLTPAC, + MNMOFS, refinements)
+  in_session: false            # TRUE: run every step in this R session instead of a fresh one (debugging; avoids callr crashes)
+  python: ""                   # python executable; "" = python3, else python, on the PATH
+  agcros_tables: "Inputs/agcros/extracted_tables"
+  B_boot: 2000                 # calibration: site-bootstrap draws
+  R_outer: 50                  # calibration: repeats of nested cross-validation
+  B_sens: 1000                 # calibration: bootstrap draws, sensitivity runs
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, comment = "")
+ROOT <- here::here()
+# params exists only when knitting; when the chunks are run one by one in the console,
+# read the defaults from this file's YAML header (edit them there)
+if (!exists("params")) params <- rmarkdown::yaml_front_matter(file.path(ROOT, "run_all.Rmd"))$params
+setwd(ROOT)
+source(here::here("R", "run_helpers.R"))
+options(shmi.in_session = isTRUE(params$in_session))
+start_log(ROOT)
+```
+
+This document reruns every analysis in the paper, in order. Each script runs in a
+fresh R session (`callr`), so objects left by one step cannot affect the next. The
+log of each step is in `Outputs/logs/<run time>/`. The parameters in the header choose
+which parts run. Knit with **Knit with Parameters** in RStudio, or:
+
+```r
+rmarkdown::render("run_all.Rmd", params = list(run_calibration = TRUE))
+```
+
+Inputs that cannot be shipped with the code are listed in `Inputs/README.md`; the
+check below reports any that are missing for the parts selected.
+
+# Setup
+
+```{r check, results = "asis"}
+# Python builds the AgCROS workbooks, soil C and the treatment table. It is needed only
+# when one of those files is missing (or rebuilding is asked for); otherwise the existing
+# files are used and the run is R only.
+PY <- tryCatch(find_python(params$python), error = function(e) NA_character_)
+if (!is.na(PY) && !isTRUE(tryCatch({ check_python(PY); TRUE }, error = function(e) FALSE))) PY <- NA_character_
+cat("Python:", if (is.na(PY)) "not available (R-only run)" else PY, "\n")
+py_need <- python_needed(params)
+if (is.na(PY) && length(py_need))
+  stop("Python is needed to build: ", paste(py_need, collapse = "; "),
+       ". Install python with pandas, openpyxl and numpy, or put those files in place (see Inputs/README.md).")
+cat("SHMI package:", as.character(utils::packageVersion("SHMI")), "\n")
+need <- required_inputs(params)
+show_inputs(need)
+if (any(!need$present & need$required)) stop("Required inputs are missing (above). See Inputs/README.md.")
+```
+
+# Part A: SHMI calibration
+
+The calibration fixed the SHMI weights used everywhere else
+(Cover 0.687, Diversity 0.150, Inverse disturbance 0.163, growing-season share 0.76,
+organic amendment bonus). It takes several hours and is off by default
+(`run_calibration`); its outputs are only needed by the yield analyses through the
+SHAPE file in step A7 (a copy of which is in `data/`).
+
+```{r A0-napeshm}
+if (params$run_napeshm_rebuild) {
+  # A0. NAPESHM management records -> SHMI workbook (rules: python/napeshm_rebuild/conversion_rules.md)
+  run_py(PY, c("python/napeshm_rebuild/convert.py", "Inputs/napeshm_raw", "Outputs/napeshm_converted.json"),
+         "A0_napeshm_convert")
+  run_py(PY, c("python/napeshm_rebuild/write_wb.py", "Inputs/napeshm_raw/NAPESHM_test.xlsx",
+               "Outputs/napeshm_converted.json", "Outputs/NAPESHM_rebuilt.xlsx"), "A0_napeshm_write")
+  cat("Compare Outputs/NAPESHM_rebuilt.xlsx with Inputs/NAPESHM_rebuilt.xlsx (the workbook used, after QC).\n")
+} else cat("Skipped: run_napeshm_rebuild is FALSE\n")
+```
+
+```{r A1-sem}
+if (params$run_calibration) {
+  CAL_OPTS <- list(shmi.B_boot = params$B_boot, shmi.R_outer = params$R_outer, shmi.B_sens = params$B_sens)
+  # A1. soils (SHAPE soil groups), SEM data, measured soil health, climate normals
+  if (file.exists(Sys.getenv("GSSURGO_GPKG", "Inputs/gSSURGO_CONUS.gpkg"))) {
+    run_r("Get_site_ssurgo.R")
+  } else message("gSSURGO not found: using Outputs/site_soils_ssurgo.csv if present (see Inputs/README.md)")
+  run_r("Prepare_SEM.R")
+  run_r("SH_SEM_refinement_clean.R")
+  if (!file.exists("Outputs/site_climate_monthly.rds")) run_r("Get_site_climate.R")
+} else cat("Skipped: run_calibration is FALSE\n")
+```
+
+```{r A2-calibration}
+if (params$run_calibration) {
+  # A2. weight structure, calibration scenarios, Mexico projection, four-pillar calibration
+  for (s in c("SHMI_weight_tests.R", "Run_calibration_scenarios.R", "Project_SH.R",
+              "SHMI_calibration_final.R", "Compare_v110_v120.R", "Summarize_results.R"))
+    run_r(s, opts = CAL_OPTS)
+  # A3. final calibration (three pillars + amendment bonus) and its figures (Fig. 1-2, Table 10b)
+  run_r("SHMI_calibration_plus.R", opts = CAL_OPTS)
+  run_r("Fig5_Fig6_fit_plus.R")
+  # A4. SHMI against its own components
+  run_r("SHMI_benchmark.R", opts = CAL_OPTS)
+  # A5. weights fitted between sites, to all variation and within sites (ED Fig. 7)
+  run_r("Run_within_calibration_scenarios.R", opts = CAL_OPTS)
+  run_r("ED_Fig7_weights_by_comparison.R")
+} else cat("Skipped: run_calibration is FALSE\n")
+```
+
+```{r A6-shape}
+if (params$run_calibration) {
+  # A6. SHAPE: input file for the SHAPE app; its output (batch_Combined_scores.csv) is
+  # produced outside R and read back from Inputs/SHAPE/
+  run_r("Prepare_SHAPE.R")
+  dir.create("Outputs/SHAPE", showWarnings = FALSE, recursive = TRUE)
+  if (file.exists("Inputs/SHAPE/batch_Combined_scores.csv")) {
+    file.copy("Inputs/SHAPE/batch_Combined_scores.csv", "Outputs/SHAPE/batch_Combined_scores.csv", overwrite = TRUE)
+    run_r("Merge_SHAPE_SHMI.R")
+    run_r("SHMI_SHAPE_age.R")
+  } else message("Run Outputs/SHAPE/SHAPE_multi_indicator_input.csv through the SHAPE app and put ",
+                 "batch_Combined_scores.csv in Inputs/SHAPE/, then rerun this chunk.")
+  # A7-A8. WorldClim vs Daymet season check; appendix tables
+  run_r("Check_climate_source.R")
+  run_r("Export_appendix_tables.R")
+} else cat("Skipped: run_calibration is FALSE\n")
+```
+
+# Part B: corn yield
+
+## B0. Workbooks and soil data
+
+The seven AgCROS experiments are converted from the AgCROS table export by
+`agcros2shmi.py` (rules in `python/agcros2shmi/README.md`): NECCIRR's fertilizer and
+manure come from a supplement, and two NEMLTCRS record errors are corrected. The
+Ohio and Wisconsin workbooks were built by hand from DRIVES and are inputs.
+
+```{r B0-conversion}
+TEMPLATE <- system.file("extdata", "SHMI_template.xlsx", package = "SHMI")
+if (!nzchar(TEMPLATE)) stop("SHMI_template.xlsx not found in the installed SHMI package (extdata)")
+WB <- "Inputs/yield_workbooks"
+dir.create(WB, showWarnings = FALSE, recursive = TRUE)
+conv <- function(sites, extra = character(), label) {
+  run_py(PY, c("python/agcros2shmi/agcros2shmi.py", params$agcros_tables, sites,
+               "--template", TEMPLATE, "--out", WB, extra), label)
+}
+if (conv_needed(params)) {
+  conv(c("NELITCSE", "NEMLTCRS", "NEMEIRR", "NECCIRR"),
+       c("--supplement", "python/agcros2shmi/supplements/NECCIRR_amendments.csv",
+         "--corrections", "python/agcros2shmi/corrections/NEMLTCRS_corrections.csv"), "B0_convert_nebraska")
+  conv(c("INWLACRE", "IAAM7071", "PAUP"), label = "B0_convert_added")
+} else cat("AgCROS workbooks present; not rebuilt (set run_conversion = TRUE to rebuild)\n")
+if (params$run_site_sensitivity && conv_needed(params, c("INWLTPAC", "MNMOFS")))
+  conv(c("INWLTPAC", "MNMOFS"), label = "B0_convert_screened")
+```
+
+```{r B0-soil}
+# soil C by plot and layer (AgCROS) and NAPESHM soil health (for the mediation test)
+dir.create("Outputs/yield", showWarnings = FALSE, recursive = TRUE)
+if (conv_needed(params) || !file.exists("Outputs/yield/soil_c.csv"))
+  run_py(PY, c("python/build_soil_c.py", params$agcros_tables, "Outputs/yield"), "B0_soil_c")
+if (!file.exists("Outputs/SHAPE/SHAPE_by_unit_with_SHMI.csv")) {   # Part A not run: shipped copy
+  dir.create("Outputs/SHAPE", showWarnings = FALSE, recursive = TRUE)
+  file.copy("data/SHAPE_by_unit_with_SHMI.csv", "Outputs/SHAPE/SHAPE_by_unit_with_SHMI.csv")
+}
+run_r("build_napeshm_crosswalk.R")
+```
+
+## B1-B5. Main yield analyses
+
+```{r B1-B5}
+if (params$run_yield) {
+  run_r("Get_SPEI.R")                    # B1 growing-season SPEI for every site-year
+  run_r("SHMI_yield_main.R")             # B2 within-site SHMI slope, SHMI x N, SHMI x age, forest plot
+  run_r("SHMI_yield_stability.R")        # B3 year conditions, worst years, drought
+  run_r("SHMI_N_equivalent.R")           # B4 SHMI in fertilizer-N units
+  run_r("SHMI_soil_mediation.R")         # B5 soil-health mediation
+} else cat("Skipped: run_yield is FALSE\n")
+```
+
+## B5b. Nitrogen accounting
+
+Methods (Nitrogen) reports the range of the SHMI slope over 20 legume-credit ×
+manure-availability assumptions and which accounting fits best.
+
+```{r B5b}
+# Self-contained: reloads sections 1-3 of SHMI_yield_main.R (site runs from the cache),
+# so it can run without run_yield.
+if (isTRUE(params$run_n_scenarios)) {
+  run_r("SHMI_N_scenarios.R")
+} else cat("Skipped: run_n_scenarios is FALSE\n")
+```
+
+## B6. SHMI weight sets
+
+```{r B6}
+if (params$run_weights) {
+  run_r("SHMI_yield_weights_sensitivity.R")
+} else cat("Skipped: run_weights is FALSE\n")
+```
+
+## B7-B8. Figures and treatment table
+
+```{r B7-B8}
+if (params$run_yield) {
+  run_r("Assemble_manuscript_figures.R")
+  if (!is.na(PY)) run_py(PY, c("python/build_study_treatments.py", "--wb-dir", "Inputs/yield_workbooks",
+               "--units-dir", "Inputs/yield_workbooks", "--old", "data/SHMI_study_treatments_descriptions.xlsx",
+               "--out", "Outputs/SHMI_study_treatments.xlsx"), "B8_study_treatments") else
+    cat("No python: Supplementary treatment table (B8) not rebuilt\n")
+} else cat("Skipped: run_yield is FALSE\n")
+```
+
+## B9. Site combinations
+
+```{r B9}
+if (params$run_site_sensitivity) {
+  runs <- list(
+    sites7       = list(INCLUDE_AGCROS_OVERRIDE = FALSE),
+    # INWLTPAC and MNMOFS get a linear N term, like every site, but no quadratic or SHMI x N
+    plus_INWLTPAC = list(AGCROS_SITES_OVERRIDE = c("INWLACRE", "IAAM7071", "PAUP", "INWLTPAC")),
+    plus_MNMOFS   = list(AGCROS_SITES_OVERRIDE = c("INWLACRE", "IAAM7071", "PAUP", "MNMOFS")),
+    refine        = list(AGCROS_REFINE_OVERRIDE = TRUE),
+    # SHMI x N from the three N-rate sites only (without INWLACRE's two rates)
+    NxSHMI_3sites = list(N_INTERACT_SITES_OVERRIDE = c("NEMLTCRS", "NECCIRR", "WICST_ARS")))
+  run_r("Get_SPEI.R", vars = list(AGCROS_SITES_OVERRIDE = c("INWLACRE", "IAAM7071", "PAUP", "INWLTPAC", "MNMOFS")),
+        label = "B9_spei")
+  for (nm in names(runs))
+    run_r("SHMI_yield_main.R", vars = c(runs[[nm]], OUT_OVERRIDE = file.path("Outputs", paste0("yield_main_", nm))),
+          label = paste0("B9_", nm))
+} else cat("Skipped: run_site_sensitivity is FALSE\n")
+```
+
+# Results
+
+```{r results, results = "asis"}
+MAIN <- "Outputs/yield_main_default_total_agcros"
+if (params$run_yield) {
+  show_csv(file.path(MAIN, "results_main.csv"), "Main yield results (Fig. 3-4 models)")
+  show_csv(file.path(MAIN, "N_equivalent.csv"), "SHMI in fertilizer-N units")
+  show_csv(file.path(MAIN, "mediation_results.csv"), "Soil-health mediation")
+  show_csv("Outputs/yield_stability_default_total_agcros/stability_results.csv", "Yield stability")
+}
+if (isTRUE(params$run_n_scenarios)) show_csv(file.path(MAIN, "N_scenarios_all_sites.csv"), "N accounting scenarios (all sites)")
+if (params$run_weights) show_csv("Outputs/yield_weights_agcros/weights_slopes.csv", "SHMI weight sets")
+if (params$run_site_sensitivity) print(knitr::kable(site_combination_table(), digits = 1,
+                                                     caption = "SHMI slope by site combination"))
+```
+
+```{r figures, out.width = "100%"}
+if (params$run_yield) {
+  FIGS <- file.path("Outputs/manuscript_figures_default_total_agcros",
+                    c("Fig3.png", "Fig4.png", "ED_Fig8_stability.png"))
+  knitr::include_graphics(FIGS[file.exists(FIGS)])
+} else cat("Skipped: run_yield is FALSE\n")
+```
+
+# Session
+
+```{r session}
+cat(readLines(file.path(LOG_DIR, "steps.csv")), sep = "\n")
+sessionInfo()
+```

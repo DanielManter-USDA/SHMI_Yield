@@ -1,0 +1,61 @@
+MGT_combo,unit_id,treatment_id,first_record,last_record,records,treatment_descriptor,rotation_descriptor,tillage_descriptor,n_treatment_descriptor,cover_crop,residue_removal,irrigation,organic_management
+AgCROS_PAUP_101_1,PAUP_101,PAUP_1,2008-05-25,2012-11-01,66,Twin row Continuous Corn - 100% corn stover removal with rye winter cover crop,Corn,No Till,Optimum,Secale cereale (Rye),Yes,No,No
+AgCROS_PAUP_102_2,PAUP_102,PAUP_2,2008-05-25,2012-11-01,52,Corn-Soybean Rotation - 50% corn stover removal with rye winter cover crop,"Corn, Soybean",No Till,Optimum,Secale cereale (Rye),Partial,No,No
+AgCROS_PAUP_103_3,PAUP_103,PAUP_3,2008-05-25,2012-11-01,47,Soybean-Corn Rotation - 100% cornstover removal with rye winter cover crop,"Corn, Soybean",No Till,Optimum,Secale cereale (Rye),Yes,No,No
+AgCROS_PAUP_104_4,PAUP_104,PAUP_4,2008-05-25,2012-11-01,66,Twin row Continuous Corn - 0% corn stover removal with rye winter cover crop,Corn,No Till,Optimum,Secale cereale (Rye),No,No,No
+AgCROS_PAUP_105_5,PAUP_105,PAUP_5,2008-05-25,2012-11-01,66,Twin row Continuous Corn - 50% corn stover removal with rye winter cover crop,Corn,No Till,Optimum,Secale cereale (Rye),Partial,No,No
+AgCROS_PAUP_106_6,PAUP_106,PAUP_6,2008-05-25,2012-11-01,52,Corn-Soybean Rotation - 0% corn stover removal with rye winter cover crop,"Corn, Soybean",No Till,Optimum,Secale cereale (Rye),No,No,No
+AgCROS_PAUP_107_7,PAUP_107,PAUP_7,2008-05-25,2012-11-01,66,Continuous Corn - 50% corn stover removal with rye winter cover crop,Corn,No Till,Optimum,Secale cereale (Rye),Partial,No,No
+AgCROS_PAUP_108_8,PAUP_108,PAUP_8,2008-05-25,2012-10-18,61,Continuous Corn - 0% corn stover removal without rye winter cover crop,Corn,No Till,Optimum,,No,No,No
+AgCROS_PAUP_109_9,PAUP_109,PAUP_9,2008-05-25,2012-11-01,47,Soybean-Corn Rotation - 50% corn stover removal with rye winter cover crop,"Corn, Soybean",No Till,Optimum,Secale cereale (Rye),Partial,No,No
+AgCROS_PAUP_110_10,PAUP_110,PAUP_10,2008-05-25,2012-10-18,61,Continuous Corn - 100% corn stover removal without rye winter cover crop,Corn,No Till,Optimum,,Yes,No,No
+AgCROS_PAUP_111_11,PAUP_111,PAUP_11,2008-05-25,2012-11-01,67,Continuous Corn - 100% corn stover removal with rye winter cover crop,Corn,No Till,Optimum,Secale cereale (Rye),Yes,No,No
+AgCROS_PAUP_112_12,PAUP_112,PAUP_12,2008-05-25,2012-10-18,61,Continuous Corn - 50% corn stover removal without rye winter cover crop,Corn,No Till,Optimum,,Partial,No,No
+AgCROS_PAUP_113_13,PAUP_113,PAUP_13,2008-05-25,2012-11-01,47,Soybean-Corn Rotation - 0% corn stover removal with rye winter cover crop,"Corn, Soybean",No Till,Optimum,Secale cereale (Rye),No,No,No
+AgCROS_PAUP_114_14,PAUP_114,PAUP_14,2008-05-25,2012-11-01,52,Corn-Soybean Rotation - 100% corn stover removal with rye winter cover crop,"Corn, Soybean",No Till,Optimum,Secale cereale (Rye),Yes,No,No
+AgCROS_PAUP_115_15,PAUP_115,PAUP_15,2008-05-25,2012-11-01,66,Continuous Corn - 0% corn stover removal with rye winter cover crop,Corn,No Till,Optimum,Secale cereale (Rye),No,No,No
+AgCROS_PAUP_201_13,PAUP_201,PAUP_13,2008-05-25,2012-11-01,47,Soybean-Corn Rotation - 0% corn stover removal with rye winter cover crop,"Corn, Soybean",No Till,Optimum,Secale cereale (Rye),No,No,No
+AgCROS_PAUP_202_1,PAUP_202,PAUP_1,2008-05-25,2012-11-01,66,Twin row Continuous Corn - 100% corn stover removal with rye winter cover crop,Corn,No Till,Optimum,Secale cereale (Rye),Yes,No,No
+AgCROS_PAUP_203_9,PAUP_203,PAUP_9,2008-05-25,2012-11-01,47,Soybean-Corn Rotation - 50% corn stover removal with rye winter cover crop,"Corn, Soybean",No Till,Optimum,Secale cereale (Rye),Partial,No,No
+AgCROS_PAUP_204_12,PAUP_204,PAUP_12,2008-05-25,2012-10-18,61,Continuous Corn - 50% corn stover removal without rye winter cover crop,Corn,No Till,Optimum,,Partial,No,No
+AgCROS_PAUP_205_2,PAUP_205,PAUP_2,2008-05-25,2012-11-01,52,Corn-Soybean Rotation - 50% corn stover removal with rye winter cover crop,"Corn, Soybean",No Till,Optimum,Secale cereale (Rye),Partial,No,No
+AgCROS_PAUP_206_5,PAUP_206,PAUP_5,2008-05-25,2012-11-01,66,Twin row Continuous Corn - 50% corn stover removal with rye winter cover crop,Corn,No Till,Optimum,Secale cereale (Rye),Partial,No,No
+AgCROS_PAUP_207_11,PAUP_207,PAUP_11,2008-05-25,2012-11-01,66,Continuous Corn - 100% corn stover removal with rye winter cover crop,Corn,No Till,Optimum,Secale cereale (Rye),Yes,No,No
+AgCROS_PAUP_208_7,PAUP_208,PAUP_7,2008-05-25,2012-11-01,66,Continuous Corn - 50% corn stover removal with rye winter cover crop,Corn,No Till,Optimum,Secale cereale (Rye),Partial,No,No
+AgCROS_PAUP_209_4,PAUP_209,PAUP_4,2008-05-25,2012-11-01,66,Twin row Continuous Corn - 0% corn stover removal with rye winter cover crop,Corn,No Till,Optimum,Secale cereale (Rye),No,No,No
+AgCROS_PAUP_210_3,PAUP_210,PAUP_3,2008-05-25,2012-11-01,47,Soybean-Corn Rotation - 100% cornstover removal with rye winter cover crop,"Corn, Soybean",No Till,Optimum,Secale cereale (Rye),Yes,No,No
+AgCROS_PAUP_211_6,PAUP_211,PAUP_6,2008-05-25,2012-11-01,52,Corn-Soybean Rotation - 0% corn stover removal with rye winter cover crop,"Corn, Soybean",No Till,Optimum,Secale cereale (Rye),No,No,No
+AgCROS_PAUP_212_10,PAUP_212,PAUP_10,2008-05-25,2012-10-18,61,Continuous Corn - 100% corn stover removal without rye winter cover crop,Corn,No Till,Optimum,,Yes,No,No
+AgCROS_PAUP_213_15,PAUP_213,PAUP_15,2008-05-25,2012-11-01,66,Continuous Corn - 0% corn stover removal with rye winter cover crop,Corn,No Till,Optimum,Secale cereale (Rye),No,No,No
+AgCROS_PAUP_214_8,PAUP_214,PAUP_8,2008-05-25,2012-10-18,61,Continuous Corn - 0% corn stover removal without rye winter cover crop,Corn,No Till,Optimum,,No,No,No
+AgCROS_PAUP_215_14,PAUP_215,PAUP_14,2008-05-25,2012-11-01,52,Corn-Soybean Rotation - 100% corn stover removal with rye winter cover crop,"Corn, Soybean",No Till,Optimum,Secale cereale (Rye),Yes,No,No
+AgCROS_PAUP_301_8,PAUP_301,PAUP_8,2008-05-25,2012-10-18,61,Continuous Corn - 0% corn stover removal without rye winter cover crop,Corn,No Till,Optimum,,No,No,No
+AgCROS_PAUP_302_5,PAUP_302,PAUP_5,2008-05-25,2012-11-01,66,Twin row Continuous Corn - 50% corn stover removal with rye winter cover crop,Corn,No Till,Optimum,Secale cereale (Rye),Partial,No,No
+AgCROS_PAUP_303_15,PAUP_303,PAUP_15,2008-05-25,2012-11-01,66,Continuous Corn - 0% corn stover removal with rye winter cover crop,Corn,No Till,Optimum,Secale cereale (Rye),No,No,No
+AgCROS_PAUP_304_4,PAUP_304,PAUP_4,2008-05-25,2012-11-01,66,Twin row Continuous Corn - 0% corn stover removal with rye winter cover crop,Corn,No Till,Optimum,Secale cereale (Rye),No,No,No
+AgCROS_PAUP_305_6,PAUP_305,PAUP_6,2008-05-25,2012-11-01,52,Corn-Soybean Rotation - 0% corn stover removal with rye winter cover crop,"Corn, Soybean",No Till,Optimum,Secale cereale (Rye),No,No,No
+AgCROS_PAUP_306_13,PAUP_306,PAUP_13,2008-05-25,2012-11-01,47,Soybean-Corn Rotation - 0% corn stover removal with rye winter cover crop,"Corn, Soybean",No Till,Optimum,Secale cereale (Rye),No,No,No
+AgCROS_PAUP_307_3,PAUP_307,PAUP_3,2008-05-25,2012-11-01,47,Soybean-Corn Rotation - 100% cornstover removal with rye winter cover crop,"Corn, Soybean",No Till,Optimum,Secale cereale (Rye),Yes,No,No
+AgCROS_PAUP_308_11,PAUP_308,PAUP_11,2008-05-25,2012-11-01,66,Continuous Corn - 100% corn stover removal with rye winter cover crop,Corn,No Till,Optimum,Secale cereale (Rye),Yes,No,No
+AgCROS_PAUP_309_12,PAUP_309,PAUP_12,2008-05-25,2012-10-18,61,Continuous Corn - 50% corn stover removal without rye winter cover crop,Corn,No Till,Optimum,,Partial,No,No
+AgCROS_PAUP_310_10,PAUP_310,PAUP_10,2008-05-25,2012-10-18,61,Continuous Corn - 100% corn stover removal without rye winter cover crop,Corn,No Till,Optimum,,Yes,No,No
+AgCROS_PAUP_311_7,PAUP_311,PAUP_7,2008-05-25,2012-11-01,66,Continuous Corn - 50% corn stover removal with rye winter cover crop,Corn,No Till,Optimum,Secale cereale (Rye),Partial,No,No
+AgCROS_PAUP_312_14,PAUP_312,PAUP_14,2008-05-25,2012-11-01,52,Corn-Soybean Rotation - 100% corn stover removal with rye winter cover crop,"Corn, Soybean",No Till,Optimum,Secale cereale (Rye),Yes,No,No
+AgCROS_PAUP_313_9,PAUP_313,PAUP_9,2008-05-25,2012-11-01,47,Soybean-Corn Rotation - 50% corn stover removal with rye winter cover crop,"Corn, Soybean",No Till,Optimum,Secale cereale (Rye),Partial,No,No
+AgCROS_PAUP_314_2,PAUP_314,PAUP_2,2008-05-25,2012-11-01,52,Corn-Soybean Rotation - 50% corn stover removal with rye winter cover crop,"Corn, Soybean",No Till,Optimum,Secale cereale (Rye),Partial,No,No
+AgCROS_PAUP_315_1,PAUP_315,PAUP_1,2008-05-25,2012-11-01,66,Twin row Continuous Corn - 100% corn stover removal with rye winter cover crop,Corn,No Till,Optimum,Secale cereale (Rye),Yes,No,No
+AgCROS_PAUP_401_14,PAUP_401,PAUP_14,2008-05-25,2012-11-01,52,Corn-Soybean Rotation - 100% corn stover removal with rye winter cover crop,"Corn, Soybean",No Till,Optimum,Secale cereale (Rye),Yes,No,No
+AgCROS_PAUP_402_8,PAUP_402,PAUP_8,2008-05-25,2012-10-18,61,Continuous Corn - 0% corn stover removal without rye winter cover crop,Corn,No Till,Optimum,,No,No,No
+AgCROS_PAUP_403_2,PAUP_403,PAUP_2,2008-05-25,2012-11-01,52,Corn-Soybean Rotation - 50% corn stover removal with rye winter cover crop,"Corn, Soybean",No Till,Optimum,Secale cereale (Rye),Partial,No,No
+AgCROS_PAUP_404_11,PAUP_404,PAUP_11,2008-05-25,2012-11-01,66,Continuous Corn - 100% corn stover removal with rye winter cover crop,Corn,No Till,Optimum,Secale cereale (Rye),Yes,No,No
+AgCROS_PAUP_405_10,PAUP_405,PAUP_10,2008-05-25,2012-10-18,61,Continuous Corn - 100% corn stover removal without rye winter cover crop,Corn,No Till,Optimum,,Yes,No,No
+AgCROS_PAUP_406_4,PAUP_406,PAUP_4,2008-05-25,2012-11-01,66,Twin row Continuous Corn - 0% corn stover removal with rye winter cover crop,Corn,No Till,Optimum,Secale cereale (Rye),No,No,No
+AgCROS_PAUP_407_1,PAUP_407,PAUP_1,2008-05-25,2012-11-01,66,Twin row Continuous Corn - 100% corn stover removal with rye winter cover crop,Corn,No Till,Optimum,Secale cereale (Rye),Yes,No,No
+AgCROS_PAUP_408_7,PAUP_408,PAUP_7,2008-05-25,2012-11-01,66,Continuous Corn - 50% corn stover removal with rye winter cover crop,Corn,No Till,Optimum,Secale cereale (Rye),Partial,No,No
+AgCROS_PAUP_409_13,PAUP_409,PAUP_13,2008-05-25,2012-11-01,47,Soybean-Corn Rotation - 0% corn stover removal with rye winter cover crop,"Corn, Soybean",No Till,Optimum,Secale cereale (Rye),No,No,No
+AgCROS_PAUP_410_5,PAUP_410,PAUP_5,2008-05-25,2012-11-01,66,Twin row Continuous Corn - 50% corn stover removal with rye winter cover crop,Corn,No Till,Optimum,Secale cereale (Rye),Partial,No,No
+AgCROS_PAUP_411_9,PAUP_411,PAUP_9,2008-05-25,2012-11-01,47,Soybean-Corn Rotation - 50% corn stover removal with rye winter cover crop,"Corn, Soybean",No Till,Optimum,Secale cereale (Rye),Partial,No,No
+AgCROS_PAUP_412_12,PAUP_412,PAUP_12,2008-05-25,2012-10-18,61,Continuous Corn - 50% corn stover removal without rye winter cover crop,Corn,No Till,Optimum,,Partial,No,No
+AgCROS_PAUP_413_15,PAUP_413,PAUP_15,2008-05-25,2012-11-01,66,Continuous Corn - 0% corn stover removal with rye winter cover crop,Corn,No Till,Optimum,Secale cereale (Rye),No,No,No
+AgCROS_PAUP_414_6,PAUP_414,PAUP_6,2008-05-25,2012-11-01,52,Corn-Soybean Rotation - 0% corn stover removal with rye winter cover crop,"Corn, Soybean",No Till,Optimum,Secale cereale (Rye),No,No,No
+AgCROS_PAUP_415_3,PAUP_415,PAUP_3,2008-05-25,2012-11-01,47,Soybean-Corn Rotation - 100% cornstover removal with rye winter cover crop,"Corn, Soybean",No Till,Optimum,Secale cereale (Rye),Yes,No,No

@@ -1,0 +1,226 @@
+MGT_combo,unit_id,treatment_id,first_record,last_record,records,treatment_descriptor,rotation_descriptor,tillage_descriptor,n_treatment_descriptor,cover_crop,residue_removal,irrigation,organic_management
+AgCROS_NEMLTCRS_101M_ROT51,NEMLTCRS_101M,NEMLTCRS_ROT51,1983-04-26,2015-06-17,148,Sorghum/soybean 2-yr rotation (Low N),"Soybean, Sorghum",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_101N_ROT52,NEMLTCRS_101N,NEMLTCRS_ROT52,1983-04-26,2015-06-17,148,Sorghum/soybean 2-yr rotation (High N),"Soybean, Sorghum",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_101S_ROT50,NEMLTCRS_101S,NEMLTCRS_ROT50,1983-04-26,2015-06-17,148,Sorghum/soybean 2-yr rotation (0 N),"Soybean, Sorghum",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_102M_ROT40,NEMLTCRS_102M,NEMLTCRS_ROT40,1983-04-26,2015-06-17,143,Corn/soybean 2-yr rotation (0 N),"Corn, Soybean",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_102N_ROT42,NEMLTCRS_102N,NEMLTCRS_ROT42,1983-04-26,2015-06-17,143,Corn/soybean 2-yr rotation(High N),"Corn, Soybean",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_102S_ROT41,NEMLTCRS_102S,NEMLTCRS_ROT41,1983-04-26,2015-06-17,143,Corn/soybean 2-yr rotation (Low N),"Corn, Soybean",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_103M_ROT72,NEMLTCRS_103M,NEMLTCRS_ROT72,1983-04-26,2015-07-16,140,Corn/soybean/sorghum/oat+clover 4-yr (High N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_103N_ROT70,NEMLTCRS_103N,NEMLTCRS_ROT70,1983-04-26,2015-07-16,140,Corn/soybean/sorghum/oat+clover 4-yr (0 N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_103S_ROT71,NEMLTCRS_103S,NEMLTCRS_ROT71,1983-04-26,2015-07-16,140,Corn/soybean/sorghum/oat+clover 4-yr (Low N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_104M_ROT72,NEMLTCRS_104M,NEMLTCRS_ROT72,1983-04-26,2015-06-17,140,Corn/soybean/sorghum/oat+clover 4-yr (High N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_104N_ROT71,NEMLTCRS_104N,NEMLTCRS_ROT71,1983-04-26,2015-06-17,140,Corn/soybean/sorghum/oat+clover 4-yr (Low N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_104S_ROT70,NEMLTCRS_104S,NEMLTCRS_ROT70,1983-04-26,2015-06-17,140,Corn/soybean/sorghum/oat+clover 4-yr (0 N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_105M_ROT70,NEMLTCRS_105M,NEMLTCRS_ROT70,1983-04-26,2015-06-02,139,Corn/soybean/sorghum/oat+clover 4-yr (0 N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_105N_ROT72,NEMLTCRS_105N,NEMLTCRS_ROT72,1983-04-26,2015-06-02,139,Corn/soybean/sorghum/oat+clover 4-yr (High N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_105S_ROT71,NEMLTCRS_105S,NEMLTCRS_ROT71,1983-04-26,2015-06-02,139,Corn/soybean/sorghum/oat+clover 4-yr (Low N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_106M_ROT72,NEMLTCRS_106M,NEMLTCRS_ROT72,1983-04-22,2015-05-13,139,Corn/soybean/sorghum/oat+clover 4-yr (High N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_106N_ROT70,NEMLTCRS_106N,NEMLTCRS_ROT70,1983-04-22,2015-05-13,139,Corn/soybean/sorghum/oat+clover 4-yr (0 N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_106S_ROT71,NEMLTCRS_106S,NEMLTCRS_ROT71,1983-04-22,2015-05-13,139,Corn/soybean/sorghum/oat+clover 4-yr (Low N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_107M_ROT22,NEMLTCRS_107M,NEMLTCRS_ROT22,1983-04-26,2015-06-17,144,Continuous soybean (High N),Soybean,Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_107N_ROT20,NEMLTCRS_107N,NEMLTCRS_ROT20,1983-04-26,2015-06-17,144,Continuous soybean (0 N),Soybean,Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_107S_ROT21,NEMLTCRS_107S,NEMLTCRS_ROT21,1983-04-26,2015-06-17,144,Continuous soybean (Low N),Soybean,Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_108M_ROT40,NEMLTCRS_108M,NEMLTCRS_ROT40,1983-04-26,2015-06-02,143,Corn/soybean 2-yr rotation (0 N),"Corn, Soybean",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_108N_ROT41,NEMLTCRS_108N,NEMLTCRS_ROT41,1983-04-26,2015-06-02,143,Corn/soybean 2-yr rotation (Low N),"Corn, Soybean",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_108S_ROT42,NEMLTCRS_108S,NEMLTCRS_ROT42,1983-04-26,2015-06-02,143,Corn/soybean 2-yr rotation(High N),"Corn, Soybean",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_109M_ROT61,NEMLTCRS_109M,NEMLTCRS_ROT61,1983-04-22,2015-05-13,136,Corn/oat+clover/sorghum/soybean 4-yr (Low N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_109N_ROT62,NEMLTCRS_109N,NEMLTCRS_ROT62,1983-04-22,2015-05-13,136,Corn/oat+clover/sorghum/soybean 4-yr (High N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_109S_ROT60,NEMLTCRS_109S,NEMLTCRS_ROT60,1983-04-22,2015-05-13,136,Corn/oat+clover/sorghum/soybean 4-yr (0 N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_110M_ROT62,NEMLTCRS_110M,NEMLTCRS_ROT62,1983-04-26,2015-07-16,140,Corn/oat+clover/sorghum/soybean 4-yr (High N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_110N_ROT60,NEMLTCRS_110N,NEMLTCRS_ROT60,1983-04-26,2015-07-16,140,Corn/oat+clover/sorghum/soybean 4-yr (0 N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_110S_ROT61,NEMLTCRS_110S,NEMLTCRS_ROT61,1983-04-26,2015-07-16,140,Corn/oat+clover/sorghum/soybean 4-yr (Low N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_111M_ROT32,NEMLTCRS_111M,NEMLTCRS_ROT32,1983-04-26,2015-07-16,151,Continuous sorghum (High N),Sorghum,Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_111N_ROT30,NEMLTCRS_111N,NEMLTCRS_ROT30,1983-04-26,2015-07-16,151,Continuous sorghum (0 N),Sorghum,Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_111S_ROT31,NEMLTCRS_111S,NEMLTCRS_ROT31,1983-04-26,2015-07-16,151,Continuous sorghum (Low N),Sorghum,Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_112M_ROT62,NEMLTCRS_112M,NEMLTCRS_ROT62,1983-04-26,2015-06-17,143,Corn/oat+clover/sorghum/soybean 4-yr (High N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_112N_ROT60,NEMLTCRS_112N,NEMLTCRS_ROT60,1983-04-26,2015-06-17,143,Corn/oat+clover/sorghum/soybean 4-yr (0 N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_112S_ROT61,NEMLTCRS_112S,NEMLTCRS_ROT61,1983-04-26,2015-06-17,143,Corn/oat+clover/sorghum/soybean 4-yr (Low N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_113M_ROT60,NEMLTCRS_113M,NEMLTCRS_ROT60,1983-04-26,2015-06-02,139,Corn/oat+clover/sorghum/soybean 4-yr (0 N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_113N_ROT62,NEMLTCRS_113N,NEMLTCRS_ROT62,1983-04-26,2015-06-02,139,Corn/oat+clover/sorghum/soybean 4-yr (High N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_113S_ROT61,NEMLTCRS_113S,NEMLTCRS_ROT61,1983-04-26,2015-06-02,139,Corn/oat+clover/sorghum/soybean 4-yr (Low N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_114M_ROT51,NEMLTCRS_114M,NEMLTCRS_ROT51,1983-04-26,2015-07-16,146,Sorghum/soybean 2-yr rotation (Low N),"Soybean, Sorghum",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_114N_ROT52,NEMLTCRS_114N,NEMLTCRS_ROT52,1983-04-26,2015-07-16,146,Sorghum/soybean 2-yr rotation (High N),"Soybean, Sorghum",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_114S_ROT50,NEMLTCRS_114S,NEMLTCRS_ROT50,1983-04-26,2015-07-16,146,Sorghum/soybean 2-yr rotation (0 N),"Soybean, Sorghum",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_115M_ROT11,NEMLTCRS_115M,NEMLTCRS_ROT11,1983-04-26,2015-06-02,142,Continuous corn (Low N),Corn,Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_115N_ROT12,NEMLTCRS_115N,NEMLTCRS_ROT12,1983-04-26,2015-06-02,142,Continuous corn (High N),Corn,Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_115S_ROT10,NEMLTCRS_115S,NEMLTCRS_ROT10,1983-04-26,2015-06-02,142,Continuous corn (0 N),Corn,Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_201M_ROT41,NEMLTCRS_201M,NEMLTCRS_ROT41,1983-04-26,2015-06-02,143,Corn/soybean 2-yr rotation (Low N),"Corn, Soybean",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_201N_ROT40,NEMLTCRS_201N,NEMLTCRS_ROT40,1983-04-26,2015-06-02,143,Corn/soybean 2-yr rotation (0 N),"Corn, Soybean",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_201S_ROT42,NEMLTCRS_201S,NEMLTCRS_ROT42,1983-04-26,2015-06-02,143,Corn/soybean 2-yr rotation(High N),"Corn, Soybean",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_202M_ROT61,NEMLTCRS_202M,NEMLTCRS_ROT61,1983-04-22,2015-05-13,136,Corn/oat+clover/sorghum/soybean 4-yr (Low N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_202N_ROT62,NEMLTCRS_202N,NEMLTCRS_ROT62,1983-04-22,2015-05-13,136,Corn/oat+clover/sorghum/soybean 4-yr (High N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_202S_ROT60,NEMLTCRS_202S,NEMLTCRS_ROT60,1983-04-22,2015-05-13,136,Corn/oat+clover/sorghum/soybean 4-yr (0 N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_203M_ROT61,NEMLTCRS_203M,NEMLTCRS_ROT61,1983-04-26,2015-07-16,140,Corn/oat+clover/sorghum/soybean 4-yr (Low N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_203N_ROT62,NEMLTCRS_203N,NEMLTCRS_ROT62,1983-04-26,2015-07-16,140,Corn/oat+clover/sorghum/soybean 4-yr (High N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_203S_ROT60,NEMLTCRS_203S,NEMLTCRS_ROT60,1983-04-26,2015-07-16,140,Corn/oat+clover/sorghum/soybean 4-yr (0 N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_204M_ROT32,NEMLTCRS_204M,NEMLTCRS_ROT32,1983-04-26,2015-07-16,151,Continuous sorghum (High N),Sorghum,Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_204N_ROT30,NEMLTCRS_204N,NEMLTCRS_ROT30,1983-04-26,2015-07-16,151,Continuous sorghum (0 N),Sorghum,Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_204S_ROT31,NEMLTCRS_204S,NEMLTCRS_ROT31,1983-04-26,2015-07-16,151,Continuous sorghum (Low N),Sorghum,Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_205M_ROT61,NEMLTCRS_205M,NEMLTCRS_ROT61,1983-04-26,2015-06-17,143,Corn/oat+clover/sorghum/soybean 4-yr (Low N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_205N_ROT62,NEMLTCRS_205N,NEMLTCRS_ROT62,1983-04-26,2015-06-17,143,Corn/oat+clover/sorghum/soybean 4-yr (High N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_205S_ROT60,NEMLTCRS_205S,NEMLTCRS_ROT60,1983-04-26,2015-06-17,143,Corn/oat+clover/sorghum/soybean 4-yr (0 N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_206M_ROT60,NEMLTCRS_206M,NEMLTCRS_ROT60,1983-04-26,2015-06-02,139,Corn/oat+clover/sorghum/soybean 4-yr (0 N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_206N_ROT61,NEMLTCRS_206N,NEMLTCRS_ROT61,1983-04-26,2015-06-02,139,Corn/oat+clover/sorghum/soybean 4-yr (Low N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_206S_ROT62,NEMLTCRS_206S,NEMLTCRS_ROT62,1983-04-26,2015-06-02,139,Corn/oat+clover/sorghum/soybean 4-yr (High N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_207M_ROT51,NEMLTCRS_207M,NEMLTCRS_ROT51,1983-04-26,2015-07-16,146,Sorghum/soybean 2-yr rotation (Low N),"Soybean, Sorghum",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_207N_ROT50,NEMLTCRS_207N,NEMLTCRS_ROT50,1983-04-26,2015-07-16,146,Sorghum/soybean 2-yr rotation (0 N),"Soybean, Sorghum",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_207S_ROT52,NEMLTCRS_207S,NEMLTCRS_ROT52,1983-04-26,2015-07-16,146,Sorghum/soybean 2-yr rotation (High N),"Soybean, Sorghum",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_208M_ROT10,NEMLTCRS_208M,NEMLTCRS_ROT10,1983-04-26,2015-06-02,142,Continuous corn (0 N),Corn,Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_208N_ROT12,NEMLTCRS_208N,NEMLTCRS_ROT12,1983-04-26,2015-06-02,142,Continuous corn (High N),Corn,Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_208S_ROT11,NEMLTCRS_208S,NEMLTCRS_ROT11,1983-04-26,2015-06-02,142,Continuous corn (Low N),Corn,Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_209M_ROT52,NEMLTCRS_209M,NEMLTCRS_ROT52,1983-04-26,2015-06-17,148,Sorghum/soybean 2-yr rotation (High N),"Soybean, Sorghum",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_209N_ROT50,NEMLTCRS_209N,NEMLTCRS_ROT50,1983-04-26,2015-06-17,148,Sorghum/soybean 2-yr rotation (0 N),"Soybean, Sorghum",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_209S_ROT51,NEMLTCRS_209S,NEMLTCRS_ROT51,1983-04-26,2015-06-17,148,Sorghum/soybean 2-yr rotation (Low N),"Soybean, Sorghum",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_210M_ROT40,NEMLTCRS_210M,NEMLTCRS_ROT40,1983-04-26,2015-06-17,143,Corn/soybean 2-yr rotation (0 N),"Corn, Soybean",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_210N_ROT41,NEMLTCRS_210N,NEMLTCRS_ROT41,1983-04-26,2015-06-17,143,Corn/soybean 2-yr rotation (Low N),"Corn, Soybean",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_210S_ROT42,NEMLTCRS_210S,NEMLTCRS_ROT42,1983-04-26,2015-06-17,143,Corn/soybean 2-yr rotation(High N),"Corn, Soybean",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_211M_ROT72,NEMLTCRS_211M,NEMLTCRS_ROT72,1983-04-26,2015-07-16,140,Corn/soybean/sorghum/oat+clover 4-yr (High N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_211N_ROT71,NEMLTCRS_211N,NEMLTCRS_ROT71,1983-04-26,2015-07-16,140,Corn/soybean/sorghum/oat+clover 4-yr (Low N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_211S_ROT70,NEMLTCRS_211S,NEMLTCRS_ROT70,1983-04-26,2015-07-16,140,Corn/soybean/sorghum/oat+clover 4-yr (0 N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_212M_ROT70,NEMLTCRS_212M,NEMLTCRS_ROT70,1983-04-26,2015-06-17,140,Corn/soybean/sorghum/oat+clover 4-yr (0 N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_212N_ROT71,NEMLTCRS_212N,NEMLTCRS_ROT71,1983-04-26,2015-06-17,140,Corn/soybean/sorghum/oat+clover 4-yr (Low N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_212S_ROT72,NEMLTCRS_212S,NEMLTCRS_ROT72,1983-04-26,2015-06-17,140,Corn/soybean/sorghum/oat+clover 4-yr (High N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_213M_ROT71,NEMLTCRS_213M,NEMLTCRS_ROT71,1983-04-26,2015-06-02,139,Corn/soybean/sorghum/oat+clover 4-yr (Low N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_213N_ROT70,NEMLTCRS_213N,NEMLTCRS_ROT70,1983-04-26,2015-06-02,139,Corn/soybean/sorghum/oat+clover 4-yr (0 N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_213S_ROT72,NEMLTCRS_213S,NEMLTCRS_ROT72,1983-04-26,2015-06-02,139,Corn/soybean/sorghum/oat+clover 4-yr (High N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_214M_ROT70,NEMLTCRS_214M,NEMLTCRS_ROT70,1983-04-22,2015-05-13,139,Corn/soybean/sorghum/oat+clover 4-yr (0 N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_214N_ROT72,NEMLTCRS_214N,NEMLTCRS_ROT72,1983-04-22,2015-05-13,139,Corn/soybean/sorghum/oat+clover 4-yr (High N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_214S_ROT71,NEMLTCRS_214S,NEMLTCRS_ROT71,1983-04-22,2015-05-13,139,Corn/soybean/sorghum/oat+clover 4-yr (Low N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_215M_ROT21,NEMLTCRS_215M,NEMLTCRS_ROT21,1983-04-26,2015-06-17,144,Continuous soybean (Low N),Soybean,Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_215N_ROT22,NEMLTCRS_215N,NEMLTCRS_ROT22,1983-04-26,2015-06-17,144,Continuous soybean (High N),Soybean,Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_215S_ROT20,NEMLTCRS_215S,NEMLTCRS_ROT20,1983-04-26,2015-06-17,144,Continuous soybean (0 N),Soybean,Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_301M_ROT72,NEMLTCRS_301M,NEMLTCRS_ROT72,1983-04-26,2015-06-17,140,Corn/soybean/sorghum/oat+clover 4-yr (High N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_301N_ROT71,NEMLTCRS_301N,NEMLTCRS_ROT71,1983-04-26,2015-06-17,140,Corn/soybean/sorghum/oat+clover 4-yr (Low N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_301S_ROT70,NEMLTCRS_301S,NEMLTCRS_ROT70,1983-04-26,2015-06-17,140,Corn/soybean/sorghum/oat+clover 4-yr (0 N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_302M_ROT70,NEMLTCRS_302M,NEMLTCRS_ROT70,1983-04-26,2015-06-02,139,Corn/soybean/sorghum/oat+clover 4-yr (0 N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_302N_ROT72,NEMLTCRS_302N,NEMLTCRS_ROT72,1983-04-26,2015-06-02,139,Corn/soybean/sorghum/oat+clover 4-yr (High N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_302S_ROT71,NEMLTCRS_302S,NEMLTCRS_ROT71,1983-04-26,2015-06-02,139,Corn/soybean/sorghum/oat+clover 4-yr (Low N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_303M_ROT70,NEMLTCRS_303M,NEMLTCRS_ROT70,1983-04-22,2015-05-13,139,Corn/soybean/sorghum/oat+clover 4-yr (0 N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_303N_ROT71,NEMLTCRS_303N,NEMLTCRS_ROT71,1983-04-22,2015-05-13,139,Corn/soybean/sorghum/oat+clover 4-yr (Low N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_303S_ROT72,NEMLTCRS_303S,NEMLTCRS_ROT72,1983-04-22,2015-05-13,139,Corn/soybean/sorghum/oat+clover 4-yr (High N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_304M_ROT21,NEMLTCRS_304M,NEMLTCRS_ROT21,1983-04-26,2015-06-17,144,Continuous soybean (Low N),Soybean,Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_304N_ROT22,NEMLTCRS_304N,NEMLTCRS_ROT22,1983-04-26,2015-06-17,144,Continuous soybean (High N),Soybean,Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_304S_ROT20,NEMLTCRS_304S,NEMLTCRS_ROT20,1983-04-26,2015-06-17,144,Continuous soybean (0 N),Soybean,Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_305M_ROT40,NEMLTCRS_305M,NEMLTCRS_ROT40,1983-04-26,2015-06-02,143,Corn/soybean 2-yr rotation (0 N),"Corn, Soybean",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_305N_ROT41,NEMLTCRS_305N,NEMLTCRS_ROT41,1983-04-26,2015-06-02,143,Corn/soybean 2-yr rotation (Low N),"Corn, Soybean",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_305S_ROT42,NEMLTCRS_305S,NEMLTCRS_ROT42,1983-04-26,2015-06-02,143,Corn/soybean 2-yr rotation(High N),"Corn, Soybean",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_306M_ROT61,NEMLTCRS_306M,NEMLTCRS_ROT61,1983-04-22,2015-05-13,136,Corn/oat+clover/sorghum/soybean 4-yr (Low N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_306N_ROT60,NEMLTCRS_306N,NEMLTCRS_ROT60,1983-04-22,2015-05-13,136,Corn/oat+clover/sorghum/soybean 4-yr (0 N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_306S_ROT62,NEMLTCRS_306S,NEMLTCRS_ROT62,1983-04-22,2015-05-13,136,Corn/oat+clover/sorghum/soybean 4-yr (High N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_307M_ROT62,NEMLTCRS_307M,NEMLTCRS_ROT62,1983-04-26,2015-07-16,140,Corn/oat+clover/sorghum/soybean 4-yr (High N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_307N_ROT60,NEMLTCRS_307N,NEMLTCRS_ROT60,1983-04-26,2015-07-16,140,Corn/oat+clover/sorghum/soybean 4-yr (0 N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_307S_ROT61,NEMLTCRS_307S,NEMLTCRS_ROT61,1983-04-26,2015-07-16,140,Corn/oat+clover/sorghum/soybean 4-yr (Low N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_308M_ROT32,NEMLTCRS_308M,NEMLTCRS_ROT32,1983-04-26,2015-07-16,151,Continuous sorghum (High N),Sorghum,Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_308N_ROT30,NEMLTCRS_308N,NEMLTCRS_ROT30,1983-04-26,2015-07-16,151,Continuous sorghum (0 N),Sorghum,Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_308S_ROT31,NEMLTCRS_308S,NEMLTCRS_ROT31,1983-04-26,2015-07-16,151,Continuous sorghum (Low N),Sorghum,Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_309M_ROT60,NEMLTCRS_309M,NEMLTCRS_ROT60,1983-04-26,2015-06-17,143,Corn/oat+clover/sorghum/soybean 4-yr (0 N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_309N_ROT62,NEMLTCRS_309N,NEMLTCRS_ROT62,1983-04-26,2015-06-17,143,Corn/oat+clover/sorghum/soybean 4-yr (High N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_309S_ROT61,NEMLTCRS_309S,NEMLTCRS_ROT61,1983-04-26,2015-06-17,143,Corn/oat+clover/sorghum/soybean 4-yr (Low N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_310M_ROT60,NEMLTCRS_310M,NEMLTCRS_ROT60,1983-04-26,2015-06-02,139,Corn/oat+clover/sorghum/soybean 4-yr (0 N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_310N_ROT62,NEMLTCRS_310N,NEMLTCRS_ROT62,1983-04-26,2015-06-02,139,Corn/oat+clover/sorghum/soybean 4-yr (High N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_310S_ROT61,NEMLTCRS_310S,NEMLTCRS_ROT61,1983-04-26,2015-06-02,139,Corn/oat+clover/sorghum/soybean 4-yr (Low N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_311M_ROT52,NEMLTCRS_311M,NEMLTCRS_ROT52,1983-04-26,2015-07-16,146,Sorghum/soybean 2-yr rotation (High N),"Soybean, Sorghum",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_311N_ROT51,NEMLTCRS_311N,NEMLTCRS_ROT51,1983-04-26,2015-07-16,146,Sorghum/soybean 2-yr rotation (Low N),"Soybean, Sorghum",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_311S_ROT50,NEMLTCRS_311S,NEMLTCRS_ROT50,1983-04-26,2015-07-16,146,Sorghum/soybean 2-yr rotation (0 N),"Soybean, Sorghum",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_312M_ROT11,NEMLTCRS_312M,NEMLTCRS_ROT11,1983-04-26,2015-06-02,142,Continuous corn (Low N),Corn,Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_312N_ROT10,NEMLTCRS_312N,NEMLTCRS_ROT10,1983-04-26,2015-06-02,142,Continuous corn (0 N),Corn,Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_312S_ROT12,NEMLTCRS_312S,NEMLTCRS_ROT12,1983-04-26,2015-06-02,142,Continuous corn (High N),Corn,Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_313M_ROT52,NEMLTCRS_313M,NEMLTCRS_ROT52,1983-04-26,2015-06-17,148,Sorghum/soybean 2-yr rotation (High N),"Soybean, Sorghum",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_313N_ROT51,NEMLTCRS_313N,NEMLTCRS_ROT51,1983-04-26,2015-06-17,148,Sorghum/soybean 2-yr rotation (Low N),"Soybean, Sorghum",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_313S_ROT50,NEMLTCRS_313S,NEMLTCRS_ROT50,1983-04-26,2015-06-17,148,Sorghum/soybean 2-yr rotation (0 N),"Soybean, Sorghum",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_314M_ROT42,NEMLTCRS_314M,NEMLTCRS_ROT42,1983-04-26,2015-06-17,143,Corn/soybean 2-yr rotation(High N),"Corn, Soybean",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_314N_ROT41,NEMLTCRS_314N,NEMLTCRS_ROT41,1983-04-26,2015-06-17,143,Corn/soybean 2-yr rotation (Low N),"Corn, Soybean",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_314S_ROT40,NEMLTCRS_314S,NEMLTCRS_ROT40,1983-04-26,2015-06-17,143,Corn/soybean 2-yr rotation (0 N),"Corn, Soybean",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_315M_ROT71,NEMLTCRS_315M,NEMLTCRS_ROT71,1983-04-26,2015-07-16,140,Corn/soybean/sorghum/oat+clover 4-yr (Low N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_315N_ROT70,NEMLTCRS_315N,NEMLTCRS_ROT70,1983-04-26,2015-07-16,140,Corn/soybean/sorghum/oat+clover 4-yr (0 N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_315S_ROT72,NEMLTCRS_315S,NEMLTCRS_ROT72,1983-04-26,2015-07-16,140,Corn/soybean/sorghum/oat+clover 4-yr (High N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_401M_ROT42,NEMLTCRS_401M,NEMLTCRS_ROT42,1983-04-26,2015-06-02,143,Corn/soybean 2-yr rotation(High N),"Corn, Soybean",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_401N_ROT41,NEMLTCRS_401N,NEMLTCRS_ROT41,1983-04-26,2015-06-02,143,Corn/soybean 2-yr rotation (Low N),"Corn, Soybean",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_401S_ROT40,NEMLTCRS_401S,NEMLTCRS_ROT40,1983-04-26,2015-06-02,143,Corn/soybean 2-yr rotation (0 N),"Corn, Soybean",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_402M_ROT60,NEMLTCRS_402M,NEMLTCRS_ROT60,1983-04-26,2015-06-17,143,Corn/oat+clover/sorghum/soybean 4-yr (0 N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_402N_ROT61,NEMLTCRS_402N,NEMLTCRS_ROT61,1983-04-26,2015-06-17,143,Corn/oat+clover/sorghum/soybean 4-yr (Low N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_402S_ROT62,NEMLTCRS_402S,NEMLTCRS_ROT62,1983-04-26,2015-06-17,143,Corn/oat+clover/sorghum/soybean 4-yr (High N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_403M_ROT70,NEMLTCRS_403M,NEMLTCRS_ROT70,1983-04-26,2015-06-17,140,Corn/soybean/sorghum/oat+clover 4-yr (0 N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_403N_ROT72,NEMLTCRS_403N,NEMLTCRS_ROT72,1983-04-26,2015-06-17,140,Corn/soybean/sorghum/oat+clover 4-yr (High N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_403S_ROT71,NEMLTCRS_403S,NEMLTCRS_ROT71,1983-04-26,2015-06-17,140,Corn/soybean/sorghum/oat+clover 4-yr (Low N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_404M_ROT61,NEMLTCRS_404M,NEMLTCRS_ROT61,1983-04-26,2015-07-16,140,Corn/oat+clover/sorghum/soybean 4-yr (Low N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_404N_ROT60,NEMLTCRS_404N,NEMLTCRS_ROT60,1983-04-26,2015-07-16,140,Corn/oat+clover/sorghum/soybean 4-yr (0 N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_404S_ROT62,NEMLTCRS_404S,NEMLTCRS_ROT62,1983-04-26,2015-07-16,140,Corn/oat+clover/sorghum/soybean 4-yr (High N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_405M_ROT71,NEMLTCRS_405M,NEMLTCRS_ROT71,1983-04-26,2015-07-16,140,Corn/soybean/sorghum/oat+clover 4-yr (Low N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_405N_ROT70,NEMLTCRS_405N,NEMLTCRS_ROT70,1983-04-26,2015-07-16,140,Corn/soybean/sorghum/oat+clover 4-yr (0 N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_405S_ROT72,NEMLTCRS_405S,NEMLTCRS_ROT72,1983-04-26,2015-07-16,140,Corn/soybean/sorghum/oat+clover 4-yr (High N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_406M_ROT71,NEMLTCRS_406M,NEMLTCRS_ROT71,1983-04-22,2015-05-13,139,Corn/soybean/sorghum/oat+clover 4-yr (Low N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_406N_ROT72,NEMLTCRS_406N,NEMLTCRS_ROT72,1983-04-22,2015-05-13,139,Corn/soybean/sorghum/oat+clover 4-yr (High N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_406S_ROT70,NEMLTCRS_406S,NEMLTCRS_ROT70,1983-04-22,2015-05-13,139,Corn/soybean/sorghum/oat+clover 4-yr (0 N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_407M_ROT12,NEMLTCRS_407M,NEMLTCRS_ROT12,1983-04-26,2015-06-02,142,Continuous corn (High N),Corn,Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_407N_ROT10,NEMLTCRS_407N,NEMLTCRS_ROT10,1983-04-26,2015-06-02,142,Continuous corn (0 N),Corn,Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_407S_ROT11,NEMLTCRS_407S,NEMLTCRS_ROT11,1983-04-26,2015-06-02,142,Continuous corn (Low N),Corn,Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_408M_ROT60,NEMLTCRS_408M,NEMLTCRS_ROT60,1983-04-26,2015-06-02,139,Corn/oat+clover/sorghum/soybean 4-yr (0 N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_408N_ROT62,NEMLTCRS_408N,NEMLTCRS_ROT62,1983-04-26,2015-06-02,139,Corn/oat+clover/sorghum/soybean 4-yr (High N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_408S_ROT61,NEMLTCRS_408S,NEMLTCRS_ROT61,1983-04-26,2015-06-02,139,Corn/oat+clover/sorghum/soybean 4-yr (Low N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_409M_ROT52,NEMLTCRS_409M,NEMLTCRS_ROT52,1983-04-26,2015-06-17,148,Sorghum/soybean 2-yr rotation (High N),"Soybean, Sorghum",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_409N_ROT51,NEMLTCRS_409N,NEMLTCRS_ROT51,1983-04-26,2015-06-17,148,Sorghum/soybean 2-yr rotation (Low N),"Soybean, Sorghum",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_409S_ROT50,NEMLTCRS_409S,NEMLTCRS_ROT50,1983-04-26,2015-06-17,148,Sorghum/soybean 2-yr rotation (0 N),"Soybean, Sorghum",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_410M_ROT62,NEMLTCRS_410M,NEMLTCRS_ROT62,1983-04-22,2015-05-13,136,Corn/oat+clover/sorghum/soybean 4-yr (High N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_410N_ROT60,NEMLTCRS_410N,NEMLTCRS_ROT60,1983-04-22,2015-05-13,136,Corn/oat+clover/sorghum/soybean 4-yr (0 N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_410S_ROT61,NEMLTCRS_410S,NEMLTCRS_ROT61,1983-04-22,2015-05-13,136,Corn/oat+clover/sorghum/soybean 4-yr (Low N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_411M_ROT20,NEMLTCRS_411M,NEMLTCRS_ROT20,1983-04-26,2015-06-17,144,Continuous soybean (0 N),Soybean,Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_411N_ROT22,NEMLTCRS_411N,NEMLTCRS_ROT22,1983-04-26,2015-06-17,144,Continuous soybean (High N),Soybean,Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_411S_ROT21,NEMLTCRS_411S,NEMLTCRS_ROT21,1983-04-26,2015-06-17,144,Continuous soybean (Low N),Soybean,Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_412M_ROT71,NEMLTCRS_412M,NEMLTCRS_ROT71,1983-04-26,2015-06-02,139,Corn/soybean/sorghum/oat+clover 4-yr (Low N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_412N_ROT70,NEMLTCRS_412N,NEMLTCRS_ROT70,1983-04-26,2015-06-02,139,Corn/soybean/sorghum/oat+clover 4-yr (0 N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_412S_ROT72,NEMLTCRS_412S,NEMLTCRS_ROT72,1983-04-26,2015-06-02,139,Corn/soybean/sorghum/oat+clover 4-yr (High N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_413M_ROT52,NEMLTCRS_413M,NEMLTCRS_ROT52,1983-04-26,2015-07-01,145,Sorghum/soybean 2-yr rotation (High N),"Soybean, Sorghum",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_413N_ROT51,NEMLTCRS_413N,NEMLTCRS_ROT51,1983-04-26,2015-07-16,146,Sorghum/soybean 2-yr rotation (Low N),"Soybean, Sorghum",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_413S_ROT50,NEMLTCRS_413S,NEMLTCRS_ROT50,1983-04-26,2015-07-01,145,Sorghum/soybean 2-yr rotation (0 N),"Soybean, Sorghum",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_414M_ROT42,NEMLTCRS_414M,NEMLTCRS_ROT42,1983-04-26,2015-06-17,143,Corn/soybean 2-yr rotation(High N),"Corn, Soybean",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_414N_ROT41,NEMLTCRS_414N,NEMLTCRS_ROT41,1983-04-26,2015-06-17,143,Corn/soybean 2-yr rotation (Low N),"Corn, Soybean",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_414S_ROT40,NEMLTCRS_414S,NEMLTCRS_ROT40,1983-04-26,2015-06-17,143,Corn/soybean 2-yr rotation (0 N),"Corn, Soybean",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_415M_ROT30,NEMLTCRS_415M,NEMLTCRS_ROT30,1983-04-26,2015-07-01,150,Continuous sorghum (0 N),Sorghum,Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_415N_ROT32,NEMLTCRS_415N,NEMLTCRS_ROT32,1983-04-26,2015-07-01,150,Continuous sorghum (High N),Sorghum,Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_415S_ROT31,NEMLTCRS_415S,NEMLTCRS_ROT31,1983-04-26,2015-07-01,150,Continuous sorghum (Low N),Sorghum,Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_501M_ROT72,NEMLTCRS_501M,NEMLTCRS_ROT72,1983-04-26,2015-06-17,140,Corn/soybean/sorghum/oat+clover 4-yr (High N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_501N_ROT71,NEMLTCRS_501N,NEMLTCRS_ROT71,1983-04-26,2015-06-17,140,Corn/soybean/sorghum/oat+clover 4-yr (Low N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_501S_ROT70,NEMLTCRS_501S,NEMLTCRS_ROT70,1983-04-26,2015-06-17,140,Corn/soybean/sorghum/oat+clover 4-yr (0 N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_502M_ROT61,NEMLTCRS_502M,NEMLTCRS_ROT61,1983-04-26,2015-06-17,143,Corn/oat+clover/sorghum/soybean 4-yr (Low N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_502N_ROT62,NEMLTCRS_502N,NEMLTCRS_ROT62,1983-04-26,2015-06-17,143,Corn/oat+clover/sorghum/soybean 4-yr (High N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_502S_ROT60,NEMLTCRS_502S,NEMLTCRS_ROT60,1983-04-26,2015-06-17,143,Corn/oat+clover/sorghum/soybean 4-yr (0 N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_503M_ROT42,NEMLTCRS_503M,NEMLTCRS_ROT42,1983-04-26,2015-06-17,143,Corn/soybean 2-yr rotation(High N),"Corn, Soybean",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_503N_ROT40,NEMLTCRS_503N,NEMLTCRS_ROT40,1983-04-26,2015-06-17,143,Corn/soybean 2-yr rotation (0 N),"Corn, Soybean",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_503S_ROT41,NEMLTCRS_503S,NEMLTCRS_ROT41,1983-04-26,2015-06-17,143,Corn/soybean 2-yr rotation (Low N),"Corn, Soybean",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_504M_ROT71,NEMLTCRS_504M,NEMLTCRS_ROT71,1983-04-26,2015-07-01,139,Corn/soybean/sorghum/oat+clover 4-yr (Low N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_504N_ROT72,NEMLTCRS_504N,NEMLTCRS_ROT72,1983-04-26,2015-07-01,139,Corn/soybean/sorghum/oat+clover 4-yr (High N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_504S_ROT70,NEMLTCRS_504S,NEMLTCRS_ROT70,1983-04-26,2015-07-01,139,Corn/soybean/sorghum/oat+clover 4-yr (0 N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_505M_ROT70,NEMLTCRS_505M,NEMLTCRS_ROT70,1983-04-26,2015-06-02,139,Corn/soybean/sorghum/oat+clover 4-yr (0 N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_505N_ROT71,NEMLTCRS_505N,NEMLTCRS_ROT71,1983-04-26,2015-06-02,139,Corn/soybean/sorghum/oat+clover 4-yr (Low N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_505S_ROT72,NEMLTCRS_505S,NEMLTCRS_ROT72,1983-04-26,2015-06-02,139,Corn/soybean/sorghum/oat+clover 4-yr (High N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_506M_ROT62,NEMLTCRS_506M,NEMLTCRS_ROT62,1983-04-22,2015-05-13,136,Corn/oat+clover/sorghum/soybean 4-yr (High N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_506N_ROT60,NEMLTCRS_506N,NEMLTCRS_ROT60,1983-04-22,2015-05-13,136,Corn/oat+clover/sorghum/soybean 4-yr (0 N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_506S_ROT61,NEMLTCRS_506S,NEMLTCRS_ROT61,1983-04-22,2015-05-13,136,Corn/oat+clover/sorghum/soybean 4-yr (Low N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_507M_ROT11,NEMLTCRS_507M,NEMLTCRS_ROT11,1983-04-26,2015-06-02,142,Continuous corn (Low N),Corn,Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_507N_ROT12,NEMLTCRS_507N,NEMLTCRS_ROT12,1983-04-26,2015-06-02,142,Continuous corn (High N),Corn,Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_507S_ROT10,NEMLTCRS_507S,NEMLTCRS_ROT10,1983-04-26,2015-06-02,142,Continuous corn (0 N),Corn,Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_508M_ROT62,NEMLTCRS_508M,NEMLTCRS_ROT62,1983-04-26,2015-07-01,140,Corn/oat+clover/sorghum/soybean 4-yr (High N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_508N_ROT60,NEMLTCRS_508N,NEMLTCRS_ROT60,1983-04-26,2015-07-01,140,Corn/oat+clover/sorghum/soybean 4-yr (0 N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_508S_ROT61,NEMLTCRS_508S,NEMLTCRS_ROT61,1983-04-26,2015-07-01,140,Corn/oat+clover/sorghum/soybean 4-yr (Low N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_509M_ROT32,NEMLTCRS_509M,NEMLTCRS_ROT32,1983-04-26,2015-07-01,151,Continuous sorghum (High N),Sorghum,Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_509N_ROT31,NEMLTCRS_509N,NEMLTCRS_ROT31,1983-04-26,2015-07-01,151,Continuous sorghum (Low N),Sorghum,Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_509S_ROT30,NEMLTCRS_509S,NEMLTCRS_ROT30,1983-04-26,2015-07-01,151,Continuous sorghum (0 N),Sorghum,Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_510M_ROT20,NEMLTCRS_510M,NEMLTCRS_ROT20,1983-04-26,2015-06-17,144,Continuous soybean (0 N),Soybean,Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_510N_ROT21,NEMLTCRS_510N,NEMLTCRS_ROT21,1983-04-26,2015-06-17,144,Continuous soybean (Low N),Soybean,Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_510S_ROT22,NEMLTCRS_510S,NEMLTCRS_ROT22,1983-04-26,2015-06-17,144,Continuous soybean (High N),Soybean,Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_511M_ROT51,NEMLTCRS_511M,NEMLTCRS_ROT51,1983-04-26,2015-06-17,148,Sorghum/soybean 2-yr rotation (Low N),"Soybean, Sorghum",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_511N_ROT52,NEMLTCRS_511N,NEMLTCRS_ROT52,1983-04-26,2015-06-17,148,Sorghum/soybean 2-yr rotation (High N),"Soybean, Sorghum",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_511S_ROT50,NEMLTCRS_511S,NEMLTCRS_ROT50,1983-04-26,2015-06-17,148,Sorghum/soybean 2-yr rotation (0 N),"Soybean, Sorghum",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_512M_ROT41,NEMLTCRS_512M,NEMLTCRS_ROT41,1983-04-26,2015-06-02,143,Corn/soybean 2-yr rotation (Low N),"Corn, Soybean",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_512N_ROT40,NEMLTCRS_512N,NEMLTCRS_ROT40,1983-04-26,2015-06-02,143,Corn/soybean 2-yr rotation (0 N),"Corn, Soybean",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_512S_ROT42,NEMLTCRS_512S,NEMLTCRS_ROT42,1983-04-26,2015-06-02,143,Corn/soybean 2-yr rotation(High N),"Corn, Soybean",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_513M_ROT71,NEMLTCRS_513M,NEMLTCRS_ROT71,1983-04-22,2015-05-13,139,Corn/soybean/sorghum/oat+clover 4-yr (Low N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_513N_ROT70,NEMLTCRS_513N,NEMLTCRS_ROT70,1983-04-22,2015-05-13,139,Corn/soybean/sorghum/oat+clover 4-yr (0 N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_513S_ROT72,NEMLTCRS_513S,NEMLTCRS_ROT72,1983-04-22,2015-05-13,139,Corn/soybean/sorghum/oat+clover 4-yr (High N),"Corn, Soybean, Sorghum, Oat/Clover",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_514M_ROT50,NEMLTCRS_514M,NEMLTCRS_ROT50,1983-04-26,2015-07-01,145,Sorghum/soybean 2-yr rotation (0 N),"Soybean, Sorghum",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_514N_ROT52,NEMLTCRS_514N,NEMLTCRS_ROT52,1983-04-26,2015-07-01,145,Sorghum/soybean 2-yr rotation (High N),"Soybean, Sorghum",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_514S_ROT51,NEMLTCRS_514S,NEMLTCRS_ROT51,1983-04-26,2015-07-01,145,Sorghum/soybean 2-yr rotation (Low N),"Soybean, Sorghum",Conventional Till,Low N,,No,No,No
+AgCROS_NEMLTCRS_515M_ROT62,NEMLTCRS_515M,NEMLTCRS_ROT62,1983-04-26,2015-06-02,139,Corn/oat+clover/sorghum/soybean 4-yr (High N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,High N,,No,No,No
+AgCROS_NEMLTCRS_515N_ROT60,NEMLTCRS_515N,NEMLTCRS_ROT60,1983-04-26,2015-06-02,139,Corn/oat+clover/sorghum/soybean 4-yr (0 N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,0 N,,No,No,No
+AgCROS_NEMLTCRS_515S_ROT61,NEMLTCRS_515S,NEMLTCRS_ROT61,1983-04-26,2015-06-02,139,Corn/oat+clover/sorghum/soybean 4-yr (Low N),"Corn, Oat/Clover, Sorghum, Soybean",Conventional Till,Low N,,No,No,No

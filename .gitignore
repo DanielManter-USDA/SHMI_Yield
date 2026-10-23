@@ -1,4 +1,12 @@
-.Rproj.user
+# generated
+Outputs/
+*.html
+.Rproj.user/
 .Rhistory
 .RData
-.Ruserdata
+__pycache__/
+# inputs: only the SHMI workbooks (and this README) are shared. The raw AgCROS tables,
+# the SPEI grid and the NAPESHM source files are not redistributed (see Inputs/README.md)
+Inputs/*
+!Inputs/README.md
+!Inputs/yield_workbooks/

@@ -1,0 +1,105 @@
+MGT_combo,unit_id,treatment_id,first_record,last_record,records,treatment_descriptor,rotation_descriptor,tillage_descriptor,n_treatment_descriptor,cover_crop,residue_removal,irrigation,organic_management
+AgCROS_NECCIRR_001_DfctX0N,NECCIRR_001,DfctX0N,2010-04-01,2018-10-04,18,Deficit_Irrigation_No_Amelioration_0N_0%_Residue_Removal,Corn,No Till,0 kg N/ha/y,,No,Yes,No
+AgCROS_NECCIRR_002_DfctX0A,NECCIRR_002,DfctX0A,2010-04-01,2018-10-04,25,Deficit_Irrigation_No_Amelioration_0N_100%_Residue_Removal,Corn,No Till,0 kg N/ha/y,,Yes,Yes,No
+AgCROS_NECCIRR_003_FullX0N,NECCIRR_003,FullX0N,2010-04-01,2018-10-04,19,Full_Irrigation_No_Amelioration_0N_0%_Residue_Removal,Corn,No Till,0 kg N/ha/y,,No,Yes,No
+AgCROS_NECCIRR_004_FullX0A,NECCIRR_004,FullX0A,2010-04-01,2018-10-04,26,Full_Irrigation_No_Amelioration_0N_100%_Residue_Removal,Corn,No Till,0 kg N/ha/y,,Yes,Yes,No
+AgCROS_NECCIRR_005_DfctX0A,NECCIRR_005,DfctX0A,2010-04-01,2018-10-04,26,Deficit_Irrigation_No_Amelioration_0N_100%_Residue_Removal,Corn,No Till,0 kg N/ha/y,,Yes,Yes,No
+AgCROS_NECCIRR_006_DfctX0N,NECCIRR_006,DfctX0N,2010-04-01,2018-10-04,19,Deficit_Irrigation_No_Amelioration_0N_0%_Residue_Removal,Corn,No Till,0 kg N/ha/y,,No,Yes,No
+AgCROS_NECCIRR_007_FullX0N,NECCIRR_007,FullX0N,2010-04-01,2018-10-04,17,Full_Irrigation_No_Amelioration_0N_0%_Residue_Removal,Corn,No Till,0 kg N/ha/y,,No,Yes,No
+AgCROS_NECCIRR_008_FullX0A,NECCIRR_008,FullX0A,2010-04-01,2018-10-04,23,Full_Irrigation_No_Amelioration_0N_100%_Residue_Removal,Corn,No Till,0 kg N/ha/y,,Yes,Yes,No
+AgCROS_NECCIRR_101_FullX125A,NECCIRR_101,FullX125A,2010-04-01,2018-10-04,24,Full_Irrigation_No_Amelioration_125N_100%_Residue_Removal,Corn,No Till,125 kg N/ha/y,,Yes,Yes,No
+AgCROS_NECCIRR_102_FullX200N,NECCIRR_102,FullX200N,2010-04-01,2018-10-04,18,Full_Irrigation_No_Amelioration_200N_0%_Residue_Removal,Corn,No Till,200 kg N/ha/y,,No,Yes,No
+AgCROS_NECCIRR_103_FullX200A,NECCIRR_103,FullX200A,2010-04-01,2018-10-04,26,Full_Irrigation_No_Amelioration_200N_100%_Residue_Removal,Corn,No Till,200 kg N/ha/y,,Yes,Yes,No
+AgCROS_NECCIRR_104_FullX125N,NECCIRR_104,FullX125N,2010-04-01,2018-10-04,19,Full_Irrigation_No_Amelioration_125N_0%_Residue_Removal,Corn,No Till,125 kg N/ha/y,,No,Yes,No
+AgCROS_NECCIRR_105_FullC125N,NECCIRR_105,FullC125N,2010-04-01,2018-11-02,28,Full_Irrigation_Cover_Crop_125N_0%_Residue_Removal,Corn,No Till,125 kg N/ha/y,Secale cereale (Rye),No,Yes,No
+AgCROS_NECCIRR_106_FullC200A,NECCIRR_106,FullC200A,2010-04-01,2018-11-02,35,Full_Irrigation_Cover_Crop_200N_100%_Residue_Removal,Corn,No Till,200 kg N/ha/y,Secale cereale (Rye),Yes,Yes,No
+AgCROS_NECCIRR_107_FullC200N,NECCIRR_107,FullC200N,2010-04-01,2018-11-02,27,Full_Irrigation_Cover_Crop_200N_0%_Residue_Removal,Corn,No Till,200 kg N/ha/y,Secale cereale (Rye),No,Yes,No
+AgCROS_NECCIRR_108_FullC125A,NECCIRR_108,FullC125A,2010-04-01,2018-11-02,33,Full_Irrigation_Cover_Crop_125N_100%_Residue_Removal,Corn,No Till,125 kg N/ha/y,Secale cereale (Rye),Yes,Yes,No
+AgCROS_NECCIRR_109_FullM200A,NECCIRR_109,FullM200A,2010-04-01,2018-10-04,26,Full_Irrigation_Manure_200N_100%_Residue_Removal,Corn,No Till,200 kg N/ha/y,,Yes,Yes,Yes
+AgCROS_NECCIRR_110_FullM200N,NECCIRR_110,FullM200N,2010-04-01,2018-10-04,18,Full_Irrigation_Manure_200N_0%_Residue_Removal,Corn,No Till,200 kg N/ha/y,,No,Yes,Yes
+AgCROS_NECCIRR_111_FullM125A,NECCIRR_111,FullM125A,2010-04-01,2018-10-04,24,Full_Irrigation_Manure_125N_100%_Residue_Removal,Corn,No Till,125 kg N/ha/y,,Yes,Yes,Yes
+AgCROS_NECCIRR_112_FullM125N,NECCIRR_112,FullM125N,2010-04-01,2018-10-04,19,Full_Irrigation_Manure_125N_0%_Residue_Removal,Corn,No Till,125 kg N/ha/y,,No,Yes,Yes
+AgCROS_NECCIRR_113_DfctC125N,NECCIRR_113,DfctC125N,2010-04-01,2018-11-02,28,Deficit_Irrigation_Cover_Crop_125N_0%_Residue_Removal,Corn,No Till,125 kg N/ha/y,Secale cereale (Rye),No,Yes,No
+AgCROS_NECCIRR_114_DfctC200A,NECCIRR_114,DfctC200A,2010-04-01,2018-11-02,35,Deficit_Irrigation_Cover_Crop_200N_100%_Residue_Removal,Corn,No Till,200 kg N/ha/y,Secale cereale (Rye),Yes,Yes,No
+AgCROS_NECCIRR_115_DfctC200N,NECCIRR_115,DfctC200N,2010-04-01,2018-11-02,27,Deficit_Irrigation_Cover_Crop_200N_0%_Residue_Removal,Corn,No Till,200 kg N/ha/y,Secale cereale (Rye),No,Yes,No
+AgCROS_NECCIRR_116_DfctC125A,NECCIRR_116,DfctC125A,2010-04-01,2018-11-02,33,Deficit_Irrigation_Cover_Crop_125N_100%_Residue_Removal,Corn,No Till,125 kg N/ha/y,Secale cereale (Rye),Yes,Yes,No
+AgCROS_NECCIRR_117_DfctM200A,NECCIRR_117,DfctM200A,2010-04-01,2018-10-04,24,Deficit_Irrigation_Manure_200N_100%_Residue_Removal,Corn,No Till,200 kg N/ha/y,,Yes,Yes,Yes
+AgCROS_NECCIRR_118_DfctM200N,NECCIRR_118,DfctM200N,2010-04-01,2018-10-04,19,Deficit_Irrigation_Manure_200N_0%_Residue_Removal,Corn,No Till,200 kg N/ha/y,,No,Yes,Yes
+AgCROS_NECCIRR_119_DfctM125A,NECCIRR_119,DfctM125A,2010-04-01,2018-10-04,26,Deficit_Irrigation_Manure_125N_100%_Residue_Removal,Corn,No Till,125 kg N/ha/y,,Yes,Yes,Yes
+AgCROS_NECCIRR_120_DfctM125N,NECCIRR_120,DfctM125N,2010-04-01,2018-10-04,18,Deficit_Irrigation_Manure_125N_0%_Residue_Removal,Corn,No Till,125 kg N/ha/y,,No,Yes,Yes
+AgCROS_NECCIRR_121_DfctX125N,NECCIRR_121,DfctX125N,2010-04-01,2018-10-04,19,Deficit_Irrigation_No_Amelioration_125N_0%_Residue_Removal,Corn,No Till,125 kg N/ha/y,,No,Yes,No
+AgCROS_NECCIRR_122_DfctX200A,NECCIRR_122,DfctX200A,2010-04-01,2018-10-04,26,Deficit_Irrigation_No_Amelioration_200N_100%_Residue_Removal,Corn,No Till,200 kg N/ha/y,,Yes,Yes,No
+AgCROS_NECCIRR_123_DfctX200N,NECCIRR_123,DfctX200N,2010-04-01,2018-10-04,18,Deficit_Irrigation_No_Amelioration_200N_0%_Residue_Removal,Corn,No Till,200 kg N/ha/y,,No,Yes,No
+AgCROS_NECCIRR_124_DfctX125A,NECCIRR_124,DfctX125A,2010-04-01,2018-10-04,24,Deficit_Irrigation_No_Amelioration_125N_100%_Residue_Removal,Corn,No Till,125 kg N/ha/y,,Yes,Yes,No
+AgCROS_NECCIRR_201_DfctX200N,NECCIRR_201,DfctX200N,2010-04-01,2018-10-04,18,Deficit_Irrigation_No_Amelioration_200N_0%_Residue_Removal,Corn,No Till,200 kg N/ha/y,,No,Yes,No
+AgCROS_NECCIRR_202_DfctX125A,NECCIRR_202,DfctX125A,2010-04-01,2018-10-04,24,Deficit_Irrigation_No_Amelioration_125N_100%_Residue_Removal,Corn,No Till,125 kg N/ha/y,,Yes,Yes,No
+AgCROS_NECCIRR_203_DfctX125N,NECCIRR_203,DfctX125N,2010-04-01,2018-10-04,19,Deficit_Irrigation_No_Amelioration_125N_0%_Residue_Removal,Corn,No Till,125 kg N/ha/y,,No,Yes,No
+AgCROS_NECCIRR_204_DfctX200A,NECCIRR_204,DfctX200A,2010-04-01,2018-10-04,26,Deficit_Irrigation_No_Amelioration_200N_100%_Residue_Removal,Corn,No Till,200 kg N/ha/y,,Yes,Yes,No
+AgCROS_NECCIRR_205_DfctM200N,NECCIRR_205,DfctM200N,2010-04-01,2018-10-04,19,Deficit_Irrigation_Manure_200N_0%_Residue_Removal,Corn,No Till,200 kg N/ha/y,,No,Yes,Yes
+AgCROS_NECCIRR_206_DfctM125A,NECCIRR_206,DfctM125A,2010-04-01,2018-10-04,26,Deficit_Irrigation_Manure_125N_100%_Residue_Removal,Corn,No Till,125 kg N/ha/y,,Yes,Yes,Yes
+AgCROS_NECCIRR_207_DfctM125N,NECCIRR_207,DfctM125N,2010-04-01,2018-10-04,18,Deficit_Irrigation_Manure_125N_0%_Residue_Removal,Corn,No Till,125 kg N/ha/y,,No,Yes,Yes
+AgCROS_NECCIRR_208_DfctM200A,NECCIRR_208,DfctM200A,2010-04-01,2018-10-04,24,Deficit_Irrigation_Manure_200N_100%_Residue_Removal,Corn,No Till,200 kg N/ha/y,,Yes,Yes,Yes
+AgCROS_NECCIRR_209_DfctC125A,NECCIRR_209,DfctC125A,2010-04-01,2018-11-02,33,Deficit_Irrigation_Cover_Crop_125N_100%_Residue_Removal,Corn,No Till,125 kg N/ha/y,Secale cereale (Rye),Yes,Yes,No
+AgCROS_NECCIRR_210_DfctC200N,NECCIRR_210,DfctC200N,2010-04-01,2018-11-02,27,Deficit_Irrigation_Cover_Crop_200N_0%_Residue_Removal,Corn,No Till,200 kg N/ha/y,Secale cereale (Rye),No,Yes,No
+AgCROS_NECCIRR_211_DfctC200A,NECCIRR_211,DfctC200A,2010-04-01,2018-11-02,35,Deficit_Irrigation_Cover_Crop_200N_100%_Residue_Removal,Corn,No Till,200 kg N/ha/y,Secale cereale (Rye),Yes,Yes,No
+AgCROS_NECCIRR_212_DfctC125N,NECCIRR_212,DfctC125N,2010-04-01,2018-11-02,28,Deficit_Irrigation_Cover_Crop_125N_0%_Residue_Removal,Corn,No Till,125 kg N/ha/y,Secale cereale (Rye),No,Yes,No
+AgCROS_NECCIRR_213_FullC125A,NECCIRR_213,FullC125A,2010-04-01,2018-11-02,35,Full_Irrigation_Cover_Crop_125N_100%_Residue_Removal,Corn,No Till,125 kg N/ha/y,Secale cereale (Rye),Yes,Yes,No
+AgCROS_NECCIRR_214_FullC200N,NECCIRR_214,FullC200N,2010-04-01,2018-11-02,28,Full_Irrigation_Cover_Crop_200N_0%_Residue_Removal,Corn,No Till,200 kg N/ha/y,Secale cereale (Rye),No,Yes,No
+AgCROS_NECCIRR_215_FullC200A,NECCIRR_215,FullC200A,2010-04-01,2018-11-02,33,Full_Irrigation_Cover_Crop_200N_100%_Residue_Removal,Corn,No Till,200 kg N/ha/y,Secale cereale (Rye),Yes,Yes,No
+AgCROS_NECCIRR_216_FullC125N,NECCIRR_216,FullC125N,2010-04-01,2018-11-02,27,Full_Irrigation_Cover_Crop_125N_0%_Residue_Removal,Corn,No Till,125 kg N/ha/y,Secale cereale (Rye),No,Yes,No
+AgCROS_NECCIRR_217_FullX125N,NECCIRR_217,FullX125N,2010-04-01,2018-10-04,19,Full_Irrigation_No_Amelioration_125N_0%_Residue_Removal,Corn,No Till,125 kg N/ha/y,,No,Yes,No
+AgCROS_NECCIRR_218_FullX200A,NECCIRR_218,FullX200A,2010-04-01,2018-10-04,26,Full_Irrigation_No_Amelioration_200N_100%_Residue_Removal,Corn,No Till,200 kg N/ha/y,,Yes,Yes,No
+AgCROS_NECCIRR_219_FullX200N,NECCIRR_219,FullX200N,2010-04-01,2018-10-04,18,Full_Irrigation_No_Amelioration_200N_0%_Residue_Removal,Corn,No Till,200 kg N/ha/y,,No,Yes,No
+AgCROS_NECCIRR_220_FullX125A,NECCIRR_220,FullX125A,2010-04-01,2018-10-04,24,Full_Irrigation_No_Amelioration_125N_100%_Residue_Removal,Corn,No Till,125 kg N/ha/y,,Yes,Yes,No
+AgCROS_NECCIRR_221_FullM200A,NECCIRR_221,FullM200A,2010-04-01,2018-10-04,26,Full_Irrigation_Manure_200N_100%_Residue_Removal,Corn,No Till,200 kg N/ha/y,,Yes,Yes,Yes
+AgCROS_NECCIRR_222_FullM200N,NECCIRR_222,FullM200N,2010-04-01,2018-10-04,18,Full_Irrigation_Manure_200N_0%_Residue_Removal,Corn,No Till,200 kg N/ha/y,,No,Yes,Yes
+AgCROS_NECCIRR_223_FullM125A,NECCIRR_223,FullM125A,2010-04-01,2018-10-04,24,Full_Irrigation_Manure_125N_100%_Residue_Removal,Corn,No Till,125 kg N/ha/y,,Yes,Yes,Yes
+AgCROS_NECCIRR_224_FullM125N,NECCIRR_224,FullM125N,2010-04-01,2018-10-04,19,Full_Irrigation_Manure_125N_0%_Residue_Removal,Corn,No Till,125 kg N/ha/y,,No,Yes,Yes
+AgCROS_NECCIRR_301_FullM200N,NECCIRR_301,FullM200N,2010-04-01,2018-10-04,19,Full_Irrigation_Manure_200N_0%_Residue_Removal,Corn,No Till,200 kg N/ha/y,,No,Yes,Yes
+AgCROS_NECCIRR_302_FullM125A,NECCIRR_302,FullM125A,2010-04-01,2018-10-04,26,Full_Irrigation_Manure_125N_100%_Residue_Removal,Corn,No Till,125 kg N/ha/y,,Yes,Yes,Yes
+AgCROS_NECCIRR_303_FullM125N,NECCIRR_303,FullM125N,2010-04-01,2018-10-04,18,Full_Irrigation_Manure_125N_0%_Residue_Removal,Corn,No Till,125 kg N/ha/y,,No,Yes,Yes
+AgCROS_NECCIRR_304_FullM200A,NECCIRR_304,FullM200A,2010-04-01,2018-10-04,24,Full_Irrigation_Manure_200N_100%_Residue_Removal,Corn,No Till,200 kg N/ha/y,,Yes,Yes,Yes
+AgCROS_NECCIRR_305_FullX200A,NECCIRR_305,FullX200A,2010-04-01,2018-10-04,24,Full_Irrigation_No_Amelioration_200N_100%_Residue_Removal,Corn,No Till,200 kg N/ha/y,,Yes,Yes,No
+AgCROS_NECCIRR_306_FullX125N,NECCIRR_306,FullX125N,2010-04-01,2018-10-04,18,Full_Irrigation_No_Amelioration_125N_0%_Residue_Removal,Corn,No Till,125 kg N/ha/y,,No,Yes,No
+AgCROS_NECCIRR_307_FullX125A,NECCIRR_307,FullX125A,2010-04-01,2018-10-04,26,Full_Irrigation_No_Amelioration_125N_100%_Residue_Removal,Corn,No Till,125 kg N/ha/y,,Yes,Yes,No
+AgCROS_NECCIRR_308_FullX200N,NECCIRR_308,FullX200N,2010-04-01,2018-10-04,19,Full_Irrigation_No_Amelioration_200N_0%_Residue_Removal,Corn,No Till,200 kg N/ha/y,,No,Yes,No
+AgCROS_NECCIRR_309_FullC125A,NECCIRR_309,FullC125A,2010-04-01,2018-11-02,35,Full_Irrigation_Cover_Crop_125N_100%_Residue_Removal,Corn,No Till,125 kg N/ha/y,Secale cereale (Rye),Yes,Yes,No
+AgCROS_NECCIRR_310_FullC200N,NECCIRR_310,FullC200N,2010-04-01,2018-11-02,28,Full_Irrigation_Cover_Crop_200N_0%_Residue_Removal,Corn,No Till,200 kg N/ha/y,Secale cereale (Rye),No,Yes,No
+AgCROS_NECCIRR_311_FullC200A,NECCIRR_311,FullC200A,2010-04-01,2018-11-02,33,Full_Irrigation_Cover_Crop_200N_100%_Residue_Removal,Corn,No Till,200 kg N/ha/y,Secale cereale (Rye),Yes,Yes,No
+AgCROS_NECCIRR_312_FullC125N,NECCIRR_312,FullC125N,2010-04-01,2018-11-02,27,Full_Irrigation_Cover_Crop_125N_0%_Residue_Removal,Corn,No Till,125 kg N/ha/y,Secale cereale (Rye),No,Yes,No
+AgCROS_NECCIRR_313_DfctM200A,NECCIRR_313,DfctM200A,2010-04-01,2018-10-04,24,Deficit_Irrigation_Manure_200N_100%_Residue_Removal,Corn,No Till,200 kg N/ha/y,,Yes,Yes,Yes
+AgCROS_NECCIRR_314_DfctM125N,NECCIRR_314,DfctM125N,2010-04-01,2018-10-04,18,Deficit_Irrigation_Manure_125N_0%_Residue_Removal,Corn,No Till,125 kg N/ha/y,,No,Yes,Yes
+AgCROS_NECCIRR_315_DfctM125A,NECCIRR_315,DfctM125A,2010-04-01,2018-10-04,26,Deficit_Irrigation_Manure_125N_100%_Residue_Removal,Corn,No Till,125 kg N/ha/y,,Yes,Yes,Yes
+AgCROS_NECCIRR_316_DfctM200N,NECCIRR_316,DfctM200N,2010-04-01,2018-10-04,19,Deficit_Irrigation_Manure_200N_0%_Residue_Removal,Corn,No Till,200 kg N/ha/y,,No,Yes,Yes
+AgCROS_NECCIRR_317_DfctX125N,NECCIRR_317,DfctX125N,2010-04-01,2018-10-04,18,Deficit_Irrigation_No_Amelioration_125N_0%_Residue_Removal,Corn,No Till,125 kg N/ha/y,,No,Yes,No
+AgCROS_NECCIRR_318_DfctX125A,NECCIRR_318,DfctX125A,2010-04-01,2018-10-04,26,Deficit_Irrigation_No_Amelioration_125N_100%_Residue_Removal,Corn,No Till,125 kg N/ha/y,,Yes,Yes,No
+AgCROS_NECCIRR_319_DfctX200N,NECCIRR_319,DfctX200N,2010-04-01,2018-10-04,19,Deficit_Irrigation_No_Amelioration_200N_0%_Residue_Removal,Corn,No Till,200 kg N/ha/y,,No,Yes,No
+AgCROS_NECCIRR_320_DfctX200A,NECCIRR_320,DfctX200A,2010-04-01,2018-10-04,24,Deficit_Irrigation_No_Amelioration_200N_100%_Residue_Removal,Corn,No Till,200 kg N/ha/y,,Yes,Yes,No
+AgCROS_NECCIRR_321_DfctC125A,NECCIRR_321,DfctC125A,2010-04-01,2018-11-02,35,Deficit_Irrigation_Cover_Crop_125N_100%_Residue_Removal,Corn,No Till,125 kg N/ha/y,Secale cereale (Rye),Yes,Yes,No
+AgCROS_NECCIRR_322_DfctC200N,NECCIRR_322,DfctC200N,2010-04-01,2018-11-02,28,Deficit_Irrigation_Cover_Crop_200N_0%_Residue_Removal,Corn,No Till,200 kg N/ha/y,Secale cereale (Rye),No,Yes,No
+AgCROS_NECCIRR_323_DfctC200A,NECCIRR_323,DfctC200A,2010-04-01,2018-11-02,33,Deficit_Irrigation_Cover_Crop_200N_100%_Residue_Removal,Corn,No Till,200 kg N/ha/y,Secale cereale (Rye),Yes,Yes,No
+AgCROS_NECCIRR_324_DfctC125N,NECCIRR_324,DfctC125N,2010-04-01,2018-11-02,27,Deficit_Irrigation_Cover_Crop_125N_0%_Residue_Removal,Corn,No Till,125 kg N/ha/y,Secale cereale (Rye),No,Yes,No
+AgCROS_NECCIRR_401_DfctC200N,NECCIRR_401,DfctC200N,2010-04-01,2018-11-02,27,Deficit_Irrigation_Cover_Crop_200N_0%_Residue_Removal,Corn,No Till,200 kg N/ha/y,Secale cereale (Rye),No,Yes,No
+AgCROS_NECCIRR_402_DfctC125A,NECCIRR_402,DfctC125A,2010-04-01,2018-11-02,33,Deficit_Irrigation_Cover_Crop_125N_100%_Residue_Removal,Corn,No Till,125 kg N/ha/y,Secale cereale (Rye),Yes,Yes,No
+AgCROS_NECCIRR_403_DfctC125N,NECCIRR_403,DfctC125N,2010-04-01,2018-11-02,28,Deficit_Irrigation_Cover_Crop_125N_0%_Residue_Removal,Corn,No Till,125 kg N/ha/y,Secale cereale (Rye),No,Yes,No
+AgCROS_NECCIRR_404_DfctC200A,NECCIRR_404,DfctC200A,2010-04-01,2018-11-02,35,Deficit_Irrigation_Cover_Crop_200N_100%_Residue_Removal,Corn,No Till,200 kg N/ha/y,Secale cereale (Rye),Yes,Yes,No
+AgCROS_NECCIRR_405_DfctM125A,NECCIRR_405,DfctM125A,2010-04-01,2018-10-04,26,Deficit_Irrigation_Manure_125N_100%_Residue_Removal,Corn,No Till,125 kg N/ha/y,,Yes,Yes,Yes
+AgCROS_NECCIRR_406_DfctM200N,NECCIRR_406,DfctM200N,2010-04-01,2018-10-04,19,Deficit_Irrigation_Manure_200N_0%_Residue_Removal,Corn,No Till,200 kg N/ha/y,,No,Yes,Yes
+AgCROS_NECCIRR_407_DfctM200A,NECCIRR_407,DfctM200A,2010-04-01,2018-10-04,24,Deficit_Irrigation_Manure_200N_100%_Residue_Removal,Corn,No Till,200 kg N/ha/y,,Yes,Yes,Yes
+AgCROS_NECCIRR_408_DfctM125N,NECCIRR_408,DfctM125N,2010-04-01,2018-10-04,18,Deficit_Irrigation_Manure_125N_0%_Residue_Removal,Corn,No Till,125 kg N/ha/y,,No,Yes,Yes
+AgCROS_NECCIRR_409_DfctX200A,NECCIRR_409,DfctX200A,2010-04-01,2018-10-04,24,Deficit_Irrigation_No_Amelioration_200N_100%_Residue_Removal,Corn,No Till,200 kg N/ha/y,,Yes,Yes,No
+AgCROS_NECCIRR_410_DfctX125N,NECCIRR_410,DfctX125N,2010-04-01,2018-10-04,18,Deficit_Irrigation_No_Amelioration_125N_0%_Residue_Removal,Corn,No Till,125 kg N/ha/y,,No,Yes,No
+AgCROS_NECCIRR_411_DfctX125A,NECCIRR_411,DfctX125A,2010-04-01,2018-10-04,26,Deficit_Irrigation_No_Amelioration_125N_100%_Residue_Removal,Corn,No Till,125 kg N/ha/y,,Yes,Yes,No
+AgCROS_NECCIRR_412_DfctX200N,NECCIRR_412,DfctX200N,2010-04-01,2018-10-04,19,Deficit_Irrigation_No_Amelioration_200N_0%_Residue_Removal,Corn,No Till,200 kg N/ha/y,,No,Yes,No
+AgCROS_NECCIRR_413_FullX125A,NECCIRR_413,FullX125A,2010-04-01,2018-10-04,26,Full_Irrigation_No_Amelioration_125N_100%_Residue_Removal,Corn,No Till,125 kg N/ha/y,,Yes,Yes,No
+AgCROS_NECCIRR_414_FullX125N,NECCIRR_414,FullX125N,2010-04-01,2018-10-04,18,Full_Irrigation_No_Amelioration_125N_0%_Residue_Removal,Corn,No Till,125 kg N/ha/y,,No,Yes,No
+AgCROS_NECCIRR_415_FullX200A,NECCIRR_415,FullX200A,2010-04-01,2018-10-04,24,Full_Irrigation_No_Amelioration_200N_100%_Residue_Removal,Corn,No Till,200 kg N/ha/y,,Yes,Yes,No
+AgCROS_NECCIRR_416_FullX200N,NECCIRR_416,FullX200N,2010-04-01,2018-10-04,19,Full_Irrigation_No_Amelioration_200N_0%_Residue_Removal,Corn,No Till,200 kg N/ha/y,,No,Yes,No
+AgCROS_NECCIRR_417_FullC125A,NECCIRR_417,FullC125A,2010-04-01,2018-11-02,33,Full_Irrigation_Cover_Crop_125N_100%_Residue_Removal,Corn,No Till,125 kg N/ha/y,Secale cereale (Rye),Yes,Yes,No
+AgCROS_NECCIRR_418_FullC200N,NECCIRR_418,FullC200N,2010-04-01,2018-11-02,27,Full_Irrigation_Cover_Crop_200N_0%_Residue_Removal,Corn,No Till,200 kg N/ha/y,Secale cereale (Rye),No,Yes,No
+AgCROS_NECCIRR_419_FullC200A,NECCIRR_419,FullC200A,2010-04-01,2018-11-02,35,Full_Irrigation_Cover_Crop_200N_100%_Residue_Removal,Corn,No Till,200 kg N/ha/y,Secale cereale (Rye),Yes,Yes,No
+AgCROS_NECCIRR_420_FullC125N,NECCIRR_420,FullC125N,2010-04-01,2018-11-02,28,Full_Irrigation_Cover_Crop_125N_0%_Residue_Removal,Corn,No Till,125 kg N/ha/y,Secale cereale (Rye),No,Yes,No
+AgCROS_NECCIRR_421_FullM200N,NECCIRR_421,FullM200N,2010-04-01,2018-10-04,18,Full_Irrigation_Manure_200N_0%_Residue_Removal,Corn,No Till,200 kg N/ha/y,,No,Yes,Yes
+AgCROS_NECCIRR_422_FullM125A,NECCIRR_422,FullM125A,2010-04-01,2018-10-04,24,Full_Irrigation_Manure_125N_100%_Residue_Removal,Corn,No Till,125 kg N/ha/y,,Yes,Yes,Yes
+AgCROS_NECCIRR_423_FullM125N,NECCIRR_423,FullM125N,2010-04-01,2018-10-04,19,Full_Irrigation_Manure_125N_0%_Residue_Removal,Corn,No Till,125 kg N/ha/y,,No,Yes,Yes
+AgCROS_NECCIRR_424_FullM200A,NECCIRR_424,FullM200A,2010-04-01,2018-10-04,26,Full_Irrigation_Manure_200N_100%_Residue_Removal,Corn,No Till,200 kg N/ha/y,,Yes,Yes,Yes
