@@ -7,7 +7,7 @@
 # Minnesota farms are not used: 3-5 corn years per farm are too few for stability.
 #
 # Every test extends the Fig 1 model (within sites, same year):
-#   yield ~ site x year + N curve per site + other treatment factors
+#   yield ~ site x year + N per site + other treatment factors
 #           + SHMI_w + SHMI_w x N + SHMI_w x age + (1 | treatment/plot), AR(1)
 # so N rate, system age and the non-SHMI treatments are accounted for throughout, and
 # every slope is the within-site SHMI slope at 150 kg N/ha and the average system age.
@@ -127,7 +127,8 @@ figS1 <- plot_mod(m_fw, "SHMI_w:env_c", seq(min(d1$env_c), max(d1$env_c), length
                          " kg N/ha and\naverage system age; 95% band. Points: 10th, 50th and 90th percentile years. ",
                          "A falling line = the SHMI\nbenefit is larger in poor years. Rug: site-years in the data."),
                   "#08519c", 1000 * unique(select(d1, site_year, env_c))$env_c, xscale = 1000, p_lab = "SHMI × year")
-ggsave(file.path(OUTS, "FigS1_sensitivity.png"), figS1 + PANEL, width = 6.8, height = 4.4, dpi = 300)
+if (!exists("MS")) MS <- if (isTRUE(getOption("shmi.ms_figures", TRUE))) ggplot2::labs(title = NULL, subtitle = NULL, caption = NULL) else NULL
+ggsave(file.path(OUTS, "FigS1_sensitivity.png"), figS1 + MS + PANEL, width = 6.8, height = 4.4, dpi = 300)
 
 ################################################################################
 # S2. DOWNSIDE RISK (10th percentile of each plot's deviations from the site-year mean)
@@ -195,11 +196,11 @@ figS2 <- ggplot() +
   labs(x = XLAB, y = "Worst-year deviation (kg ha⁻¹)",
        title = "SHMI and yield in the worst years (research sites)",
        caption = paste0("Each plot with at least ", MIN_YEARS, " corn years: the 10th percentile of its yield minus the mean of all plots at the site that\n",
-                        "year (left), and the same around the plot's own mean deviation (right). Model: site + N curve per site + other treatment\n",
+                        "year (left), and the same around the plot's own mean deviation (right). Model: site + N per site + other treatment\n",
                         "factors + SHMI + (1 | treatment). Points: treatments with the same SHMI at a site (± SE over plots); higher = smaller losses.")) +
   theme_fig + theme(strip.background = element_blank(), strip.text = element_text(face = "bold"))
 ggsave(file.path(OUTS, "FigS2_downside.png"),
-       figS2 + force_panelsizes(rows = unit(2.6, "in"), cols = unit(3.2, "in")), width = 9, height = 4.6, dpi = 300)
+       figS2 + MS + force_panelsizes(rows = unit(2.6, "in"), cols = unit(3.2, "in")), width = 9, height = 4.6, dpi = 300)
 
 ################################################################################
 # S3. DROUGHT: two SPEI windows x all sites / rainfed sites only
@@ -268,8 +269,8 @@ if (!file.exists(dfile)) {
                              " kg N/ha and\naverage system age; 95% band. A line rising to the left = more SHMI benefit in dry years.\n",
                              "SPEIbase, 3-month SPEI for ", if (w == "mjj") "July" else "August", ". Rug: site-years."),
                       "#b35806", unique(select(d3, site_year, spei))$spei, p_lab = "SHMI × SPEI")
-      ggsave(file.path(OUTS, sprintf("FigS3_drought_%s_%s.png", w, set)), fig + PANEL, width = 6.8, height = 4.4, dpi = 300)
-      if (w == "mjj" && set == "all") ggsave(file.path(OUTS, "FigS3_drought.png"), fig + PANEL, width = 6.8, height = 4.4, dpi = 300)
+      ggsave(file.path(OUTS, sprintf("FigS3_drought_%s_%s.png", w, set)), fig + MS + PANEL, width = 6.8, height = 4.4, dpi = 300)
+      if (w == "mjj" && set == "all") ggsave(file.path(OUTS, "FigS3_drought.png"), fig + MS + PANEL, width = 6.8, height = 4.4, dpi = 300)
     }
   }
   res$spei <- bind_rows(s3_rows)
@@ -286,7 +287,7 @@ if (!file.exists(dfile)) {
       labs(x = NULL, y = "Corn yield change per 10 SHMI (kg ha⁻¹)", title = "SHMI benefit in dry, average and wet growing seasons",
            caption = paste0("Within-site SHMI slope at ", N_REF, " kg N/ha and average system age, 95% CI. SPEI −1.5 = severe drought, +1.5 = very wet.\n",
                             "Rainfed sites exclude the irrigated NEMEIRR and NECCIRR.")) + theme_fig
-    ggsave(file.path(OUTS, "FigS3_drought_summary.png"), figS3s, width = 9, height = 4.4, dpi = 300)
+    ggsave(file.path(OUTS, "FigS3_drought_summary.png"), figS3s + MS, width = 9, height = 4.4, dpi = 300)
     write.csv(ss %>% select(window, set, cond, b, se, lower, upper, p_int), file.path(OUTS, "FigS3_drought_summary.csv"), row.names = FALSE)
   }
 }

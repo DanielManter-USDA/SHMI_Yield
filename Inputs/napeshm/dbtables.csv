@@ -1,0 +1,10 @@
+dbtablename,description
+dbtables,Table definitions compiled and curated by SHI.
+dbcolumns,Column definitions compiled and curated by SHI.
+sites,Attributes for long-term experimental sites.
+treatments,Attributes for experimental treatments sampled by Soil Health Institute.
+rr_lookup,Look up table to support calculation of response ratios for paired comparisons.
+soildata,Compilation of soils data merged and curated by Soil Health Institute.
+mgmtdata,Compilation of management survey data collected by Soil Health Institute.
+plfa_ng,Phospholipid Fatty Acid biomarkers in nanograms per gram.
+plfa_nm,Phospholipid Fatty Acid biomarkers in nanomoles per gram.

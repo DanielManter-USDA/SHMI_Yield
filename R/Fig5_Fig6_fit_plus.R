@@ -23,6 +23,9 @@ suppressPackageStartupMessages({
   library(dplyr); library(tidyr); library(ggplot2); library(here)
 })
 if (!requireNamespace("patchwork", quietly = TRUE)) stop("Install patchwork: install.packages('patchwork')")
+# Manuscript figures: each panel carries only its bold letter (a-f); titles go in the legend.
+# options(shmi.ms_figures = FALSE) restores the descriptive panel titles and the figure title.
+MS_FIG <- isTRUE(getOption("shmi.ms_figures", TRUE))
 FIN <- if (exists("FIN_DIR")) FIN_DIR else here::here("Outputs", "Final_plus")
 
 # Older outputs: SHMI (no bonus) -> SHMI_base, SHMI_plus -> SHMI, *_core -> *_base
@@ -48,9 +51,11 @@ panel <- function(x, y, tag, title, xlab, ylab) {
     geom_smooth(method = "lm", formula = y ~ x, se = FALSE, colour = "#d1495b", linewidth = 1) +
     annotate("text", x = -Inf, y = Inf, hjust = -0.08, vjust = 1.15, size = 3.4, lineheight = 0.95,
              label = sprintf("r = %.2f\nR² = %.2f\nslope = %.2f", r, r^2, slope)) +
-    labs(title = sprintf("(%s) %s", tag, title), x = xlab, y = ylab) +
+    labs(title = if (MS_FIG) tag else sprintf("(%s) %s", tag, title), x = xlab, y = ylab) +
     theme_classic(base_size = 11) +
-    theme(plot.title = element_text(size = 11))
+    theme(plot.title = if (MS_FIG) element_text(size = 14, face = "bold", hjust = 0, margin = margin(b = 4))
+                       else element_text(size = 11),
+          plot.title.position = "plot")
 }
 
 # Three panels for one x variable: all treatments, site means, within sites
@@ -64,8 +69,8 @@ three_panels <- function(d, xvar, xname, tags) {
              paste(xname, "minus site mean"), "Soil health minus site mean"))
 }
 plot_rows <- function(rows, title, file) {
-  p <- patchwork::wrap_plots(unlist(rows, recursive = FALSE), ncol = 3) +
-    patchwork::plot_annotation(title = title, theme = theme(plot.title = element_text(hjust = 0.5, size = 13)))
+  p <- patchwork::wrap_plots(unlist(rows, recursive = FALSE), ncol = 3)
+  if (!MS_FIG) p <- p + patchwork::plot_annotation(title = title, theme = theme(plot.title = element_text(hjust = 0.5, size = 13)))
   ggsave(file, p, width = 13, height = 4.2 * length(rows), dpi = 300)
   invisible(p)
 }

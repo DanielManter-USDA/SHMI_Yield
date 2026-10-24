@@ -61,9 +61,10 @@ pd <- ppanel("R2", "d  Out-of-fold R²")
 pe <- ppanel("between_r", "e  Between-site r")
 pf <- ppanel("within_r", "f  Within-site r")
 
+MS_FIG <- isTRUE(getOption("shmi.ms_figures", TRUE))   # manuscript figures: no titles/captions (legend in the manuscript)
 fig <- (pa | pb | pc) / (pd | pe | pf) +
   plot_layout(guides = "collect") +
-  plot_annotation(caption = "Weights fitted to: between sites (site means), all variation, or within sites (deviations from site means). Red diamonds: 57:43 blend of the between- and within-site fits.",
+  plot_annotation(caption = if (MS_FIG) NULL else "Weights fitted to: between sites (site means), all variation, or within sites (deviations from site means). Red diamonds: 57:43 blend of the between- and within-site fits.",
                   theme = theme(plot.caption = element_text(size = 7.5, hjust = 0))) &
   theme(legend.position = "bottom")
 ggsave(file.path(OUT, "ED_Fig7_weights_by_comparison.png"), fig, width = 7.2, height = 5.2, dpi = 300)

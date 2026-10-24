@@ -24,7 +24,7 @@ suppressPackageStartupMessages({ library(dplyr); library(tidyr); library(here) }
 GROW_T <- 5
 CACHE_FILE <- here::here("Outputs", "daymet_site_monthly.csv")
 
-sites <- read.csv(here::here("Inputs", "sites.csv")) %>%
+sites <- read.csv(here::here("Inputs", "napeshm", "sites.csv")) %>%
   filter(grepl("^US", sitecode)) %>%
   select(sitecode, lon = site_longitude, lat = site_latitude)
 wc <- readRDS(here::here("Outputs", "site_climate_monthly.rds")) %>% filter(sitecode %in% sites$sitecode)

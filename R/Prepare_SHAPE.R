@@ -31,7 +31,7 @@
 #
 # Inputs (R_NAPESHM project; paths relative to its root)
 #   Outputs/semDF_prepped.rds          units kept after Prepare_SEM.R's exclusions
-#   Inputs/CSV Files/soildata.csv      soil data, one row per sample
+#   Inputs/napeshm/soildata.csv      soil data, one row per sample
 #   Outputs/site_soils_ssurgo.csv      SHAPE taxonomy group per site
 #   PRISM normals                      downloaded by the prism package (CLIMATE_SOURCE)
 #   Outputs/site_climate_monthly.rds   monthly normals per site, used where PRISM has
@@ -143,7 +143,7 @@ suborder <- read.csv(SOILS, stringsAsFactors = FALSE) %>%
   transmute(sitecode = as.character(sitecode), Suborder = shape_group, taxsuborder, ssurgo_flag = flag)
 
 # ---- soil samples -----------------------------------------------------------
-soil <- read.csv(IN("CSV Files", "soildata.csv"), stringsAsFactors = FALSE) %>%
+soil <- read.csv(IN("napeshm", "soildata.csv"), stringsAsFactors = FALSE) %>%
   mutate(MGT_combo = paste0("NAPESHM_", sitecode, "_", treatmentid)) %>%
   filter(MGT_combo %in% units$MGT_combo)
 need <- c("a_ace", "a_stabi", "a_resp", "a_act_c", "b_soc", "b_sand", "b_silt", "b_clay")

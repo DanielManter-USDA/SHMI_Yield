@@ -106,8 +106,7 @@ python_needed <- function(p) {
   if (isTRUE(p$run_napeshm_rebuild)) out <- c(out, "the NAPESHM workbook (A0)")
   if (conv_needed(p)) out <- c(out, "the AgCROS workbooks in Inputs/yield_workbooks (B0)")
   if (!file.exists("Outputs/yield/soil_c.csv")) out <- c(out, "Outputs/yield/soil_c.csv (B0)")
-  if (isTRUE(p$run_site_sensitivity) && conv_needed(p, c("INWLTPAC", "MNMOFS")))
-    out <- c(out, "SHMI_INWLTPAC.xlsx and SHMI_MNMOFS.xlsx for B9")
+  if (isTRUE(p$run_coarse) && !dir.exists("Outputs/Coarse/napeshm")) out <- c(out, "the coarse-record workbooks (B9)")
   out
 }
 
@@ -115,21 +114,19 @@ required_inputs <- function(p) {
   conv  <- c("NELITCSE", "NEMLTCRS", "NEMEIRR", "NECCIRR", "INWLACRE", "IAAM7071", "PAUP")
   units <- c("INWLACRE", "IAAM7071", "PAUP")
   tab   <- function(f) file.path(p$agcros_tables, f)
-  # the AgCROS tables are needed when a workbook must be built; INWLTPAC and MNMOFS
-  # (B9 only) are converted whenever their workbooks are missing
-  need_tables <- conv_needed(p) || (isTRUE(p$run_site_sensitivity) && conv_needed(p, c("INWLTPAC", "MNMOFS")))
+  # the AgCROS tables are needed when a workbook must be built
+  need_tables <- conv_needed(p)
   rows <- list(
     # Part A
-    c("Inputs/napeshm_raw/mgmtdata.csv", "A0 NAPESHM rebuild", p$run_napeshm_rebuild),
-    c("Inputs/napeshm_raw/treatments.csv", "A0 NAPESHM rebuild", p$run_napeshm_rebuild),
-    c("Inputs/napeshm_raw/sites.csv", "A0 NAPESHM rebuild", p$run_napeshm_rebuild),
-    c("Inputs/napeshm_raw/NAPESHM_test.xlsx", "A0 NAPESHM rebuild (layout)", p$run_napeshm_rebuild),
+    c("Inputs/napeshm/mgmtdata.csv", "A0 NAPESHM rebuild", p$run_napeshm_rebuild),
+    c("Inputs/napeshm/treatments.csv", "A0 NAPESHM rebuild", p$run_napeshm_rebuild),
+    c("Inputs/napeshm/sites.csv", "A0 NAPESHM rebuild", p$run_napeshm_rebuild),
+    c("Inputs/napeshm/NAPESHM_test.xlsx", "A0 NAPESHM rebuild (layout)", p$run_napeshm_rebuild),
     c("Inputs/NAPESHM_rebuilt.xlsx", "A1 SHMI inputs for the calibration", p$run_calibration),
-    c("Inputs/sites.csv", "A1 site climate and descriptors", p$run_calibration),
-    c("Inputs/CSV Files/sites.csv", "A1 site coordinates (soils)", p$run_calibration),
-    c("Inputs/CSV Files/treatments.csv", "A1 NAPESHM treatments", p$run_calibration),
-    c("Inputs/CSV Files/soildata.csv", "A1 NAPESHM soil measurements", p$run_calibration),
-    c("Inputs/CSV Files/plfa_ng.csv", "A1 NAPESHM PLFA", p$run_calibration),
+    c("Inputs/napeshm/sites.csv", "A1 site climate, descriptors and coordinates", p$run_calibration),
+    c("Inputs/napeshm/treatments.csv", "A1 NAPESHM treatments", p$run_calibration),
+    c("Inputs/napeshm/soildata.csv", "A1 NAPESHM soil measurements", p$run_calibration),
+    c("Inputs/napeshm/plfa_ng.csv", "A1 NAPESHM PLFA", p$run_calibration),
     c("Inputs/SHAPE/batch_Combined_scores.csv", "A6 SHAPE app output (optional)", FALSE),
     # Part B
     c(tab("meassoilchem.csv"), "B0 soil C (AgCROS)", conv_needed(p) || !file.exists("Outputs/yield/soil_c.csv")),
@@ -138,7 +135,11 @@ required_inputs <- function(p) {
     c("Inputs/yield_workbooks/SHMI_OHTVD_Ho.xlsx", "B2 Hoytville (hand-built from DRIVES)", p$run_yield),
     c("Inputs/yield_workbooks/SHMI_OHTVD_Wo.xlsx", "B2 Wooster (hand-built from DRIVES)", p$run_yield),
     c("Inputs/yield_workbooks/SHMI_WICST_ARS.xlsx", "B2 Arlington (hand-built from DRIVES)", p$run_yield),
-    c("Inputs/climate/spei03.nc", "B1 SPEIbase 3-month SPEI", p$run_yield || p$run_site_sensitivity))
+    c("Inputs/climate/spei03.nc", "B1 SPEIbase 3-month SPEI", p$run_yield),
+    c("Inputs/NAPESHM_rebuilt.xlsx", "B9 coarse records (NAPESHM)", isTRUE(p$run_coarse)),
+    c("Inputs/napeshm/treatments.csv", "B9 coarse records (irrigation)", isTRUE(p$run_coarse)),
+    c("Outputs/Final_plus/final_results.rds", "B9 coarse records (A3 output)", isTRUE(p$run_coarse)),
+    c("Outputs/site_climate_monthly.rds", "B9 coarse records (A1 output)", isTRUE(p$run_coarse)))
   rows <- c(rows, list(c(tab("metaunits.csv"), "B0 AgCROS conversion", need_tables)))
   if (!conv_needed(p)) {
     rows <- c(rows, lapply(conv, function(s) c(sprintf("Inputs/yield_workbooks/SHMI_%s.xlsx", s), "B2 converted workbook", p$run_yield)),
@@ -166,17 +167,24 @@ show_csv <- function(f, caption) {
   cat("\n")
 }
 
-# within-site SHMI slope (Fig. 3a model) and the pooled site slope for every main run
-site_combination_table <- function() {
-  dirs <- list.dirs("Outputs", recursive = FALSE)
-  dirs <- dirs[grepl("^yield_main_", basename(dirs)) & file.exists(file.path(dirs, "results_main.csv"))]
-  do.call(rbind, lapply(dirs, function(d) {
-    r <- utils::read.csv(file.path(d, "results_main.csv"))
-    fig1 <- r[r$figure == "Fig 1", ][1, ]
-    pool <- r[r$estimate == "Pooled across sites (random effects, Knapp-Hartung)", ][1, ]
-    sxn <- r[grepl("^SHMI x N: change", r$estimate), ][1, ]
-    data.frame(run = sub("^yield_main_", "", basename(d)), slope_per10 = fig1$effect, lower = fig1$lower,
-               upper = fig1$upper, pooled = pool$effect, pooled_lower = pool$lower, pooled_upper = pool$upper,
-               sites = pool$n, SHMIxN = sxn$effect, SHMIxN_p = sxn$p_val, N_sites = sxn$n)
-  }))
+# ---- shipped copies of derived inputs ---------------------------------------------
+# Files in data/ that a step would otherwise build from restricted or very large
+# sources (AgCROS tables, gSSURGO) or download with a key (NASS). Each is copied into
+# Outputs/ only when missing there, so a local run keeps its own files.
+SEED_FILES <- c(
+  "data/cache/nass_site_county_corn_yield.csv" = "Outputs/yield/nass_site_county_corn_yield.csv",  # NASS Quick Stats (no key needed)
+  "data/cache/site_soils_ssurgo.csv"           = "Outputs/site_soils_ssurgo.csv",                  # gSSURGO soil groups
+  "data/soil_c.csv"                            = "Outputs/yield/soil_c.csv",                       # AgCROS soil C (derived)
+  "data/SHAPE_by_unit_with_SHMI.csv"           = "Outputs/SHAPE/SHAPE_by_unit_with_SHMI.csv")      # SHAPE scores (A6 output)
+seed_outputs <- function(files = SEED_FILES) {
+  done <- character()
+  for (src in names(files)) {
+    dst <- files[[src]]
+    if (file.exists(src) && !file.exists(dst)) {
+      dir.create(dirname(dst), recursive = TRUE, showWarnings = FALSE)
+      file.copy(src, dst); done <- c(done, dst)
+    }
+  }
+  if (length(done)) cat("Copied from data/:", paste(done, collapse = ", "), "\n")
+  invisible(done)
 }

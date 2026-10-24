@@ -254,8 +254,10 @@ pb <- ggplot(dec, aes(part, est)) + geom_hline(yintercept = 0, linetype = 2, col
                        100 * r1$share_lo, 100 * r1$share_hi)) +
   theme_bw(base_size = 10)
 if (requireNamespace("patchwork", quietly = TRUE)) {
+  MS_FIG <- isTRUE(getOption("shmi.ms_figures", TRUE))   # manuscript figures: no titles/captions (legend in the manuscript)
+  if (MS_FIG) { pa <- pa + labs(title = "a") + theme(plot.title = element_text(face = "bold", size = 14)); pb <- pb + labs(title = "b") + theme(plot.title = element_text(face = "bold", size = 14)) }   # stats in the panel titles go to the legend
   fig <- patchwork::wrap_plots(pa, pb, widths = c(1.2, 1)) +
-    patchwork::plot_annotation(caption = sprintf("%s; %d units at %s; %d plot-years. Slopes at %d kg N/ha and average age.",
+    patchwork::plot_annotation(caption = if (MS_FIG) NULL else sprintf("%s; %d units at %s; %d plot-years. Slopes at %d kg N/ha and average age.",
                                                  r1$mediator, r1$n_units, r1$sites, r1$plot_years, N_REF))
   ggsave(file.path(OUT, "Fig_mediation.png"), fig, width = 9.5, height = 4, dpi = 300)
 }

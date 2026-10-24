@@ -128,5 +128,7 @@ p <- ggplot(pd, aes(N, est)) +
                        "\nc: extra N on top of the x-axis rate that raises the fitted curve as much as 10 SHMI points; gaps = the curve plateaus first.")) +
   theme_bw(base_size = 10) + theme(strip.background = element_blank(), strip.text = element_text(hjust = 0, face = "bold"),
                                    plot.caption = element_text(hjust = 0, size = 8))
+MS_FIG <- isTRUE(getOption("shmi.ms_figures", TRUE))   # manuscript figures: no titles/captions (legend in the manuscript)
+if (MS_FIG) p <- p + labs(title = NULL, subtitle = NULL, caption = NULL)
 ggsave(file.path(OUT, "Fig_N_equivalent.png"), p, width = 10, height = 3.6, dpi = 300)
 cat("\nSaved N_equivalent.csv, N_equivalent_by_site.csv and Fig_N_equivalent.png in", OUT, "\n")

@@ -1,0 +1,465 @@
+dbtablename,origcolname,interpretive_name,dbcolname,dbdatatype,unit,description
+sites,siteid,Site ID,siteid,SERIAL PRIMARY KEY,,Integer primary key for the experimental sites.
+sites,SHI Site ID,Site Code,sitecode,CHAR(6),,Unique alphanumeric key for exmperimental sites.
+sites,SHI Study Name,Study Name,studyname,VARCHAR(128),,Name of the study or experiment provided by partnering scientist
+sites,Country,Country,country,VARCHAR(24),,Country where the site is located.
+sites,State or Province,State or Province,state_prov,VARCHAR(64),,The state or province where the site it located
+sites,Start Year,Experimental Start Year,start_year,INTEGER,,The year the site became an experimental site
+sites,Experimental Unit Type,Plot Type,eu_type,VARCHAR(64),,General descriptor of the lay out and type of experimental unit sampled by SHI (e.g. plots or pasture paddock)
+sites,Experiment Design,Experiment Design,exper_design,VARCHAR(128),,Design of the experiment being conducted at the site at the time of NAPESHM sampling
+sites,Site Latitude,Site Latitude,site_latitude,REAL,decimal degrees,Latitude (decimal degrees in WGS84 reference coordinate system; EPSG or SRID 4326) of a central point where the site is located
+sites,Site Longitude,Site Longitude,site_longitude,REAL,decimal degrees,Longitude (decimal degrees in WGS84 reference coordinate system; EPSG or SRID 4326) of a central point where the site is located
+sites,gdd0,Growing Degree Days above 0C,gdd0,REAL,degree days,"2019 climate data, daily sum of temperature over 0 C from Jan 1 to sampling date; calculated by SHI from Daymet daily surface weather data set (https://doi.org/10.3334/ORNLDAAC/1328)"
+sites,gdd10,Growing Degree Days above 10C,gdd10,REAL,degree days,"2019 climate data, daily sum of temperature over 10 C from Jan 1 to sampling date; calculated by SHI from Daymet daily surface weather data set (https://doi.org/10.3334/ORNLDAAC/1328)"
+sites,std_temp_max,Maximum Annual Temperature Standard Deviation,max_annualtemp_sd,REAL,degrees C,Standard deviation of 10 years (2010-2019) of annual average max temperatures; calculated by SHI from Daymet daily surface weather data set (https://doi.org/10.3334/ORNLDAAC/1328)
+sites,Precip_std,Annual Precipitation std dev,mean_annualprecip_sd,REAL,mm,Standard deviation of 10 year average annual total precipitation; calculated by SHI from Daymet daily surface weather data set (https://doi.org/10.3334/ORNLDAAC/1328)
+sites,std_temp_mean,Temp Mean std dev,mean_annualtemp_sd,REAL,degrees C,Standard deviation of 10 years (2010-2019) of annual average mean temperatures; calculated by SHI from Daymet daily surface weather data set (https://doi.org/10.3334/ORNLDAAC/1328)
+sites,Precip_monthly_std,Montly Precipitation std dev,mean_monthlyprecip_sd,REAL,mm,Standard deviation of 10 year average monthly total precipitation; calculated by SHI from Daymet daily surface weather data set (https://doi.org/10.3334/ORNLDAAC/1328)
+sites,MI,Thornthwaite Moisture Index,mi,REAL,unitless,"Thornthwaite 1948, Moisture Index using calculated potential evapotranspiration and annual moisture surplus or deficit; calculated by SHI from Daymet daily surface weather data set (https://doi.org/10.3334/ORNLDAAC/1328)"
+sites,std_temp_min,Temp Min std dev,min_annualtemp_sd,REAL,degrees C,Standard deviation of 10 years (2010-2019) of annual average min temperatures; calculated by SHI from Daymet daily surface weather data set (https://doi.org/10.3334/ORNLDAAC/1328)
+sites,mean_temp_mean,Mean temperature,site_mean_temp,REAL,degrees C,10 year average (2010-2019) of daily mean temperature; calculated by SHI from Daymet daily surface weather data set (https://doi.org/10.3334/ORNLDAAC/1328)
+sites,mean_temp_max,Temp Maximum,site_meanmax_temp,REAL,degrees C,10 year average (2010-2019) of daily minimum temperatures; calculated by SHI from Daymet daily surface weather data set (https://doi.org/10.3334/ORNLDAAC/1328)
+sites,mean_temp_min,Temp Minimum,site_meanmin_temp,REAL,degrees C,10 year average (2010-2019) of daily maximum temperatures; calculated by SHI from Daymet daily surface weather data set (https://doi.org/10.3334/ORNLDAAC/1328)
+sites,Precip_sum_cm,Annual Precipitation,site_precip,REAL,mm,10 year average of annual total precipitation; calculated by SHI from Daymet daily surface weather data set (https://doi.org/10.3334/ORNLDAAC/1328)
+sites,Hargreave_CMI,Hargreave's Climate Moisture Deficit,hargreave_cmd,REAL,mm,"Hargreave Climate Moisture Deficit based on 1981-2010 normals, precipitation minus reference evaporation where reference evaporation > precipitation else 0; extracted from GIS layer (see Wang et al. 2016, doi:10.1371/journal.pone.0156720)"
+sites,LRR_NAME,Land Resource Region Name,lrr_name,VARCHAR(256),,Name of the Land Resource Region (USA only); extracted from NRCS boundaries (https://www.nrcs.usda.gov/wps/portal/nrcs/detail/national/technical/nra/nri/?cid=nrcs143_013721)
+sites,LRRSYM,Land Resource Region Symbol,lrr_symbol,CHAR(1),,Abbreviated symbol of the Land Resource Region (USA only); extracted from NRCS boundaries (https://www.nrcs.usda.gov/wps/portal/nrcs/detail/national/technical/nra/nri/?cid=nrcs143_013721)
+sites,MLRA_ID,Major Land Resource Area ID,mlra_id,INTEGER,,Abbreviated identifier for the Major Land Resource Area (USA only); extracted from NRCS boundaries (https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/survey/?cid=nrcs142p2_053624)
+sites,MLRA_NAME,Major Land Resource Area Name,mlra_name,VARCHAR(256),,Name of the Major Land Resource Area (USA only); extracted from NRCS boundaries (https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/survey/?cid=nrcs142p2_053624)
+sites,NA_L1CODE,NA Ecoregion Level 1 Code,na_l1code,VARCHAR(6),,Numerical identifier for the Level 1 North American Ecoregion; extracted from CEC/EPA boundaries (https://www.epa.gov/eco-research/ecoregions-north-america)
+sites,NA_L1KEY,NA Ecoregion Level 1 Key,na_l1key,VARCHAR(256),,Identifier key for the Level 1 North American Ecoregion; extracted from CEC/EPA boundaries (https://www.epa.gov/eco-research/ecoregions-north-america)
+sites,NA_L1NAME,NA Ecoregion Level 1 Name,na_l1name,VARCHAR(256),,Name of the Level 1 North American Ecoregion; extracted from CEC/EPA boundaries (https://www.epa.gov/eco-research/ecoregions-north-america)
+sites,NA_L2CODE,NA Ecoregion Level 2 Code,na_l2code,VARCHAR(6),,Numerical identifier for the Level 2 North American Ecoregion; extracted from CEC/EPA boundaries (https://www.epa.gov/eco-research/ecoregions-north-america)
+sites,NA_L2KEY,NA Ecoregion Level 2 Key,na_l2key,VARCHAR(256),,Identifier key for the Level 2 North American Ecoregion; extracted from CEC/EPA boundaries (https://www.epa.gov/eco-research/ecoregions-north-america)
+sites,NA_L2NAME,NA Ecoregion Level 2 Name,na_l2name,VARCHAR(256),,Name of the Level 2 North American Ecoregion; extracted from CEC/EPA boundaries (https://www.epa.gov/eco-research/ecoregions-north-america)
+sites,NA_L3CODE,NA Ecoregion Level 3 Code,na_l3code,VARCHAR(6),,Numerical identifier for the Level 3 North American Ecoregion; extracted from CEC/EPA boundaries (https://www.epa.gov/eco-research/ecoregions-north-america)
+sites,NA_L3KEY,NA Ecoregion Level 3 Key,na_l3key,VARCHAR(256),,Identifier key for the Level 3 North American Ecoregion; extracted from CEC/EPA boundaries (https://www.epa.gov/eco-research/ecoregions-north-america)
+sites,NA_L3NAME,NA Ecoregion Level 3 Name,na_l3name,VARCHAR(256),,Name of the Level 3 North American Ecoregion; extracted from CEC/EPA boundaries (https://www.epa.gov/eco-research/ecoregions-north-america)
+sites,elevation,Site Elevation,site_elevation,REAL,meters,Extracted from National Elevation Dataset (NED) Seamless Layers (https://www.usgs.gov/core-science-systems/ngp/3dep/about-3dep-products-services)
+sites,Animals,Grazing Binary,site_animals,INTEGER,,Binary attribute indicating whether or not there are animal grazing or usage intensity comparisons that can be made among the experimental units sampled in NAPESHM
+sites,Corn,Corn Binary,site_corn,INTEGER,,Binary attribute indicating whether or not a variety of corn is grown and harvested on any of the experimental units sampled in NAPESHM
+sites,Cotton,Cotton Binary,site_cotton,INTEGER,,Binary attribute indicating whether or not a variety of cotton is grown and harvested on any of the experimental units sampled in NAPESHM
+sites,Cover Crop,Cover Crop Binary,site_cover_crop,INTEGER,,Binary attribute indicating whether or not there are cover crop comparisons that can be made among the experimental units sampled in NAPESHM
+sites,Cropping System,Cropping System Binary,site_crop_sys,INTEGER,,Binary attribute indicating whether or not there there are cropping system comparisons that can be made among the experimental units sampled in NAPESHM
+sites,Disturbance,Tillage Binary,site_disturbance,INTEGER,,Binary attribute indicating whether or not there are soil disturbance intensity comparisons that can be made among the experimental units sampled in NAPESHM
+sites,Native,Native Binary,site_native,INTEGER,,"Binary attribute indicating whether or not SHI sampled native, near native, or reconstructed native experimental units"
+sites,Nutrient Rate ,Nutrient Rate Binary,site_nutr_rate,INTEGER,,Binary attribute indicating whether or not there are nutrient rate treatment comparisons that can be made among the experimental units sampled in NAPEHSM
+sites,Nutrient Type,Nutrient Type Binary,site_nutr_type,INTEGER,,Binary attribute indicating whether or not there are nutrient type comparisons that can be made among the experimental units sampled in NAPESHM
+sites,Residue,Residue Binary,site_residue,INTEGER,,Binary attribute indicating whether or not crop residue management comparisons can be made among the experimental units sampled in NAPESHM
+sites,Soy,Soy Binary,site_soy,INTEGER,,Binary attribute indicating whether or not a variety of soy is grown and harvested on any of the experimental units sampled in NAPESHM
+sites,Water,Irrigation Binary,site_water,INTEGER,,Binary attribute indicating whether or not there are water management or irrigation comparisons that can be made among the experimental units sampled in NAPESHM
+sites,Wheat,Wheat Binary,site_wheat,INTEGER,,Binary attribute indicating whether or not a variety of wheat is grown and harvested on any of the experimental units sampled in NAPESHM
+treatments,,Treatment ID,treatmentid,SERIAL PRIMARY KEY,,Primary key for the experimental treatment; generated by SHI.
+treatments,,Site ID,siteid,INTEGER,,Foreign key to siteid in the sites table.
+treatments,SHI Site ID,Site Code,sitecode,CHAR(6),,"Unique alphanumeric key for exmperimental sites, also links to shi_site_id in the sites table."
+treatments,Site Treatment Number,Site Treatment Number,treat_no,INTEGER,,Database index key for the experimental treatment; generated by SHI.
+treatments,Treatment Description,Treatment Description,eu_treat_desc,VARCHAR(256),,Unstructured treatment descriptor text for the experimental treatment
+treatments,Treatment Start Year,Treatment Start Year,treatment_start_year,INTEGER,,The year the experimental treatment began on the experimenal unit
+treatments,Tillage,Tillage Category,eu_tillage,VARCHAR(48),,"Categorical, relative indicator for the intensity of tillage practices used on the experimental unit"
+treatments,Cover crops,Cover Crop Category,eu_cover_crops,VARCHAR(48),,Categorical indicator for the presence/absence and type of cover crops used on the experimental unit
+treatments,Nutrient rate,Nutrient Rate Category,eu_nutr_rate,VARCHAR(48),,"Categorical, relative indicator for the nutrient rate applied to the experimental unit"
+treatments,Nutrient type,Nutrient Type Category,eu_nutr_type,VARCHAR(48),,Categorical indicator for the nutrient type applied to the experimental unit
+treatments,Residue,Residue Category,eu_residue,VARCHAR(48),,"Categorical, relative indicator for residue management practices used on the experimental unit"
+treatments,Crop phase sampled,Crop Phase Sampled,crop_phase,VARCHAR(48),,Description of the crop phase or timeing at the time of SHI sampling.
+treatments,Crop category,Cropping System Category,eu_crop_cat,VARCHAR(48),,Categorical indicator for the type of cropping system implemented on the experimental unit
+treatments,Crop rotation,Crop Rotation Category,eu_crop_rot,VARCHAR(48),,Categorical indicator for the length or type of crop rotation being implemented on the experimental unit
+treatments,Grazing,Grazing Category,eu_grazing,VARCHAR(48),,"Categorical indicator for the grazing intensity applied to the experimental unit, in reference to the relative amount of biomass removed during the grazing cycles"
+treatments,Irrigation,Irrigation Category,eu_irrigation,VARCHAR(48),,Categorical indicator for the type of irrigation applied to the experimental unit
+treatments,Other treatment or site to consider,Other notes,eu_other_trt,VARCHAR(128),,Categorical indicator for other experimental treatments or factors that do not fall under other treatment or management categories
+treatments,Cash Crop Count,Cash Crop Count,cash_crop_ct,VARCHAR(3),,Count of cash crops grown and harvested in the crop rotation
+treatments,Cover Crop Count,Cover Crop Count,cover_crop_ct,VARCHAR(3),,Count of cover crop species planted in the crop rotation
+treatments,Perennial Species Count,Perennial Count,perennial_ct,VARCHAR(3),,Count of perennial plant species in the treatment or crop rotation
+treatments,Total Plant Species Count,Total Plant Species Count,plant_species_ct,VARCHAR(3),,Count of all plant species in the treatment or crop rotation
+rr_lookup,siteid,Site ID,siteid,INTEGER,,Foreign key to siteid in the sites table.
+rr_lookup,SHI Site ID,Site Code,sitecode,CHAR(6),,Unique identifier for the experimental site; generated by SHI.
+rr_lookup,comparisontype,Compsarison Type,comparisontype,VARCHAR(24),,Categorical indicator describing the subject-matter of the analysis that the paired comparisions are designed to facilitate.
+rr_lookup,treatmentid_control,Treatment ID (control),treatmentid_control,INTEGER,,The treatmentid (foreign key relating to treatments table) of the control group of the paired comparison; the control group is the BAU or intensive management system in the paired comparison.
+rr_lookup,treatmentid_treatment,Treatment ID (treatment),treatmentid_treatment,INTEGER,,The treatmentid (foreign key relating to treatments table) of the treatment group of the paired comparison; the treatment group is the soil health management system or less intensive management system.
+soildata,experunitid,Experimental Unit ID,euid,SERIAL PRIMARY KEY,,"Integer primary key indexing unique experimental units (EU); EU is a plot, paddock, or sampling location."
+soildata,siteid,Site ID,siteid,INTEGER,,Foreign key referencing siteid in the sites table.
+soildata,treatmentid,Treatment ID,treatmentid,INTEGER,,Foreign key relating to the treatments table.
+soildata,shi_site_id,Site Code,sitecode,CHAR(6),,SHI's unique identifier for the experimental site
+soildata,shi_eu_id,EU Code,eucode,VARCHAR(24),,Unique alphanumeric identifier for the experimental unit.
+soildata,ace_soil_protein_index,ACE Protein Index,a_ace,REAL,mg protein/ g dry soil,Autoclaved Citrate Extractable Protein
+soildata,active_carbon,Active Carbon,a_act_c,REAL,mg active C/kg soil,Potassium Permanganate Oxidizable Carbon
+soildata,Aluminum,Al (MM),a_al,REAL,mg/kg,Modified Morgan Extract
+soildata,water_capacity,Repacked AWHC,a_awhc,REAL,g water/g dry soil,"Ground and repacked, difference of moisture on pressure plates 10-1500kPa"
+soildata,Repacked water capacity volumetric (2mm),Repacked Available Water Holding Capacity,a_awhc_repack_vol,REAL,v/v,"Ground and repacked, difference of moisture on pressure plates 10-1500kPa, converted to volumetrtic moisture content using composite bulk density (column a_wt_bd_2mm); calculated by SHI"
+soildata,Boron,B (MM),a_b,REAL,mg/kg,Modified Morgan Extract
+soildata,Barium,Ba (MM),a_ba,REAL,mg/kg,Modified Morgan Extract
+soildata,Calcium,Ca (MM),a_ca,REAL,mg/kg,Modified Morgan Extract
+soildata,Cadmium,Cd (MM),a_cd,REAL,mg/kg,Modified Morgan Extract
+soildata,fe,Fe (MM),a_fe,REAL,mg/kg,Modified Morgan Extract
+soildata,k,K (MM),a_k,REAL,mg/kg,Modified Morgan Extract
+soildata,mg,Mg (MM),a_mg,REAL,mg/kg,Modified Morgan Extract
+soildata,mn,Mn (MM),a_mn,REAL,mg/kg,Modified Morgan Extract
+soildata,Sodium,Na (MM),a_na,REAL,mg/kg,Modified Morgan Extract
+soildata,Nickel,Ni (MM),a_ni,REAL,mg/kg,Modified Morgan Extract
+soildata,organic_matter,Organic Matter CASH,a_org,REAL,%,Loss on Ignition (500C)
+soildata,p,P (MM),a_p,REAL,mg/kg,Modified Morgan Extract
+soildata,Lead ,Pb (MM),a_pb,REAL,mg/kg,Modified Morgan Extract
+soildata,respiration,CO2 CASH (96 hour),a_resp,REAL,mg CO2/ g dry soil / 96 hr,96 hr Rewetting Incubation with units as reported Cornell
+soildata,Cornell respiration 24 hour co 2 c,CO2-C Respiration (24 hour basis),a_resp_24hr,REAL,mg CO2-C/kg dry soil/ 24 hr,96 hr Rewetting Incubation converted to CO2-C on 24 hour basis
+soildata,Repack Moist Field Cap (10kPa 2mm),Repacked VWC at 10 kPa,a_rpfcm_10kpa2mm,REAL,v/v,"Field capacity ground and repacked soil sample on pressure plate at 10 kPa, converted to volumetrtic moisture content using composite bulk density (column a_wt_bd_2mm)."
+soildata,Repack Moist Field Cap (1500kPa 2mm),Repacked VWC at 1500 kPa,a_rpfcm_1500kpa2mm,REAL,v/v,"Wilting point ground and repacked soil sample on pressure plate at 1500 kPa, converted to volumetrtic moisture content using composite bulk density (column a_wt_bd_2mm)."
+soildata,Sulfur,S (MM),a_s,REAL,mg/kg,Modified Morgan Extract
+soildata,Strontium,Sr (MM),a_sr,REAL,mg/kg,Modified Morgan Extract
+soildata,aggregate_stability,Aggregate Stability,a_stabi,REAL,% stable aggregates,Sprinkle Infiltrometer method
+soildata,zn,Zn (MM),a_zn,REAL,mg/kg,Modified Morgan Extract
+soildata,stone volume %,Stone Volume as %,a_vol_stone2,REAL,%,Water displacement relative to core volume
+soildata,bd_2mm_good,Fine Earth Bulk Density,bd_2mm,REAL,g/cm^3,"For any sample with <2% coarse fragments by weight (determined during preparation for particle size analysis), bulk density was calculated as the mean bulk density of all four cores—two intact and two composited. Ninety percent of the experimental units in this study had <2% coarse fragments by weight. For the remaining 10% with coarse fragments >2% by weight, bulk density was calculated as the mean of the two composited cores, following removal of coarse fragments and adjustments for the weight and volume of coarse fragments. (https://acsess.onlinelibrary.wiley.com/doi/10.1002/saj2.20395)"
+soildata,Intact water capacity volumetric,Intact Available Water Holding Capacity,a_awhc_intact_vol,REAL,cm^3 water/cm^3 soil,Intact moisture at 33 kPa - repacked moisture at 1500 kPa
+soildata,Average bd intact,Intact Bulk Density Average,a_bd_intact_av,REAL,g/cm^3,Average of intact surface cores; calculated by SHI
+soildata,macro-porosity_x,Macro Porosity,a_macro_por,REAL,cm^3,Pore spaces evacuted after gravity table; average of two intact cores.
+soildata,meso-porosity_x,Meso Porosity,a_meso_por,REAL,cm^3,Pore spaced evaculated after tension table; average of two intact cores.
+soildata,0.3kPa.1_x,Intact core VWC at 0.3 kPa,a_vwc_03kpa_wet,REAL,cm^3 water/cm^3 soil,Volumetric moisture from intact core on gravity table; average of two intact cores.
+soildata,33 kPa.1_x,Intact core VWC at 33 kPa,a_vwc_33kpa_wet,REAL,cm^3 water/cm^3 soil,Volumetric moisture from intact core at field capacity on tension table; average of two intact cores.
+soildata,antecedent.1_x,Intact core VWC at Sampling,a_vwc_ante_wet,REAL,cm^3 water/cm^3 soil,Volumetric moisture from intact core as sampled; average of two intact cores.
+soildata,sat..1_x,Intact core VWC at Saturation,a_vwc_sat_wet,REAL,cm^3 water/cm^3 soil,Volumetric moisture from intact core in saturation tray; average of two intact cores.
+soildata,Corrected Kfs (cm/hr),Saturated Hydraulic Conductivity,shi_kfs_cmhr,REAL,cm hr-1,"Measured with Saturo ™ dual head pressure infiltrometer in field, 1 per EU"
+soildata,M3_Al,Al (M3),b_al_m3,REAL,mg/kg,Mehlich 3 extract
+soildata,M3_As,As (M3),b_as_m3,REAL,mg/kg,Mehlich 3 extract
+soildata,M3_B,B (M3),b_b_m3,REAL,mg/kg,Mehlich 3 extract
+soildata,M3_Ba,Ba (M3),b_ba_m3,REAL,mg/kg,Mehlich 3 extract
+soildata,Ammonium acetate_Ca,Ca (NH4AOc),b_ca_amac,REAL,mg/kg,Ammonium acetate extract
+soildata,M3_Ca,Ca (M3),b_ca_m3,REAL,mg/kg,Mehlich 3 extract
+soildata,M3_Cd,Cd (M3),b_cd_m3,REAL,mg/kg,Mehlich 3 extract
+soildata,Pipette_Clay,Clay,b_clay,REAL,%,Sieve and Pipette
+soildata,b_texture_class,Texture Class,b_texture_class,VARCHAR(24),,"Texture class generated by SHI based on sand, silt, and clay content."
+soildata,M3_Co,Co (M3),b_co_m3,REAL,mg/kg,Mehlich 3 extract
+soildata,M3_Cr,Cr (M3),b_cr_m3,REAL,mg/kg,Mehlich 3 extract
+soildata,DTPA_Cu,Cu (DTPA),b_cu_dtpa,REAL,mg/kg,DTPA extract
+soildata,M3_Cu,Cu (M3),b_cu_m3,REAL,mg/kg,Mehlich 3 extract
+soildata,Mass after sieving Dry MWD,Mass of dry soil used,b_dry_mass_after_sieve,REAL,g,Mass of dry soil used
+soildata,mass of dry sieved < 0.053 mm soil Dry MWD,Mass of dry sieved < 0.053 mm soil,b_dry_mwd_0053_mass,REAL,g,Air-dried mass of dry sieved aggregates in <0.053 mm size fraction
+soildata,mass of dry sieved 0.053-0.25 mm soil Dry MWD,Mass of dry sieved 0.053-0.25 mm soil,b_dry_mwd_0053_025_mass,REAL,g,Air-dried mass of dry sieved aggregates in 0.053-0.25 mm size fraction
+soildata,mass of dry sieved 0.25-1 mm soil Dry MWD,Mass of dry sieved 0.25-1 mm soil,b_dry_mwd_025_1_mass,REAL,g,Air-dried mass of dry sieved aggregates in 0.25-1 mm size fraction
+soildata,mass of dry sieved 1-4.75 mm soil Dry MWD,Mass of dry sieved 1-4.75 mm soil,b_dry_mwd_1_475_mass,REAL,g,Air-dried mass of dry sieved aggregates in 1-4.75 mm size fraction
+soildata,1:2_Conductivity,EC SWEL (1:2),b_ec,REAL,mmho/cm,1:2 water
+soildata,DTPA_Fe,Fe (DTPA),b_fe_dtpa,REAL,mg/kg,DTPA extract
+soildata,M3_Fe,Fe (M3),b_fe_m3,REAL,mg/kg,Mehlich 3 extract
+soildata,Calcimeter_C,Inorganic Carbon,b_ic,REAL,%,Carbonates quantified with Chittix method
+soildata,Ammonium acetate_K,K (NH4AOc),b_k_amac,REAL,mg/kg,Ammonium acetate extract
+soildata,M3_K,K (M3),b_k_m3,REAL,mg/kg,Mehlich 3 extract
+soildata,Ammonium acetate_Mg,Mg (NH4AOc),b_mg_amac,REAL,mg/kg,Ammonium acetate extract
+soildata,M3_Mg,Mg (M3),b_mg_m3,REAL,mg/kg,Mehlich 3 extract
+soildata,DTPA_Mn,Mn (DTPA),b_mn_dtpa,REAL,mg/kg,DTPA extract
+soildata,M3_Mn,Mn (M3),b_mn_m3,REAL,mg/kg,Mehlich 3 extract
+soildata,M3_Mo,Mo (M3),b_mo_m3,REAL,mg/kg,Mehlich 3 extract
+soildata,Ammonium acetate_Na,Na (NH4AOc),b_na_amac,REAL,mg/kg,Ammonium acetate extract
+soildata,M3_Na,Na (M3),b_na_m3,REAL,mg/kg,Mehlich 3 extract
+soildata,M3_Ni,Ni (M3),b_ni_m3,REAL,mg/kg,Mehlich 3 extract
+soildata,M3_P,P (M3),b_p_m3,REAL,mg/kg,Mehlich 3 extract
+soildata,Olsen_P,P (Olsen),b_p_olsen,REAL,mg/kg,Olsen extract
+soildata,M3_Pb,Pb (M3),b_pb_m3,REAL,mg/kg,Mehlich 3 extract
+soildata,1:2_pH,pH SWEL (1:2),b_ph,REAL,unitless,1:2 water
+soildata,PMN_Ammonia mgkg,Potentially Mineralizable Nitrogen,b_pmn_am_mgkg,REAL,mg/kg,NH4 measured after 7 day anaerobic incubation at 40C
+soildata,PMN_Nitrate-Nitrite,PMN NO3,b_pmn_nn,REAL,mg N/kg,NO3 measured after 7 day anaerobic incubation at 40C
+soildata,M3_S,S (M3),b_s_m3,REAL,mg/kg,Mehlich 3 extract
+soildata,Pipette_Sand,Sand,b_sand,REAL,%,Sieve and Pipette
+soildata,Saturated paste_SAR,Sodium Adsorption Ratio,b_sar_sp,REAL,unitless,Saturated Paste
+soildata,Pipette_Silt,Silt,b_silt,REAL,%,Sieve and Pipette
+soildata,Calcimiter correction_C,Organic Carbon,b_soc,REAL,%,Total Carbon - Inorganic Carbon with Dry Combustion
+soildata,MWD value Dry MWD,SSI dry MWD value,b_ssi_dry,REAL,unitless,Soil stability index using mean weight diameter of aggregates after dry seiving; calculated by Soil Water Environmental Lab (Ohio State)
+soildata,MWD value Wet MWD,SSI wet MWD value,b_ssi_wet,REAL,unitless,Soil stability index using mean weight diameter of aggregates after wet seiving; calculated by Soil Water Environmental Lab (Ohio State)
+soildata,Dry combustion_C,Total C,b_total_c,REAL,%,Dry Combustion
+soildata,Dry combustion_N,Total N,b_total_n,REAL,%,Dry Combustion
+soildata,mass of dry sieved < 0.053 mm soil Wet MWD,Mass of wet sieved < 0.053 mm soil (wet,b_wet_mwd_0053_mass,REAL,g,Oven-dried mass of wet sieved aggregates in <0.053 mm size fraction
+soildata,mass of dry sieved 0.053-0.25 mm soil Wet MWD,Mass of wet sieved 0.053-0.25 mm soil (wet),b_wet_mwd_0053_025_mass,REAL,g,Oven-dried mass of wet sieved aggregates in 0.053-0.25 mm size fraction
+soildata,mass of dry sieved 0.25-1 mm soil Wet MWD,Mass of wet sieved 0.25-1 mm soil (wet),b_wet_mwd_025_1_mass,REAL,g,Oven-dried mass of wet sieved aggregates in 0.25-1 mm size fraction
+soildata,mass of dry sieved 1-4.75 mm soil Wet MWD,Mass of wet sieved 1-4.75 mm soil (wet),b_wet_mwd_1_475_mass,REAL,g,Oven-dried mass of wet sieved aggregates in 1-4.75 mm size fraction
+soildata,Wet Sieving_WSA,Water Stable Aggregates,b_wsa,REAL,%,Wet sieve aggregate stability; the degree to which soil aggregates resist disintegration when wetted and oscillated in a wet-sieving device
+soildata,Soil Stability Index,Soil Stability Index,b_ssi,REAL,,Equal to b_ssi_wet/b_ssi_dry; calculated by SHI; this is the correct soil stability index.
+soildata,DTPA_Zn,Zn (DTPA),b_zn_dtpa,REAL,mg/kg,DTPA extract
+soildata,M3_Zn,Zn (M3),b_zn_m3,REAL,mg/kg,Mehlich 3 extract
+soildata,ecec,Effective cation exchange capacity,ecec,REAL,meq / 100 g soil,Calculated with meq sum of K Ca Mg Na using Mehlich 3 extraction; calculated by SHI
+soildata,slakes_average_gmean,Slakes Aggregate Average,slakes_gmean,REAL,unitless ratio,Aggregate dispersal in water measured with phone app
+soildata,Arylsulfatase ppm pNP g-1 soil h-1,Arylsulfatase,d_aryl,VARCHAR(5),mg pNP kg-1 soil hr-1 ,Colorimetric absorbance
+soildata,Beta Glucosaminidase ppm pNP g-1 soil h-1,N-Acetyl β-Glucosaminidase,d_beta_minidase,VARCHAR(5),mg pNP kg-1 soil hr-1 ,Colorimetric absorbance
+soildata,Beta Glucosidase ppm pNP g-1 soil h-1,β-glucosidase,d_beta_sidase,VARCHAR(5),mg pNP kg-1 soil hr-1 ,Colorimetric absorbance
+soildata,Phosphomonoesterases (Acid) ppm pNP g-1 soil h-1_x,Phosphomonoesterase (acid buffer),d_phospho_acid_1,REAL,mg pNP kg-1 soil hr-1 ,Colorimetric absorbance with acid buffer.
+soildata,Phosphomonoesterases (Alkaline) ppm pNP g-1 soil h-1_x,Phosphomonoesterase (alkaline buffer),d_phospho_alk_1,REAL,mg pNP kg-1 soil hr-1 ,Colorimetric absorbance with alkaline buffer.
+soildata,CO2-C,CO2-C Ward (24 hour),d_co2_c,REAL,mg CO2-C/kg dry soil/ 24 hr,"Carbon mineralization potential using 24 hour rewetting at ~50% water filled pore space (with a fixed mass of soil and volume of water) measured with SR-1. This column is calculated by SHI depending on the raw data reporting unit (see resp_24hr_raw and resp_24hr_raw_unit) and the ideal gas law. Where the resp_24hr_raw_unit value is ""ppm CO2-C (AAL)"" or ""ppm CO2-C (Ward)"", the calculation is  resp_24hr_raw*40*(44/12)/(0.9*0.215/.082/298)/1000/.04 where 40*(44/12) converts the value back into the raw CO2 concentation in ppm, and (0.9*0.215/.082/298)/1000 is the conversion to mg CO2-C. 0.9 in the term (0.9*0.215/0.082/298)/1000 is the pressure in atm based on elevation where the analysis was performed. 0.215 is the typical volume of air in mL in a half pint jar with 40 mg soil and 9 mL of water. 0.082 is the constant R. 298 is the lab temperature in K.  0.04 is the mass of soil in kg. "
+soildata,H2O Total Organic C,Water Extractable C,d_h2o_org_c,REAL,mg C/kg,Total water extractable carbon
+soildata,H3A Inorganic Nitrogen,Inorganic N,d_h3a_inorg_n,REAL,ppm N,Inorganic nitrogen (nitrate nitrogen and ammoniacal nitrogen) extracted using the H3A extractant; equivalent to H3A Ammonium + H3A Nitrate
+soildata,H3A Inorganic Phosphorus,Inorganic P (H3A),d_h3a_inorg_p,REAL,mg/kg,inorganic (plant available) phosphorus extracted using the H3A extractant
+soildata,H3A Ammonium,NH4-N,d_h3a_nh4,REAL,mg N/kg,Ammoniacal nitrogen extracted using the H3A extractant
+soildata,H3A Nitrate,NO3-N,d_h3a_no3,REAL,mg N/kg,Nitrate-nitrogen extracted using the H3A extractant
+soildata,H3A Organic Phosphorus,Organic P (H3A),d_h3a_org_p,REAL,mg/kg,organic (non-plant available) phosphorus extracted using the H3A extractant
+soildata,H3A Total Phosphorus,Total P,d_h3a_total_p,REAL,mg/kg,Total phosphorus extracted using the H3A extractant; calculated in Haney Soil Health Test (Ward Laboratories) from PLFA biomarkers
+soildata,H3A ICAP Aluminum,Al (H3A),d_icap_al,REAL,mg/kg,Aluminum extracted using the H3A extractant and ICAP spectrophotometer
+soildata,H3A ICAP Calcium,Ca (H3A),d_icap_ca,REAL,mg/kg,H3A extract 
+soildata,H3A ICAP Copper,Cu (H3A),d_icap_cu,REAL,mg/kg,H3A extract 
+soildata,H3A ICAP Iron,Fe (H3A),d_icap_fe,REAL,mg/kg,H3A extract 
+soildata,H3A ICAP Potassium,K (H3A),d_icap_k,REAL,mg/kg,H3A extract 
+soildata,H3A ICAP Magnesium,Mg (H3A),d_icap_mg,REAL,mg/kg,H3A extract 
+soildata,H3A ICAP Manganese,Mn (H3A),d_icap_mn,REAL,mg/kg,H3A extract 
+soildata,H3A ICAP Sodium,Na (H3A),d_icap_na,REAL,mg/kg,H3A extract 
+soildata,H3A ICAP Sulfur,S (H3A),d_icap_s,REAL,mg/kg,H3A extract 
+soildata,H3A ICAP Zinc,Zn (H3A),d_icap_zn,REAL,mg/kg,H3A extract 
+soildata,Organic Matter,Organic Matter Ward,d_org_matter,REAL,%,total soil organic matter expressed as percent loss on ignition
+soildata,WDRF Buffer,Buffer pH,d_wdrf_buffer,REAL,unitless scale,Woodruff buffer pH
+soildata,H2O Total N,Water Extractable Nitrogen,d_wen,REAL,mg N/kg,Total water extractable nitrogen
+soildata,H2O Organic N,Water Extractable Organic Nitrogen,d_weon,REAL,mg N/kg,Total water extractable nitrogen minus inorganic nitrogen (nitrate nitrogen and ammoniacal nitrogen); calculated in Haney Soil Health Test (Ward Laboratories)
+mgmtdata,treatmentid,Treatment ID,treatmentid,INTEGER,,Foreign key relating to the treatments table.
+mgmtdata,shi_site_id,SHI Site ID,sitecode,CHAR(6),,SHI's unique identifier for the experimental site
+mgmtdata,Date,Date,date,CHAR(10),,Date of the management event.
+mgmtdata,action_cat,Record Category,category,VARCHAR(64),,"Category of the management record event (e.g., planting)."
+mgmtdata,action_method,Event Method,method,VARCHAR(64),,General method used for the management implementation.
+mgmtdata,mgmt_action,Event Description,eventdesc,VARCHAR(128),,Description of the management event.
+mgmtdata,quantity,Quantity,quantity,VARCHAR(64),,"Quantity of product used or applied, where applicable."
+mgmtdata,unit,Unit,unit,VARCHAR(64),,"Unit associated with the quantity, where applicable"
+dbtables,Table/File Name,Database Table Name,dbtablename,VARCHAR(64),,Name of the table in the database.
+dbtables,Description,Description,description,TEXT,,Description of the table.
+dbcolumns,Table Name,Database Table Name,dbtablename,VARCHAR(64),,Name of the table in the database.
+dbcolumns,Original Column Header Name,Original Column Name,origcolname,VARCHAR(64),,Original name of the column reported from lab or generated by SHI.
+dbcolumns,Interpretive Name,Interpretive Name,interpretive_name,VARCHAR(64),,Interpretive name of the column generated by SHI.
+dbcolumns,Database Name,Database Column Name,dbcolname,VARCHAR(64),,Name of the column in the database.
+dbcolumns,Data Type,Data Type,dbdatatype,VARCHAR(64),,The data type in SQL.
+dbcolumns,Unit,Unit,unit,VARCHAR(64),,"The unit of the measurement, where applicable."
+dbcolumns,Description,Description,description,TEXT,,Description of the column.
+plfa_ng,experunitid,Experimental Unit ID,euid,SERIAL PRIMARY KEY,,"Integer primary key indexing unique experimental units (EU); EU is a plot, paddock, or sampling location."
+plfa_ng,siteid,Site ID,siteid,INTEGER,,Foreign key referencing siteid in the sites table.
+plfa_ng,treatmentid,Treatment ID,treatmentid,INTEGER,,Foreign key relating to the treatments table.
+plfa_ng,shi_site_id,Site Code,sitecode,CHAR(6),,SHI's unique identifier for the experimental site
+plfa_ng,shi_eu_id,EU Code,eucode,VARCHAR(24),,Unique alphanumeric identifier for the experimental unit.
+plfa_ng,Total_(ngram_C/g),Total PLFA (ng/g),mpng_total,REAL,ng/g,Row-wise sum of the biomarker data values.
+plfa_ng,004:_11:0,,mpng_004110,REAL,ng/g,PLFA biomarker.
+plfa_ng,005:_10:0_2OH,,mpng_0051002oh,REAL,ng/g,PLFA biomarker.
+plfa_ng,006:_10:0_3OH,,mpng_0061003oh,REAL,ng/g,PLFA biomarker.
+plfa_ng,009:_12:1_w8c,,mpng_009121w8c,REAL,ng/g,PLFA biomarker.
+plfa_ng,011:_12:0,,mpng_011120,REAL,ng/g,PLFA biomarker.
+plfa_ng,012:_13:0_iso,,mpng_012130iso,REAL,ng/g,PLFA biomarker.
+plfa_ng,013:_13:0_anteiso,,mpng_013130anteiso,REAL,ng/g,PLFA biomarker.
+plfa_ng,014:_13:1_w5c,,mpng_014131w5c,REAL,ng/g,PLFA biomarker.
+plfa_ng,017:_13:0,,mpng_017130,REAL,ng/g,PLFA biomarker.
+plfa_ng,019:_14:0_iso,,mpng_019140iso,REAL,ng/g,PLFA biomarker.
+plfa_ng,022:_14:1_w8c,,mpng_022141w8c,REAL,ng/g,PLFA biomarker.
+plfa_ng,023:_14:1_w7c,,mpng_023141w7c,REAL,ng/g,PLFA biomarker.
+plfa_ng,026:_14:0,,mpng_026140,REAL,ng/g,PLFA biomarker.
+plfa_ng,027:_15:1_iso_w9c,,mpng_027151isow9c,REAL,ng/g,PLFA biomarker.
+plfa_ng,028:_15:1_iso_w6c,,mpng_028151isow6c,REAL,ng/g,PLFA biomarker.
+plfa_ng,029:_15:4_w3c,,mpng_029154w3c,REAL,ng/g,PLFA biomarker.
+plfa_ng,030:_15:1_anteiso_w9c,,mpng_030151anteisow9c,REAL,ng/g,PLFA biomarker.
+plfa_ng,031:_15:0_iso,,mpng_031150iso,REAL,ng/g,PLFA biomarker.
+plfa_ng,033:_15:0_anteiso,,mpng_033150anteiso,REAL,ng/g,PLFA biomarker.
+plfa_ng,035:_15:1_w8c,,mpng_035151w8c,REAL,ng/g,PLFA biomarker.
+plfa_ng,037:_15:1_w6c,,mpng_037151w6c,REAL,ng/g,PLFA biomarker.
+plfa_ng,041:_15:0,,mpng_041150,REAL,ng/g,PLFA biomarker.
+plfa_ng,042:_16:1_w7c_alcohol,,mpng_042161w7calcohol,REAL,ng/g,PLFA biomarker.
+plfa_ng,043:_16:0_N_alcohol,,mpng_043160Nalcohol,REAL,ng/g,PLFA biomarker.
+plfa_ng,044:_16:3_w6c,,mpng_044163w6c,REAL,ng/g,PLFA biomarker.
+plfa_ng,045:_16:0_iso,,mpng_045160iso,REAL,ng/g,PLFA biomarker.
+plfa_ng,047:_16:0_anteiso,,mpng_047160anteiso,REAL,ng/g,PLFA biomarker.
+plfa_ng,048:_16:1_w9c,,mpng_048161w9c,REAL,ng/g,PLFA biomarker.
+plfa_ng,050:_16:1_w7c,,mpng_050161w7c,REAL,ng/g,PLFA biomarker.
+plfa_ng,051:_16:1_w6c,,mpng_051161w6c,REAL,ng/g,PLFA biomarker.
+plfa_ng,052:_16:1_w5c,,mpng_052161w5c,REAL,ng/g,PLFA biomarker.
+plfa_ng,054:_16:1_w3c,,mpng_054161w3c,REAL,ng/g,PLFA biomarker.
+plfa_ng,055:_16:0,,mpng_055160,REAL,ng/g,PLFA biomarker.
+plfa_ng,057:_16:0_10-methyl,,mpng_05716010methyl,REAL,ng/g,PLFA biomarker.
+plfa_ng,058:_17:1_iso_w9c,,mpng_058171isow9c,REAL,ng/g,PLFA biomarker.
+plfa_ng,059:_17:1_anteiso_w9c,,mpng_059171anteisow9c,REAL,ng/g,PLFA biomarker.
+plfa_ng,060:_17:1_anteiso_w7c,,mpng_060171anteisow7c,REAL,ng/g,PLFA biomarker.
+plfa_ng,061:_17:0_iso,,mpng_061170iso,REAL,ng/g,PLFA biomarker.
+plfa_ng,062:_17:0_anteiso,,mpng_062170anteiso,REAL,ng/g,PLFA biomarker.
+plfa_ng,064:_17:1_w8c,,mpng_064171w8c,REAL,ng/g,PLFA biomarker.
+plfa_ng,067:_17:0_cyclo_w7c,,mpng_067170cyclow7c,REAL,ng/g,PLFA biomarker.
+plfa_ng,071:_17:0,,mpng_071170,REAL,ng/g,PLFA biomarker.
+plfa_ng,072:_17:1_w7c_10-methyl,,mpng_072171w7c10methyl,REAL,ng/g,PLFA biomarker.
+plfa_ng,073:_16:0_2OH,,mpng_07316020h,REAL,ng/g,PLFA biomarker.
+plfa_ng,074:_17:0_10-methyl,,mpng_07417010methyl,REAL,ng/g,PLFA biomarker.
+plfa_ng,075:_18:3_w6c,,mpng_075183w6c,REAL,ng/g,PLFA biomarker.
+plfa_ng,076:_18:0_iso,,mpng_076180iso,REAL,ng/g,PLFA biomarker.
+plfa_ng,077:_18:4_w3c,,mpng_077184w3c,REAL,ng/g,PLFA biomarker.
+plfa_ng,078:_18:2_w6c,,mpng_078182w6c,REAL,ng/g,PLFA biomarker.
+plfa_ng,079:_18:1_w9c,,mpng_079181w9c,REAL,ng/g,PLFA biomarker.
+plfa_ng,081:_18:1_w7c,,mpng_081181w7c,REAL,ng/g,PLFA biomarker.
+plfa_ng,082:_18:1_w6c,,mpng_082181w6c,REAL,ng/g,PLFA biomarker.
+plfa_ng,083:_18:1_w5c,,mpng_083181w5c,REAL,ng/g,PLFA biomarker.
+plfa_ng,086:_18:1_w7c_10-methyl,,mpng_086181w7c10methyl,REAL,ng/g,PLFA biomarker.
+plfa_ng,087:_17:0_iso_3OH,,mpng_087170iso3OH,REAL,ng/g,PLFA biomarker.
+plfa_ng,088:_18:0_10-methyl,,mpng_08818010methyl,REAL,ng/g,PLFA biomarker.
+plfa_ng,089:_19:4_w6c,,mpng_089194w6c,REAL,ng/g,PLFA biomarker.
+plfa_ng,090:_19:3_w6c,,mpng_090193w6c,REAL,ng/g,PLFA biomarker.
+plfa_ng,091:_19:0_iso,,mpng_091190iso,REAL,ng/g,PLFA biomarker.
+plfa_ng,092:_19:3_w3c,,mpng_092193w3c,REAL,ng/g,PLFA biomarker.
+plfa_ng,093:_19:0_anteiso,,mpng_093190anteiso,REAL,ng/g,PLFA biomarker.
+plfa_ng,094:_19:1_w9c,,mpng_094191w9c,REAL,ng/g,PLFA biomarker.
+plfa_ng,095:_19:1_w8c,,mpng_095191w8c,REAL,ng/g,PLFA biomarker.
+plfa_ng,097:_19:1_w6c,,mpng_097191w6c,REAL,ng/g,PLFA biomarker.
+plfa_ng,098:_19:0_cyclo_w9c,,mpng_098190cyclow9c,REAL,ng/g,PLFA biomarker.
+plfa_ng,099:_19:0_cyclo_w7c,,mpng_099190cyclow7c,REAL,ng/g,PLFA biomarker.
+plfa_ng,102:_20:4_w6c,,mpng_102204w6c,REAL,ng/g,PLFA biomarker.
+plfa_ng,103:_20:5_w3c,,mpng_103205w3c,REAL,ng/g,PLFA biomarker.
+plfa_ng,104:_20:3_w6c,,mpng_104203w6c,REAL,ng/g,PLFA biomarker.
+plfa_ng,105:_20:0_iso,,mpng_105200iso,REAL,ng/g,PLFA biomarker.
+plfa_ng,106:_20:2_w6c,,mpng_106202w6c,REAL,ng/g,PLFA biomarker.
+plfa_ng,107:_20:1_w9c,,mpng_107201w9c,REAL,ng/g,PLFA biomarker.
+plfa_ng,108:_20:1_w8c,,mpng_108201w8c,REAL,ng/g,PLFA biomarker.
+plfa_ng,109:_20:1_w6c,,mpng_109201w6c,REAL,ng/g,PLFA biomarker.
+plfa_ng,110:_20:1_w4c,,mpng_110201w4c,REAL,ng/g,PLFA biomarker.
+plfa_ng,112:_20:0,,mpng_112200,REAL,ng/g,PLFA biomarker.
+plfa_ng,113:_20:0_10-methyl,,mpng_11320010methyl,REAL,ng/g,PLFA biomarker.
+plfa_ng,117:_21:1_w8c,,mpng_117211w8c,REAL,ng/g,PLFA biomarker.
+plfa_ng,118:_21:1_w6c,,mpng_118211w6c,REAL,ng/g,PLFA biomarker.
+plfa_ng,120:_21:1_w4c,,mpng_120211w4c,REAL,ng/g,PLFA biomarker.
+plfa_ng,121:_21:1_w3c,,mpng_121211w3c,REAL,ng/g,PLFA biomarker.
+plfa_ng,123:_22:5_w6c,,mpng_123225w6c,REAL,ng/g,PLFA biomarker.
+plfa_ng,124:_22:6_w3c,,mpng_124226w3c,REAL,ng/g,PLFA biomarker.
+plfa_ng,125:_22:4_w6c,,mpng_125224w6c,REAL,ng/g,PLFA biomarker.
+plfa_ng,126:_22:5_w3c,,mpng_126225w3c,REAL,ng/g,PLFA biomarker.
+plfa_ng,127:_22:0_iso,,mpng_127220iso,REAL,ng/g,PLFA biomarker.
+plfa_ng,128:_22:2_w6c,,mpng_128222w6c,REAL,ng/g,PLFA biomarker.
+plfa_ng,129:_22:1_w9c,,mpng_129221w9c,REAL,ng/g,PLFA biomarker.
+plfa_ng,130:_22:1_w8c,,mpng_130221w8c,REAL,ng/g,PLFA biomarker.
+plfa_ng,131:_22:1_w5c,,mpng_131221w5c,REAL,ng/g,PLFA biomarker.
+plfa_ng,132:_22:1_w3c,,mpng_132221w3c,REAL,ng/g,PLFA biomarker.
+plfa_ng,134:_22:0,,mpng_134220,REAL,ng/g,PLFA biomarker.
+plfa_ng,136:_23:4_w6c,,mpng_136234w6c,REAL,ng/g,PLFA biomarker.
+plfa_ng,140:_23:1_w4c,,mpng_140231w4c,REAL,ng/g,PLFA biomarker.
+plfa_ng,141:_23:0,,mpng_141230,REAL,ng/g,PLFA biomarker.
+plfa_ng,144:_24:3_w3c,,mpng_144243w3c,REAL,ng/g,PLFA biomarker.
+plfa_ng,146:_24:1_w7c,,mpng_146241w7c,REAL,ng/g,PLFA biomarker.
+plfa_ng,148:_24:0,,mpng_148240,REAL,ng/g,PLFA biomarker.
+plfa_ng,115:_21:3_w3c,,mpng_115213w3c,REAL,ng/g,PLFA biomarker.
+plfa_ng,024:_14:1_w5c,,mpng_024141w5c,REAL,ng/g,PLFA biomarker.
+plfa_ng,039:_16:1_w9c_aldehyde,,mpng_039161w9caldehyde,REAL,ng/g,PLFA biomarker.
+plfa_ng,119:_21:1_w5c,,mpng_119211w5c,REAL,ng/g,PLFA biomarker.
+plfa_ng,056:_17:1_iso_w10c,,mpng_056171isow10c,REAL,ng/g,PLFA biomarker.
+plfa_ng,101:_19:1_w7c_10-methyl,,mpng_101191w7c10methyl,REAL,ng/g,PLFA biomarker.
+plfa_ng,145:_24:1_w9c,,mpng_145241w9c,REAL,ng/g,PLFA biomarker.
+plfa_ng,114:_21:3_w6c,,mpng_114213w6c,REAL,ng/g,PLFA biomarker.
+plfa_ng,122:_21:0,,mpng_122210,REAL,ng/g,PLFA biomarker.
+plfa_ng,036:_15:1_w7c,,mpng_036151w7c,REAL,ng/g,PLFA biomarker.
+plfa_ng,001: 10-methyl,,mf_001_10methyl,REAL,ng/g,PLFA biomarker.
+plfa_ng,003: Straight,,mf_003straight,REAL,ng/g,PLFA biomarker.
+plfa_ng,"004: 18:2 w6,9c",,mf_004182_w69c,REAL,ng/g,PLFA biomarker.
+plfa_ng,005: Branched,,mf_005branched,REAL,ng/g,PLFA biomarker.
+plfa_ng,006: Other,,mf_006_other,REAL,ng/g,PLFA biomarker.
+plfa_ng,007: MUFA,,mf_007mufa,REAL,ng/g,PLFA biomarker.
+plfa_ng,008: 16:1 w5c,,mf_008161_w5c,REAL,ng/g,PLFA biomarker.
+plfa_ng,009: 18:1 w9c,,mf_009181w9c,REAL,ng/g,PLFA biomarker.
+plfa_ng,010: Hydroxy,,mf_010hydroxy,REAL,ng/g,PLFA biomarker.
+plfa_ng,011: PUFA,,mf_011pufa,REAL,ng/g,PLFA biomarker.
+plfa_ng,012: Cyclo,,mf_012cyclo,REAL,ng/g,PLFA biomarker.
+plfa_ng,001: AM Fungi,,mt_001amfungi,REAL,ng/g,PLFA biomarker.
+plfa_ng,002: Gram Negative,,mt_002gramneg,REAL,ng/g,PLFA biomarker.
+plfa_ng,004: Eukaryote,,mt_004eukaryote,REAL,ng/g,PLFA biomarker.
+plfa_ng,005: Fungi,,mt_005fungi,REAL,ng/g,PLFA biomarker.
+plfa_ng,006: Gram Positive,,mt_006grampos,REAL,ng/g,PLFA biomarker.
+plfa_ng,008: Actinomycetes,,mt_008actino,REAL,ng/g,PLFA biomarker.
+plfa_nm,experunitid,Experimental Unit ID,euid,SERIAL PRIMARY KEY,,"Integer primary key indexing unique experimental units (EU); EU is a plot, paddock, or sampling location."
+plfa_nm,siteid,Site ID,siteid,INTEGER,,Foreign key referencing siteid in the sites table.
+plfa_nm,treatmentid,Treatment ID,treatmentid,INTEGER,,Foreign key relating to the treatments table.
+plfa_nm,shi_site_id,Site Code,sitecode,CHAR(6),,SHI's unique identifier for the experimental site
+plfa_nm,shi_eu_id,EU Code,eucode,VARCHAR(24),,Unique alphanumeric identifier for the experimental unit.
+plfa_nm,Total_(nmole/g),,mpnm_total,REAL,nmol/g,Row-wise sum of the biomarker data values.
+plfa_nm,004:_11:0,,mpnm_004110,REAL,nmol/g,PLFA biomarker.
+plfa_nm,005:_10:0_2OH,,mpnm_0051002oh,REAL,nmol/g,PLFA biomarker.
+plfa_nm,006:_10:0_3OH,,mpnm_0061003oh,REAL,nmol/g,PLFA biomarker.
+plfa_nm,009:_12:1_w8c,,mpnm_009121w8c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,011:_12:0,,mpnm_011120,REAL,nmol/g,PLFA biomarker.
+plfa_nm,012:_13:0_iso,,mpnm_012130iso,REAL,nmol/g,PLFA biomarker.
+plfa_nm,013:_13:0_anteiso,,mpnm_013130anteiso,REAL,nmol/g,PLFA biomarker.
+plfa_nm,014:_13:1_w5c,,mpnm_014131w5c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,017:_13:0,,mpnm_017130,REAL,nmol/g,PLFA biomarker.
+plfa_nm,019:_14:0_iso,,mpnm_019140iso,REAL,nmol/g,PLFA biomarker.
+plfa_nm,022:_14:1_w8c,,mpnm_022141w8c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,023:_14:1_w7c,,mpnm_023141w7c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,026:_14:0,,mpnm_026140,REAL,nmol/g,PLFA biomarker.
+plfa_nm,027:_15:1_iso_w9c,,mpnm_027151isow9c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,028:_15:1_iso_w6c,,mpnm_028151isow6c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,029:_15:4_w3c,,mpnm_029154w3c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,030:_15:1_anteiso_w9c,,mpnm_030151anteisow9c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,031:_15:0_iso,,mpnm_031150iso,REAL,nmol/g,PLFA biomarker.
+plfa_nm,033:_15:0_anteiso,,mpnm_033150anteiso,REAL,nmol/g,PLFA biomarker.
+plfa_nm,035:_15:1_w8c,,mpnm_035151w8c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,037:_15:1_w6c,,mpnm_037151w6c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,041:_15:0,,mpnm_041150,REAL,nmol/g,PLFA biomarker.
+plfa_nm,042:_16:1_w7c_alcohol,,mpnm_042161w7calcohol,REAL,nmol/g,PLFA biomarker.
+plfa_nm,043:_16:0_N_alcohol,,mpnm_043160Nalcohol,REAL,nmol/g,PLFA biomarker.
+plfa_nm,044:_16:3_w6c,,mpnm_044163w6c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,045:_16:0_iso,,mpnm_045160iso,REAL,nmol/g,PLFA biomarker.
+plfa_nm,047:_16:0_anteiso,,mpnm_047160anteiso,REAL,nmol/g,PLFA biomarker.
+plfa_nm,048:_16:1_w9c,,mpnm_048161w9c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,050:_16:1_w7c,,mpnm_050161w7c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,051:_16:1_w6c,,mpnm_051161w6c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,052:_16:1_w5c,,mpnm_052161w5c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,054:_16:1_w3c,,mpnm_054161w3c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,055:_16:0,,mpnm_055160,REAL,nmol/g,PLFA biomarker.
+plfa_nm,057:_16:0_10-methyl,,mpnm_05716010methyl,REAL,nmol/g,PLFA biomarker.
+plfa_nm,058:_17:1_iso_w9c,,mpnm_058171isow9c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,059:_17:1_anteiso_w9c,,mpnm_059171anteisow9c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,060:_17:1_anteiso_w7c,,mpnm_060171anteisow7c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,061:_17:0_iso,,mpnm_061170iso,REAL,nmol/g,PLFA biomarker.
+plfa_nm,062:_17:0_anteiso,,mpnm_062170anteiso,REAL,nmol/g,PLFA biomarker.
+plfa_nm,064:_17:1_w8c,,mpnm_064171w8c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,067:_17:0_cyclo_w7c,,mpnm_067170cyclow7c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,071:_17:0,,mpnm_071170,REAL,nmol/g,PLFA biomarker.
+plfa_nm,072:_17:1_w7c_10-methyl,,mpnm_072171w7c10methyl,REAL,nmol/g,PLFA biomarker.
+plfa_nm,073:_16:0_2OH,,mpnm_07316020h,REAL,nmol/g,PLFA biomarker.
+plfa_nm,074:_17:0_10-methyl,,mpnm_07417010methyl,REAL,nmol/g,PLFA biomarker.
+plfa_nm,075:_18:3_w6c,,mpnm_075183w6c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,076:_18:0_iso,,mpnm_076180iso,REAL,nmol/g,PLFA biomarker.
+plfa_nm,077:_18:4_w3c,,mpnm_077184w3c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,078:_18:2_w6c,,mpnm_078182w6c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,079:_18:1_w9c,,mpnm_079181w9c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,081:_18:1_w7c,,mpnm_081181w7c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,082:_18:1_w6c,,mpnm_082181w6c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,083:_18:1_w5c,,mpnm_083181w5c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,086:_18:1_w7c_10-methyl,,mpnm_086181w7c10methyl,REAL,nmol/g,PLFA biomarker.
+plfa_nm,087:_17:0_iso_3OH,,mpnm_087170iso3OH,REAL,nmol/g,PLFA biomarker.
+plfa_nm,088:_18:0_10-methyl,,mpnm_08818010methyl,REAL,nmol/g,PLFA biomarker.
+plfa_nm,089:_19:4_w6c,,mpnm_089194w6c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,090:_19:3_w6c,,mpnm_090193w6c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,091:_19:0_iso,,mpnm_091190iso,REAL,nmol/g,PLFA biomarker.
+plfa_nm,092:_19:3_w3c,,mpnm_092193w3c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,093:_19:0_anteiso,,mpnm_093190anteiso,REAL,nmol/g,PLFA biomarker.
+plfa_nm,094:_19:1_w9c,,mpnm_094191w9c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,095:_19:1_w8c,,mpnm_095191w8c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,097:_19:1_w6c,,mpnm_097191w6c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,098:_19:0_cyclo_w9c,,mpnm_098190cyclow9c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,099:_19:0_cyclo_w7c,,mpnm_099190cyclow7c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,102:_20:4_w6c,,mpnm_102204w6c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,103:_20:5_w3c,,mpnm_103205w3c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,104:_20:3_w6c,,mpnm_104203w6c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,105:_20:0_iso,,mpnm_105200iso,REAL,nmol/g,PLFA biomarker.
+plfa_nm,106:_20:2_w6c,,mpnm_106202w6c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,107:_20:1_w9c,,mpnm_107201w9c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,108:_20:1_w8c,,mpnm_108201w8c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,109:_20:1_w6c,,mpnm_109201w6c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,110:_20:1_w4c,,mpnm_110201w4c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,112:_20:0,,mpnm_112200,REAL,nmol/g,PLFA biomarker.
+plfa_nm,113:_20:0_10-methyl,,mpnm_11320010methyl,REAL,nmol/g,PLFA biomarker.
+plfa_nm,117:_21:1_w8c,,mpnm_117211w8c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,118:_21:1_w6c,,mpnm_118211w6c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,120:_21:1_w4c,,mpnm_120211w4c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,121:_21:1_w3c,,mpnm_121211w3c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,123:_22:5_w6c,,mpnm_123225w6c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,124:_22:6_w3c,,mpnm_124226w3c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,125:_22:4_w6c,,mpnm_125224w6c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,126:_22:5_w3c,,mpnm_126225w3c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,127:_22:0_iso,,mpnm_127220iso,REAL,nmol/g,PLFA biomarker.
+plfa_nm,128:_22:2_w6c,,mpnm_128222w6c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,129:_22:1_w9c,,mpnm_129221w9c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,130:_22:1_w8c,,mpnm_130221w8c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,131:_22:1_w5c,,mpnm_131221w5c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,132:_22:1_w3c,,mpnm_132221w3c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,134:_22:0,,mpnm_134220,REAL,nmol/g,PLFA biomarker.
+plfa_nm,136:_23:4_w6c,,mpnm_136234w6c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,140:_23:1_w4c,,mpnm_140231w4c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,141:_23:0,,mpnm_141230,REAL,nmol/g,PLFA biomarker.
+plfa_nm,144:_24:3_w3c,,mpnm_144243w3c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,146:_24:1_w7c,,mpnm_146241w7c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,148:_24:0,,mpnm_148240,REAL,nmol/g,PLFA biomarker.
+plfa_nm,115:_21:3_w3c,,mpnm_115213w3c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,024:_14:1_w5c,,mpnm_024141w5c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,039:_16:1_w9c_aldehyde,,mpnm_039161w9caldehyde,REAL,nmol/g,PLFA biomarker.
+plfa_nm,119:_21:1_w5c,,mpnm_119211w5c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,056:_17:1_iso_w10c,,mpnm_056171isow10c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,101:_19:1_w7c_10-methyl,,mpnm_101191w7c10methyl,REAL,nmol/g,PLFA biomarker.
+plfa_nm,145:_24:1_w9c,,mpnm_145241w9c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,114:_21:3_w6c,,mpnm_114213w6c,REAL,nmol/g,PLFA biomarker.
+plfa_nm,122:_21:0,,mpnm_122210,REAL,nmol/g,PLFA biomarker.
+plfa_nm,036:_15:1_w7c,,mpnm_036151w7c,REAL,nmol/g,PLFA biomarker.

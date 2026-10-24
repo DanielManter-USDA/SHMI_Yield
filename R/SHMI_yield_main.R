@@ -67,7 +67,7 @@
 #
 # MODELS
 #   Within sites (Fig 1-4), all corn plot-years at the research sites:
-#     yield ~ site x year + N curve per site + other treatment factors
+#     yield ~ site x year + N per site + other treatment factors
 #             + SHMI_w + SHMI_w:N + SHMI_w:age + (1 | treatment/plot), AR(1) over years
 #     SHMI_w = SHMI minus its site mean, so the slope compares treatments at the
 #     same site. Site x year removes everything shared by the plots of a site in a
@@ -135,7 +135,7 @@ library(daymetr)
 
 setwd(here::here())                 # the project root (SHMI_Yield.Rproj)
 OUT   <- "Outputs/yield_main_default_total"     # this script's figures and tables
-# To rerun with other SHMI weights at the research sites (SHMI_yield_weights_sensitivity.R),
+# To rerun with other SHMI weights at the research sites (R/archive/SHMI_yield_weights_sensitivity.R),
 # set before sourcing: SHMI_WEIGHTS_OVERRIDE <- list(weights = c(Cover =, Diversity =, InvDist =),
 # growing_share = ) and OUT_OVERRIDE <- "<folder>". The Minnesota farms keep the official weights.
 if (exists("OUT_OVERRIDE")) OUT <- OUT_OVERRIDE
@@ -293,7 +293,10 @@ code_text <- function(f) deparse(utils::removeSource(f))
 SITE_CODE_HASH <- rlang::hash(list(code_text(run_site_fresh), code_text(corn_yields), code_text(shmi_for_period),
                                    code_text(corn_n),
                                    unname(tools::md5sum(here::here("R", c("SHMI_legume_credit.R", "SHMI_manure_n.R"))))))
-run_site <- function(file, start, end, exclude = NULL, trt_regex, trt_parts) {
+run_site <- function(file, start, end, exclude = NULL, trt_regex, trt_parts,
+                     coarse = exists("SCORE_WB_DIR_OVERRIDE"), alt = exists("SHMI_FN_OVERRIDE")) {
+  if (alt) return(run_site_alt(file, start, end, exclude, trt_regex, trt_parts, coarse = coarse))
+  if (coarse) return(run_site_coarse(file, start, end, exclude, trt_regex, trt_parts))
   w <- if (exists("SHMI_WEIGHTS_OVERRIDE")) paste(unlist(SHMI_WEIGHTS_OVERRIDE), collapse = ",") else "official"
   key <- rlang::hash(list(normalizePath(file, mustWork = TRUE), as.numeric(file.mtime(file)), start, end,
                           sort(exclude), trt_regex, trt_parts, MANURE_SCENARIO, LEGUME_SCENARIO, w,
@@ -313,6 +316,63 @@ run_site <- function(file, start, end, exclude = NULL, trt_regex, trt_parts) {
   dir.create(SITE_CACHE_DIR, recursive = TRUE, showWarnings = FALSE)
   saveRDS(r, rds)
   r
+}
+
+# Coarse-record test (R/SHMI_coarse_records.R): with SCORE_WB_DIR_OVERRIDE set, SHMI is
+# scored from the degraded copy of each workbook in that folder (same file name), while
+# yields, N, climate and everything else come from the full record (the cached full run).
+# Not part of SITE_CODE_HASH, so adding it leaves the full-record cache valid.
+run_site_coarse <- function(file, start, end, exclude, trt_regex, trt_parts) {
+  f2 <- file.path(SCORE_WB_DIR_OVERRIDE, basename(file))
+  if (!file.exists(f2)) stop("No degraded workbook for ", basename(file), " in ", SCORE_WB_DIR_OVERRIDE, call. = FALSE)
+  full <- run_site(file, start, end, exclude, trt_regex, trt_parts, coarse = FALSE, alt = FALSE)
+  w <- if (exists("SHMI_WEIGHTS_OVERRIDE")) paste(unlist(SHMI_WEIGHTS_OVERRIDE), collapse = ",") else "official"
+  key <- rlang::hash(list("coarse", normalizePath(f2, mustWork = TRUE), as.numeric(file.mtime(f2)),
+                          normalizePath(file, mustWork = TRUE), as.numeric(file.mtime(file)), start, end,
+                          sort(exclude), trt_regex, trt_parts, MANURE_SCENARIO, LEGUME_SCENARIO, w,
+                          as.character(utils::packageVersion("SHMI")), SHMI_INSTALLED, SITE_CODE_HASH))
+  if (!is.null(SITE_CACHE[[key]])) return(SITE_CACHE[[key]])
+  message("Scoring the coarse record: ", f2)
+  inp2 <- prepare_shmi_inputs(f2, start_date_override = start, end_date_override = end,
+                              rotation_window = "events", exclude = exclude,
+                              calc_yield = TRUE, calc_n_rate = TRUE)
+  shmi <- shmi_for_period(inp2, full$climate, start, end)
+  miss <- setdiff(unique(full$shmi$MGT_combo), shmi$MGT_combo)
+  if (length(miss)) stop("Coarse record lost units: ", paste(head(miss, 5), collapse = ", "), call. = FALSE)
+  r <- list(inputs = full$inputs, climate = full$climate, shmi = shmi,
+            yield = corn_yields(full$inputs, shmi, trt_regex, trt_parts) %>%
+              mutate(year = as.integer(year)) %>%
+              left_join(corn_n(full$inputs), by = c("MGT_combo", "year")) %>%
+              left_join(legume_credit_class(full$inputs$crop), by = c("MGT_combo", "year")))
+  SITE_CACHE[[key]] <- r
+  r
+}
+
+# Another score in place of SHMI (R/archive/SHMI_v1_compare.R): SHMI_FN_OVERRIDE(inputs, climate,
+# start, end) returns one row per unit with MGT_combo and SHMI (0-100); yields, N and
+# everything else come from the full run. With SCORE_WB_DIR_OVERRIDE also set, the score
+# is computed from the degraded workbook's records. Not part of SITE_CODE_HASH.
+run_site_alt <- function(file, start, end, exclude, trt_regex, trt_parts, coarse = FALSE) {
+  full <- run_site(file, start, end, exclude, trt_regex, trt_parts, coarse = FALSE, alt = FALSE)
+  inp_score <- full$inputs
+  if (coarse) {
+    f2 <- file.path(SCORE_WB_DIR_OVERRIDE, basename(file))
+    if (!file.exists(f2)) stop("No degraded workbook for ", basename(file), " in ", SCORE_WB_DIR_OVERRIDE, call. = FALSE)
+    message("Scoring the degraded record: ", f2)
+    inp_score <- prepare_shmi_inputs(f2, start_date_override = start, end_date_override = end,
+                                     rotation_window = "events", exclude = exclude,
+                                     calc_yield = TRUE, calc_n_rate = TRUE)
+  }
+  alt <- SHMI_FN_OVERRIDE(inp_score, full$climate, start, end)
+  miss <- setdiff(unique(full$shmi$MGT_combo), alt$MGT_combo)
+  # keep the unit metadata and period of the full run (corn_yields() needs them); swap the score columns
+  shmi <- full$shmi %>% select(-any_of(setdiff(names(alt), "MGT_combo"))) %>% left_join(alt, by = "MGT_combo")
+  if (length(miss)) stop("SHMI_FN_OVERRIDE lost units: ", paste(head(miss, 5), collapse = ", "), call. = FALSE)
+  list(inputs = full$inputs, climate = full$climate, shmi = shmi,
+       yield = corn_yields(full$inputs, shmi, trt_regex, trt_parts) %>%
+         mutate(year = as.integer(year)) %>%
+         left_join(corn_n(full$inputs), by = c("MGT_combo", "year")) %>%
+         left_join(legume_credit_class(full$inputs$crop), by = c("MGT_combo", "year")))
 }
 
 # ---- the seven sites ------------------------------------------------------------
@@ -636,7 +696,6 @@ if (nrow(cty_need) > 0) {
 }
 
 # Manually add Saunders 2011, missing from the NASS download (kept only if NASS lacks it)
-# TODO Find the source for these...
 MANUAL_CTY <- tribble(
   ~year, ~bu_ac, ~state, ~county,    ~practice,
   2011,  133.4,  "NE",   "SAUNDERS", "NON-IRRIGATED",
@@ -684,6 +743,10 @@ write.csv(excluded, file.path(OUT, "excluded_plot_years.csv"), row.names = FALSE
 YLAB  <- "Adjusted corn yield, relative to county (kg ha\u207B\u00B9)"   # level = average yield minus county; adjusted for the model's other terms
 XLAB  <- "Soil Health Management Index (SHMI)"
 PANEL <- force_panelsizes(rows = unit(2.6, "in"), cols = unit(3.6, "in"))
+# Manuscript figures: no title, subtitle or caption (the legend is written in the manuscript;
+# panel letters are added by Assemble_manuscript_figures.R). options(shmi.ms_figures = FALSE)
+# keeps them for working plots.
+MS <- if (isTRUE(getOption("shmi.ms_figures", TRUE))) ggplot2::labs(title = NULL, subtitle = NULL, caption = NULL) else NULL
 # slope label (top-left) and p-value (bottom-right)
 lab_slope <- function(est, lo, hi, what = "Yield change per 10 SHMI")
   sprintf("%s: %+.0f kg/ha (95%% CI %.0f%s%.0f)", what, est, lo, if (lo < 0) " to " else "\u2013", hi)
@@ -757,12 +820,12 @@ fig2 <- ggplot() +
                 lab_p(tt_full["SHMI_w", "p-value"])) +
   labs(x = XLAB, y = YLAB, title = sprintf("Within research sites (%d sites)", n_distinct(corn$site)),
        caption = paste0("Treatments compared within each site and year. Model (annual plot yields): yield ~ site \u00D7 year\n",
-                        "(which removes weather, county yield, soil and the site's level) + N curve per site + other treatment factors\n",
+                        "(which removes weather, county yield, soil and the site's level) + N per site + other treatment factors\n",
                         "+ SHMI + SHMI \u00D7 N + SHMI \u00D7 system age + (1 | treatment/plot), AR(1). Slope at ", N_REF, " kg N/ha and the average\n",
                         sprintf("system age (%.0f years). Each point: treatments with the same SHMI at a site (\u00B1 SE). Each site's level is\n", AGE_MEAN),
                         "set by site \u00D7 year, so its points sit along the line; their spread around it is the within-site evidence.")) +
   theme_fig
-ggsave(file.path(OUT, "Fig1_within_sites.png"), fig2 + PANEL, width = 6.8, height = 4.6, dpi = 300)
+ggsave(file.path(OUT, "Fig1_within_sites.png"), fig2 + MS + PANEL, width = 6.8, height = 4.6, dpi = 300)
 results$within <- coef_row("Fig 1", sprintf("Within sites, at %d kg N/ha and average age", N_REF),
                            s0$b, s0$se, DF_W, tt_full["SHMI_w", "p-value"], n_distinct(corn$site))
 
@@ -790,7 +853,7 @@ plot_slope <- function(xs, at, marks, xlab, p_term, p_lab, title, cap, col, rug,
 }
 n_rug <- corn %>% filter(site %in% n_var_sites) %>% distinct(site, MGT_trt_base, year, N100) %>% pull(N100) * 100
 fig3 <- plot_slope(seq(1, max(corn$age), length.out = 100), function(a) slope_at(age = a), AGES,
-                   "System age (years since the experiment began)", "SHMI_w:age_c", "SHMI × age",
+                   "Time under management (years)", "SHMI_w:age_c", "SHMI × age",
                    "SHMI benefit and system age (research sites)",
                    paste0("Within-site SHMI slope from the Fig 1 model at each system age, at ", N_REF,
                           " kg N/ha; 95% band. Points: ", paste(AGES, collapse = ", "), " years.\n",
@@ -804,8 +867,8 @@ fig4 <- plot_slope(seq(N_FIG_MIN, max(N_LINES), length.out = 100), function(n) s
                           "at any SHMI, fertilized corn still out-yields unfertilized corn. Drawn from ", N_FIG_MIN, " kg N/ha: below that only\n",
                           "NEMLTCRS compared SHMI levels. Rug: N rates in the data."),
                    "#b30000", n_rug[n_rug >= N_FIG_MIN & n_rug <= max(N_LINES)], label_right = TRUE)
-ggsave(file.path(OUT, "Fig3_SHMI_x_age.png"), fig3 + PANEL, width = 6.8, height = 4.4, dpi = 300)
-ggsave(file.path(OUT, "Fig2_SHMI_x_N.png"),   fig4 + PANEL, width = 6.8, height = 4.4, dpi = 300)
+ggsave(file.path(OUT, "Fig3_SHMI_x_age.png"), fig3 + MS + PANEL, width = 6.8, height = 4.4, dpi = 300)
+ggsave(file.path(OUT, "Fig2_SHMI_x_N.png"),   fig4 + MS + PANEL, width = 6.8, height = 4.4, dpi = 300)
 
 # ---- Fig 2b (alternative): lines of yield vs SHMI at the N_LINES rates, each at its own height
 # Height at the average SHMI = baseline + the average N response of the N-trial sites
@@ -833,7 +896,7 @@ fig4b <- ggplot(ln_n, aes(SHMI, fit, colour = line, fill = line)) +
                         "average N response of the N-rate sites (", paste(n_curve_sites, collapse = ", "), "),\n",
                         "relative to ", N_REF, " kg N/ha. Heights describe a typical N-trial site; bands are the 95% CI of the slopes.")) +
   theme_fig
-ggsave(file.path(OUT, "Fig2b_SHMI_x_N_lines.png"), fig4b + PANEL, width = 6.8, height = 4.4, dpi = 300)
+ggsave(file.path(OUT, "Fig2b_SHMI_x_N_lines.png"), fig4b + MS + PANEL, width = 6.8, height = 4.4, dpi = 300)
 message(sprintf("Fig 2b: average N response at %s kg N vs %d: %s kg/ha", paste(N_LINES, collapse = " / "), N_REF,
                 paste(round(vapply(N_LINES, n_eff, numeric(1))), collapse = " / ")))
 results$age <- bind_rows(
@@ -919,7 +982,7 @@ local({
           strip.placement = "outside", strip.text.y.left = element_text(angle = 0, hjust = 1),
           strip.background = element_blank(), panel.grid.minor = element_blank(),
           plot.caption = element_text(size = 7.5, colour = "grey30", hjust = 0), plot.caption.position = "plot")
-  ggsave(file.path(OUT, "Fig_effect_sizes.png"), p, width = 7.5, height = 1.9 + 0.32 * nrow(es), dpi = 300)
+  ggsave(file.path(OUT, "Fig_effect_sizes.png"), p + MS, width = 7.5, height = 1.9 + 0.32 * nrow(es), dpi = 300)
 })
 
 
@@ -1041,8 +1104,13 @@ print(pool); print(pool_adj); print(mreg_N)
 # (always shown: NEMEIRR's own model with SHMI x residue removal, whatever
 # MEI_SLOPE_BY_RESIDUE says about the global model; its main row stays the one slope)
 sub_mei <- if ("NEMEIRR" %in% names(site_models)) {
-  m <- fit_site(filter(corn, site == "NEMEIRR"),
-                extra = if (!MEI_SLOPE_BY_RESIDUE) c("SHMI_w:mei_res50", "SHMI_w:mei_res100"))
+  # tryCatch: with other scores (coarse records, SHMI v1) the SHMI x residue model can be singular
+  m <- tryCatch(fit_site(filter(corn, site == "NEMEIRR"),
+                         extra = if (!MEI_SLOPE_BY_RESIDUE) c("SHMI_w:mei_res50", "SHMI_w:mei_res100")),
+                error = function(e) { message("NEMEIRR SHMI x residue model not estimable: ", conditionMessage(e)); NULL })
+}
+sub_mei <- if (!is.null(sub_mei)) {
+  m <- sub_mei
   bm <- fixef(m); Vm <- vcov(m)
   ints <- intersect(c("SHMI_w:mei_res50", "SHMI_w:mei_res100"), names(bm))
   corn %>% filter(site == "NEMEIRR") %>% distinct(residue, mei_res50, mei_res100) %>% arrange(as.numeric(residue)) %>%
@@ -1147,7 +1215,7 @@ fig5 <- ggplot(forest, aes(effect, row)) +
                         "*** p < 0.001, ** p < 0.01, * p < 0.05, + p < 0.1.")) +
   theme_fig + theme(panel.grid.major.y = element_blank(), panel.grid.minor.y = element_blank())
 ggsave(file.path(OUT, "Fig4_forest.png"),
-       fig5 + force_panelsizes(rows = unit(0.22 * nrow(forest), "in"), cols = unit(3.4, "in")),
+       fig5 + MS + force_panelsizes(rows = unit(0.22 * nrow(forest), "in"), cols = unit(3.4, "in")),
        width = 6.8, height = 1.6 + 0.22 * nrow(forest), dpi = 300)
 
 

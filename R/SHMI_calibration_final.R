@@ -33,7 +33,7 @@ CFG <- list(
   mx_scores   = file.path(BASE, "sem_noMX_projected_MX.rds"),
   all_scores  = file.path(BASE, "sem_all_scores.rds"),
   climate     = file.path(BASE, "site_climate_monthly.rds"),
-  treatments  = here::here("Inputs", "CSV Files", "treatments.csv"),
+  treatments  = here::here("Inputs", "napeshm", "treatments.csv"),
   out_dir     = file.path(BASE, "Final"),
   test_mexico = TRUE,        # FALSE: skip the independent Mexico test
   K           = 10,

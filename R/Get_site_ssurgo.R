@@ -11,7 +11,7 @@ suppressPackageStartupMessages({
 })
 
 SSURGO_GPKG <- Sys.getenv("GSSURGO_GPKG", here::here("Inputs", "gSSURGO_CONUS.gpkg"))     # <- path to the national gpkg
-SITES_CSV   <- here::here("Inputs", "CSV Files", "sites.csv")
+SITES_CSV   <- here::here("Inputs", "napeshm", "sites.csv")
 OUT_CSV     <- here::here("Outputs", "site_soils_ssurgo.csv")
 BUFFER_M    <- 100    # 0 = map unit at the exact point; > 0 = map unit covering most of a buffer
 

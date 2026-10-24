@@ -20,7 +20,7 @@ RES     <- 10                        # arc-minutes: 10, 5, 2.5 (finer = larger d
 WC_DIR  <- here::here("Inputs", "worldclim")
 dir.create(WC_DIR, showWarnings = FALSE, recursive = TRUE)
 
-sites <- read.csv(here::here("Inputs", "sites.csv")) %>%
+sites <- read.csv(here::here("Inputs", "napeshm", "sites.csv")) %>%
   select(sitecode, site_longitude, site_latitude, site_mean_temp)
 
 tavg <- geodata::worldclim_global(var = "tavg", res = RES, path = WC_DIR)

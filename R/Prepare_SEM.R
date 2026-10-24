@@ -8,8 +8,8 @@
 #
 # Project layout (RStudio project R_NAPESHM; paths are relative to its root)
 #   Inputs/   NAPESHM_test.xlsx   SHMI management workbook (corrected version)
-#             sites.csv           site climate and descriptors
-#             CSV Files/          treatments.csv, soildata.csv, plfa_ng.csv
+#             napeshm/sites.csv   site climate and descriptors
+#             napeshm/            treatments.csv, soildata.csv, plfa_ng.csv
 #   Outputs/  everything this script writes
 #   R/        scripts
 #
@@ -96,7 +96,7 @@ crop_eval <- clip_crop_to_rotation(shmi_inputs$crop, shmi_inputs$rot_bounds)
 
 # Reference soils: unmanaged treatments (sod, remnant prairie, benchmarks,
 # exclosures, native grassland), from the treatment descriptions
-reference_ids <- read.csv(IN("CSV Files", "treatments.csv")) %>%
+reference_ids <- read.csv(IN("napeshm", "treatments.csv")) %>%
   mutate(MGT_combo = make_combo(sitecode, treatmentid)) %>%
   filter(eu_crop_cat == "non_farmed" | grepl("not_grazed", eu_treat_desc)) %>%
   pull(MGT_combo)
@@ -159,14 +159,14 @@ SITE_COLS <- c("country", "state_prov", "siteid", "sitecode",
                "site_nutr_rate", "site_nutr_type", "site_residue", "site_soy",
                "site_water", "site_wheat")
 
-sites <- read.csv(IN("sites.csv"))
+sites <- read.csv(IN("napeshm", "sites.csv"))
 missing_cols <- setdiff(SITE_COLS, names(sites))
 if (length(missing_cols)) stop("sites.csv lacks: ", paste(missing_cols, collapse = ", "))
 sites <- sites %>%
   select(all_of(SITE_COLS)) %>%
   filter(!sitecode %in% EXCLUDE_SITES)
 
-treatments <- read.csv(IN("CSV Files", "treatments.csv")) %>%
+treatments <- read.csv(IN("napeshm", "treatments.csv")) %>%
   mutate(MGT_combo = make_combo(sitecode, treatmentid))
 
 # Lab data: average replicate samples per treatment. Means of all-NA groups
@@ -179,12 +179,12 @@ mean_by_unit <- function(df) {
     mutate(across(where(is.numeric), ~ ifelse(is.nan(.x), NA_real_, .x)))
 }
 
-soil <- read.csv(IN("CSV Files", "soildata.csv")) %>%
+soil <- read.csv(IN("napeshm", "soildata.csv")) %>%
   mean_by_unit() %>%
   select(MGT_combo, starts_with("a_"), starts_with("b_"), starts_with("d_"),
          shi_kfs_cmhr, slakes_gmean)
 
-plfa <- read.csv(IN("CSV Files", "plfa_ng.csv")) %>%
+plfa <- read.csv(IN("napeshm", "plfa_ng.csv")) %>%
   mean_by_unit() %>%
   select(MGT_combo, mpng_total, starts_with("mt_"))
 

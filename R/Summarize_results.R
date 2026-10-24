@@ -474,7 +474,7 @@ if (have(OUT("shmi_inputs_v120.rds")) && have(OUT("sem_all_scores.rds")) &&
   suppressPackageStartupMessages(library(SHMI))
   inp <- readRDS(OUT("shmi_inputs_v120.rds"))
   units <- readRDS(OUT("sem_all_scores.rds")) %>% select(MGT_combo, sitecode, system)
-  irr <- read.csv(here::here("Inputs", "CSV Files", "treatments.csv"), stringsAsFactors = FALSE) %>%
+  irr <- read.csv(here::here("Inputs", "napeshm", "treatments.csv"), stringsAsFactors = FALSE) %>%
     transmute(MGT_combo = paste0("NAPESHM_", sitecode, "_", treatmentid),
               irrigated = !is.na(eu_irrigation) & !(trimws(tolower(eu_irrigation)) %in% c("none", "", "n_a")))
   climate <- inp$mgt %>%

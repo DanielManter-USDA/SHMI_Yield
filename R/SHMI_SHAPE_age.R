@@ -21,8 +21,8 @@
 #
 # Inputs
 #   Outputs/SHAPE/SHAPE_by_unit_with_SHMI.csv   (Merge_SHAPE_SHMI.R)
-#   Inputs/CSV Files/treatments.csv             (treatment_start_year)
-#   Inputs/CSV Files/sites_AI_startdate.csv     (updated start dates; site- or
+#   Inputs/napeshm/treatments.csv             (treatment_start_year)
+#   Inputs/napeshm/sites_AI_startdate.csv     (updated start dates; site- or
 #                                                treatment-level, see read_starts)
 # Outputs: Outputs/SHAPE_age/
 #   shape_correlations.csv, age_models.csv, age_slopes.csv, site_slopes.csv,
@@ -35,8 +35,8 @@ if (!requireNamespace("patchwork", quietly = TRUE)) stop("Install patchwork: ins
 HAS_LMERTEST <- requireNamespace("lmerTest", quietly = TRUE)
 
 in_csv <- function(f) {                      # Inputs/ or inputs/
-  p <- here::here("Inputs", "CSV Files", f)
-  if (!file.exists(p)) p <- here::here("inputs", "CSV Files", f)
+  p <- here::here("Inputs", "napeshm", f)
+  if (!file.exists(p)) p <- here::here("inputs", "napeshm", f)
   p
 }
 CFG <- list(
@@ -177,10 +177,15 @@ panel <- function(level, y, ylab) {
     labs(x = xl, y = yl, title = sprintf("%s vs SHMI: %s", ylab, ttl)) +
     theme_classic(base_size = 10) + theme(plot.title = element_text(size = 10))
 }
+MS_FIG <- isTRUE(getOption("shmi.ms_figures", TRUE))   # manuscript figures: no titles/captions (legend in the manuscript)
 figA <- patchwork::wrap_plots(c(map(c("all", "sites", "within"), panel, y = "SHAPE_mean", ylab = "SHAPE"),
                                 map(c("all", "sites", "within"), panel, y = "SH", ylab = "Soil health (SH)")), ncol = 3) +
-  patchwork::plot_annotation(caption = paste0("SHAPE: mean of the SOC, active C, respiration and aggregate stability scores (0-100). ",
+  patchwork::plot_annotation(caption = if (MS_FIG) NULL else paste0("SHAPE: mean of the SOC, active C, respiration and aggregate stability scores (0-100). ",
                                               "SH: measured soil-health score SHMI was calibrated on.\nWithin sites: each unit minus its site mean."))
+if (MS_FIG) {                                   # letters a-f in place of the panel titles; no caption
+  figA <- figA + patchwork::plot_annotation(tag_levels = "a") &
+    labs(title = NULL) & theme(plot.tag = element_text(face = "bold", size = 14))
+}
 ggsave(OUTF("FigA_SHMI_vs_SHAPE.png"), figA, width = 13, height = 8, dpi = 300)
 
 # ==============================================================================
@@ -289,5 +294,6 @@ figB <- ggplot(site_sl, aes(age, slope10)) +
                         "y ~ SHMI between + SHMI within × age + (1 + SHMI within | site), with 95% CI. Site-slope trend weighted by units. Age = ", CFG$sample_year,
                         " minus treatment start year.")) +
   theme_bw(base_size = 11) + theme(panel.grid.minor = element_blank())
+if (exists("MS_FIG") && MS_FIG) figB <- figB + labs(title = NULL, subtitle = NULL, caption = NULL)
 ggsave(OUTF("FigB_slope_by_age.png"), figB, width = 11, height = 5, dpi = 300)
 message("Saved results and figures to ", CFG$out_dir)

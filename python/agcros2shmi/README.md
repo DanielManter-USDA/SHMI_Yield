@@ -63,11 +63,11 @@ The comparison is field by field over the same years, using `compare_workbooks.p
 
 ‡ AgCROS has no amendment records for NECCIRR. Its fertilizer and manure come from the supplement, and match the hand-built workbook record for record (864 N and 128 manure rows).
 
-**SHMI scores (run in R, `Validate_converter_SHMI.R`):** NEMEIRR is identical, NELITCSE within 1.2 points and NEMLTCRS within 2.4 (the clover split). NECCIRR differed by up to 12.5 points for two reasons:
+**SHMI scores (computed in R from both versions):** NEMEIRR is identical, NELITCSE within 1.2 points and NEMLTCRS within 2.4 (the clover split). NECCIRR differed by up to 12.5 points for two reasons:
 - missing harvest dates, now fixed by rule C3c;
 - manure plots with no amendment records in AgCROS, now supplied by `supplements/NECCIRR_amendments.csv`.
 
-**Final check, run in R:** `Validate_converter_SHMI.R` computes SHMI from both versions and compares them field by field.
+**Final check:** SHMI was computed in R from both versions of each workbook and compared field by field (a one-off check; the script is not part of the pipeline).
 
 ## New candidate sites (`new_sites/`, `candidate_summary.csv`)
 

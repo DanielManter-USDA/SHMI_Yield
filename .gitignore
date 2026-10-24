@@ -1,5 +1,6 @@
 # generated
 Outputs/
+Outputs_ref/
 *.html
 .Rproj.user/
 .Rhistory
@@ -10,3 +11,15 @@ __pycache__/
 Inputs/*
 !Inputs/README.md
 !Inputs/yield_workbooks/
+# NAPESHM (public, Ag Data Commons) and the QC'd SHMI workbook built from it
+!Inputs/NAPESHM_rebuilt.xlsx
+!Inputs/napeshm/
+!Inputs/SHAPE/
+# never commit raw AgCROS exports
+*.sql
+Inputs/agcros/
+# local only: archived scripts and data, and helper scripts (documented in R/archive/README.md)
+R/archive/
+R/local/
+data/archive/
+python/archive/
