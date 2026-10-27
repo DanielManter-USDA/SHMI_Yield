@@ -253,7 +253,8 @@ if (!file.exists(dfile)) {
         map_dfr(q_sp, function(x) row_at(m_sp, "SHMI_w:spei", x, sprintf("%s Slope at SPEI %+.1f", lab, x), "S3", ns)))
       s3_slopes[[length(s3_slopes) + 1]] <- slope_x(m_sp, "SHMI_w:spei", q_sp) %>%
         mutate(window = SPEI_WINDOWS[[w]], set = if (set == "all") "All sites" else "Rainfed sites",
-               df = summary(m_sp)$tTable["SHMI_w", "DF"], p_int = summary(m_sp)$tTable["SHMI_w:spei", "p-value"])
+               df = summary(m_sp)$tTable["SHMI_w", "DF"], p_int = summary(m_sp)$tTable["SHMI_w:spei", "p-value"],
+               p_main = summary(m_sp)$tTable["SHMI_w", "p-value"])   # SHMI slope at SPEI 0
       keep <- d3 %>% distinct(site, year, drought) %>% group_by(site) %>% summarise(k = sum(drought)) %>% filter(k >= 3) %>% pull(site)
       if (length(keep)) {
         m_dr <- tryCatch(fit_fig1(filter(d3, site %in% keep), "SHMI_w:drought"), error = function(e) NULL)
@@ -275,20 +276,33 @@ if (!file.exists(dfile)) {
   }
   res$spei <- bind_rows(s3_rows)
   if (length(s3_slopes)) {
+    # Panel headers: the SHMI slope at SPEI 0 (P for the SHMI term; all four are well above 0).
+    # Reference: the overall slope of the Fig 1 model (green line and band), so a reader sees
+    # at once that every estimate sits on it; the SHMI x SPEI P values go in the legend
+    # (smallest printed in the console).
+    m0 <- fit_fig1(corn)
+    s0 <- slope_x(m0, "SHMI_w:N_c", 0); df0 <- summary(m0)$tTable["SHMI_w", "DF"]
+    ref <- tibble(b = s0$b, lower = s0$b - qt(0.975, df0) * s0$se, upper = s0$b + qt(0.975, df0) * s0$se)
     ss <- bind_rows(s3_slopes) %>%
       mutate(lower = b - qt(0.975, df) * se, upper = b + qt(0.975, df) * se,
              cond = factor(sprintf("SPEI %+.1f", x), sprintf("SPEI %+.1f", q_sp)),
-             analysis = factor(paste0(window, "\n", set, "\n", lab_p(p_int, "SHMI × SPEI")))) 
+             analysis = factor(paste0(window, "\n", set, "\n", lab_p(p_main, "SHMI"))))
+    message("S3: SHMI x SPEI interaction P values: ", paste(sprintf("%.3f", unique(ss$p_int)), collapse = ", "),
+            " (smallest ", sprintf("%.3f", min(ss$p_int)), ")")
     figS3s <- ggplot(ss, aes(cond, b, colour = cond)) +
-      geom_hline(yintercept = 0, linetype = "dashed", colour = "grey60") +
+      annotate("rect", xmin = -Inf, xmax = Inf, ymin = ref$lower, ymax = ref$upper, fill = "darkgreen", alpha = 0.10) +
+      geom_hline(yintercept = ref$b, colour = "darkgreen", linewidth = 0.6) +
+      geom_hline(yintercept = 0, colour = "grey25", linewidth = 0.5) +
       geom_pointrange(aes(ymin = lower, ymax = upper), size = 0.4) +
       facet_wrap(~ analysis, nrow = 1) +
       scale_colour_manual(values = c("#b35806", "grey40", "#2166ac"), guide = "none") +
       labs(x = NULL, y = "Corn yield change per 10 SHMI (kg ha⁻¹)", title = "SHMI benefit in dry, average and wet growing seasons",
            caption = paste0("Within-site SHMI slope at ", N_REF, " kg N/ha and average system age, 95% CI. SPEI −1.5 = severe drought, +1.5 = very wet.\n",
-                            "Rainfed sites exclude the irrigated NEMEIRR and NECCIRR.")) + theme_fig
+                            "Green line and band: the overall slope (Fig 1 model). Headers: P for the SHMI slope at SPEI 0. ",
+                            "Rainfed sites exclude the irrigated NEMEIRR and NECCIRR.")) + theme_fig +
+      theme(strip.background = element_blank(), strip.text = element_text(face = "bold"))
     ggsave(file.path(OUTS, "FigS3_drought_summary.png"), figS3s + MS, width = 9, height = 4.4, dpi = 300)
-    write.csv(ss %>% select(window, set, cond, b, se, lower, upper, p_int), file.path(OUTS, "FigS3_drought_summary.csv"), row.names = FALSE)
+    write.csv(ss %>% select(window, set, cond, b, se, lower, upper, p_main, p_int), file.path(OUTS, "FigS3_drought_summary.csv"), row.names = FALSE)
   }
 }
 

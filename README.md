@@ -26,7 +26,7 @@ SHMI scores are computed with the SHMI R package, https://github.com/DanielMante
 | `run_conversion` | FALSE | B0: rebuild the AgCROS workbooks and soil C even when present (they are always built when missing; rebuilding resets their cached site runs) | minutes |
 | `run_yield` | TRUE | B1-B5, B7-B8: yield analyses, figures, treatment table | first run about an hour (sites are cached after that) |
 | `run_n_scenarios` | TRUE | B6: SHMI slope under 20 N-accounting assumptions | 30-60 min |
-| `run_coarse` | FALSE | B9: SHMI from remote-sensing-resolution records (soil-health skill and yield slope) | hours (NAPESHM noise repeats; 18 yield reruns) |
+| `run_coarse` | FALSE | B9: SHMI from less detailed records: each component alone, and typical farm and remote-sensing records (soil-health skill and yield slope) | hours (NAPESHM seeds; about 28 yield reruns) |
 
 ## Steps and scripts (`R/`, `python/`)
 
@@ -44,14 +44,14 @@ Every script below produces something reported in the paper; figure and table nu
 | A7-A8 | `Check_climate_source.R`, `Export_appendix_tables.R` | season check; SEM loadings and adjustment slopes | Methods; ED Fig. 1 |
 | B0 | `python/agcros2shmi/agcros2shmi.py` (with the supplement and corrections), `python/build_soil_c.py`, `R/build_napeshm_crosswalk.R` | AgCROS workbooks in `Inputs/yield_workbooks/`; `yield/soil_c.csv`; `yield/napeshm_mediators_crosswalk.csv` | yield workbooks; mediation inputs |
 | B1 | `Get_SPEI.R` | `yield/drought_years.csv` | drought analysis |
-| B2 | `SHMI_yield_main.R` (with `SHMI_legume_credit.R`, `SHMI_manure_n.R`) | `yield_main_default_total_agcros/`: results_main.csv and panels | Fig. 3; Fig. 4a; ED Fig. 6 |
-| B3 | `SHMI_yield_stability.R` | `yield_stability_default_total_agcros/` | Fig. 4b; ED Fig. 7 |
+| B2 | `SHMI_yield_main.R` (with `SHMI_legume_credit.R`, `SHMI_manure_n.R`) | `yield_main_default_total_agcros/`: results_main.csv and panels; heterogeneity and SHMI-scale checks (SHMI_heterogeneity.csv, SHMI_scale_check*.csv); site_SHMI_ranges.csv | Fig. 3; ED Figs. 6-7; Supplementary Data Table 4 |
+| B3 | `SHMI_yield_stability.R` | `yield_stability_default_total_agcros/` | Fig. 4 |
 | B4 | `SHMI_N_equivalent.R` | N_equivalent.csv | fertilizer-N equivalent (Results) |
 | B5 | `SHMI_soil_mediation.R` | mediation_results.csv | soil-health mediation (Results; Supplementary Table) |
 | B6 | `SHMI_N_scenarios.R` | N_scenarios_all_sites.csv, N_scenarios_WICST.csv | N-accounting range (Methods) |
-| B7 | `Assemble_manuscript_figures.R` | `manuscript_figures_default_total_agcros/`: Fig3, Fig4, ED_Fig8_stability (now ED Fig. 7) | Figs. 3-4; ED Fig. 7 |
+| B7 | `Assemble_manuscript_figures.R` | `manuscript_figures_default_total_agcros/`: Fig3, Fig4, ED_Fig7_sites | Figs. 3-4; ED Fig. 7 |
 | B8 | `python/build_study_treatments.py` | `SHMI_study_treatments.xlsx` | Supplementary Table of sites and treatments |
-| B9 | `SHMI_coarse_records.R` with `python/coarse_records/degrade_records.py` | `Coarse/`: coarse_napeshm.csv, coarse_agreement.csv, coarse_yield.csv, coarse_yield_noise.csv, Fig_coarse_records.png | coarse-record test; ED Fig. 8 |
+| B9 | `SHMI_coarse_records.R` with `python/coarse_records/degrade_records.py` | `Coarse/`: coarse_scenarios.csv, coarse_napeshm.csv, coarse_agreement.csv, coarse_yield.csv, coarse_yield_runs.csv, Fig_coarse_records.png | coarse-record test; ED Fig. 8; Supplementary Table (record types) |
 
 Figures are saved without titles or captions (the legends are in the manuscript); set `options(shmi.ms_figures = FALSE)` before running a script to keep them for working plots.
 
@@ -71,4 +71,4 @@ Figures are saved without titles or captions (the legends are in the manuscript)
 - Scripts use paths relative to the project root (`here::here()`). Any script can also be run on its own from the project.
 - Site runs are cached in `Outputs/yield/site_runs`. The cache key covers each workbook, the period, the settings, the SHMI weights, the SHMI package (version and install time) and the scoring code. Delete the folder to force a full rescore.
 - The converter writes one `CD_term_date` (rule T1) and a zero-mixing placeholder pass at no-till sites (rule D3). Both were workarounds for two issues fixed in the SHMI package (an all-blank required column; an empty sheet). They do not change any score and are kept so the shipped workbooks are reproduced exactly.
-
+- `Inputs/yield_workbooks/` also holds workbooks for two AgCROS experiments screened but not analysed (INWLTPAC, MNMOFS).

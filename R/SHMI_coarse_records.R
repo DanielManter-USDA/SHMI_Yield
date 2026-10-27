@@ -1,27 +1,38 @@
 ################################################################################
 # SHMI_coarse_records.R
 #
-# Does SHMI keep its skill when the management record is only as detailed as
-# remote-sensing and public data products (annual crop type, cover-crop presence,
-# tillage class)? Real pixels cannot be used: NAPESHM and the long-term experiments
-# are small plots, below a 30-m pixel. Instead the full records are degraded step
-# by step (python/coarse_records/degrade_records.py) and rescored with the
-# published weights, which are not refitted.
+# Does SHMI keep its skill when the management record is less detailed than the
+# experiments' full records? Real remote-sensing pixels cannot be used: NAPESHM and
+# the long-term experiments are small plots, below a 30-m pixel. Instead the full
+# records are degraded (python/coarse_records/degrade_records.py) and rescored with
+# the published weights, which are not refitted.
 #
-# Scenarios (cumulative):
-#   D0  full record (the paper's scores)
-#   D1  typical dates: every crop's dates set to the site's typical day of year
-#   D2  + cover crop yes/no: one generic cover crop per gap between cash crops
-#   D3  + tillage class: each crop interval's passes replaced by one pass at the
-#         typical intensity of its class (no-till, reduced, conventional)
-#   D4  + main crop only: mixtures, companion crops and intercrops dropped
-#   D5  + no organic amendments or grazing (not visible from space)
-#   D6  + last 2 years of record only (NAPESHM only)
-# Noise (NAPESHM: CFG_C$n_noise seeds each; yield: CFG_C$yield_noise_seeds, 1 seed, 3 for J30):
-#   J7, J14, J30  every crop and tillage date shifted at random by up to 7, 14, 30 days
-#                 (each record on its own: replicate plots of a treatment no longer share dates)
-#   S7, S14, S30  as J, but one shift per date and site: records on the same day move together
-#   M10, M20      D3 with 10% or 20% of cover-crop gaps and tillage classes misclassified
+# a. Components: each piece of detail removed on its own from the full record, at
+#    each relevant level
+#      Crops            main crop only (mixtures, companion crops, intercrops dropped)
+#      Cover crops      presence only (one generic rye cover per gap between cash
+#                       crops); presence only with 10% or 20% of gaps misclassified
+#      Dates            a typical date per crop and site (as public statistics give);
+#                       every date shifted at random by up to 7, 14 or 30 days, either
+#                       shared by everything recorded on the same day at a site (S, a
+#                       farm calendar known approximately) or for each field and plot
+#                       on its own (J, as detection from satellite images)
+#      Tillage          class only (no-till, reduced, conventional: one pass per crop
+#                       interval at the class's typical intensity); class with 10% or
+#                       20% of intervals misclassified by one class
+#      Manure, grazing  organic amendments and grazing removed
+# b. Record types
+#      Full record           the experiments' records (the paper's scores)
+#      Typical farm record   crops and cover species kept; dates known to within 14
+#                            days, shared across the farm (S14); tillage as class;
+#                            manure and grazing recorded
+#      Remote-sensing record main crop only; cover crops as presence; tillage class;
+#                            dates detected for each field to within 14 days (J14);
+#                            no manure or grazing (not visible)
+#      Remote sensing + reported manure, grazing   the remote-sensing record with
+#                            manure, compost and grazing added from the farmer
+# Scenarios with a random element are repeated with several seeds (NAPESHM: n_noise;
+# yield: yield_seeds).
 #
 # Measures
 #   1. Agreement with the full-record score (NAPESHM units): RMS difference and mean
@@ -31,17 +42,18 @@
 #      folds (10-fold leave-sites-out, repeated), with the PUBLISHED weights; only the
 #      line from SHMI to lv_SH is fitted on the training sites, as in the calibration.
 #      Secondary: the weights refitted on the coarse records (refit = TRUE).
-#   3. Yield (D0-D5, and the noise scenarios): SHMI_yield_main.R rerun with each site scored from its degraded
-#      workbook (SCORE_WB_DIR_OVERRIDE) and everything else (yields, N, climate) from
-#      the full record: the within-site slope (Fig 1 model) and SHMI agreement.
+#   3. Yield: SHMI_yield_main.R rerun with each site scored from its degraded workbook
+#      (SCORE_WB_DIR_OVERRIDE) and everything else (yields, N, climate) from the full
+#      record: the within-site slope (Fig. 3a model) and SHMI agreement.
 #
 # RUN: from the project (here::here()), after SHMI_calibration_plus.R (Part A) and
-#      SHMI_yield_main.R (Part B; its site runs are reused). The coarse workbooks are written
-#      with python (openpyxl) unless already in Outputs/Coarse/ (prebuilt: then python is not needed).
+#      SHMI_yield_main.R (Part B; its site runs are reused). The degraded workbooks are
+#      written with python (openpyxl) unless already in Outputs/Coarse/ (prebuilt).
 #      Settings: CFG_COARSE_OVERRIDE <- list(...) before sourcing (see CFG_C).
-# Outputs (Outputs/Coarse/): coarse_agreement.csv, coarse_napeshm.csv,
-#      coarse_napeshm_repeats.csv, coarse_yield.csv, Fig_coarse_records.png,
-#      degrade_log.csv, the degraded workbooks, yield_<scenario>_agcros/ (main runs)
+# Outputs (Outputs/Coarse/): coarse_scenarios.csv, coarse_napeshm.csv,
+#      coarse_napeshm_repeats.csv, coarse_agreement.csv, coarse_yield.csv,
+#      coarse_yield_runs.csv, Fig_coarse_records.png, degrade_log.csv, the degraded
+#      workbooks, yield_<scenario>[_s0#]_agcros/ (main runs)
 ################################################################################
 suppressPackageStartupMessages({
   library(dplyr); library(tidyr); library(tibble); library(ggplot2); library(here); library(SHMI)
@@ -59,42 +71,46 @@ CFG_C <- list(
   out_dir      = here::here("Outputs", "Coarse"),
   python       = "",       # python executable; "" = python3, else python, on the PATH
   R            = NULL,     # CV repeats; NULL = the calibration's (100)
-  n_noise      = 5,        # repeats (seeds) of each noise scenario (the prebuilt workbooks cover 5)
-  refit        = TRUE,     # also refit the weights on the coarse records
+  n_noise      = 5,        # NAPESHM seeds of each random scenario (the prebuilt workbooks cover 5)
+  refit        = TRUE,     # also refit the weights on the degraded records
   run_napeshm  = TRUE,
-  napeshm_scenarios = NULL, # e.g. c("J7", "J14", "J30"): rerun only these (results merged with the saved ones)
+  napeshm_scenarios = NULL, # e.g. c("J7", "J14"): rerun only these (results merged with the saved ones)
   run_yield    = TRUE,
-  yield_scenarios = NULL,  # e.g. c("D3", "D4", "D5"): run only these; the others are read from their saved runs
-  # noise scenarios for yield (each seed is one run of SHMI_yield_main.R; prebuilt workbooks in
-  # Outputs/Coarse/yield_workbooks/<scenario>_s0#/; finished seeds are read back, not rerun)
-  yield_noise  = c("J7", "J14", "J30", "S7", "S14", "S30", "M10", "M20"),
-  yield_noise_seeds = list(default = 1, J30 = 1:3),   # seeds per scenario (a vector applies to all)
-  reuse_runs   = TRUE,     # read back noise seeds already run (FALSE: rerun them all, as run_all.Rmd does)
+  yield_scenarios = NULL,  # e.g. c("FARM", "RS"): run only these; the others are read from their saved runs
+  yield_seeds  = list(default = 1, J30 = 1:3, FARM = 1:3, RSM = 1:3, RS = 1:3),   # yield seeds of each random scenario
+  reuse_runs   = TRUE,     # read back yield runs already done (FALSE: rerun them all, as run_all.Rmd does)
   rebuild      = FALSE     # rewrite degraded workbooks that already exist
 )
 if (exists("CFG_COARSE_OVERRIDE")) CFG_C <- utils::modifyList(CFG_C, CFG_COARSE_OVERRIDE)
 dir.create(CFG_C$out_dir, recursive = TRUE, showWarnings = FALSE)
 OUTC <- function(...) file.path(CFG_C$out_dir, ...)
 
+# one row per scenario: set (a components, b record types), component, level shown in
+# the figure, operations for degrade_records.py, random (repeated with seeds), yield (rerun)
 SCEN <- tribble(
-  ~scenario, ~ops,                                          ~label,                         ~yield,
-  "D0",      "",                                            "Full record",                  TRUE,
-  "D1",      "dates",                                       "Typical dates",                TRUE,
-  "D2",      "dates,cover",                                 "+ cover crop yes/no",          TRUE,
-  "D3",      "dates,cover,tillage",                         "+ tillage class",              TRUE,
-  "D4",      "dates,cover,tillage,maincrop",                "+ main crop only",             TRUE,
-  "D5",      "dates,cover,tillage,maincrop,noamend",        "+ no amendments or grazing",   TRUE,
-  "D6",      "dates,cover,tillage,maincrop,noamend,last:2", "+ last 2 years only",          FALSE)
-NOISE <- tribble(
-  ~scenario, ~ops,                                ~label,
-  "J7",      "jitter:7",                          "Dates shifted up to 7 days",
-  "J14",     "jitter:14",                         "Dates shifted up to 14 days",
-  "J30",     "jitter:30",                         "Dates shifted up to 30 days",
-  "S7",      "sjitter:7",                         "Dates shifted up to 7 days, shared by date",
-  "S14",     "sjitter:14",                        "Dates shifted up to 14 days, shared by date",
-  "S30",     "sjitter:30",                        "Dates shifted up to 30 days, shared by date",
-  "M10",     "dates,cover,tillage,misclass:0.1",  "D3, 10% of cover and tillage misclassified",
-  "M20",     "dates,cover,tillage,misclass:0.2",  "D3, 20% of cover and tillage misclassified")
+  ~scenario, ~set, ~component,        ~level,                                   ~ops,                                       ~random, ~yield,
+  "D0",      "b",  "Record type",     "Full record",                            "",                                         FALSE,   TRUE,
+  "FARM",    "b",  "Record type",     "Typical farm record",                    "tillage,sjitter:14",                       TRUE,    TRUE,
+  "RSM",     "b",  "Record type",     "Remote sensing + reported manure, grazing", "cover,maincrop,tillage,jitter:14",      TRUE,    TRUE,
+  "RS",      "b",  "Record type",     "Remote-sensing record",                  "cover,maincrop,tillage,jitter:14,noamend", TRUE,    TRUE,
+  "CROP",    "a",  "Crops",           "main crop only",                         "maincrop",                                 FALSE,   TRUE,
+  "COVER",   "a",  "Cover crops",     "presence only",                          "cover",                                    FALSE,   TRUE,
+  "COVER10", "a",  "Cover crops",     "presence, 10% misclassified",            "cover,misclass:0.1",                       TRUE,    TRUE,
+  "COVER20", "a",  "Cover crops",     "presence, 20% misclassified",            "cover,misclass:0.2",                       TRUE,    TRUE,
+  "D1",      "a",  "Dates",           "typical date per crop and site",         "dates",                                    FALSE,   TRUE,
+  "S7",      "a",  "Dates",           "within 7 days, shared",                  "sjitter:7",                                TRUE,    TRUE,
+  "S14",     "a",  "Dates",           "within 14 days, shared",                 "sjitter:14",                               TRUE,    TRUE,
+  "S30",     "a",  "Dates",           "within 30 days, shared",                 "sjitter:30",                               TRUE,    TRUE,
+  "J7",      "a",  "Dates",           "within 7 days, each field",              "jitter:7",                                 TRUE,    TRUE,
+  "J14",     "a",  "Dates",           "within 14 days, each field",             "jitter:14",                                TRUE,    TRUE,
+  "J30",     "a",  "Dates",           "within 30 days, each field",             "jitter:30",                                TRUE,    TRUE,
+  "TILL",    "a",  "Tillage",         "class only",                             "tillage",                                  FALSE,   TRUE,
+  "TILL10",  "a",  "Tillage",         "class, 10% misclassified",               "tillage,misclass:0.1",                     TRUE,    TRUE,
+  "TILL20",  "a",  "Tillage",         "class, 20% misclassified",               "tillage,misclass:0.2",                     TRUE,    TRUE,
+  "AMEND",   "a",  "Manure, grazing", "removed",                                "noamend",                                  FALSE,   TRUE) %>%
+  mutate(label = ifelse(set == "b", level, paste0(component, ": ", level)))
+write.csv(SCEN, OUTC("coarse_scenarios.csv"), row.names = FALSE)
+labs_all <- SCEN %>% select(scenario, label)
 
 # ==============================================================================
 # Degrading workbooks (python)
@@ -249,8 +265,8 @@ if (CFG_C$run_napeshm) {
   if (chk < 0.99) warning("D0 differs from the calibration's components (r = ", round(chk, 3),
                           "): check that Inputs/NAPESHM_rebuilt.xlsx is the QC'd workbook used there")
 
-  runs <- bind_rows(SCEN %>% mutate(seed = 1L),
-                    NOISE %>% tidyr::crossing(seed = seq_len(CFG_C$n_noise)))
+  runs <- SCEN %>% select(scenario, ops, random) %>%
+    tidyr::crossing(seed = seq_len(CFG_C$n_noise)) %>% filter(random | seed == 1)
   if (!is.null(CFG_C$napeshm_scenarios)) runs <- runs %>% filter(scenario %in% CFG_C$napeshm_scenarios)
   rep_rows <- list(); agr_rows <- list()
   for (i in seq_len(nrow(runs))) {
@@ -267,16 +283,13 @@ if (CFG_C$run_napeshm) {
   if (!is.null(CFG_C$napeshm_scenarios)) {        # merge with the saved results of the other scenarios
     if (file.exists(OUTC("coarse_napeshm_repeats.csv")))
       reps <- bind_rows(read.csv(OUTC("coarse_napeshm_repeats.csv"), stringsAsFactors = FALSE) %>%
-                          filter(!scenario %in% CFG_C$napeshm_scenarios), reps)
-    old_agr <- if (file.exists(OUTC("coarse_agreement_seeds.csv")))
-      read.csv(OUTC("coarse_agreement_seeds.csv"), stringsAsFactors = FALSE)
-    else if (file.exists(OUTC("coarse_agreement.csv")))       # runs before the per-seed file existed
-      read.csv(OUTC("coarse_agreement.csv"), stringsAsFactors = FALSE) %>% select(-any_of(c("label", "n_seeds"))) %>% mutate(seed = NA_integer_)
-    if (!is.null(old_agr)) agr <- bind_rows(old_agr %>% filter(!scenario %in% CFG_C$napeshm_scenarios), agr)
+                          filter(!scenario %in% CFG_C$napeshm_scenarios, scenario %in% SCEN$scenario), reps)
+    if (file.exists(OUTC("coarse_agreement_seeds.csv")))
+      agr <- bind_rows(read.csv(OUTC("coarse_agreement_seeds.csv"), stringsAsFactors = FALSE) %>%
+                         filter(!scenario %in% CFG_C$napeshm_scenarios, scenario %in% SCEN$scenario), agr)
   }
   write.csv(reps, OUTC("coarse_napeshm_repeats.csv"), row.names = FALSE)
   write.csv(agr, OUTC("coarse_agreement_seeds.csv"), row.names = FALSE)
-  labs_all <- bind_rows(SCEN %>% select(scenario, label), NOISE %>% select(scenario, label))
   agr_sum <- agr %>% group_by(scenario) %>% summarise(across(-seed, ~ mean(.x, na.rm = TRUE)), n_seeds = n(), .groups = "drop") %>%
     left_join(labs_all, by = "scenario") %>% relocate(label, .after = scenario)
   write.csv(agr_sum %>% mutate(across(where(is.numeric), ~ signif(.x, 4))), OUTC("coarse_agreement.csv"), row.names = FALSE)
@@ -284,172 +297,125 @@ if (CFG_C$run_napeshm) {
     summarise(across(c(R2, between_r, within_r, within_median_rho, sites_correct),
                      list(med = ~ median(.x, na.rm = TRUE), lo = ~ q(.x, 0.025), hi = ~ q(.x, 0.975))),
               n = n(), .groups = "drop") %>%
-    left_join(labs_all, by = "scenario") %>% relocate(label, .after = scenario)
+    left_join(labs_all, by = "scenario") %>% relocate(label, .after = scenario) %>%
+    arrange(match(scenario, SCEN$scenario))
   write.csv(nap_sum %>% mutate(across(where(is.numeric), ~ round(.x, 4))), OUTC("coarse_napeshm.csv"), row.names = FALSE)
   print(nap_sum %>% filter(weights == "published") %>% select(scenario, label, R2_med, R2_lo, R2_hi, sites_correct_med), n = Inf)
 }
 
 # ==============================================================================
-# Part B: yield, the within-site slope with coarse records
+# Part B: yield, the within-site slope with degraded records
 # ==============================================================================
 if (CFG_C$run_yield) {
-  leak <- intersect(c("SCORE_WB_DIR_OVERRIDE", "OUT_OVERRIDE", "SHMI_WEIGHTS_OVERRIDE"), ls(globalenv()))
-  if (length(leak)) stop("Remove these from the global environment first: ", paste(leak, collapse = ", "))
-  wbs <- list.files(CFG_C$yield_wb_dir, pattern = "^SHMI_.*\\.xlsx$", full.names = TRUE)
-  ysc <- SCEN %>% filter(yield)
-  y_rows <- list(); keep_corn <- list()
-  # a scenario not in yield_scenarios is read back: from its saved units (coarse_units.rds), or, for runs
-  # made before that file was written, from its results_main.csv (then without the agreement columns).
-  # D0 is the base of the agreement, so it is rerun (fast: full-record site runs are cached) if not saved.
-  read_saved <- function(sc, label) {
-    d <- OUTC(paste0("yield_", sc)); if (!dir.exists(d)) d <- paste0(d, "_agcros"); rds <- file.path(d, "coarse_units.rds"); csv <- file.path(d, "results_main.csv")
-    if (file.exists(rds)) return(readRDS(rds))
-    if (sc == "D0" || !file.exists(csv)) return(NULL)
-    r <- read.csv(csv, stringsAsFactors = FALSE); f1 <- r[r$figure == "Fig 1", ][1, ]
-    xn <- r[grepl("^SHMI x N: change", r$estimate), ][1, ]
-    list(row = tibble(scenario = sc, label = label, slope = f1$effect, lower = f1$lower, upper = f1$upper,
-                      p = f1$p_val, SHMIxN = xn$effect, SHMIxN_p = xn$p_val, plot_years = NA_integer_), units = NULL)
-  }
-  for (i in seq_len(nrow(ysc))) {
-    sc <- ysc$scenario[i]
-    if (!is.null(CFG_C$yield_scenarios) && !(sc %in% CFG_C$yield_scenarios)) {
-      sv <- read_saved(sc, ysc$label[i])
-      if (!is.null(sv)) {
-        message("Yield, ", sc, ": read from the saved run")
-        y_rows[[i]] <- sv$row; if (!is.null(sv$units)) keep_corn[[sc]] <- sv$units
-        next
-      }
-    }
-    cat(sprintf("\n==================== Yield, %s: %s ====================\n", sc, ysc$label[i]))
-    env <- new.env(parent = globalenv())
-    env$OUT_OVERRIDE <- OUTC(paste0("yield_", sc))
-    if (sc != "D0") {
-      dir_s <- OUTC("yield_workbooks", sc)
-      for (f in wbs) degrade(f, file.path(dir_s, basename(f)), ysc$ops[i], tillage = "epa", seed = 1, site_regex = "NONE")
-      env$SCORE_WB_DIR_OVERRIDE <- dir_s
-    }
-    sys.source(CFG_C$main_script, envir = env)
-    r <- read.csv(file.path(env$OUT, "results_main.csv"), stringsAsFactors = FALSE)
-    f1 <- r[r$figure == "Fig 1", ][1, ]
-    xn <- r[grepl("^SHMI x N: change", r$estimate), ][1, ]
-    y_rows[[i]] <- tibble(scenario = sc, label = ysc$label[i], slope = f1$effect, lower = f1$lower, upper = f1$upper,
-                          p = f1$p_val, SHMIxN = xn$effect, SHMIxN_p = xn$p_val, plot_years = nrow(env$corn))
-    keep_corn[[sc]] <- env$corn %>% group_by(site, MGT_combo) %>% summarise(SHMI = mean(SHMI), .groups = "drop")
-    saveRDS(list(row = y_rows[[i]], units = keep_corn[[sc]]), file.path(env$OUT, "coarse_units.rds"))
-    rm(env); gc(verbose = FALSE)
-  }
-  yld <- bind_rows(y_rows)
-  base <- if (is.null(keep_corn[["D0"]])) NULL else keep_corn[["D0"]] %>% rename(SHMI0 = SHMI)
-  if (is.null(base)) stop("No D0 units for the agreement")
-  yagr <- bind_rows(lapply(names(keep_corn), function(sc) {
-    d <- keep_corn[[sc]] %>% inner_join(base, by = c("site", "MGT_combo"))
-    rho <- d %>% group_by(site) %>% filter(n() >= 3, sd(SHMI) > 0, sd(SHMI0) > 0) %>%
-      summarise(rho = cor(SHMI, SHMI0, method = "spearman"), .groups = "drop")
-    tibble(scenario = sc, units = nrow(d), rms_diff = sqrt(mean((d$SHMI - d$SHMI0)^2)), bias = mean(d$SHMI - d$SHMI0),
-           within_rho = median(rho$rho))
-  }))
-  yld <- yld %>% left_join(yagr, by = "scenario")
-  write.csv(yld %>% mutate(across(where(is.numeric), ~ signif(.x, 4))), OUTC("coarse_yield.csv"), row.names = FALSE)
-  print(yld)
-}
-
-# ==============================================================================
-# Yield under noise (optional): one run of SHMI_yield_main.R per scenario and seed
-# ==============================================================================
-noise_row <- function(r, sc, seed) {
-  f1 <- r[r$figure == "Fig 1", ][1, ]; xn <- r[grepl("^SHMI x N: change", r$estimate), ][1, ]
-  tibble(scenario = sc, seed = seed, slope = f1$effect, lower = f1$lower, upper = f1$upper, p = f1$p_val,
-         SHMIxN = xn$effect, SHMIxN_p = xn$p_val)
-}
-if (length(CFG_C$yield_noise)) {
   leak <- intersect(c("SCORE_WB_DIR_OVERRIDE", "OUT_OVERRIDE", "SHMI_WEIGHTS_OVERRIDE", "SHMI_FN_OVERRIDE"), ls(globalenv()))
   if (length(leak)) stop("Remove these from the global environment first: ", paste(leak, collapse = ", "))
   wbs <- list.files(CFG_C$yield_wb_dir, pattern = "^SHMI_.*\\.xlsx$", full.names = TRUE)
-  n_rows <- list()
-  seeds_for <- function(sc) {
-    z <- CFG_C$yield_noise_seeds
+  seeds_for <- function(sc, random) {
+    if (!random) return(1L)
+    z <- CFG_C$yield_seeds
     if (!is.list(z)) return(z)
-    if (!is.null(z[[sc]])) z[[sc]] else if (!is.null(z$default)) z$default else 1
+    if (!is.null(z[[sc]])) z[[sc]] else if (!is.null(z$default)) z$default else 1L
   }
-  for (sc in CFG_C$yield_noise) for (seed in seeds_for(sc)) {
-    tag <- sprintf("%s_s%02d", sc, seed)
-    out <- OUTC(paste0("yield_", tag)); out_a <- paste0(out, "_agcros")
-    done <- file.path(if (dir.exists(out_a)) out_a else out, "results_main.csv")
-    if (CFG_C$reuse_runs && file.exists(done)) {                 # resume: a finished seed is not rerun
-      message("Yield, ", tag, ": read from the saved run")
-      n_rows[[tag]] <- noise_row(read.csv(done, stringsAsFactors = FALSE), sc, seed); next
+  ysc <- SCEN %>% filter(yield) %>% rowwise() %>% mutate(seed = list(seeds_for(scenario, random))) %>%
+    ungroup() %>% tidyr::unnest(seed) %>%
+    mutate(tag = ifelse(random, sprintf("%s_s%02d", scenario, seed), scenario))
+  run_row <- function(r, sc, seed, n_py = NA_integer_) {
+    f1 <- r[r$figure == "Fig 1", ][1, ]; xn <- r[grepl("^SHMI x N: change", r$estimate), ][1, ]
+    tibble(scenario = sc, seed = seed, slope = f1$effect, lower = f1$lower, upper = f1$upper, p = f1$p_val,
+           SHMIxN = xn$effect, SHMIxN_p = xn$p_val, plot_years = n_py)
+  }
+  y_rows <- list(); keep_corn <- list()
+  for (i in seq_len(nrow(ysc))) {
+    sc <- ysc$scenario[i]; seed <- ysc$seed[i]; tag <- ysc$tag[i]
+    out <- OUTC(paste0("yield_", tag)); out_dir <- if (dir.exists(paste0(out, "_agcros"))) paste0(out, "_agcros") else out
+    rds <- file.path(out_dir, "coarse_units.rds"); csv <- file.path(out_dir, "results_main.csv")
+    skip <- if (!is.null(CFG_C$yield_scenarios)) !(sc %in% CFG_C$yield_scenarios) else CFG_C$reuse_runs
+    if (skip && file.exists(rds)) {                                  # resume: a finished run is read back
+      sv <- readRDS(rds); y_rows[[tag]] <- sv$row; keep_corn[[tag]] <- sv$units
+      message("Yield, ", tag, ": read from the saved run"); next
     }
-    cat(sprintf("\n==================== Yield, %s ====================\n", tag))
-    dir_s <- OUTC("yield_workbooks", tag)
-    ops <- NOISE$ops[NOISE$scenario == sc]
-    for (f in wbs) degrade(f, file.path(dir_s, basename(f)), ops, tillage = "epa", seed = seed, site_regex = "NONE")
+    if (skip && sc != "D0" && file.exists(csv)) {                    # older runs: results only (no agreement)
+      y_rows[[tag]] <- run_row(read.csv(csv, stringsAsFactors = FALSE), sc, seed)
+      message("Yield, ", tag, ": read from the saved run (results only)"); next
+    }
+    cat(sprintf("\n==================== Yield, %s: %s ====================\n", tag, ysc$label[i]))
     env <- new.env(parent = globalenv())
-    env$OUT_OVERRIDE <- out; env$SCORE_WB_DIR_OVERRIDE <- dir_s
+    env$OUT_OVERRIDE <- out
+    if (sc != "D0") {
+      dir_s <- OUTC("yield_workbooks", tag)
+      for (f in wbs) degrade(f, file.path(dir_s, basename(f)), ysc$ops[i], tillage = "epa", seed = seed, site_regex = "NONE")
+      env$SCORE_WB_DIR_OVERRIDE <- dir_s
+    }
     sys.source(CFG_C$main_script, envir = env)
-    n_rows[[tag]] <- noise_row(read.csv(file.path(env$OUT, "results_main.csv"), stringsAsFactors = FALSE), sc, seed)
+    y_rows[[tag]] <- run_row(read.csv(file.path(env$OUT, "results_main.csv"), stringsAsFactors = FALSE), sc, seed, nrow(env$corn))
+    keep_corn[[tag]] <- env$corn %>% group_by(site, MGT_combo) %>% summarise(SHMI = mean(SHMI), .groups = "drop")
+    saveRDS(list(row = y_rows[[tag]], units = keep_corn[[tag]]), file.path(env$OUT, "coarse_units.rds"))
     rm(env); gc(verbose = FALSE)
   }
-  new_runs <- bind_rows(n_rows)
-  if (file.exists(OUTC("coarse_yield_noise_runs.csv"))) {      # keep the saved runs of other scenarios and seeds
-    old_runs <- read.csv(OUTC("coarse_yield_noise_runs.csv"), stringsAsFactors = FALSE)
-    new_runs <- bind_rows(old_runs %>% anti_join(new_runs, by = c("scenario", "seed")), new_runs)
+  yruns <- bind_rows(y_rows)
+  base <- keep_corn[["D0"]]
+  if (!is.null(base)) {
+    base <- base %>% rename(SHMI0 = SHMI)
+    yagr <- bind_rows(lapply(names(keep_corn), function(tg) {
+      d <- keep_corn[[tg]] %>% inner_join(base, by = c("site", "MGT_combo"))
+      rho <- d %>% group_by(site) %>% filter(n() >= 3, sd(SHMI) > 0, sd(SHMI0) > 0) %>%
+        summarise(rho = cor(SHMI, SHMI0, method = "spearman"), .groups = "drop")
+      tibble(tag = tg, units = nrow(d), rms_diff = sqrt(mean((d$SHMI - d$SHMI0)^2)), bias = mean(d$SHMI - d$SHMI0),
+             within_rho = median(rho$rho))
+    }))
+    yruns <- yruns %>% mutate(tag = ifelse(SCEN$random[match(scenario, SCEN$scenario)], sprintf("%s_s%02d", scenario, seed), scenario)) %>%
+      left_join(yagr, by = "tag") %>% select(-tag)
   }
-  write.csv(new_runs %>% arrange(scenario, seed) %>% mutate(across(where(is.numeric), ~ signif(.x, 4))),
-            OUTC("coarse_yield_noise_runs.csv"), row.names = FALSE)
+  write.csv(yruns %>% mutate(across(where(is.numeric), ~ signif(.x, 4))), OUTC("coarse_yield_runs.csv"), row.names = FALSE)
+  yld <- yruns %>% group_by(scenario) %>%
+    summarise(seeds = n(), slope_min = min(slope), slope_max = max(slope),
+              across(any_of(c("slope", "lower", "upper", "p", "SHMIxN", "SHMIxN_p", "rms_diff", "bias", "within_rho")),
+                     ~ mean(.x, na.rm = TRUE)), .groups = "drop") %>%
+    left_join(labs_all, by = "scenario") %>% relocate(label, .after = scenario) %>%
+    mutate(pct_of_full = if (any(scenario == "D0")) 100 * slope / slope[scenario == "D0"][1] else NA_real_) %>%
+    arrange(match(scenario, SCEN$scenario))
+  write.csv(yld %>% mutate(across(where(is.numeric), ~ signif(.x, 4))), OUTC("coarse_yield.csv"), row.names = FALSE)
+  print(yld %>% select(scenario, label, seeds, slope, lower, upper, pct_of_full), n = Inf)
 }
 
 # ==============================================================================
-# Figure: skill and yield slope by scenario
+# Figure: a, components; b, record types (soil-health skill, ranking, yield slope)
 # ==============================================================================
-pl <- list()
-# yield under noise: mean over seeds of the slope and of its 95% CI limits
-ynr <- if (file.exists(OUTC("coarse_yield_noise_runs.csv"))) read.csv(OUTC("coarse_yield_noise_runs.csv"), stringsAsFactors = FALSE) else NULL
-if (!is.null(ynr) && nrow(ynr)) {
-  yns <- ynr %>% group_by(scenario) %>%
-    summarise(seeds = n(), slope_min = min(slope), slope_max = max(slope),
-              across(c(slope, lower, upper, p, SHMIxN, SHMIxN_p), mean), .groups = "drop") %>%
-    left_join(NOISE %>% select(scenario, label), by = "scenario")
-  write.csv(yns %>% mutate(across(where(is.numeric), ~ signif(.x, 4))), OUTC("coarse_yield_noise.csv"), row.names = FALSE)
-}
 if (!exists("nap_sum") && file.exists(OUTC("coarse_napeshm.csv"))) nap_sum <- read.csv(OUTC("coarse_napeshm.csv"), stringsAsFactors = FALSE)
 if (!exists("yld") && file.exists(OUTC("coarse_yield.csv"))) yld <- read.csv(OUTC("coarse_yield.csv"), stringsAsFactors = FALSE)
+pl <- list()
 if (exists("nap_sum")) {
-  ns <- nap_sum %>% filter(weights == "published")
-  pl$a <- bind_rows(
-    ns %>% transmute(scenario, label, panel = "a  Soil health: out-of-fold R²", est = R2_med, lo = R2_lo, hi = R2_hi),
-    ns %>% transmute(scenario, label, panel = "b  Sites ranked correctly (%)", est = 100 * sites_correct_med,
-                     lo = 100 * sites_correct_lo, hi = 100 * sites_correct_hi))
+  ns <- nap_sum %>% filter(weights == "published", scenario %in% SCEN$scenario)
+  pl$r2 <- ns %>% transmute(scenario, measure = "Soil health: out-of-fold R²", est = R2_med, lo = R2_lo, hi = R2_hi)
+  pl$sc <- ns %>% transmute(scenario, measure = "Sites ranked correctly (%)", est = 100 * sites_correct_med,
+                            lo = 100 * sites_correct_lo, hi = 100 * sites_correct_hi)
 }
-if (exists("yld")) pl$b <- yld %>% transmute(scenario, label, panel = "c  Corn yield per 10 SHMI (kg/ha)",
-                                             est = slope, lo = lower, hi = upper)
-if (exists("yns")) pl$c <- yns %>% transmute(scenario, label, panel = "c  Corn yield per 10 SHMI (kg/ha)",
-                                             est = slope, lo = lower, hi = upper)
+if (exists("yld")) pl$y <- yld %>% filter(scenario %in% SCEN$scenario) %>%
+  transmute(scenario, measure = "Corn yield per 10 SHMI (kg/ha)", est = slope, lo = lower, hi = upper)
 if (length(pl)) {
-  fd <- bind_rows(pl)
-  ord <- c(SCEN$scenario, NOISE$scenario)
-  fd <- fd %>% mutate(scenario = factor(scenario, levels = rev(ord)),
-                      lab = factor(paste0(scenario, "  ", label), levels = rev(paste0(c(SCEN$scenario, NOISE$scenario), "  ",
-                                                                                  c(SCEN$label, NOISE$label)))),
-                      kind = ifelse(scenario %in% NOISE$scenario, "Noise", ifelse(scenario == "D0", "Full record", "Coarser record")))
-  ref <- fd %>% filter(scenario == "D0") %>% select(panel, ref = est)
-  g <- ggplot(fd, aes(est, lab, colour = kind)) +
+  ms <- isTRUE(getOption("shmi.ms_figures", TRUE))
+  fd <- bind_rows(pl) %>% left_join(SCEN %>% select(scenario, set, component, label), by = "scenario") %>%
+    mutate(measure = factor(measure, c("Soil health: out-of-fold R²", "Sites ranked correctly (%)", "Corn yield per 10 SHMI (kg/ha)")),
+           set = factor(set, c("a", "b"), if (ms) c("a", "b") else c("a  Components (each alone)", "b  Record types")),
+           label = factor(label, rev(SCEN$label)))
+  ref <- fd %>% filter(scenario == "D0") %>% select(measure, ref = est)
+  g <- ggplot(fd, aes(est, label, colour = component)) +
     geom_vline(data = ref, aes(xintercept = ref), linetype = "dashed", colour = "grey55") +
-    geom_errorbar(aes(xmin = lo, xmax = hi), width = 0.25) + geom_point(size = 2.4) +
-    facet_wrap(~ panel, scales = "free_x", nrow = 1) +
-    scale_colour_manual(values = c("Full record" = "#1b7837", "Coarser record" = "#2166ac", "Noise" = "#b2182b"), name = NULL) +
-    labs(x = NULL, y = NULL, title = "SHMI with coarser management records",
-         caption = paste0("a, b: NAPESHM US units, published weights, the calibration's leave-sites-out folds; median and 95% range over repeats ",
-                          "(noise: and seeds).\nb: D0-D6 have no range: a rising line from SHMI to soil health keeps the order of treatments within ",
-                          "a site, so the share is the same in every repeat\n(58 rankable sites; binomial 95% CI at 81%: 69-89%). ",
-                          "c: within-site slope of the Fig 1 model at 150 kg N/ha (95% CI); SHMI from the coarse record,\nyields and N from the ",
-                          "full record (noise: mean over seeds). D6: NAPESHM only. J: each record shifted on its own; S: one shift per date and site. ",
-                          "Dashed: full record.")) +
-    theme_bw(base_size = 10) + theme(legend.position = "bottom", plot.caption = element_text(hjust = 0, size = 7.5))
-  if (isTRUE(getOption("shmi.ms_figures", TRUE))) {     # manuscript: no title or caption (they go in the legend);
-    g <- g + labs(title = NULL, subtitle = NULL, caption = NULL) +   # the panel heading (letter + measure, which
-      theme(strip.background = element_blank(),                     # is also the x-axis meaning) stays, left-aligned
-            strip.text = element_text(face = "bold", size = 11, hjust = 0))
-  }
-  ggsave(OUTC("Fig_coarse_records.png"), g, width = 11.5, height = 6.4, dpi = 300)
+    geom_errorbar(aes(xmin = lo, xmax = hi), width = 0.3) + geom_point(size = 2.2) +
+    facet_grid(set ~ measure, scales = "free", space = "free_y") +
+    scale_colour_manual(values = c("Record type" = "#1b7837", "Crops" = "#8c510a", "Cover crops" = "#35978f",
+                                   "Dates" = "#2166ac", "Tillage" = "#b2182b", "Manure, grazing" = "#762a83"), name = NULL) +
+    labs(x = NULL, y = NULL, title = "SHMI with less detailed management records",
+         caption = paste0("Soil health: NAPESHM US units, published weights, the calibration's leave-site-out folds; median and 95% range over ",
+                          "repeats and seeds. Sites ranked correctly: without a random element the share is the same in every repeat.\n",
+                          "Yield: within-site slope of the Fig. 3a model at 150 kg N/ha (95% CI; mean over seeds); SHMI from the degraded record, ",
+                          "yields and N from the full record. Dashed: full record.")) +
+    theme_bw(base_size = 10) +
+    theme(legend.position = "bottom", plot.caption = element_text(hjust = 0, size = 7.5),
+          strip.text.y = element_text(angle = 0, face = "bold", hjust = 0))
+  if (ms) g <- g + labs(title = NULL, subtitle = NULL, caption = NULL) +
+    theme(strip.background = element_blank(), strip.text.x = element_text(face = "bold", size = 10, hjust = 0),
+          strip.text.y = element_text(angle = 0, face = "bold", size = 13, hjust = 0))
+  ggsave(OUTC("Fig_coarse_records.png"), g, width = 11.5, height = 7, dpi = 300)
 }
 message("Coarse-record test done: ", CFG_C$out_dir)

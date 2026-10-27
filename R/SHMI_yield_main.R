@@ -696,6 +696,7 @@ if (nrow(cty_need) > 0) {
 }
 
 # Manually add Saunders 2011, missing from the NASS download (kept only if NASS lacks it)
+# TODO Find the source for these...
 MANUAL_CTY <- tribble(
   ~year, ~bu_ac, ~state, ~county,    ~practice,
   2011,  133.4,  "NE",   "SAUNDERS", "NON-IRRIGATED",
@@ -1217,6 +1218,340 @@ fig5 <- ggplot(forest, aes(effect, row)) +
 ggsave(file.path(OUT, "Fig4_forest.png"),
        fig5 + MS + force_panelsizes(rows = unit(0.22 * nrow(forest), "in"), cols = unit(3.4, "in")),
        width = 6.8, height = 1.6 + 0.22 * nrow(forest), dpi = 300)
+
+
+################################################################################
+# 7b. ONE SLOPE ALONG THE SHMI SCALE: THE EXPERIMENTS AS A COLLECTION
+################################################################################
+# Site x year removes each site's level, so the global slope comes only from treatment
+# differences within sites. Each experiment covers its own stretch of the SHMI scale
+# (set by the treatments it was designed to compare), and the global model joins the
+# stretches with one slope. Checks that one slope is fair along the whole scale, each
+# added to the Fig 1 model (SHMI x N and SHMI x age kept, so a site's position on the
+# scale is not mistaken for its system age):
+#   (a) position: + SHMI_w x site mean SHMI. Does the slope depend on where a site's
+#       stretch sits? Reported as the change in the slope (per 10 SHMI) per 10 points
+#       higher site mean.
+#   (b) curvature within sites: + (SHMI_w / 10)^2. Slope reported 15 points below and
+#       above each site's mean.
+#   (c) curvature on the absolute scale: + ((SHMI - pivot) / 10)^2 (with site x year this
+#       combines (a) and (b)). Slope reported at SHMI 40, 60 and 80.
+#   (d) the same question between site slopes: meta-regression of each site's own slope
+#       on its mean SHMI (as the N meta-regression in section 7).
+# Also written: site_SHMI_ranges.csv (each experiment's treatments, SHMI range, the part
+# of SHMI that drives its range, and its slope: the basis of the Supplementary Table of
+# contrasts) and Fig_SHMI_ranges.png (each site's stretch of the scale).
+site_means <- corn %>% distinct(site, MGT_combo, SHMI) %>%
+  group_by(site) %>% summarise(site_SHMI = mean(SHMI), .groups = "drop")
+corn <- corn %>% select(-any_of(c("site_SHMI", "pos_c", "q_w", "q_abs"))) %>%
+  left_join(site_means, by = "site") %>%
+  mutate(pos_c = (site_SHMI - mean(site_means$site_SHMI)) / 10,
+         q_w   = (SHMI_w / 10)^2,
+         q_abs = ((SHMI - SHMI_PIV) / 10)^2)
+f_scale <- function(extra) reformulate(c("site_year", n_terms(corn), o_term(corn), "SHMI_w", mei_terms(corn),
+                                         "SHMI_w:N_c", "SHMI_w:age_c", extra), "yield_kgha")
+fit_scale <- function(extra) tryCatch(
+  lme(f_scale(extra), random = ~ 1 | trt/plot_id, correlation = corCAR1(form = ~ year | trt/plot_id),
+      data = corn, method = "REML", control = ctrl),
+  error = function(e) { message("Scale check (", extra, ") did not fit: ", conditionMessage(e)); NULL })
+# slope (per 1 SHMI, at 150 kg N/ha and average age) from a model with a curvature term:
+# d/dSHMI of b_w * SHMI_w + b_q * ((x - centre) / 10)^2 = b_w + 2 * b_q * (x - centre) / 100
+slope_curved <- function(m, qterm, dx) {
+  bm <- fixef(m); Vm <- vcov(m); L <- c(1, 2 * dx / 100)
+  list(b = sum(L * bm[c("SHMI_w", qterm)]), se = sqrt(drop(t(L) %*% Vm[c("SHMI_w", qterm), c("SHMI_w", qterm)] %*% L)),
+       df = summary(m)$tTable["SHMI_w", "DF"])
+}
+scale_rows <- list()
+m_pos <- fit_scale("SHMI_w:pos_c")
+if (!is.null(m_pos)) {
+  tp <- summary(m_pos)$tTable
+  scale_rows$pos <- bind_rows(
+    coef_row("Fig 1, SHMI scale check", "(a) Change in slope per 10 points higher site mean SHMI",
+             tp["SHMI_w:pos_c", "Value"], tp["SHMI_w:pos_c", "Std.Error"], tp["SHMI_w:pos_c", "DF"],
+             tp["SHMI_w:pos_c", "p-value"], n_distinct(corn$site)),
+    coef_row("Fig 1, SHMI scale check", "(a) Global slope with the position term (at the average site mean)",
+             tp["SHMI_w", "Value"], tp["SHMI_w", "Std.Error"], tp["SHMI_w", "DF"], tp["SHMI_w", "p-value"],
+             n_distinct(corn$site)))
+}
+m_qw <- fit_scale("q_w")
+if (!is.null(m_qw)) {
+  tq <- summary(m_qw)$tTable
+  scale_rows$qw <- bind_rows(
+    tibble(figure = "Fig 1, SHMI scale check", estimate = "(b) Curvature within sites: p for (SHMI_w/10)^2",
+           effect = NA_real_, se = NA_real_, df = tq["q_w", "DF"], lower = NA_real_, upper = NA_real_,
+           p_val = tq["q_w", "p-value"], n = n_distinct(corn$site)),
+    map_dfr(c(-15, 15), function(dx) { s <- slope_curved(m_qw, "q_w", dx)
+      coef_row("Fig 1, SHMI scale check", sprintf("(b) Slope %d points %s the site mean", abs(dx), ifelse(dx < 0, "below", "above")),
+               s$b, s$se, s$df, 2 * pt(-abs(s$b / s$se), s$df), n_distinct(corn$site)) }))
+}
+m_qa <- fit_scale("q_abs")
+if (!is.null(m_qa)) {
+  ta <- summary(m_qa)$tTable
+  scale_rows$qa <- bind_rows(
+    tibble(figure = "Fig 1, SHMI scale check", estimate = "(c) Curvature on the SHMI scale: p for ((SHMI - pivot)/10)^2",
+           effect = NA_real_, se = NA_real_, df = ta["q_abs", "DF"], lower = NA_real_, upper = NA_real_,
+           p_val = ta["q_abs", "p-value"], n = n_distinct(corn$site)),
+    map_dfr(c(40, 60, 80), function(x) { s <- slope_curved(m_qa, "q_abs", x - SHMI_PIV)
+      coef_row("Fig 1, SHMI scale check", sprintf("(c) Slope at SHMI %d", x),
+               s$b, s$se, s$df, 2 * pt(-abs(s$b / s$se), s$df), n_distinct(corn$site)) }))
+}
+# (a) and (c) with each site left out: does the trend along the scale rest on one
+# experiment? One row per site left out (SHMI_scale_check_loo.csv): the position effect
+# (a; per 10 points higher site mean), p for the curvature term (c) and the slope at
+# SHMI 40, 60 and 80 from (c). The pivot of (c) stays the all-site average SHMI, and
+# the centring of (a) does not change its interaction coefficient.
+fit_scale_on <- function(d, extra) {
+  d <- droplevels(d)
+  f <- reformulate(c("site_year", n_terms(d), o_term(d), "SHMI_w", mei_terms(d),
+                     if (any(d$N_c != 0)) "SHMI_w:N_c", "SHMI_w:age_c", extra), "yield_kgha")
+  tryCatch(lme(f, random = ~ 1 | trt/plot_id, correlation = corCAR1(form = ~ year | trt/plot_id),
+               data = d, method = "REML", control = ctrl), error = function(e) NULL)
+}
+ci_of <- function(b, se, df) c(b, b - qt(0.975, df) * se, b + qt(0.975, df) * se)
+scale_loo <- map_dfr(c("none", sort(unique(as.character(corn$site)))), function(s_) {
+  message("Scale check, leaving out: ", s_)
+  dd <- if (s_ == "none") corn else filter(corn, site != s_)
+  out <- tibble(left_out = s_, n_sites = n_distinct(dd$site))
+  ma <- fit_scale_on(dd, "SHMI_w:pos_c")
+  if (!is.null(ma)) {
+    t_ <- summary(ma)$tTable["SHMI_w:pos_c", ]
+    v <- ci_of(10 * t_[["Value"]], 10 * t_[["Std.Error"]], t_[["DF"]])
+    out <- mutate(out, pos_effect = v[1], pos_lower = v[2], pos_upper = v[3], pos_p = t_[["p-value"]])
+  }
+  mc <- fit_scale_on(dd, "q_abs")
+  if (!is.null(mc)) {
+    out$curv_p <- summary(mc)$tTable["q_abs", "p-value"]
+    for (x in c(40, 60, 80)) {
+      s <- slope_curved(mc, "q_abs", x - SHMI_PIV); v <- ci_of(10 * s$b, 10 * s$se, s$df)
+      out[[paste0("slope", x)]] <- v[1]; out[[paste0("slope", x, "_lower")]] <- v[2]; out[[paste0("slope", x, "_upper")]] <- v[3]
+    }
+  }
+  out
+})
+write.csv(mutate(scale_loo, across(where(is.double), ~ signif(.x, 4))),
+          file.path(OUT, "SHMI_scale_check_loo.csv"), row.names = FALSE)
+print(scale_loo, n = Inf, width = Inf)
+loo_only <- filter(scale_loo, left_out != "none")
+scale_rows$loo <- tibble(
+  figure = "Fig 1, SHMI scale check",
+  estimate = c("(a) Leave one site out: smallest and largest position effect",
+               "(a) Leave one site out: largest p for the position effect (site left out in the CSV)",
+               "(c) Leave one site out: smallest and largest slope at SHMI 80"),
+  effect = c(min(loo_only$pos_effect, na.rm = TRUE), NA, min(loo_only$slope80, na.rm = TRUE)),
+  se = NA_real_, df = NA_real_,
+  lower = NA_real_, upper = c(max(loo_only$pos_effect, na.rm = TRUE), NA, max(loo_only$slope80, na.rm = TRUE)),
+  p_val = c(NA, max(loo_only$pos_p, na.rm = TRUE), NA), n = nrow(loo_only))
+
+# (d) between site slopes, and how position relates to system age
+site_rows3 <- site_rows %>% left_join(site_means, by = c("label" = "site")) %>% left_join(site_mod, by = c("label" = "site"))
+mreg_pos <- rma(yi = effect, sei = se, mods = ~ I((site_SHMI - mean(site_SHMI)) / 10), data = site_rows3,
+                method = "REML", test = "knha")
+r_pos_age <- cor(site_rows3$site_SHMI, site_rows3$age_mean)
+scale_rows$meta <- tibble(
+  figure = "Fig 1, SHMI scale check",
+  estimate = c("(d) Meta-regression: change in site slope per 10 points higher site mean SHMI",
+               "(d) Correlation of site mean SHMI with site mean system age (r)"),
+  effect = c(mreg_pos$beta[2], r_pos_age), se = c(mreg_pos$se[2], NA), df = c(mreg_pos$k - mreg_pos$p, NA),
+  lower = c(mreg_pos$ci.lb[2], NA), upper = c(mreg_pos$ci.ub[2], NA), p_val = c(mreg_pos$pval[2], NA),
+  n = mreg_pos$k)
+results$scale <- bind_rows(scale_rows)
+write.csv(mutate(results$scale, across(where(is.numeric), ~ signif(.x, 4))),
+          file.path(OUT, "SHMI_scale_check.csv"), row.names = FALSE)
+print(results$scale, n = Inf, width = Inf)
+
+# ---- each experiment's treatments and stretch of the SHMI scale ----------------------
+# One row per site. SHMI range over its treatments (each record counted once, as in
+# SHMI_w). share_*: the part of the within-site SHMI variance that comes from each part
+# of SHMI (weight x sub-index, or the amendment bonus): cov(part, SHMI) / var(SHMI) over
+# the site's records; the four add to 1. The weights are recovered from the scores
+# (SHMI_base = wC Cover + wD Diversity + wI InvDist), so overrides are respected.
+parts_ok <- all(c("Cover", "Diversity", "InvDist", "SHMI_base", "Amend_bonus") %in% names(corn))
+recs <- corn %>% distinct(site, MGT_combo, .keep_all = TRUE)
+shares <- if (parts_ok) {
+  wfit <- lm(SHMI_base ~ 0 + Cover + Diversity + InvDist, data = recs)
+  if (summary(wfit)$r.squared < 0.999) warning("SHMI weights not recovered exactly (R2 = ", round(summary(wfit)$r.squared, 4), ")")
+  w_hat <- coef(wfit)
+  recs %>% mutate(p_cover = w_hat[["Cover"]] * Cover, p_div = w_hat[["Diversity"]] * Diversity,
+                  p_dist = w_hat[["InvDist"]] * InvDist, p_amend = Amend_bonus) %>%
+    group_by(site) %>%
+    summarise(across(c(p_cover, p_div, p_dist, p_amend),
+                     ~ if (var(SHMI) > 1e-8) cov(.x, SHMI) / var(SHMI) else NA_real_,
+                     .names = "share_{sub('p_', '', .col)}"), .groups = "drop")
+} else tibble(site = character())
+site_tab <- corn %>% group_by(site) %>%
+  summarise(treatments = n_distinct(MGT_trt_base), plots = n_distinct(plot_id),
+            first_year = min(year), last_year = max(year), corn_plot_years = n(),
+            N_min = round(100 * min(N100)), N_max = round(100 * max(N100)), .groups = "drop") %>%
+  left_join(recs %>% group_by(site) %>%
+              summarise(SHMI_min = min(SHMI), SHMI_max = max(SHMI), SHMI_mean = mean(SHMI), SHMI_sd = sd(SHMI),
+                        SHMI_levels = n_distinct(round(SHMI)), .groups = "drop"), by = "site") %>%
+  left_join(shares, by = "site") %>%
+  left_join(site_rows %>% transmute(site = label, slope = effect, slope_lower = effect - qt(0.975, df) * se,
+                                    slope_upper = effect + qt(0.975, df) * se), by = "site") %>%
+  mutate(location = unname(SITE_LOC[site]), .after = site) %>%
+  arrange(SHMI_mean)
+# What drives each site's SHMI range (from the shares; the rule was set after seeing the
+# site table, so groups are descriptive): tillage only (share_dist >= 0.8); rotation,
+# legumes or manure (share_div + share_amend >= 0.4); mostly cover crops (share_cover
+# >= 0.7); otherwise cover crops and tillage.
+CONTRAST_LEVELS <- c("Tillage only", "Mostly cover crops", "Cover crops and tillage", "Rotation, legumes or manure")
+if (parts_ok) site_tab <- site_tab %>%
+  mutate(contrast = factor(case_when(share_dist >= 0.8 ~ CONTRAST_LEVELS[1],
+                                     share_div + share_amend >= 0.4 ~ CONTRAST_LEVELS[4],
+                                     share_cover >= 0.7 ~ CONTRAST_LEVELS[2],
+                                     TRUE ~ CONTRAST_LEVELS[3]), levels = CONTRAST_LEVELS), .after = share_amend)
+write.csv(mutate(site_tab, across(where(is.double), ~ round(.x, 2))), file.path(OUT, "site_SHMI_ranges.csv"), row.names = FALSE)
+print(site_tab, n = Inf, width = Inf)
+
+# ---- heterogeneity: the average with site slopes free, and what explains the spread ----
+# (e) Random-slope global model: the Fig 1 model with the SHMI slope varying by site
+#     (random SHMI_w | site; no random site intercept, which site x year already removes).
+#     Its SHMI_w coefficient is the average within-site slope at 150 kg N/ha and average
+#     age, allowing each site its own slope. CI on sites - 1 df (nlme's default df treat
+#     SHMI_w as a plot-level term and would be too generous with ten sites). Also: the SD
+#     of the site slopes (tau), a 95% prediction interval for the slope in a new
+#     experiment, and a likelihood-ratio test against the one-slope model (REML, same
+#     fixed effects; p halved for the boundary).
+# (f) Meta-regressions of the site slopes (each site's own model; and moved to 150 kg
+#     N/ha and average age, as site_adj in section 7) on what drives the site's SHMI
+#     range: the disturbance share (continuous) and the contrast group, with group means.
+#     Descriptive: ten sites, groups defined after seeing the data.
+het_x <- list()
+m_rs <- tryCatch(
+  lme(f_full, random = list(site = pdDiag(~ SHMI_w - 1), trt = ~ 1, plot_id = ~ 1),
+      correlation = corCAR1(form = ~ year | site/trt/plot_id), data = corn, method = "REML", control = ctrl),
+  error = function(e) { message("Random-slope model did not fit: ", conditionMessage(e)); NULL })
+if (!is.null(m_rs)) {
+  k_s <- n_distinct(corn$site)
+  b_rs <- fixef(m_rs)[["SHMI_w"]]; se_rs <- sqrt(vcov(m_rs)["SHMI_w", "SHMI_w"])
+  tau_rs <- as.numeric(VarCorr(m_rs)["SHMI_w", "StdDev"])
+  t_k <- qt(0.975, k_s - 1)
+  lrt <- tryCatch(anova(m_full, m_rs), error = function(e) NULL)
+  p_lrt <- if (!is.null(lrt)) 0.5 * lrt[2, "p-value"] else NA_real_
+  het_x$rs <- tibble(
+    figure = "Fig 1, heterogeneity",
+    estimate = c("(e) Random-slope model: average within-site slope (site slopes free; df = sites - 1)",
+                 "(e) Random-slope model: SD of site slopes (tau)",
+                 "(e) Random-slope model: 95% prediction interval for a new experiment",
+                 "(e) Random-slope model vs one slope: likelihood-ratio test (p halved)"),
+    effect = c(10 * b_rs, 10 * tau_rs, 10 * b_rs, if (!is.null(lrt)) lrt[2, "L.Ratio"] else NA),
+    se = c(10 * se_rs, NA, NA, NA), df = c(k_s - 1, NA, k_s - 1, 1),
+    lower = c(10 * (b_rs - t_k * se_rs), NA, 10 * (b_rs - t_k * sqrt(se_rs^2 + tau_rs^2)), NA),
+    upper = c(10 * (b_rs + t_k * se_rs), NA, 10 * (b_rs + t_k * sqrt(se_rs^2 + tau_rs^2)), NA),
+    p_val = c(2 * pt(-abs(b_rs / se_rs), k_s - 1), NA, NA, p_lrt), n = k_s)
+  # (each site's slope from this model is not reported: with ten sites and site-specific
+  # N terms, it is pulled far toward the average, e.g. NELITCSE from -245 to +114)
+}
+if (parts_ok) {
+  mr_dat <- site_rows %>% transmute(site = label, effect, se) %>%
+    left_join(select(site_adj, site = label, effect_adj = effect), by = "site") %>%
+    left_join(select(site_tab, site, share_dist, contrast), by = "site") %>% droplevels()
+  meta_rows <- function(yname, lab) {
+    d <- mutate(mr_dat, yi = .data[[yname]])
+    m_d <- rma(yi = yi, sei = se, mods = ~ share_dist, data = d, method = "REML", test = "knha")
+    out <- tibble(figure = "Fig 1, heterogeneity",
+                  estimate = paste0("(f) ", lab, ": change in slope from no disturbance share to all (share_dist 0 to 1)"),
+                  effect = m_d$beta[2], se = m_d$se[2], df = m_d$k - m_d$p, lower = m_d$ci.lb[2], upper = m_d$ci.ub[2],
+                  p_val = m_d$pval[2], n = m_d$k)
+    if (n_distinct(d$contrast) > 1) {
+      m_g  <- rma(yi = yi, sei = se, mods = ~ contrast, data = d, method = "REML", test = "knha")
+      m_g0 <- rma(yi = yi, sei = se, mods = ~ contrast - 1, data = d, method = "REML", test = "knha")
+      m_0  <- rma(yi = yi, sei = se, data = d, method = "REML", test = "knha")
+      out <- bind_rows(out,
+        tibble(figure = "Fig 1, heterogeneity",
+               estimate = paste0("(f) ", lab, c(": contrast groups, omnibus test (F)",
+                                                ": I2 (%) without and with contrast groups",
+                                                ": share of between-site variance explained by contrast groups (R2, %)")),
+               effect = c(m_g$QM, m_0$I2, m_g$R2), se = NA_real_,
+               df = c(if (is.null(m_g$QMdf)) m_g$p - 1 else m_g$QMdf[1], NA, NA),
+               lower = NA_real_, upper = c(NA, m_g$I2, NA), p_val = c(m_g$QMp, NA, NA), n = m_g$k),
+        tibble(figure = "Fig 1, heterogeneity",
+               estimate = paste0("(f) ", lab, ": mean slope, ", sub("^contrast", "", rownames(m_g0$beta)),
+                                 " (", as.integer(table(d$contrast)[sub("^contrast", "", rownames(m_g0$beta))]), " sites)"),
+               effect = as.numeric(m_g0$beta), se = m_g0$se, df = m_g0$k - m_g0$p,
+               lower = m_g0$ci.lb, upper = m_g0$ci.ub, p_val = m_g0$pval, n = m_g0$k))
+    }
+    out
+  }
+  het_x$meta <- bind_rows(meta_rows("effect", "Site slopes as estimated"),
+                          meta_rows("effect_adj", sprintf("Site slopes at %d kg N/ha and average age", N_REF)))
+}
+results$het_x <- bind_rows(het_x)
+write.csv(mutate(results$het_x, across(where(is.numeric), ~ signif(.x, 4))),
+          file.path(OUT, "SHMI_heterogeneity.csv"), row.names = FALSE)
+print(results$het_x, n = Inf, width = Inf)
+write.csv(mutate(site_tab, across(where(is.double), ~ round(.x, 2))), file.path(OUT, "site_SHMI_ranges.csv"), row.names = FALSE)
+
+# ---- Extended Data Fig. 7: each experiment's stretch of the SHMI scale (a) and slope (b) ----
+# Sites in the same order in both panels: grouped by what drives their SHMI range
+# (CONTRAST_LEVELS, top to bottom: rotation, legumes or manure; cover crops and tillage;
+# mostly cover crops; tillage only), by mean SHMI within a group. Colours = groups.
+# (a) Fig_SHMI_ranges.png: each treatment record's SHMI (points) and the site's range
+#     (bar); together the sites span the scale that no single experiment does.
+# (b) EDFig7b_forest.png: the rows of Fig4_forest.png without the averages of site slopes
+#     and without stars; summary rows are the global slope (Fig 1) and the random-slope
+#     average (e); site labels carry each site's SHMI range.
+CONTRAST_COLS <- setNames(c("#D55E00", "#E69F00", "#56B4E9", "#0072B2"), CONTRAST_LEVELS)
+has_grp <- "contrast" %in% names(site_tab)
+site_seq <- if (has_grp) site_tab %>% arrange(desc(as.integer(contrast)), SHMI_mean) %>% pull(site) else
+  site_tab %>% arrange(SHMI_mean) %>% pull(site)
+rng_dat <- site_tab %>% mutate(site = factor(site, levels = rev(site_seq)),     # first group at the top
+                               grp = if (has_grp) contrast else factor("all"))
+trt_pts <- recs %>% distinct(site = as.character(site), SHMI = round(SHMI, 1)) %>%
+  left_join(transmute(rng_dat, site = as.character(site), grp), by = "site") %>%
+  mutate(site = factor(site, levels = levels(rng_dat$site)))
+grp_scale <- if (has_grp) list(scale_colour_manual(values = CONTRAST_COLS, name = NULL, drop = FALSE),
+                               scale_fill_manual(values = CONTRAST_COLS, name = NULL, drop = FALSE)) else
+  list(scale_colour_manual(values = "grey40", guide = "none"), scale_fill_manual(values = "grey40", guide = "none"))
+fig_rng <- ggplot(rng_dat, aes(y = site)) +
+  geom_segment(aes(x = SHMI_min, xend = SHMI_max, yend = site, colour = grp), linewidth = 2.2, alpha = 0.45) +
+  geom_point(data = trt_pts, aes(x = SHMI, fill = grp), shape = 21, size = 2.2, colour = "black") +
+  grp_scale +
+  scale_y_discrete(labels = function(s) paste0(s, " (", SITE_LOC[s], ")")) +
+  scale_x_continuous(limits = c(floor(min(rng_dat$SHMI_min) / 10) * 10, 100), breaks = seq(20, 100, 10)) +
+  guides(colour = "none", fill = guide_legend(nrow = 2, override.aes = list(size = 3))) +
+  labs(x = XLAB, y = NULL, title = "Each experiment's stretch of the SHMI scale",
+       caption = paste0("Points: SHMI of each treatment record; bars: the site's range; colours: what drives the site's SHMI range.\n",
+                        "The global model estimates one slope from the differences within each site; together the sites span SHMI ",
+                        sprintf("%.0f-%.0f.", min(rng_dat$SHMI_min), max(rng_dat$SHMI_max)))) +
+  theme_fig + theme(panel.grid.major.y = element_blank(), legend.position = "bottom")
+ggsave(file.path(OUT, "Fig_SHMI_ranges.png"), fig_rng + MS, width = 6.8, height = 1.6 + 0.32 * nrow(rng_dat), dpi = 300)
+
+# (b) the forest plot for Extended Data Fig. 7
+fr_sum <- forest %>% filter(kind == "within") %>% select(label, kind, effect, lower, upper, display) %>%
+  mutate(display = "Global slope (one model, all sites)")
+if (!is.null(het_x$rs)) fr_sum <- bind_rows(fr_sum, tibble(
+  label = "Random-slope average", kind = "pooled", effect = het_x$rs$effect[1], lower = het_x$rs$lower[1],
+  upper = het_x$rs$upper[1], display = "Average, each site its own slope (random slopes)"))
+rng_lab <- with(site_tab, setNames(sprintf("%.0f\u2013%.0f", SHMI_min, SHMI_max), site))
+fr_sites <- forest %>% filter(kind %in% c("site", "sub")) %>% select(label, kind, effect, lower, upper, display, site) %>%
+  mutate(.ord = seq_len(n())) %>% arrange(factor(site, levels = site_seq), .ord) %>% select(-.ord) %>%
+  mutate(display = ifelse(kind == "site", paste0(display, ", SHMI ", rng_lab[site]), display)) %>%
+  left_join(transmute(rng_dat, site = as.character(site), grp), by = "site")
+fr <- bind_rows(fr_sum, fr_sites) %>%
+  mutate(row = rev(seq_len(n())),
+         fcat = case_when(kind == "within" ~ "Global slope", kind == "pooled" ~ "Random-slope average",
+                          kind == "sub" ~ "Sub-row", TRUE ~ as.character(grp))) %>%
+  left_join(select(sty, kind, shape, size), by = "kind")
+fcols <- c("Global slope" = "darkgreen", "Random-slope average" = "firebrick", "Sub-row" = "white",
+           if (has_grp) CONTRAST_COLS else c(all = "steelblue"))
+write.csv(select(fr, -row), file.path(OUT, "EDFig7b_forest_rows.csv"), row.names = FALSE)
+fig_fr <- ggplot(fr, aes(effect, row)) +
+  geom_vline(xintercept = 0, linetype = "dashed", colour = "grey60") +
+  geom_hline(yintercept = max(fr$row) - nrow(fr_sum) + 0.5, colour = "grey85") +
+  geom_errorbar(aes(xmin = lower, xmax = upper), width = 0.25, colour = "grey40", orientation = "y") +
+  geom_point(aes(shape = shape, size = size, fill = fcat), colour = "black", stroke = 0.4) +
+  scale_shape_identity() + scale_size_identity() +
+  scale_fill_manual(values = fcols, breaks = if (has_grp) CONTRAST_LEVELS else NULL, name = NULL) +
+  guides(fill = guide_legend(nrow = 2, override.aes = list(shape = 21, size = 3))) +
+  scale_y_continuous(breaks = fr$row, labels = fr$display, expand = expansion(add = 0.6)) +
+  labs(x = "Corn yield change per 10 SHMI (kg ha\u207B\u00B9)", y = NULL,
+       caption = paste0("Global slope: the Fig 1 model at ", N_REF, " kg N/ha and average age. Random-slope average: the same model with the\n",
+                        "slope free to differ among sites. Site rows: each site's own model; open circles: sub-rows as in Fig4_forest.png.")) +
+  theme_fig + theme(panel.grid.major.y = element_blank(), panel.grid.minor.y = element_blank(), legend.position = "bottom")
+ggsave(file.path(OUT, "EDFig7b_forest.png"),
+       fig_fr + MS + force_panelsizes(rows = unit(0.22 * nrow(fr), "in"), cols = unit(3.4, "in")),
+       width = 6.8, height = 2.0 + 0.22 * nrow(fr), dpi = 300)
 
 
 ################################################################################

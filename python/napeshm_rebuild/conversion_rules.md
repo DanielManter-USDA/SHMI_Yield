@@ -20,6 +20,7 @@
 | **R2b** | A cropped (row-crop) treatment with no crop records at all is a bare fallow: one `Fallow` row from the record's start to its end (end in `CD_harv_date`, following the existing convention). Applies to USMI03_297 and 298. |
 | **R2c** | A perennial, non-farmed or woody treatment with no plantings becomes one stand spanning the record, from the "start" row to the "end" row; a missing end date defaults to 31 December of the last event year. **Species:** harvested species if named; otherwise `N-species` with N = `plant_species_ct` from `treatments.csv`; otherwise `Hay` if the harvests say hay; otherwise the perennial species recorded at the same site's other treatments; woody species from the treatment description. Unassigned harvests are attached to the stand. |
 | **R2d** | A crop planted while another cash crop is still growing (interseeded, broadcast or frost-seeded into it) is a relay cover crop, whatever its raw category. The companion's harvest doesn't end it; it runs until its own harvest or termination (or the package's imputation). If it is later harvested itself, it is coded `cash`. |
+| **R2e** | A treatment with no records in mgmtdata.csv is a reference soil (remnant vegetation, sod, exclosure or benchmark stand) and is kept. It gets one perennial stand spanning the calendar years recorded at the same site’s other treatments, with no tillage, amendments or animals. Species: N-species with N = plant_species_ct from treatments.csv; for the New York benchmarks (USNY01–04), whose count is one and whose species is not named in the raw files, alfalfa, as reported by the data owner; otherwise Unknown. A site with no recorded years leaves the reference soil without crops. Applies to the 18 treatments listed under Findings, item 1. |
 | **R3** | A harvest of a named species with no planting in the record creates a harvest-only episode (plant date blank): the crop was planted before the record starts. |
 | **R3c** | A harvest-only crop takes its planting date from the last planting pass (STIR record in a planting category) that has no species and falls after the previous harvest. |
 | **R3b** | A `cover crop termination` before any planting in the record creates a pre-record cover episode whose species are taken from the unit's next cover-crop planting. **Inferred; flagged in CD_notes.** |
@@ -49,11 +50,9 @@
 | Soil_Amendments | 108 | 118 | 52 | 48 |
 | Animal_Diversity | 124 | 105 | 28 | 21 |
 
-The 18 treatments without records in `mgmtdata.csv` are excluded from both sides of the comparison.
-
 ### Findings that need your input
 
-1. **18 treatments have no records in `mgmtdata.csv`** (USCO01_185–187, USCO02_197–199, USCO03_209–211, USCO05_225, USKS02_265, USNE01_387, USNY01_395, USNY02_400, USNY03_403, USNY04_406, USOK01_433, USWY01_508). They are removed from the rebuilt workbook.
+1. **18 treatments have no records in mgmtdata.csv (USCO01_185–187, USCO02_197–199, USCO03_209–211, USCO05_225, USKS02_265, USNE01_387, USNY01_395, USNY02_400, USNY03_403, USNY04_406, USOK01_433, USWY01_508). They are reference soils and are kept under R2e. The four New York benchmarks are scored as single-species alfalfa stands (Diversity 0, SHMI 85).
 2. **The existing workbook contains information that isn't in the raw log.** Examples:
    - alfalfa at USAR01 (the raw says only "hay")
    - some pre-record crops

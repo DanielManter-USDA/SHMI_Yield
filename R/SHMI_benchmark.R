@@ -1,5 +1,5 @@
 ################################################################################
-# SHMI_benchmark.R  (v2)
+# SHMI_benchmark.R  (v3: adds SHMI with the published weights held fixed)
 #
 # Two questions, both on US units with exactly the calibration's machinery
 # (SHMI_calibration_plus.R: sites weighted equally, 10-fold leave-sites-out CV
@@ -143,6 +143,12 @@ equal_model <- line_model(function(D) {        # no calibration at all: thirds, 
   base <- (D$Cover_equal + D$Diversity + D$InvDist) / 3
   base + CFG$amend_gap * D$p_amend * (100 - base)
 })
+fixed_model <- line_model(function(D) {        # published weights held fixed (what a user applies);
+  base <- W_FINAL[["cover"]] * D$Cover_cal +   # only the line to soil health is fitted in the fold,
+          W_FINAL[["diversity"]] * D$Diversity + # so this row is slightly optimistic
+          W_FINAL[["disturbance"]] * D$InvDist
+  base + CFG$amend_gap * D$p_amend * (100 - base)
+})
 BB_VARS <- c("NonGrow", "Grow", "Diversity_plants", "Richness", "InvDist", "p_amend", "p_animal")
 ols_model <- function(Dtr, w) {
   Dtr$.w <- w
@@ -160,6 +166,7 @@ rf_model <- function(Dtr, w) {
 # ==============================================================================
 cand <- list(
   list("SHMI",                          "SHMI",       shmi_model()),
+  list("SHMI, published weights (fixed)", "SHMI",     fixed_model),
   list("SHMI_base (no amendment term)", "SHMI",       shmi_model(score_gap = 0)),
   list("SHMI without Cover/Roots",      "Drop-one",   shmi_model(use = "InvDist")),
   list("SHMI without Diversity",        "Drop-one",   shmi_model(div = 0)),
@@ -260,6 +267,11 @@ now <- summ$R2[summ$model == "SHMI"]
 if (length(pub) && length(CFG_B$drop_systems) == 0 && R_rep == CFG$R) {
   cat(sprintf("\nCheck: SHMI OOF R2 here %.4f vs calibration %.4f %s\n", now, pub,
               if (abs(now - pub) < 1e-6) "(identical)" else "(DIFFERENT -- check inputs)"))
+}
+
+if ("SHMI" %in% names(us)) {                  # fixed-weight score should reproduce the published SHMI
+  s_fixed <- environment(fixed_model)$score_fun(us)
+  cat(sprintf("Fixed-weight score vs published SHMI: max abs difference %.2e\n", max(abs(s_fixed - us$SHMI))))
 }
 
 # ==============================================================================
