@@ -50,8 +50,8 @@ Every display item ends up in **`Outputs/Manuscript/`** under the paper's number
 | Fig. 4 | `Fig4.png` | B3 `B3_SHMI_yield_stability.R` (SPEI from B1 `B1_Get_SPEI.R`); assembled by B7 | `yield_stability_default_total_agcros/` |
 | Table 2 | (text) | | |
 | Extended Data Fig. 1, soil health model | `ED_Fig1_loadings.csv` (the diagram is drawn by hand from these loadings) | A1c `A1c_soil_health_SEM.R`; A8 `A8_Export_appendix_tables.R` | `sem_noMX_standardized.csv`, `adjustment_slopes_noMX.csv` |
-| Extended Data Fig. 2, calibrated weights | `ED_Fig2.png` | A3a | `Final_plus/F1_weights.png` |
-| Extended Data Fig. 3, SHAPE | `ED_Fig3.png` | A6a-A6c (`A6a_Prepare_SHAPE.R`, the SHAPE app, `A6b_Merge_SHAPE_SHMI.R`, `A6c_SHMI_SHAPE_age.R`) | `SHAPE/`, `SHAPE_age/` |
+| Extended Data Fig. 2, active-season share | `ED_Fig2.png` | A3a; drawn by C1b `C1b_ED_Fig2.R` from the saved fits | `Final_plus/final_results.rds` |
+| Extended Data Fig. 3, SHAPE | `ED_Fig3.png` | A6a-A6c (`A6a_Prepare_SHAPE.R`, the SHAPE app, `A6b_Merge_SHAPE_SHMI.R`, `A6c_SHMI_SHAPE_age.R`); A6c also runs in Part C from the shipped SHAPE scores when Part A is off | `SHAPE/`, `SHAPE_age/` |
 | Extended Data Fig. 4, slope per experiment | `ED_Fig4.png` | B2 (section 7b); assembled by B7 | `site_SHMI_ranges.csv`, `SHMI_heterogeneity.csv`, `SHMI_scale_check*.csv` |
 | Extended Data Fig. 5, coarse records | `ED_Fig5.png` | B9 `B9_SHMI_coarse_records.R` with `python/coarse_records/degrade_records.py` | `Coarse/` |
 | Extended Data Table 1, scores by system type | `ED_Table1.csv` | C2 `C2_export_tables.R`, from `data/SHAPE_by_unit_with_SHMI.csv` | |
@@ -66,7 +66,7 @@ Every display item ends up in **`Outputs/Manuscript/`** under the paper's number
 | Methods: N-accounting range | | B6 `B6_SHMI_N_scenarios.R` | `N_scenarios_all_sites.csv` |
 | Methods: climate source check | | A7 `A7_Check_climate_source.R` | season check |
 
-Steps C1-C3 run at the end of every run and take seconds. When a part was not run (for example Part A, which is off by default), its items keep the copies already in `Outputs/Manuscript/`, and `manifest.csv` shows when each was written.
+Part C runs at the end of every run and takes a minute or two: C1, C1b, C2 and C3. When Part A is off, its drawing steps (A4b, A5b, A6c, A8) are rerun from the saved Part A outputs, so every display item is redrawn by the current code. When a part was not run (for example Part A, which is off by default), its items keep the copies already in `Outputs/Manuscript/`, and `manifest.csv` shows when each was written.
 
 ## Scripts (`R/`)
 
@@ -98,6 +98,7 @@ Scripts are numbered in the order `run_all.R` runs them: **A** = calibration (Pa
 | B7 | `B7_Assemble_manuscript_figures.R` | assembles Figs. 3-4 and Extended Data Fig. 4 |
 | B9 | `B9_SHMI_coarse_records.R` | coarse-record test |
 | C1 | `C1_Fig1_and_Table1.R` | Fig. 1 (path coefficients with site-bootstrap intervals; example systems) and Table 1 |
+| C1b | `C1b_ED_Fig2.R` | Extended Data Fig. 2, from the saved calibration fits |
 | C2 | `C2_export_tables.R` | Extended Data Table 1 and Supplementary Data Tables 1-4; `Tables.xlsx` |
 | C3 | `C3_collect_figures.R` | copies the other figures into `Outputs/Manuscript/` under the paper's numbering; `manifest.csv` |
 

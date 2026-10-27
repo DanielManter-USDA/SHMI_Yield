@@ -18,19 +18,19 @@
 ################################################################################
 
 SETTINGS <- list(
-  # Optional: show how the shipped workbooks were made from the raw records, and check
-  # that they are reproduced. The analyses use the shipped workbooks either way.
-  # Part A (Optional)
+  # Optional rebuilds: show how the shipped workbooks were made from the raw records, and
+  # check that they are reproduced. The analyses use the shipped workbooks either way.
+  # Part A (optional)
   run_napeshm_rebuild = FALSE,  # A0  NAPESHM workbook from the public NAPESHM tables in Inputs/napeshm (python);
-                                #     writes Outputs/NAPESHM_rebuilt.xlsx - should compare with the distributed copy in
-                                #     Inputs/NAPESHM_rebuilt.xlsx
+                                #     writes Outputs/NAPESHM_rebuilt.xlsx (before QC) to compare with the
+                                #     distributed copy, Inputs/NAPESHM_rebuilt.xlsx (after QC)
   # Part A
   run_calibration     = FALSE,  # A1-A8 soil health model, SHMI calibration, benchmark, SHAPE (hours; frozen for the paper)
 
-  # Part B (Optional)
+  # Part B (optional)
   run_conversion      = FALSE,  # B0  AgCROS workbooks and soil C from the raw AgCROS tables (python). The tables
-                                #     are not redistributed here; if you have them, set agcros_tables to where you 
-                                #     keep them. The paper used the snapshot exported 2026-04-21; a newer export 
+                                #     are not redistributed here; if you have them, set agcros_tables to where you
+                                #     keep them. The paper used the snapshot exported 2026-04-21; a newer export
                                 #     can change the workbooks and results.
                                 #     Overwrites the files in Inputs/yield_workbooks (git shows any change)
   agcros_tables       = "Inputs/agcros/extracted_tables",   # raw AgCROS tables (run_conversion only)
@@ -40,7 +40,7 @@ SETTINGS <- list(
   run_weights         = FALSE,  # B5b yield slope with weights fitted between or within sites (reruns B2 three times)
   run_n_scenarios     = TRUE,   # B6  N-accounting sensitivity: 20 legume x manure scenarios (30-60 min)
   run_coarse          = FALSE,  # B9  coarse-record test (hours)
-  
+
   # Configuration
   in_session          = FALSE,  # TRUE: run each step in this R session instead of a fresh one
                                 #   (use it if a step fails with "callr subprocess failed", e.g. on Windows)
@@ -176,6 +176,19 @@ if (isTRUE(p$run_coarse)) {
 
 # ---- Part C: display items into Outputs/Manuscript (seconds) ----------------------
 run_r("C1_Fig1_and_Table1.R")       # Fig. 1, Table 1
+run_r("C1b_ED_Fig2.R")              # Extended Data Fig. 2, from the saved calibration (Outputs/Final_plus)
+# When Part A was not run, its drawing steps (seconds each) are rerun from the saved
+# Part A outputs, so every display item is current; a step whose input is missing is skipped
+if (!isTRUE(p$run_calibration)) {
+  REDRAW <- c("A4b_Fig2_soil_health.R"                = "Outputs/Final_plus/us_oof_predictions.csv",          # Fig. 2
+              "A6c_SHMI_SHAPE_age.R"                  = "Outputs/SHAPE/SHAPE_by_unit_with_SHMI.csv",          # Extended Data Fig. 3
+              "A5b_SuppFig1_weights_by_comparison.R"  = "Outputs/Calib_scenarios/scenario_summary.csv",       # Supplementary Data Fig. 1
+              "A8_Export_appendix_tables.R"           = "Outputs/sem_noMX_projection.rds")                    # Extended Data Fig. 1 loadings
+  if (!file.exists("Outputs/Benchmark/benchmark_summary.csv")) REDRAW <- REDRAW[names(REDRAW) != "A4b_Fig2_soil_health.R"]
+  for (s in names(REDRAW)) {
+    if (file.exists(REDRAW[[s]])) run_r(s) else message("  ", s, " skipped: ", REDRAW[[s]], " not found (run Part A)")
+  }
+}
 run_r("C2_export_tables.R")         # Extended Data Table 1, Supplementary Data Tables 1-4, Tables.xlsx
 run_r("C3_collect_figures.R")       # the other figures, under the paper's numbering; manifest.csv
 

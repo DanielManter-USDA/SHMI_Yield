@@ -4,7 +4,7 @@
 # Copies every figure in the paper from the folder of the step that makes it into
 # Outputs/Manuscript, under the paper's numbering, and writes a manifest of display
 # items (Outputs/Manuscript/manifest.csv: item, file, source script, present or not).
-# Fig. 1 (C1) and Fig. 2 (A4b) are written to Outputs/Manuscript directly; tables
+# Fig. 1 (C1), Fig. 2 (A4b) and Extended Data Fig. 2 (C1b) are written to Outputs/Manuscript directly; tables
 # are written there by C2.
 #
 # Extended Data Fig. 1 (the soil health model diagram) is drawn by hand from the
@@ -24,7 +24,7 @@ ITEMS <- data.frame(stringsAsFactors = FALSE, rbind(
   c("Fig. 3",                      "Fig3.png",                   O(FIGS, "Fig3.png"),                         "B7_Assemble_manuscript_figures.R"),
   c("Fig. 4",                      "Fig4.png",                   O(FIGS, "Fig4.png"),                         "B7_Assemble_manuscript_figures.R"),
   c("Extended Data Fig. 1",        "ED_Fig1_loadings.csv",       O("sem_noMX_standardized.csv"),              "A8_Export_appendix_tables.R (diagram drawn by hand)"),
-  c("Extended Data Fig. 2",        "ED_Fig2.png",                O("Final_plus", "F1_weights.png"),           "A3a_SHMI_calibration_plus.R"),
+  c("Extended Data Fig. 2",        "ED_Fig2.png",                file.path(OUT, "ED_Fig2.png"),               "C1b_ED_Fig2.R (from A3a's final_results.rds)"),
   c("Extended Data Fig. 3",        "ED_Fig3.png",                O("SHAPE_age", "FigA_SHMI_vs_SHAPE.png"),    "A6c_SHMI_SHAPE_age.R"),
   c("Extended Data Fig. 4",        "ED_Fig4.png",                O(FIGS, "ED_Fig4_sites.png"),                "B7_Assemble_manuscript_figures.R"),
   c("Extended Data Fig. 5",        "ED_Fig5.png",                O("Coarse", "Fig_coarse_records.png"),       "B9_SHMI_coarse_records.R"),
