@@ -77,17 +77,43 @@ find_python <- function(py = "") {
              Sys.getenv("CONDA_PYTHON_EXE"), path.expand(file.path("~", c("miniconda3", "anaconda3", "miniforge3"), "bin", "python"))))
   cands <- cands[nzchar(cands)]
   why <- character()
+  
   for (w in cands) {
-    if (!file.exists(w) && !nzchar(Sys.which(w))) { why <- c(why, paste0(w, ": not found")); next }
-    v <- tryCatch(suppressWarnings(system2(shQuote(w), "--version", stdout = TRUE, stderr = TRUE)),
-                  error = function(e) structure(conditionMessage(e), status = 127L))
-    if (!is.null(attr(v, "status")) && attr(v, "status") != 0) {
-      why <- c(why, paste0(w, ": does not run [", utils::tail(c("", v), 1), "]")); next }
-    err <- tryCatch({ check_python(w, quiet = TRUE); "" }, error = function(e) conditionMessage(e))
+    if (!file.exists(w) && !nzchar(Sys.which(w))) { 
+      why <- c(why, paste0(w, ": not found"))
+      next 
+    }
+    
+    # 1. First, check if reticulate is locked up. If it is already bound to this specific path, return it immediately.
+    is_already_active <- tryCatch({
+      if (reticulate::py_available(initialize = FALSE)) {
+        active_path <- reticulate::py_config()$python
+        if (identical(normalizePath(active_path, mustWork = FALSE), normalizePath(w, mustWork = FALSE))) return(w)
+      }
+      FALSE
+    }, error = function(e) FALSE)
+    
+    # 2. To prevent reticulate initialization collision bugs, execute the module check
+    # using a pure, primitive system command that uses Python's -c import flag.
+    # We pass the text cleanly via single quotes to keep the shell parser stable.
+    is_alive <- tryCatch({
+      cmd <- paste(shQuote(w), "-c", shQuote("import pandas, openpyxl, numpy"))
+      system(cmd, ignore.stdout = TRUE, ignore.stderr = TRUE) == 0L
+    }, error = function(e) FALSE)
+    
+    if (is_alive) return(w)
+    
+    # 3. If primitive evaluation failed, fall back to capturing explicit module errors
+    err <- tryCatch({ 
+      check_python(w, quiet = TRUE)
+      "" 
+    }, error = function(e) conditionMessage(e))
+    
     if (!nzchar(err)) return(w)
-    last <- utils::tail(strsplit(err, "\n")[[1]], 1)   # python's own error, e.g. ModuleNotFoundError or a library clash
+    last <- utils::tail(strsplit(err, "\n")[], 1)
     why <- c(why, paste0(w, ": cannot import pandas, openpyxl and numpy [", last, "]"))
   }
+  
   if (!length(cands)) why <- "no python on the PATH and neither RETICULATE_PYTHON nor RETICULATE_PYTHON_FALLBACK set"
   structure(NA_character_, why = why)
 }
