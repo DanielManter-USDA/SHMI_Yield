@@ -1,0 +1,17 @@
+{
+  "title": "SHMI_Yield: analysis code and data for \"Soil health tracks management systems, not the sum of individual practices\"",
+  "upload_type": "software",
+  "version": "1.0-submission",
+  "description": "Code and derived data reproducing the analyses in Moore and Manter (in review): the soil-health structural equation model, calibration and cross-validation of the Soil Health Management Index (SHMI) on 354 US systems at 74 NAPESHM sites, the SHAPE benchmark, the within-site corn-yield analyses at ten long-term experiments (DRIVES and AgCROS), year-condition and drought tests, soil-health mediation, and the coarse-record test. Includes the SHMI workbooks for all experiments, derived yield and soil carbon tables, cached public downloads (NASS, WorldClim, Daymet, SPEI), and the rules and code that convert AgCROS tables to SHMI workbooks. Raw AgCROS tables are not redistributed. Scores are computed with the SHMI R package, version 2.0.0.",
+  "creators": [
+    {"name": "Moore, Jennifer M.", "affiliation": "USDA-ARS, Forage Seed and Cereal Research, Corvallis, OR, USA", "orcid": "0000-0001-5403-8184"},
+    {"name": "Manter, Daniel K.", "affiliation": "USDA-ARS, Soil Management and Sugar Beet Research, Fort Collins, CO, USA", "orcid": "0000-0001-7729-7197"}
+  ],
+  "license": "cc0-1.0",
+  "keywords": ["soil health", "management index", "corn yield", "long-term experiments", "NAPESHM", "cover crops", "tillage", "crop rotation"],
+  "related_identifiers": [
+    {"identifier": "https://github.com/DanielManter-USDA/SHMI_Yield", "relation": "isSupplementTo", "scheme": "url"},
+    {"identifier": "10.5281/zenodo.23682170", "relation": "requires", "scheme": "doi"},
+    {"identifier": "10.15482/USDA.ADC/25632270", "relation": "isDerivedFrom", "scheme": "doi"}
+  ]
+}
