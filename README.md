@@ -12,7 +12,7 @@ SHMI scores are computed with the SHMI R package, version 2.0.0: https://github.
 
 1. Open `SHMI_Yield.Rproj` in RStudio.
 2. Run `install_packages.R`, then install SHMI 2.0.0 (`remotes::install_github("DanielManter-USDA/SHMI@v2.0.0")`). Python 3.9+ (`pip install pandas openpyxl numpy`) is needed only to rebuild workbooks (A0, B0, B8) and for the coarse-record test (B9).
-3. Download the SPEI grid into `Inputs/climate/` (see `Inputs/README.md`); everything else is in the repository. The raw AgCROS tables are needed only to rebuild the AgCROS workbooks (B0), which are shipped.
+3. Everything needed is in the repository. The SPEI grid (`Inputs/climate/spei03.nc`, see `Inputs/README.md`) is optional: without it, the site values in `data/cache/site_spei.csv` are used.
 4. Run `source("run_all.R")`. To choose parts, set `RUN_SETTINGS` first (any setting at the top of `run_all.R`), for example:
 
    ```r
@@ -30,9 +30,9 @@ SHMI scores are computed with the SHMI R package, version 2.0.0: https://github.
 
 | Setting | Default | What it runs | Time |
 |---|---|---|---|
-| `run_napeshm_rebuild` | FALSE | A0: NAPESHM workbook from the raw files | minutes |
+| `run_napeshm_rebuild` | FALSE | A0: NAPESHM workbook from the public NAPESHM tables, to compare with the shipped (QC'd) workbook | minutes |
 | `run_calibration` | FALSE | A1-A8: soil health model, SHMI calibration, benchmark, weights by comparison, SHAPE | hours (frozen for the paper) |
-| `run_conversion` | FALSE | B0: rebuild the AgCROS workbooks and soil C even when present (they are always built when missing) | minutes |
+| `run_conversion` | FALSE | B0: AgCROS workbooks and soil C from the raw AgCROS tables, which are not redistributed (see below). Shows and checks how the shipped workbooks were made | minutes |
 | `run_yield` | TRUE | B1-B5, B7-B8: yield analyses, figures, treatment table | first run about an hour (site runs are cached) |
 | `run_weights` | FALSE | B5b: yield slope with weights fitted between or within sites | reruns B2 three times |
 | `run_n_scenarios` | TRUE | B6: SHMI slope under 20 N-accounting assumptions | 30-60 min |

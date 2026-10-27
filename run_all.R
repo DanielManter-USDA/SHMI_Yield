@@ -18,17 +18,33 @@
 ################################################################################
 
 SETTINGS <- list(
-  run_napeshm_rebuild = FALSE,  # A0  rebuild NAPESHM_rebuilt.xlsx from the raw NAPESHM files (python)
+  # Optional: show how the shipped workbooks were made from the raw records, and check
+  # that they are reproduced. The analyses use the shipped workbooks either way.
+  # Part A (Optional)
+  run_napeshm_rebuild = FALSE,  # A0  NAPESHM workbook from the public NAPESHM tables in Inputs/napeshm (python);
+                                #     writes Outputs/NAPESHM_rebuilt.xlsx - should compare with the distributed copy in
+                                #     Inputs/NAPESHM_rebuilt.xlsx
+  # Part A
   run_calibration     = FALSE,  # A1-A8 soil health model, SHMI calibration, benchmark, SHAPE (hours; frozen for the paper)
-  run_conversion      = FALSE,  # B0  rebuild the AgCROS workbooks even if present (python; built anyway when missing)
+
+  # Part B (Optional)
+  run_conversion      = FALSE,  # B0  AgCROS workbooks and soil C from the raw AgCROS tables (python). The tables
+                                #     are not redistributed here; if you have them, set agcros_tables to where you 
+                                #     keep them. The paper used the snapshot exported 2026-04-21; a newer export 
+                                #     can change the workbooks and results.
+                                #     Overwrites the files in Inputs/yield_workbooks (git shows any change)
+  agcros_tables       = "Inputs/agcros/extracted_tables",   # raw AgCROS tables (run_conversion only)
+
+  # Part B
   run_yield           = TRUE,   # B1-B5, B7-B8 yield analyses, figures and treatment table
   run_weights         = FALSE,  # B5b yield slope with weights fitted between or within sites (reruns B2 three times)
   run_n_scenarios     = TRUE,   # B6  N-accounting sensitivity: 20 legume x manure scenarios (30-60 min)
   run_coarse          = FALSE,  # B9  coarse-record test (hours)
+  
+  # Configuration
   in_session          = FALSE,  # TRUE: run each step in this R session instead of a fresh one
                                 #   (use it if a step fails with "callr subprocess failed", e.g. on Windows)
-  python              = "",     # python executable; "" = RETICULATE_PYTHON (RStudio's Python option), else the PATH
-  agcros_tables       = "Inputs/agcros/extracted_tables"
+  python              = ""      # python executable; "" = RETICULATE_PYTHON (RStudio's Python option), else the PATH
 )
 # Random steps use fixed seeds in the scripts (cross-validation folds 2026 + repeat,
 # bootstraps, random forest seed 1 with one thread, coarse-record seeds), so a rerun
@@ -114,8 +130,8 @@ if (isTRUE(p$run_calibration)) {
 }
 
 # ---- Part B: corn yield --------------------------------------------------------
-# B0. AgCROS workbooks (converted from the AgCROS tables; shipped, so rebuilt only when
-# missing or asked) and soil C; NAPESHM crosswalk for the mediation test
+# B0. AgCROS workbooks and soil C, converted from the raw AgCROS tables only with
+# run_conversion = TRUE (both are shipped); NAPESHM crosswalk for the mediation test
 TEMPLATE <- system.file("extdata", "SHMI_template.xlsx", package = "SHMI")
 if (!nzchar(TEMPLATE)) stop("SHMI_template.xlsx not found in the installed SHMI package (extdata)")
 WB <- "Inputs/yield_workbooks"

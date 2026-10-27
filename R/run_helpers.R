@@ -150,7 +150,7 @@ required_inputs <- function(p) {
     c("Inputs/yield_workbooks/SHMI_OHTVD_Ho.xlsx", "B2 Hoytville (hand-built from DRIVES)", p$run_yield),
     c("Inputs/yield_workbooks/SHMI_OHTVD_Wo.xlsx", "B2 Wooster (hand-built from DRIVES)", p$run_yield),
     c("Inputs/yield_workbooks/SHMI_WICST_ARS.xlsx", "B2 Arlington (hand-built from DRIVES)", p$run_yield),
-    c("Inputs/climate/spei03.nc", "B1 SPEIbase 3-month SPEI", p$run_yield),
+    c("Inputs/climate/spei03.nc", "B1 SPEIbase 3-month SPEI (else data/cache/site_spei.csv)", p$run_yield && !file.exists("data/cache/site_spei.csv")),
     c("Inputs/NAPESHM_rebuilt.xlsx", "B9 coarse records (NAPESHM)", isTRUE(p$run_coarse)),
     c("Inputs/napeshm/treatments.csv", "B9 coarse records (irrigation)", isTRUE(p$run_coarse)),
     c("Outputs/Final_plus/final_results.rds", "B9 coarse records (A3 output)", isTRUE(p$run_coarse) && !isTRUE(p$run_calibration)),

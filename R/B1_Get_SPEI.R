@@ -15,6 +15,9 @@
 #    (one row per site-year); this script fills both columns, overwriting
 #    earlier values, and adds every year since 1950 for each site (so sites added
 #    later, e.g. the AgCROS sites, are covered without rerunning the stability script).
+# Without spei03.nc, the site values are read from data/cache/site_spei.csv (written
+# here whenever the netCDF is read, and committed with the repository), so a clone
+# reproduces Fig. 4 without the download. The netCDF is used when present.
 # 3. INCLUDE_AGCROS = TRUE adds the AgCROS sites converted by agcros2shmi.py
 #    (same switch as B2_SHMI_yield_main.R).
 ################################################################################
@@ -25,6 +28,7 @@ library(readxl)
 setwd(here::here())                 # the project root (SHMI_Yield.Rproj)
 SPEI_FILE <- "Inputs/climate/spei03.nc"
 DFILE     <- "Outputs/yield/drought_years.csv"
+SPEI_CACHE <- "data/cache/site_spei.csv"            # site-year SPEI extracted from SPEI_FILE (shared)
 WINDOWS   <- c(spei_mjj = "07", spei_jja = "08")     # column = SPEI-3 for that month
 
 workbooks <- c(NELITCSE  = "Inputs/yield_workbooks/SHMI_NELITCSE.xlsx",
@@ -51,21 +55,32 @@ coords <- bind_rows(lapply(names(workbooks), function(s) {
 }))
 print(coords)
 
-r  <- rast(SPEI_FILE)
-tt <- time(r)
-if (is.null(tt) || all(is.na(tt)))                       # one layer per month from Jan 1901
-  tt <- seq(as.Date("1901-01-15"), by = "month", length.out = nlyr(r))
-pts <- vect(coords, geom = c("lon", "lat"), crs = "EPSG:4326")
+if (file.exists(SPEI_FILE)) {
+  r  <- rast(SPEI_FILE)
+  tt <- time(r)
+  if (is.null(tt) || all(is.na(tt)))                       # one layer per month from Jan 1901
+    tt <- seq(as.Date("1901-01-15"), by = "month", length.out = nlyr(r))
+  pts <- vect(coords, geom = c("lon", "lat"), crs = "EPSG:4326")
 
-extract_month <- function(mm, col) {
-  k <- which(format(as.Date(tt), "%m") == mm)
-  v <- terra::extract(r[[k]], pts, ID = FALSE)
-  bind_rows(lapply(seq_len(nrow(coords)), function(i)
-    tibble(site = coords$site[i], year = as.integer(format(as.Date(tt[k]), "%Y")),
-           !!col := as.numeric(v[i, ]))))
-}
-spei <- Reduce(function(a, b) full_join(a, b, by = c("site", "year")),
-               Map(extract_month, WINDOWS, names(WINDOWS)))
+  extract_month <- function(mm, col) {
+    k <- which(format(as.Date(tt), "%m") == mm)
+    v <- terra::extract(r[[k]], pts, ID = FALSE)
+    bind_rows(lapply(seq_len(nrow(coords)), function(i)
+      tibble(site = coords$site[i], year = as.integer(format(as.Date(tt[k]), "%Y")),
+             !!col := as.numeric(v[i, ]))))
+  }
+  spei <- Reduce(function(a, b) full_join(a, b, by = c("site", "year")),
+                 Map(extract_month, WINDOWS, names(WINDOWS)))
+  dir.create(dirname(SPEI_CACHE), recursive = TRUE, showWarnings = FALSE)
+  write.csv(spei %>% filter(year >= 1950) %>% arrange(site, year), SPEI_CACHE, row.names = FALSE)
+  cat("Extracted from", SPEI_FILE, "and saved", SPEI_CACHE, "\n")
+} else if (file.exists(SPEI_CACHE)) {
+  spei <- read.csv(SPEI_CACHE)
+  miss <- setdiff(coords$site, spei$site)
+  if (length(miss)) stop(SPEI_FILE, " not found and ", SPEI_CACHE, " has no values for: ", paste(miss, collapse = ", "),
+                         ". Download spei03.nc (see Inputs/README.md).")
+  cat(SPEI_FILE, "not found: SPEI read from", SPEI_CACHE, "\n")
+} else stop(SPEI_FILE, " not found (and no ", SPEI_CACHE, "). Download it: see Inputs/README.md.")
 
 old <- if (file.exists(DFILE)) read.csv(DFILE) %>% select(site, year) else tibble(site = character(), year = integer())
 d <- bind_rows(old, spei %>% filter(year >= 1950) %>% select(site, year)) %>% distinct() %>%
