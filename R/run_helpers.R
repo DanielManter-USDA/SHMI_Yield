@@ -67,12 +67,12 @@ run_r <- function(script, vars = list(), opts = list(), label = sub("\\.R$", "",
 }
 
 # The python to use: the one given (setting `python`), else the first that runs and has
-# pandas, openpyxl and numpy among RETICULATE_PYTHON (set by RStudio's Global Options >
+# pandas, openpyxl and numpy among RETICULATE_PYTHON or RETICULATE_PYTHON_FALLBACK (set by RStudio's Global Options >
 # Python), then python3, python and py on the PATH (on Windows, python3 is often a
 # Microsoft Store alias that does not run). Returns NA with the reasons as an attribute.
 find_python <- function(py = "") {
   cands <- if (nzchar(py)) py else
-    unique(c(Sys.getenv("RETICULATE_PYTHON"), unname(Sys.which(c("python3", "python", "py")))))
+    unique(c(Sys.getenv(c("RETICULATE_PYTHON", "RETICULATE_PYTHON_FALLBACK")), unname(Sys.which(c("python3", "python", "py")))))
   cands <- cands[nzchar(cands)]
   why <- character()
   for (w in cands) {
@@ -83,7 +83,7 @@ find_python <- function(py = "") {
     if (ok) return(w)
     why <- c(why, paste0(w, ": missing pandas, openpyxl or numpy (", shQuote(w), " -m pip install pandas openpyxl numpy)"))
   }
-  if (!length(cands)) why <- "no python on the PATH and RETICULATE_PYTHON not set"
+  if (!length(cands)) why <- "no python on the PATH and neither RETICULATE_PYTHON nor RETICULATE_PYTHON_FALLBACK set"
   structure(NA_character_, why = why)
 }
 
