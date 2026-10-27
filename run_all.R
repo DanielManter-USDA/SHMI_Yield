@@ -102,10 +102,8 @@ if (isTRUE(p$run_calibration)) {
   run_r("A1b_Prepare_SEM.R")
   run_r("A1c_soil_health_SEM.R")
   if (!file.exists("Outputs/site_climate_monthly.rds")) run_r("A1d_Get_site_climate.R")
-  # A2. US model applied to the Mexican sites (a check, not reported), the four-sub-index
-  # calibration kept for comparison, summary tables
-  for (s in c("A2c_Project_SH.R", "A2d_SHMI_calibration_final.R", "A2e_Summarize_results.R"))
-    run_r(s)
+  # A2. the US soil health model applied to the Mexican sites (the independent test in A3a)
+  run_r("A2c_Project_SH.R")
   # A3. final calibration (Extended Data Fig. 2; Extended Data Table 1)
   run_r("A3a_SHMI_calibration_plus.R")
   run_r("A3b_calibration_report_figures.R")

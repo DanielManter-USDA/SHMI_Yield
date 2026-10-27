@@ -79,8 +79,10 @@ find_python <- function(py = "") {
   why <- character()
   for (w in cands) {
     if (!file.exists(w) && !nzchar(Sys.which(w))) { why <- c(why, paste0(w, ": not found")); next }
-    if (!identical(suppressWarnings(system2(shQuote(w), "--version", stdout = FALSE, stderr = FALSE)), 0L)) {
-      why <- c(why, paste0(w, ": does not run")); next }
+    v <- tryCatch(suppressWarnings(system2(shQuote(w), "--version", stdout = TRUE, stderr = TRUE)),
+                  error = function(e) structure(conditionMessage(e), status = 127L))
+    if (!is.null(attr(v, "status")) && attr(v, "status") != 0) {
+      why <- c(why, paste0(w, ": does not run [", utils::tail(c("", v), 1), "]")); next }
     err <- tryCatch({ check_python(w, quiet = TRUE); "" }, error = function(e) conditionMessage(e))
     if (!nzchar(err)) return(w)
     last <- utils::tail(strsplit(err, "\n")[[1]], 1)   # python's own error, e.g. ModuleNotFoundError or a library clash

@@ -2,8 +2,7 @@
 # A3a_SHMI_calibration_plus.R
 #
 # Final calibration of SHMI (three pillars plus the organic amendment bonus)
-# and SHMI_base (the three pillars alone). Same machinery as A2d_SHMI_calibration_final.R (the four-pillar
-# calibration, kept as the comparison in Outputs/Final).
+# and SHMI_base (the three pillars alone).
 #
 # Structure
 #   Cover/Roots  living cover in the active and dormant season, by site climate;
@@ -67,7 +66,7 @@ CFG <- list(
   test_mexico = TRUE,
   K           = 10,
   R           = 100,
-  seed        = 2026         # same folds as A2d_SHMI_calibration_final.R
+  seed        = 2026         # fixed folds and fits (reproducible)
 )
 if (exists("CFG_OVERRIDE")) CFG <- utils::modifyList(CFG, CFG_OVERRIDE)
 dir.create(CFG$out_dir, recursive = TRUE, showWarnings = FALSE)

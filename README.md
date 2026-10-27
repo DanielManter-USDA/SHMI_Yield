@@ -78,7 +78,7 @@ Scripts are numbered in the order `run_all.R` runs them: **A** = calibration (Pa
 | A1b | `A1b_Prepare_SEM.R` | SEM data, cropping-system classes (annual, perennial, reference, fallow) |
 | A1c | `A1c_soil_health_SEM.R` | climate and texture adjustment; soil health latent variable (lv_SH) |
 | A1d | `A1d_Get_site_climate.R` | WorldClim monthly normals by site |
-| A2c-A2e | `A2c_Project_SH.R`, `A2d_SHMI_calibration_final.R`, `A2e_Summarize_results.R` | the US model applied to the Mexican sites (a check, not reported); the four-sub-index calibration kept for comparison; summary tables |
+| A2c | `A2c_Project_SH.R` | the US soil health model applied to the Mexican sites (the independent test in A3a) |
 | A3a | `A3a_SHMI_calibration_plus.R` | final calibration (three sub-indices plus the amendment bonus); out-of-fold predictions |
 | A3b | `A3b_calibration_report_figures.R` | in-sample and out-of-fold report figures and agreement table |
 | A4a | `A4a_SHMI_benchmark.R` | SHMI against its parts, reduced versions, fixed published weights and unconstrained models |
