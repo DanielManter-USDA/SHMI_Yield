@@ -1,5 +1,5 @@
 ################################################################################
-# Prepare_SEM.R
+# A1b_Prepare_SEM.R
 #
 # Purpose
 #   Build the data set used to model soil health (SH) with a structural
@@ -253,7 +253,7 @@ cat("\nSEM data:", nrow(semDF), "units at", nlevels(semDF$sitecode), "sites;",
     sum(semDF$in_scope), "in scope at",
     length(unique(semDF$sitecode[semDF$in_scope])), "sites\n")
 
-# ---- SHAPE soil taxonomy groups (from Get_site_ssurgo.R) ------------------------
+# ---- SHAPE soil taxonomy groups (from A1a_Get_site_ssurgo.R) ------------------------
 # S2 and S3 are merged (too few sites alone); S4 is the reference group.
 # Mexican sites have no SSURGO data and stay NA (only the US soil-group run uses it).
 SOILS_FILE <- OUT("site_soils_ssurgo.csv")
@@ -270,7 +270,7 @@ if (file.exists(SOILS_FILE)) {
   us_missing <- semDF %>% filter(!grepl("^MX", sitecode), is.na(shape_grp3)) %>% distinct(sitecode)
   if (nrow(us_missing)) warning("US sites without a SHAPE group: ", paste(us_missing$sitecode, collapse = ", "))
 } else {
-  message("No ", SOILS_FILE, ": SHAPE soil groups not added (run Get_site_ssurgo.R first)")
+  message("No ", SOILS_FILE, ": SHAPE soil groups not added (run A1a_Get_site_ssurgo.R first)")
 }
 
 saveRDS(semDF, OUT("semDF_prepped.rds"))

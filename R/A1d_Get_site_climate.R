@@ -1,5 +1,5 @@
 ################################################################################
-# Get_site_climate.R
+# A1d_Get_site_climate.R
 #
 # Monthly climate normals (WorldClim 2.1, 1970-2000) for each NAPESHM site,
 # used to define climate-based Cover seasons: a month is ACTIVE at a site when

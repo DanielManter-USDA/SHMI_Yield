@@ -1,5 +1,5 @@
 ################################################################################
-# Prepare_SHAPE.R
+# A6a_Prepare_SHAPE.R
 #
 # Writes the NAPESHM soil data in the SHAPE multi-indicator input format
 # (Multi_Indicator_example.csv):
@@ -17,7 +17,7 @@
 #   AC          a_act_c   active carbon, POXC (mg/kg)
 #   SOC         b_soc     soil organic carbon (%)
 #   Suborder    SHAPE taxonomy group S1-S5 of the site's dominant soil
-#               (shape_group in Outputs/site_soils_ssurgo.csv, Get_site_ssurgo.R)
+#               (shape_group in Outputs/site_soils_ssurgo.csv, A1a_Get_site_ssurgo.R)
 #   Texture     SHAPE texture group T1-T5 from the sample's measured sand,
 #               silt and clay (b_sand, b_silt, b_clay) via the USDA texture class
 #
@@ -27,10 +27,10 @@
 #   T3 silt loam, silt
 #   T4 sandy clay, clay loam, silty clay loam, silty clay, clay (< 60% clay)
 #   T5 clay (>= 60% clay)
-#   S1-S5: suborders as in Get_site_ssurgo.R (SHAPE_GROUPS)
+#   S1-S5: suborders as in A1a_Get_site_ssurgo.R (SHAPE_GROUPS)
 #
 # Inputs (R_NAPESHM project; paths relative to its root)
-#   Outputs/semDF_prepped.rds          units kept after Prepare_SEM.R's exclusions
+#   Outputs/semDF_prepped.rds          units kept after A1b_Prepare_SEM.R's exclusions
 #   Inputs/napeshm/soildata.csv      soil data, one row per sample
 #   Outputs/site_soils_ssurgo.csv      SHAPE taxonomy group per site
 #   PRISM normals                      downloaded by the prism package (CLIMATE_SOURCE)
@@ -138,7 +138,7 @@ if (CLIMATE_SOURCE == "prism") {
 }
 
 SOILS <- OUT("site_soils_ssurgo.csv")
-if (!file.exists(SOILS)) stop("No ", SOILS, ": run Get_site_ssurgo.R first (it assigns each site's SHAPE group)")
+if (!file.exists(SOILS)) stop("No ", SOILS, ": run A1a_Get_site_ssurgo.R first (it assigns each site's SHAPE group)")
 suborder <- read.csv(SOILS, stringsAsFactors = FALSE) %>%
   transmute(sitecode = as.character(sitecode), Suborder = shape_group, taxsuborder, ssurgo_flag = flag)
 

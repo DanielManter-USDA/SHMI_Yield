@@ -6,7 +6,7 @@
 # whole chain on its own: indicator adjustment -> SEM -> weight tests ->
 # SHMI calibration. Results are then compared between datasets.
 #
-#   all   all units, after the exclusions in Prepare_SEM.R (woody plantations
+#   all   all units, after the exclusions in A1b_Prepare_SEM.R (woody plantations
 #         and grazing lands); reference soils included
 #   noMX  all, without the Mexican sites
 #
@@ -18,7 +18,7 @@ is_mx        <- function(d) grepl("^MX", as.character(d$sitecode))
 is_perennial <- function(d) !is.na(d$system) & d$system == "perennial"
 
 DATASETS <- list(
-  all  = list(label = "All units (woody and grazing-land treatments excluded in Prepare_SEM.R)",
+  all  = list(label = "All units (woody and grazing-land treatments excluded in A1b_Prepare_SEM.R)",
               keep  = function(d) rep(TRUE, nrow(d))),
   noMX = list(label = "Without Mexico",
               keep  = function(d) !is_mx(d))

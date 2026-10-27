@@ -1,7 +1,7 @@
 ################################################################################
-# Run_within_calibration_scenarios.R  (v4)
+# A5a_Run_within_calibration_scenarios.R  (v4)
 #
-# Reruns SHMI_calibration_plus.R for a grid of
+# Reruns A3a_SHMI_calibration_plus.R for a grid of
 #   what the weights are fitted to: site averages only (between sites), all
 #                  variation (the original calibration), or within-site contrasts
 #                  only (add 0.5 to LAMBDAS for a half-within version)
@@ -11,19 +11,19 @@
 # (B_D<div>/ for the between-site fits).
 # Scenarios already run are skipped. Grazing and amendment gaps stay at 0.25 and 0.60.
 #
-# Needs the version of SHMI_calibration_plus.R with within_lambda and between_only. Set
+# Needs the version of A3a_SHMI_calibration_plus.R with within_lambda and between_only. Set
 # CALIB_SCRIPT if it is not in R/.
 ################################################################################
 suppressPackageStartupMessages({ library(dplyr); library(tidyr); library(ggplot2); library(here) })
 
-CALIB_SCRIPT <- if (exists("CALIB_SCRIPT")) CALIB_SCRIPT else here::here("R", "SHMI_calibration_plus.R")
+CALIB_SCRIPT <- if (exists("CALIB_SCRIPT")) CALIB_SCRIPT else here::here("R", "A3a_SHMI_calibration_plus.R")
 OUT_ROOT     <- here::here("Outputs", "Calib_scenarios")
 LAMBDAS      <- c(0, 1)
 BETWEEN      <- TRUE           # also fit to site averages only
 DIVS         <- c(0.10, 0.15, 0.20, 0.25)
 stopifnot(file.exists(CALIB_SCRIPT))
 if (!any(grepl("between_only", readLines(CALIB_SCRIPT))))
-  stop("CALIB_SCRIPT is an older SHMI_calibration_plus.R without between_only: ", CALIB_SCRIPT)
+  stop("CALIB_SCRIPT is an older A3a_SHMI_calibration_plus.R without between_only: ", CALIB_SCRIPT)
 dir.create(OUT_ROOT, recursive = TRUE, showWarnings = FALSE)
 
 scen <- expand.grid(within_lambda = LAMBDAS, fixed_div = DIVS)

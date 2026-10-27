@@ -1,7 +1,7 @@
 """
 build_soil_c.py
 Soil carbon by plot, date and layer for the AgCROS yield sites, from the AgCROS
-table export (meassoilchem.csv), for SHMI_soil_mediation.R.
+table export (meassoilchem.csv), for B5_SHMI_soil_mediation.R.
 
     python build_soil_c.py <extracted_tables> <out_dir> [--sites NEMLTCRS NELITCSE ...]
 
@@ -13,7 +13,7 @@ Rules
               unmeasured samples as 0, e.g. IAAM7071 2008-2009, 2012 total C)
   layers      a layer that spans two or more other layers sampled in the same
               site-year is a composite and is dropped (NEMLTCRS 1998 0-30 cm)
-  depth       layers ending at or above 30 cm (SHMI_soil_mediation.R uses 0-30 cm)
+  depth       layers ending at or above 30 cm (B5_SHMI_soil_mediation.R uses 0-30 cm)
   years       soil_c.csv drops baseline years (on or before the year the treatments
               began, BASELINE below) and years sampling fewer than 80% of the
               site's units (the most sampled year = 100%)

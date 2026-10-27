@@ -1,5 +1,5 @@
 ################################################################################
-# Fig2_soil_health.R
+# A4b_Fig2_soil_health.R
 #
 # Manuscript Fig. 2: SHMI predicts soil health at sites withheld from
 # calibration, and better than any of its parts.
@@ -7,16 +7,16 @@
 #   b  the same for the 74 site means
 #   c  the same within sites (deviations from site means)
 #   d  out-of-fold performance of SHMI, each part alone, and unconstrained
-#      models on the same inputs (from SHMI_benchmark.R), four metrics;
+#      models on the same inputs (from A4a_SHMI_benchmark.R), four metrics;
 #      shaded band = SHMI's 95% range across repeated fold assignments
 #
 # Inputs
-#   FIN/us_oof_predictions.csv          (SHMI_calibration_plus.R)
-#   Outputs/Benchmark/benchmark_summary.csv (SHMI_benchmark.R)
+#   FIN/us_oof_predictions.csv          (A3a_SHMI_calibration_plus.R)
+#   Outputs/Benchmark/benchmark_summary.csv (A4a_SHMI_benchmark.R)
 # Output
 #   Outputs/Manuscript/Fig2_soil_health.png (and .pdf)
 #
-# Run after SHMI_calibration_plus.R and SHMI_benchmark.R.
+# Run after A3a_SHMI_calibration_plus.R and A4a_SHMI_benchmark.R.
 ################################################################################
 suppressPackageStartupMessages({
   library(dplyr); library(tidyr); library(ggplot2); library(here)

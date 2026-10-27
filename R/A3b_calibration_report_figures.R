@@ -1,8 +1,8 @@
 ################################################################################
-# Fig5_Fig6_fit_plus.R
+# A3b_calibration_report_figures.R
 #
 # Report figures 5 and 6 and Table 10b for SHMI and SHMI_base (from
-# SHMI_calibration_plus.R). Each figure has one row per score and three panels:
+# A3a_SHMI_calibration_plus.R). Each figure has one row per score and three panels:
 # (a) all treatments, (b) site means, (c) each treatment minus its site mean.
 #   Figure 5  raw scores (0-100) against measured soil health (0-100); slopes are
 #             soil-health points per score point
@@ -12,7 +12,7 @@
 #           Lin's concordance, and the Kobayashi & Salam (2000) split into
 #           offset, spread and scatter), US and Mexico, both scores
 #
-# Inputs (SHMI_calibration_plus.R): FIN/us_oof_predictions.csv,
+# Inputs (A3a_SHMI_calibration_plus.R): FIN/us_oof_predictions.csv,
 #   FIN/shmi_scores.csv, FIN/final_results.xlsx (mexico_units). Outputs written
 #   before the rename (shmi_plus_scores.csv, SHMI / SHMI_plus columns) are read
 #   too and renamed: SHMI -> SHMI_base, SHMI_plus -> SHMI.

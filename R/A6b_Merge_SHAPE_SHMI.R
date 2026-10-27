@@ -1,5 +1,5 @@
 ################################################################################
-# Merge_SHAPE_SHMI.R
+# A6b_Merge_SHAPE_SHMI.R
 #
 # Averages the SHAPE app's sample scores by management unit (field_name =
 # MGT_combo) and joins them to the final SHMI scores and the measured

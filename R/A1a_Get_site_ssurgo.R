@@ -1,5 +1,5 @@
 # ================================================================
-# Get_site_ssurgo.R — soil series and taxonomy for each NAPESHM site
+# A1a_Get_site_ssurgo.R — soil series and taxonomy for each NAPESHM site
 #   For each US site (sites.csv coordinates), finds the SSURGO map unit
 #   at the point (or the map unit covering most of a small buffer around
 #   it), takes the map unit's dominant component, and returns its series,

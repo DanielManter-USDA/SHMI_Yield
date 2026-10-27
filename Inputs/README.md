@@ -27,9 +27,9 @@ Derived files that would otherwise need restricted, very large or keyed sources 
 
 **Created by the run (not inputs).** When any of them is missing (or with `run_conversion = TRUE`), `agcros2shmi.py` writes the seven AgCROS workbooks into `yield_workbooks/`:
 - `SHMI_<site>.xlsx` for NELITCSE, NEMLTCRS, NEMEIRR, NECCIRR, INWLACRE, IAAM7071 and PAUP;
-- `SHMI_<site>_units.csv` for each site, which `SHMI_yield_main.R` reads for INWLACRE, IAAM7071 and PAUP.
+- `SHMI_<site>_units.csv` for each site, which `B2_SHMI_yield_main.R` reads for INWLACRE, IAAM7071 and PAUP.
 
-They are in the repository already, so they are used as they are unless `run_conversion = TRUE`. The folder also holds workbooks for INWLTPAC and MNMOFS, two AgCROS experiments that were screened but not analysed.
+They are in the repository already, so they are used as they are unless `run_conversion = TRUE`.
 
 **Cached** (in `Outputs/yield/`): NASS county yields, copied from `data/cache/` (or downloaded when that copy is missing).
 
@@ -39,10 +39,10 @@ They are in the repository already, so they are used as they are unless `run_con
 |---|---|---|
 | `NAPESHM_rebuilt.xlsx` | NAPESHM management records in the SHMI template, after QC. This is the workbook used in the paper. | built by `python/napeshm_rebuild` from the raw NAPESHM files, then QC |
 | `napeshm/sites.csv`, `treatments.csv`, `soildata.csv`, `plfa_ng.csv` | NAPESHM site (climate, descriptors, coordinates), treatment, soil and PLFA tables | NAPESHM, https://doi.org/10.15482/USDA.ADC/25632270 |
-| `napeshm/sites_AI_startdate.csv` (optional) | updated treatment start dates, read by `SHMI_SHAPE_age.R` | NAPESHM site contacts |
+| `napeshm/sites_AI_startdate.csv` (optional) | updated treatment start dates, read by `A6c_SHMI_SHAPE_age.R` | NAPESHM site contacts |
 | `gSSURGO_CONUS.gpkg` (optional) | gSSURGO CONUS geopackage, for SHAPE soil groups. Large; set `GSSURGO_GPKG` to its path instead of copying it. Without it, put `site_soils_ssurgo.csv` in `Outputs/`. | USDA-NRCS |
 | `SHAPE/batch_Combined_scores.csv` | Output of the SHAPE app for `Outputs/SHAPE/SHAPE_multi_indicator_input.csv` | SHAPE app (run outside R) |
-| `worldclim/` | WorldClim 2.1 normals, downloaded by `Get_site_climate.R` on the first run | https://www.worldclim.org |
+| `worldclim/` | WorldClim 2.1 normals, downloaded by `A1d_Get_site_climate.R` on the first run | https://www.worldclim.org |
 
 ## Part A0: NAPESHM workbook from the raw files (`run_napeshm_rebuild = TRUE`)
 

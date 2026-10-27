@@ -92,9 +92,9 @@ The full screen of all 43 locations is in `agcros_location_screen.csv`.
 ## To add a site to the yield analysis
 
 1. Check the converted workbook: open the log and look at the harvest-only rows (C4) and the units file.
-2. Add the workbook to the `workbooks` list in `SHMI_yield_main.R`, along with the site's:
+2. Add the workbook to the `workbooks` list in `B2_SHMI_yield_main.R`, along with the site's:
    - N rule (`zero_if_missing` / `optimum_if_missing`)
    - `trt_regex`
    - county for NASS yields
-3. Add the site to `Get_SPEI.R`.
+3. Add the site to `B1_Get_SPEI.R`.
 4. Its soil C is already in `meassoilchem` for the mediation test.

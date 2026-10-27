@@ -5,7 +5,7 @@ degrade_records.py: reduce an SHMI workbook to coarser, remote-sensing-like reco
 Writes a copy of an SHMI workbook in which the management records keep only the
 detail that public or remote-sensing products provide, so SHMI can be rescored
 with the published weights and compared with the full-record score
-(R/SHMI_coarse_records.R runs the scenarios).
+(R/B9_SHMI_coarse_records.R runs the scenarios).
 
 Operations (--ops, comma-separated; always applied in this order):
   dates      every crop's planting, harvest and termination dates set to the

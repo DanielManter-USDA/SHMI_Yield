@@ -1,8 +1,8 @@
 ################################################################################
-# SHMI_benchmark.R  (v3: adds SHMI with the published weights held fixed)
+# A4a_SHMI_benchmark.R  (v3: adds SHMI with the published weights held fixed)
 #
 # Two questions, both on US units with exactly the calibration's machinery
-# (SHMI_calibration_plus.R: sites weighted equally, 10-fold leave-sites-out CV
+# (A3a_SHMI_calibration_plus.R: sites weighted equally, 10-fold leave-sites-out CV
 # repeated 100 times with the same seed, so the folds are identical to the ones
 # behind the published OOF R2 of 0.26; anything with weights is refitted inside
 # each fold and mapped to soil health by a site-weighted line):
@@ -31,7 +31,7 @@
 # for the difference from SHMI in overall R2, between-site r and within-site r.
 # Each candidate is also fitted on all US units and applied to Mexico.
 #
-# Input   Outputs/Final_plus/final_results.rds (from SHMI_calibration_plus.R)
+# Input   Outputs/Final_plus/final_results.rds (from A3a_SHMI_calibration_plus.R)
 # Outputs Outputs/Benchmark/
 #   benchmark_summary.csv    one row per candidate: medians, 95% ranges, paired
 #                            differences from SHMI, bootstrap intervals
@@ -89,7 +89,7 @@ us <- add_derived(us); mx <- add_derived(mx)
 cat("US units:", nrow(us), "at", n_distinct(us$sitecode), "sites | Mexican units:", nrow(mx), "\n")
 
 # ==============================================================================
-# Helpers (same definitions as SHMI_calibration_plus.R)
+# Helpers (same definitions as A3a_SHMI_calibration_plus.R)
 # ==============================================================================
 site_w <- function(s) 1 / as.numeric(table(s)[s])
 wmean  <- function(x, w) sum(w * x) / sum(w)

@@ -1,5 +1,5 @@
 ################################################################################
-# SH_SEM_refinement_clean.R
+# A1c_soil_health_SEM.R
 #
 # Purpose
 #   Choose the measurement model for soil health (SH) that will serve as the
@@ -36,7 +36,7 @@
 # primary datasets (CANDIDATE_DATASETS) as a sensitivity check. A summary compares fit, determinacy,
 # stability, invariance and the agreement of SH scores between datasets.
 #
-# Input : Outputs/semDF_prepped.rds from Prepare_SEM.R (all units, with
+# Input : Outputs/semDF_prepped.rds from A1b_Prepare_SEM.R (all units, with
 #         `in_scope`; before outlier removal and adjustment).
 # Output: Outputs/sem_<dataset>_{scores,model,report}.rds for each dataset,
 #         sem_gam_<candidate>_*.rds, sem_summary_all_runs.rds and .xlsx
@@ -57,7 +57,7 @@ OUT <- function(...) here::here("Outputs", ...)
 source(here::here("R", "datasets.R"))
 
 CFG <- list(
-  input      = OUT("semDF_prepped.rds"),   # from Prepare_SEM.R (all units, with in_scope)
+  input      = OUT("semDF_prepped.rds"),   # from A1b_Prepare_SEM.R (all units, with in_scope)
 
   # Runs, all executed in one pass. Each fits the chosen SEM to one dataset
   # with one climate/texture adjustment and exports its own files:
@@ -513,7 +513,7 @@ multigroup_syntax <- function(syntax, n_groups) {
 }
 
 # Measurement invariance across cropping systems (`system` from
-# Prepare_SEM.R: annual, fallow_reference, perennial): configural (same structure),
+# A1b_Prepare_SEM.R: annual, fallow_reference, perennial): configural (same structure),
 # metric (equal loadings), scalar (equal loadings and intercepts).
 # SH is pooled across systems when SHMI is calibrated, which presumes at
 # least scalar invariance. Common heuristic for non-invariance between
@@ -610,7 +610,7 @@ export_scores <- function(fit, data, ind = IND) {
 #   run's model, without refitting anything on them: the outlier bounds, the
 #   fitted climate/texture adjustment models, the standardization constants of
 #   the adjusted indicators, the final SEM, and the 0-100 rescaling constants.
-#   Used by Project_SH.R to score the Mexican samples with the US model.
+#   Used by A2c_Project_SH.R to score the Mexican samples with the US model.
 # ==============================================================================
 make_projection <- function(dat_raw, fit, method, ind = IND) {
   bounds <- lapply(ind, function(v) {

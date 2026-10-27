@@ -1,15 +1,15 @@
 ################################################################################
-# ED_Fig7_weights_by_comparison.R
+# A5b_SuppFig1_weights_by_comparison.R
 #
-# Extended Data Fig. 7: SHMI weights fitted between sites, to all variation
+# Supplementary Data Fig. 1: SHMI weights fitted between sites, to all variation
 # (the calibration) and within sites, at Diversity 0.10-0.25.
 #   a-c  Inverse disturbance weight, Cover weight, growing-season share
 #        (medians and 95% ranges across 1,000 fits); open red diamonds = 57:43
 #        blend of the between- and within-site fits (shares of lv_SH variance)
 #   d-f  Out-of-fold R2, between-site r, within-site r (medians of 100 repeats)
 #
-# Input  Outputs/Calib_scenarios/scenario_summary.csv (Run_within_calibration_scenarios.R)
-# Output Outputs/Calib_scenarios/ED_Fig7_weights_by_comparison.png / .pdf
+# Input  Outputs/Calib_scenarios/scenario_summary.csv (A5a_Run_within_calibration_scenarios.R)
+# Output Outputs/Calib_scenarios/SuppFig1_weights_by_comparison.png / .pdf
 ################################################################################
 suppressPackageStartupMessages({ library(dplyr); library(tidyr); library(ggplot2); library(here); library(patchwork) })
 
@@ -67,6 +67,6 @@ fig <- (pa | pb | pc) / (pd | pe | pf) +
   plot_annotation(caption = if (MS_FIG) NULL else "Weights fitted to: between sites (site means), all variation, or within sites (deviations from site means). Red diamonds: 57:43 blend of the between- and within-site fits.",
                   theme = theme(plot.caption = element_text(size = 7.5, hjust = 0))) &
   theme(legend.position = "bottom")
-ggsave(file.path(OUT, "ED_Fig7_weights_by_comparison.png"), fig, width = 7.2, height = 5.2, dpi = 300)
-ggsave(file.path(OUT, "ED_Fig7_weights_by_comparison.pdf"), fig, width = 7.2, height = 5.2)
-cat("Saved ED_Fig7_weights_by_comparison.png/.pdf in", OUT, "\n")
+ggsave(file.path(OUT, "SuppFig1_weights_by_comparison.png"), fig, width = 7.2, height = 5.2, dpi = 300)
+ggsave(file.path(OUT, "SuppFig1_weights_by_comparison.pdf"), fig, width = 7.2, height = 5.2)
+cat("Saved SuppFig1_weights_by_comparison.png/.pdf in", OUT, "\n")

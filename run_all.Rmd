@@ -1,5 +1,5 @@
 ---
-title: "Capturing cropping-system complexities at scale: full analysis"
+title: "Soil health tracks management systems, not the sum of individual practices: full analysis"
 subtitle: "SHMI calibration and corn-yield analyses (Moore & Manter)"
 date: "`r format(Sys.time(), '%d %B %Y %H:%M')`"
 output:
@@ -91,49 +91,49 @@ if (params$run_calibration) {
   CAL_OPTS <- list(shmi.B_boot = params$B_boot, shmi.R_outer = params$R_outer, shmi.B_sens = params$B_sens)
   # A1. soils (SHAPE soil groups), SEM data, measured soil health, climate normals
   if (file.exists(Sys.getenv("GSSURGO_GPKG", "Inputs/gSSURGO_CONUS.gpkg"))) {
-    run_r("Get_site_ssurgo.R")
+    run_r("A1a_Get_site_ssurgo.R")
   } else message("gSSURGO not found: using Outputs/site_soils_ssurgo.csv if present (see Inputs/README.md)")
-  run_r("Prepare_SEM.R")
-  run_r("SH_SEM_refinement_clean.R")
-  if (!file.exists("Outputs/site_climate_monthly.rds")) run_r("Get_site_climate.R")
+  run_r("A1b_Prepare_SEM.R")
+  run_r("A1c_soil_health_SEM.R")
+  if (!file.exists("Outputs/site_climate_monthly.rds")) run_r("A1d_Get_site_climate.R")
 } else cat("Skipped: run_calibration is FALSE\n")
 ```
 
 ```{r A2-calibration}
 if (params$run_calibration) {
-  # A2. weight structure and calibration scenarios (Supplementary Data Tables 1-2), the US
-  # model applied to the Mexican sites (Fig. 1b), four-pillar calibration, summary tables
-  for (s in c("SHMI_weight_tests.R", "Run_calibration_scenarios.R", "Project_SH.R",
-              "SHMI_calibration_final.R", "Summarize_results.R"))
+  # A2. the US soil health model applied to the Mexican sites (a check, not reported),
+  # the four-sub-index calibration kept for comparison, and summary tables. (The weight-structure
+  # tests and calibration scenarios of the development build are not part of this release.)
+  for (s in c("A2c_Project_SH.R", "A2d_SHMI_calibration_final.R", "A2e_Summarize_results.R"))
     run_r(s, opts = CAL_OPTS)
-  # A3. final calibration (three pillars + amendment bonus) and its report figures (ED Fig. 2)
-  run_r("SHMI_calibration_plus.R", opts = CAL_OPTS)
-  run_r("Fig5_Fig6_fit_plus.R")
+  # A3. final calibration (three pillars + amendment bonus) and its report figures (Extended Data Fig. 2; Extended Data Table 1)
+  run_r("A3a_SHMI_calibration_plus.R", opts = CAL_OPTS)
+  run_r("A3b_calibration_report_figures.R")
   # A4. SHMI against its parts, reduced versions and unconstrained models (Supplementary
   # Data Table 4), then Fig. 2 (a-c out-of-fold fit; d benchmark)
-  run_r("SHMI_benchmark.R", opts = CAL_OPTS)
-  run_r("Fig2_soil_health.R")
+  run_r("A4a_SHMI_benchmark.R", opts = CAL_OPTS)
+  run_r("A4b_Fig2_soil_health.R")
   # A5. weights fitted between sites, to all variation and within sites (Supplementary Data Fig. 1)
-  run_r("Run_within_calibration_scenarios.R", opts = CAL_OPTS)
-  run_r("ED_Fig7_weights_by_comparison.R")
+  run_r("A5a_Run_within_calibration_scenarios.R", opts = CAL_OPTS)
+  run_r("A5b_SuppFig1_weights_by_comparison.R")
 } else cat("Skipped: run_calibration is FALSE\n")
 ```
 
 ```{r A6-shape}
 if (params$run_calibration) {
-  # A6. SHAPE (ED Fig. 3): input file for the SHAPE app; its output (batch_Combined_scores.csv) is
+  # A6. SHAPE (Extended Data Fig. 3): input file for the SHAPE app; its output (batch_Combined_scores.csv) is
   # produced outside R and read back from Inputs/SHAPE/
-  run_r("Prepare_SHAPE.R")
+  run_r("A6a_Prepare_SHAPE.R")
   dir.create("Outputs/SHAPE", showWarnings = FALSE, recursive = TRUE)
   if (file.exists("Inputs/SHAPE/batch_Combined_scores.csv")) {
     file.copy("Inputs/SHAPE/batch_Combined_scores.csv", "Outputs/SHAPE/batch_Combined_scores.csv", overwrite = TRUE)
-    run_r("Merge_SHAPE_SHMI.R")
-    run_r("SHMI_SHAPE_age.R")
+    run_r("A6b_Merge_SHAPE_SHMI.R")
+    run_r("A6c_SHMI_SHAPE_age.R")
   } else message("Run Outputs/SHAPE/SHAPE_multi_indicator_input.csv through the SHAPE app and put ",
                  "batch_Combined_scores.csv in Inputs/SHAPE/, then rerun this chunk.")
-  # A7-A8. WorldClim vs Daymet season check (Methods); SEM loadings and adjustment slopes (ED Fig. 1)
-  run_r("Check_climate_source.R")
-  run_r("Export_appendix_tables.R")
+  # A7-A8. WorldClim vs Daymet season check (Methods); SEM loadings and adjustment slopes (Extended Data Fig. 1)
+  run_r("A7_Check_climate_source.R")
+  run_r("A8_Export_appendix_tables.R")
 } else cat("Skipped: run_calibration is FALSE\n")
 ```
 
@@ -168,18 +168,18 @@ if (conv_needed(params)) {
 dir.create("Outputs/yield", showWarnings = FALSE, recursive = TRUE)
 if (conv_needed(params) || !file.exists("Outputs/yield/soil_c.csv"))
   run_py(PY, c("python/build_soil_c.py", params$agcros_tables, "Outputs/yield"), "B0_soil_c")
-run_r("build_napeshm_crosswalk.R")
+run_r("B0_build_napeshm_crosswalk.R")
 ```
 
 ## B1-B5. Main yield analyses
 
 ```{r B1-B5}
 if (params$run_yield) {
-  run_r("Get_SPEI.R")                    # B1 growing-season SPEI for every site-year
-  run_r("SHMI_yield_main.R")             # B2 Fig. 3, Fig. 4a, ED Fig. 6: within-site slope, SHMI x N, SHMI x age, site slopes
-  run_r("SHMI_yield_stability.R")        # B3 Fig. 4b, ED Fig. 7: year conditions, worst years, drought
-  run_r("SHMI_N_equivalent.R")           # B4 SHMI in fertilizer-N units (Results)
-  run_r("SHMI_soil_mediation.R")         # B5 soil-health mediation (Results, Supplementary Table)
+  run_r("B1_Get_SPEI.R")                    # B1 growing-season SPEI for every site-year
+  run_r("B2_SHMI_yield_main.R")             # B2 Fig. 3, Extended Data Fig. 4, Supplementary Data Table 1, Supplementary Data Fig. 2: within-site slope, SHMI x N, SHMI x age, site slopes, effect sizes
+  run_r("B3_SHMI_yield_stability.R")        # B3 Fig. 4: year conditions, drought, worst years
+  run_r("B4_SHMI_N_equivalent.R")           # B4 SHMI in fertilizer-N units (Results)
+  run_r("B5_SHMI_soil_mediation.R")         # B5 soil-health mediation (Supplementary Data Table 3)
 } else cat("Skipped: run_yield is FALSE\n")
 ```
 
@@ -188,12 +188,12 @@ if (params$run_yield) {
 Methods (Weights by comparison) reports the within-site yield slope with SHMI rescored
 using weights fitted only between sites or only within sites (Diversity fixed at 0.15),
 with the yield model unchanged: 248 and 148 kg ha⁻¹ per 10 points against 220 with the
-calibrated weights. The script reruns `SHMI_yield_main.R` once per weight set (site runs
+calibrated weights. The script reruns `B2_SHMI_yield_main.R` once per weight set (site runs
 are cached per weight set) and writes `Outputs/yield_weights_agcros/weights_slopes.csv`.
 
 ```{r B5b-weights}
 if (isTRUE(params$run_weights)) {
-  run_r("SHMI_yield_weights_sensitivity.R")
+  run_r("B5b_SHMI_yield_weights_sensitivity.R")
 } else cat("Skipped: run_weights is FALSE\n")
 ```
 
@@ -203,10 +203,10 @@ Methods (Nitrogen) reports the range of the SHMI slope over 20 legume-credit ×
 manure-availability assumptions and which accounting fits best.
 
 ```{r B6}
-# Self-contained: reloads sections 1-3 of SHMI_yield_main.R (site runs from the cache),
+# Self-contained: reloads sections 1-3 of B2_SHMI_yield_main.R (site runs from the cache),
 # so it can run without run_yield.
 if (isTRUE(params$run_n_scenarios)) {
-  run_r("SHMI_N_scenarios.R")
+  run_r("B6_SHMI_N_scenarios.R")
 } else cat("Skipped: run_n_scenarios is FALSE\n")
 ```
 
@@ -214,7 +214,7 @@ if (isTRUE(params$run_n_scenarios)) {
 
 ```{r B7-B8}
 if (params$run_yield) {
-  run_r("Assemble_manuscript_figures.R")
+  run_r("B7_Assemble_manuscript_figures.R")
   if (!is.na(PY)) run_py(PY, c("python/build_study_treatments.py", "--wb-dir", "Inputs/yield_workbooks",
                "--units-dir", "Inputs/yield_workbooks", "--old", "data/SHMI_study_treatments_descriptions.xlsx",
                "--out", "Outputs/SHMI_study_treatments.xlsx"), "B8_study_treatments") else
@@ -222,7 +222,7 @@ if (params$run_yield) {
 } else cat("Skipped: run_yield is FALSE\n")
 ```
 
-## B9. Coarse management records (ED Fig. 8)
+## B9. Coarse management records (Extended Data Fig. 5; Supplementary Data Table 2)
 
 SHMI rescored, with the published weights, from less detailed records: (a) each piece of
 detail removed on its own (crops, cover crops, dates, tillage, manure and grazing) at
@@ -237,7 +237,7 @@ the coarse workbooks are not already in `Outputs/Coarse/`.
 if (isTRUE(params$run_coarse)) {
   # python writes the coarse workbooks only when they are not already in Outputs/Coarse/;
   # reuse_runs = FALSE reruns every yield noise seed instead of reading back saved ones
-  run_r("SHMI_coarse_records.R", vars = list(CFG_COARSE_OVERRIDE = list(python = if (is.na(PY)) "" else PY,
+  run_r("B9_SHMI_coarse_records.R", vars = list(CFG_COARSE_OVERRIDE = list(python = if (is.na(PY)) "" else PY,
                                                                         reuse_runs = FALSE)))
 } else cat("Skipped: run_coarse is FALSE\n")
 ```
@@ -264,7 +264,7 @@ if (isTRUE(params$run_coarse)) {
 ```{r figures, out.width = "100%"}
 if (params$run_yield) {
   FIGS <- file.path("Outputs/manuscript_figures_default_total_agcros",
-                    c("Fig3.png", "Fig4.png", "ED_Fig8_stability.png"))
+                    c("Fig3.png", "Fig4.png", "ED_Fig4_sites.png"))
   if (isTRUE(params$run_coarse)) FIGS <- c(FIGS, "Outputs/Coarse/Fig_coarse_records.png")
   knitr::include_graphics(FIGS[file.exists(FIGS)])
 } else cat("Skipped: run_yield is FALSE\n")

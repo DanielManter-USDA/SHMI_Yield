@@ -1,5 +1,5 @@
 ################################################################################
-# SHMI_calibration_final.R
+# A2d_SHMI_calibration_final.R
 #
 # Final SHMI calibration.
 # Structure:
@@ -16,7 +16,7 @@
 #    weights normalized to sum to 1. Final weights = medians across fits,
 #    renormalized; intervals = 2.5-97.5 percentiles.
 # 2. Independent test on the Mexican units: their SH comes from the US SEM
-#    applied to them (Project_SH.R); weights and the SH-scale calibration come
+#    applied to them (A2c_Project_SH.R); weights and the SH-scale calibration come
 #    from the US units only. The all-data SH is reported as a check.
 #
 # Outputs: Outputs/Final/ final_weights.csv, final_results.xlsx,

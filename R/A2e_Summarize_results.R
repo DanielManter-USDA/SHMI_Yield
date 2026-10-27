@@ -1,18 +1,16 @@
 ################################################################################
-# Summarize_results.R
+# A2e_Summarize_results.R
 #
 # Collects the results of the SHMI 1.2.0 calibration pipeline into one Excel
 # workbook (one sheet per table) and a set of figures (PNG).
 #
 # Run after:
-#   1. Prepare_SEM.R
-#   2. SH_SEM_refinement_clean.R
-#   3. SHMI_weight_tests.R
-#   4. Run_calibration_scenarios.R
-#   (optional) Run_cover_diversity_tests.R, Run_followup_tests.R,
-#              Run_diversity_split_tests.R, Run_climate_moisture_tests.R,
-#              Compare_v110_v120.R
-# Sections whose input files are missing are skipped with a message.
+#   1. A1b_Prepare_SEM.R
+#   2. A1c_soil_health_SEM.R
+#   3. A2d_SHMI_calibration_final.R
+# Sections whose input files are missing are skipped with a message. The
+# weight-structure tests and calibration scenarios of the SHMI development build
+# (1.2.x) are not part of this release, so their sections are skipped.
 #
 # Design: each dataset in datasets.R (all, noMX, noGZ, noMX_noGZ) goes through
 # adjustment -> SEM -> weight tests -> calibration on its own; the tables
@@ -467,7 +465,7 @@ if (!is.null(oof_all) && !is.null(sh_all)) {
 # 7. Information available for each SHMI component, by dataset
 # ==============================================================================
 cat("\n== 7. Information per component ==\n")
-# Scores as in SHMI_calibration_final.R (shmi_components, STIR matched to T-DISC);
+# Scores as in A2d_SHMI_calibration_final.R (shmi_components, STIR matched to T-DISC);
 # Diversity's rotation part = 4-year-span Diversity minus per-calendar-year Diversity.
 if (have(OUT("shmi_inputs_v120.rds")) && have(OUT("sem_all_scores.rds")) &&
     have(OUT("site_climate_monthly.rds"))) tryCatch({

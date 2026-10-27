@@ -1,7 +1,7 @@
 """
 build_study_treatments.py
 Builds SHMI_study_treatments.xlsx (Supplementary table of sites and treatments) from the
-SHMI study workbooks used by SHMI_yield_main.R, over each site's analysis period.
+SHMI study workbooks used by B2_SHMI_yield_main.R, over each site's analysis period.
 
     python3 build_study_treatments.py --wb-dir DRIVES/final --units-dir DRIVES/final \
         --old SHMI_study_treatments_7sites.xlsx --out SHMI_study_treatments.xlsx
@@ -15,7 +15,7 @@ import pandas as pd
 
 warnings.filterwarnings("ignore")
 
-# ---- sites: period, exclusions and treatment code, as in SHMI_yield_main.R ------------
+# ---- sites: period, exclusions and treatment code, as in B2_SHMI_yield_main.R ------------
 SITES = {
     "NELITCSE":  dict(start=1986, end=2014, loc="Lincoln, Nebraska"),
     "NEMLTCRS":  dict(start=1983, end=2006, loc="Mead, Nebraska"),
@@ -75,7 +75,7 @@ NEM_ROT = {"1": "continuous corn", "2": "continuous soybean", "3": "continuous s
            "6": "corn - oats/clover - sorghum - soybean", "7": "corn - soybean - sorghum - oats/clover"}
 NEM_N = {"0": "0 kg N/ha", "1": "low: 90 kg N/ha corn and sorghum; 34 soybean and oats",
          "2": "high: 180 kg N/ha corn and sorghum; 69 soybean and oats"}
-# as in SHMI_yield_main.R with AGCROS_REFINE = FALSE: matched on the treatment descriptor
+# as in B2_SHMI_yield_main.R with AGCROS_REFINE = FALSE: matched on the treatment descriptor
 AGCROS_OTHER = {"INWLACRE": {"modified planter": "no-till planter with row cleaners"}}
 
 

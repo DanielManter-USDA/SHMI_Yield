@@ -1,8 +1,8 @@
 ################################################################################
-# SHMI_calibration_plus.R
+# A3a_SHMI_calibration_plus.R
 #
 # Final calibration of SHMI (three pillars plus the organic amendment bonus)
-# and SHMI_base (the three pillars alone). Same machinery as SHMI_calibration_final.R (the four-pillar
+# and SHMI_base (the three pillars alone). Same machinery as A2d_SHMI_calibration_final.R (the four-pillar
 # calibration, kept as the comparison in Outputs/Final).
 #
 # Structure
@@ -67,7 +67,7 @@ CFG <- list(
   test_mexico = TRUE,
   K           = 10,
   R           = 100,
-  seed        = 2026         # same folds as SHMI_calibration_final.R
+  seed        = 2026         # same folds as A2d_SHMI_calibration_final.R
 )
 if (exists("CFG_OVERRIDE")) CFG <- utils::modifyList(CFG, CFG_OVERRIDE)
 dir.create(CFG$out_dir, recursive = TRUE, showWarnings = FALSE)

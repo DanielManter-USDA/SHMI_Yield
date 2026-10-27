@@ -1,5 +1,5 @@
 ################################################################################
-# Project_SH.R
+# A2c_Project_SH.R
 #
 # Scores samples the SEM was NOT fitted on, using everything learned from the
 # training units only (nothing is refitted):

@@ -1,5 +1,5 @@
 ################################################################################
-# SHMI_SHAPE_age.R
+# A6c_SHMI_SHAPE_age.R
 #
 # 1. Does SHMI track SHAPE? Correlations of SHMI (and SHMI_base) with the SHAPE
 #    scores (mean of SOC, AC, Resp, KSSL_WAS, and each one), for all units, site
@@ -20,7 +20,7 @@
 #    Also: each site's own within-site slope against the site's age (Fig B).
 #
 # Inputs
-#   Outputs/SHAPE/SHAPE_by_unit_with_SHMI.csv   (Merge_SHAPE_SHMI.R)
+#   Outputs/SHAPE/SHAPE_by_unit_with_SHMI.csv   (A6b_Merge_SHAPE_SHMI.R)
 #   Inputs/napeshm/treatments.csv             (treatment_start_year)
 #   Inputs/napeshm/sites_AI_startdate.csv     (updated start dates; site- or
 #                                                treatment-level, see read_starts)
