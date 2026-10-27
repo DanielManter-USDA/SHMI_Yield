@@ -72,16 +72,19 @@ run_r <- function(script, vars = list(), opts = list(), label = sub("\\.R$", "",
 # Microsoft Store alias that does not run). Returns NA with the reasons as an attribute.
 find_python <- function(py = "") {
   cands <- if (nzchar(py)) py else
-    unique(c(Sys.getenv(c("RETICULATE_PYTHON", "RETICULATE_PYTHON_FALLBACK")), unname(Sys.which(c("python3", "python", "py")))))
+    unique(c(Sys.getenv(c("RETICULATE_PYTHON", "RETICULATE_PYTHON_FALLBACK")), unname(Sys.which(c("python3", "python", "py"))),
+             # conda installs that RStudio does not see on its PATH
+             Sys.getenv("CONDA_PYTHON_EXE"), path.expand(file.path("~", c("miniconda3", "anaconda3", "miniforge3"), "bin", "python"))))
   cands <- cands[nzchar(cands)]
   why <- character()
   for (w in cands) {
     if (!file.exists(w) && !nzchar(Sys.which(w))) { why <- c(why, paste0(w, ": not found")); next }
     if (!identical(suppressWarnings(system2(shQuote(w), "--version", stdout = FALSE, stderr = FALSE)), 0L)) {
       why <- c(why, paste0(w, ": does not run")); next }
-    ok <- tryCatch({ check_python(w, quiet = TRUE); TRUE }, error = function(e) FALSE)
-    if (ok) return(w)
-    why <- c(why, paste0(w, ": missing pandas, openpyxl or numpy (", shQuote(w), " -m pip install pandas openpyxl numpy)"))
+    err <- tryCatch({ check_python(w, quiet = TRUE); "" }, error = function(e) conditionMessage(e))
+    if (!nzchar(err)) return(w)
+    last <- utils::tail(strsplit(err, "\n")[[1]], 1)   # python's own error, e.g. ModuleNotFoundError or a library clash
+    why <- c(why, paste0(w, ": cannot import pandas, openpyxl and numpy [", last, "]"))
   }
   if (!length(cands)) why <- "no python on the PATH and neither RETICULATE_PYTHON nor RETICULATE_PYTHON_FALLBACK set"
   structure(NA_character_, why = why)
@@ -150,8 +153,8 @@ required_inputs <- function(p) {
     c("Inputs/climate/spei03.nc", "B1 SPEIbase 3-month SPEI", p$run_yield),
     c("Inputs/NAPESHM_rebuilt.xlsx", "B9 coarse records (NAPESHM)", isTRUE(p$run_coarse)),
     c("Inputs/napeshm/treatments.csv", "B9 coarse records (irrigation)", isTRUE(p$run_coarse)),
-    c("Outputs/Final_plus/final_results.rds", "B9 coarse records (A3 output)", isTRUE(p$run_coarse)),
-    c("Outputs/site_climate_monthly.rds", "B9 coarse records (A1 output)", isTRUE(p$run_coarse)))
+    c("Outputs/Final_plus/final_results.rds", "B9 coarse records (A3 output)", isTRUE(p$run_coarse) && !isTRUE(p$run_calibration)),
+    c("Outputs/site_climate_monthly.rds", "B9 coarse records (A1 output)", isTRUE(p$run_coarse) && !isTRUE(p$run_calibration)))
   rows <- c(rows, list(c(tab("metaunits.csv"), "B0 AgCROS conversion", need_tables)))
   if (!conv_needed(p)) {
     rows <- c(rows, lapply(conv, function(s) c(sprintf("Inputs/yield_workbooks/SHMI_%s.xlsx", s), "B2 converted workbook", p$run_yield)),
