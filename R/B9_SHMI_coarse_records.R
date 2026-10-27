@@ -78,7 +78,7 @@ CFG_C <- list(
   run_yield    = TRUE,
   yield_scenarios = NULL,  # e.g. c("FARM", "RS"): run only these; the others are read from their saved runs
   yield_seeds  = list(default = 1, J30 = 1:3, FARM = 1:3, RSM = 1:3, RS = 1:3),   # yield seeds of each random scenario
-  reuse_runs   = TRUE,     # read back yield runs already done (FALSE: rerun them all, as run_all.Rmd does)
+  reuse_runs   = TRUE,     # read back yield runs already done (FALSE: rerun them all, as run_all.R does)
   rebuild      = FALSE     # rewrite degraded workbooks that already exist
 )
 if (exists("CFG_COARSE_OVERRIDE")) CFG_C <- utils::modifyList(CFG_C, CFG_COARSE_OVERRIDE)

@@ -14,7 +14,7 @@
 #   FIN/us_oof_predictions.csv          (A3a_SHMI_calibration_plus.R)
 #   Outputs/Benchmark/benchmark_summary.csv (A4a_SHMI_benchmark.R)
 # Output
-#   Outputs/Manuscript/Fig2_soil_health.png (and .pdf)
+#   Outputs/Manuscript/Fig2.png (and .pdf)
 #
 # Run after A3a_SHMI_calibration_plus.R and A4a_SHMI_benchmark.R.
 ################################################################################
@@ -118,6 +118,6 @@ if ("SHMI, published weights (fixed)" %in% bs$model) {
 # Assemble
 # ------------------------------------------------------------------------------
 fig <- (pa | pb | pc) / pd + patchwork::plot_layout(heights = c(1, 0.85))
-ggsave(file.path(OUT, "Fig2_soil_health.png"), fig, width = 13, height = 8.6, dpi = 300)
-ggsave(file.path(OUT, "Fig2_soil_health.pdf"), fig, width = 13, height = 8.6)
-cat("\nSaved Fig2_soil_health.png/.pdf in", OUT, "\n")
+ggsave(file.path(OUT, "Fig2.png"), fig, width = 13, height = 8.6, dpi = 300)
+ggsave(file.path(OUT, "Fig2.pdf"), fig, width = 13, height = 8.6)
+cat("\nSaved Fig2.png/.pdf in", OUT, "\n")

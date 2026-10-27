@@ -34,7 +34,7 @@ It was written from the hand-built workbook by `make_supplement.py`. **Rebuild i
 python3 make_supplement.py DRIVES/final/SHMI_NECCIRR.xlsx NECCIRR supplements/NECCIRR_amendments.csv --source "..."
 ```
 
-Step B0 of `run_all.Rmd` rebuilds every workbook used in the paper (the commands are in that chunk).
+Step B0 of `run_all.R` rebuilds every workbook used in the paper (the commands are in that section).
 
 ## Corrections to AgCROS records
 

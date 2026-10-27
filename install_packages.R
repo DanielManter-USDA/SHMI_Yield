@@ -1,4 +1,4 @@
-# R packages used by the analysis scripts and run_all.Rmd
+# R packages used by the analysis scripts, run_all.R and report.Rmd
 pkgs <- c("callr", "here", "rmarkdown", "knitr", "dplyr", "tidyr", "tibble", "purrr", "readxl", "writexl",
           "ggplot2", "patchwork", "ggh4x", "scales", "magick", "rlang", "nlme", "lme4", "lmerTest", "metafor",
           "mgcv", "MASS", "nnls", "ranger", "lavaan", "semTools", "terra", "sf", "geodata", "prism", "daymetr",

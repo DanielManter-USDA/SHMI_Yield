@@ -1,0 +1,91 @@
+---
+title: "SHMI_Yield: results"
+subtitle: "Moore & Manter, Soil health tracks management systems, not the sum of individual practices"
+date: "`r format(Sys.time(), '%d %B %Y %H:%M')`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+params:
+  log_dir: ""   # a run's folder in Outputs/logs/; "" = the latest run
+---
+
+```{r setup, include = FALSE}
+# This report only reads Outputs/; it runs no analysis. Run run_all.R first, then:
+#   rmarkdown::render("report.Rmd", output_dir = "Outputs")
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, comment = "")
+ROOT <- here::here()
+knitr::opts_knit$set(root.dir = ROOT)
+source(file.path(ROOT, "R", "run_helpers.R"))
+runs <- sort(list.dirs(file.path(ROOT, "Outputs", "logs"), recursive = FALSE))
+LOG_DIR <- if (nzchar(params$log_dir)) params$log_dir else utils::tail(runs, 1)
+if (!length(LOG_DIR) || !dir.exists(LOG_DIR)) stop("No run found in Outputs/logs; run run_all.R first.")
+MAIN <- file.path(ROOT, "Outputs", "yield_main_default_total_agcros")
+STAB <- file.path(ROOT, "Outputs", "yield_stability_default_total_agcros")
+FIGS <- file.path(ROOT, "Outputs", "manuscript_figures_default_total_agcros")
+```
+
+# The run
+
+Run `r basename(LOG_DIR)`. Logs for each step are in `r LOG_DIR`.
+
+```{r run}
+st <- file.path(LOG_DIR, "settings.rds")
+if (file.exists(st)) {
+  s <- readRDS(st)
+  knitr::kable(data.frame(setting = names(s), value = vapply(s, function(v) paste(v, collapse = ", "), "")),
+               row.names = FALSE, caption = "Settings")
+}
+```
+
+```{r steps}
+steps <- utils::read.csv(file.path(LOG_DIR, "steps.csv"))
+knitr::kable(steps, caption = sprintf("Steps (%.1f min in all)", sum(steps$minutes)))
+```
+
+# Soil health (Part A)
+
+Part A is frozen for the paper and off by default; the tables below are shown when its outputs exist.
+
+```{r part-a, results = "asis"}
+show_csv(file.path(ROOT, "Outputs", "Benchmark", "benchmark_summary.csv"),
+         "Fig. 2d and Supplementary Data Table 4: SHMI against its parts and unconstrained models")
+show_csv(file.path(ROOT, "Outputs", "Calib_scenarios", "scenario_summary.csv"),
+         "Supplementary Data Fig. 1: weights by comparison")
+```
+
+# Corn yield (Part B)
+
+```{r part-b, results = "asis"}
+show_csv(file.path(MAIN, "results_main.csv"), "Fig. 3 model: within-site slope, SHMI x N, SHMI x age")
+show_csv(file.path(MAIN, "N_equivalent.csv"), "Fertilizer-N equivalent of 10 SHMI points")
+show_csv(file.path(MAIN, "mediation_results.csv"), "Supplementary Data Table 3: soil properties as carriers of the slope")
+show_csv(file.path(STAB, "stability_results.csv"), "Fig. 4: year conditions, drought, worst years")
+show_csv(file.path(MAIN, "N_scenarios_all_sites.csv"), "N-accounting scenarios (all sites)")
+show_csv(file.path(ROOT, "Outputs", "yield_weights_agcros", "weights_slopes.csv"), "Yield slope by weight set")
+show_csv(file.path(ROOT, "Outputs", "Coarse", "coarse_napeshm.csv"), "Coarse records: skill against soil health")
+show_csv(file.path(ROOT, "Outputs", "Coarse", "coarse_yield.csv"), "Coarse records: within-site yield slope")
+```
+
+# Display items
+
+```{r manifest}
+mf <- file.path(ROOT, "Outputs", "Manuscript", "manifest.csv")
+if (file.exists(mf)) knitr::kable(utils::read.csv(mf)[, c("item", "file", "script", "present", "modified")],
+                                  caption = "Display items in Outputs/Manuscript")
+```
+
+# Figures
+
+```{r figures, out.width = "100%"}
+f <- file.path(ROOT, "Outputs", "Manuscript",
+               c("Fig1.png", "Fig2.png", "Fig3.png", "Fig4.png", "ED_Fig2.png", "ED_Fig3.png",
+                 "ED_Fig4.png", "ED_Fig5.png", "SuppFig1.png", "SuppFig2.png"))
+knitr::include_graphics(f[file.exists(f)])
+```
+
+# Session
+
+```{r session}
+sessionInfo()
+```

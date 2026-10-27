@@ -1,8 +1,9 @@
 ################################################################################
-# run_helpers.R: helpers for run_all.Rmd
+# run_helpers.R: helpers for run_all.R (running) and report.Rmd (results)
 # Each analysis script runs in a fresh R session (callr) with the project root as the
-# working directory; python steps run with the python found on the PATH. Every step
-# writes its own log in Outputs/logs/<run time>/ and a line in steps.csv.
+# working directory, or in this session with in_session = TRUE; python steps run with
+# the python found on the PATH. Every step writes its full output to its own log in
+# Outputs/logs/<run time>/ and a line in steps.csv; the console shows one line per step.
 ################################################################################
 
 start_log <- function(root) {
@@ -34,17 +35,19 @@ run_r <- function(script, vars = list(), opts = list(), label = sub("\\.R$", "",
   log <- file.path(LOG_DIR, paste0(label, ".log"))
   t0 <- Sys.time(); message(format(t0, "%H:%M"), "  start  ", label)
   if (isTRUE(getOption("shmi.in_session", FALSE))) {
-    # debugging / low-memory fallback: run in this R session (output to the console),
-    # in a fresh environment so the steps still do not share objects
-    message("  (in this session; log not written)")
+    # low-memory fallback: run in this R session, in a fresh environment so the steps
+    # still do not share objects. Output and messages go to the step's log, as with callr.
     env <- new.env(parent = globalenv())
     old <- options(opts); on.exit(options(old), add = TRUE)
     list2env(vars, envir = env)
+    con <- file(log, open = "wt")
+    sink(con); sink(con, type = "message")
     ok <- tryCatch({ sys.source(path, envir = env, keep.source = FALSE); TRUE },
-                   error = function(e) { message("ERROR in ", label, ": ", conditionMessage(e)); FALSE })
+                   error = function(e) { cat("\nRUN ERROR:", conditionMessage(e), "\n"); FALSE },
+                   finally = { sink(type = "message"); sink(); close(con) })
     rm(env); gc(verbose = FALSE)
     log_step(label, ok, t0, log)
-    if (!ok) stop("Step '", label, "' failed (see the console above).", call. = FALSE)
+    if (!ok) fail(label, log)
     return(invisible(TRUE))
   }
   ok <- tryCatch({
@@ -75,12 +78,13 @@ find_python <- function(py = "") {
   stop("No working python on the PATH; set params$python to the python executable.")
 }
 
-check_python <- function(py) {
+check_python <- function(py, quiet = FALSE) {
   out <- suppressWarnings(system2(shQuote(py), c("-c", shQuote("import pandas, openpyxl, numpy; print('pandas', pandas.__version__)")),
                                   stdout = TRUE, stderr = TRUE))
   if (!is.null(attr(out, "status")) && attr(out, "status") != 0)
     stop("python needs pandas, openpyxl and numpy: pip install pandas openpyxl numpy\n", paste(out, collapse = "\n"))
-  cat(out, sep = "\n")
+  if (!quiet) cat(out, sep = "\n")
+  invisible(out)
 }
 
 run_py <- function(py, args, label) {
@@ -90,7 +94,6 @@ run_py <- function(py, args, label) {
   ok <- identical(as.integer(status), 0L)
   log_step(label, ok, t0, log)
   if (!ok) fail(label, log)
-  cat(utils::tail(readLines(log, warn = FALSE), 3), sep = "\n")
   invisible(TRUE)
 }
 
@@ -157,7 +160,7 @@ required_inputs <- function(p) {
 
 show_inputs <- function(d) {
   d$status <- ifelse(d$present, "ok", ifelse(d$required, "MISSING", "not needed for this run"))
-  print(knitr::kable(d[, c("path", "used_by", "status")]))
+  print(d[, c("path", "used_by", "status")], row.names = FALSE)
 }
 
 # ---- results -----------------------------------------------------------------------

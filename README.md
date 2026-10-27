@@ -13,15 +13,22 @@ SHMI scores are computed with the SHMI R package, version 2.0.0: https://github.
 1. Open `SHMI_Yield.Rproj` in RStudio.
 2. Run `install_packages.R`, then install SHMI 2.0.0 (`remotes::install_github("DanielManter-USDA/SHMI@v2.0.0")`). Python 3.9+ (`pip install pandas openpyxl numpy`) is needed only to rebuild workbooks (A0, B0, B8) and for the coarse-record test (B9).
 3. Download the SPEI grid into `Inputs/climate/` (see `Inputs/README.md`); everything else is in the repository. The raw AgCROS tables are needed only to rebuild the AgCROS workbooks (B0), which are shipped.
-4. Knit `run_all.Rmd`. To choose parts, use **Knit with Parameters**, or run, for example:
+4. Run `source("run_all.R")`. To choose parts, set `RUN_SETTINGS` first (any setting at the top of `run_all.R`), for example:
 
    ```r
-   rmarkdown::render("run_all.Rmd", params = list(run_calibration = TRUE, run_weights = TRUE))
+   RUN_SETTINGS <- list(run_calibration = TRUE, run_weights = TRUE)
+   source("run_all.R")
    ```
 
-`run_all.Rmd` first checks the inputs. It then runs each step in a fresh R session (python for the conversions), logs each step to `Outputs/logs/<time>/`, and ends with the main result tables and figures.
+5. To see the results, render the report, which only reads `Outputs/` and takes seconds:
 
-| Parameter | Default | What it runs | Time |
+   ```r
+   rmarkdown::render("report.Rmd", output_dir = "Outputs")
+   ```
+
+`run_all.R` first checks the inputs. It then runs each step in a fresh R session (python for the conversions). The console shows one line per step (start, done or FAILED, minutes); each step's full output goes to its own log in `Outputs/logs/<time>/`, with a table of steps in `steps.csv`. If a step fails, the last lines of its log are printed. On Windows, if a step fails with "callr subprocess failed", rerun with `RUN_SETTINGS <- list(in_session = TRUE)`: each step then runs in the current session, still with its own log. B4 and B5 refit the B2 model in their own sessions, so each takes about as long as B2.
+
+| Setting | Default | What it runs | Time |
 |---|---|---|---|
 | `run_napeshm_rebuild` | FALSE | A0: NAPESHM workbook from the raw files | minutes |
 | `run_calibration` | FALSE | A1-A8: soil health model, SHMI calibration, benchmark, weights by comparison, SHAPE | hours (frozen for the paper) |
@@ -33,32 +40,37 @@ SHMI scores are computed with the SHMI R package, version 2.0.0: https://github.
 
 ## Where each result comes from
 
-Figure and table numbers are those of the manuscript. Outputs are in `Outputs/`.
+Every display item ends up in **`Outputs/Manuscript/`** under the paper's numbering, with `manifest.csv` listing each item, its file, the script that makes it and when it was last written. This folder is committed with the repository; the rest of `Outputs/` is not. Tables are also collected in `Outputs/Manuscript/Tables.xlsx` (one sheet per table).
 
-| In the paper | Step and script | Output |
-|---|---|---|
-| Fig. 1a, path diagram (Diversity → Cover/Roots 0.49; Inverse Disturbance → Cover/Roots 0.08; SHMI → lv_SH 0.41) | coefficients from `data/SHAPE_by_unit_with_SHMI.csv` by least squares; drawing not yet in the repository | |
-| Fig. 1b, scores of example systems; Table 1 | SHMI package, example records; not yet in the repository | |
-| Fig. 2a-c, out-of-fold fit | A3a `A3a_SHMI_calibration_plus.R` | `Final_plus/us_oof_predictions.csv` |
-| Fig. 2d, benchmark; Supplementary Data Table 4 | A4a `A4a_SHMI_benchmark.R`; figure `A4b_Fig2_soil_health.R` | `Benchmark/benchmark_summary.csv`, `benchmark_bootstrap.csv`; `Manuscript/Fig2_soil_health.png` |
-| Fig. 3 | B2 `B2_SHMI_yield_main.R`; panels assembled by B7 `B7_Assemble_manuscript_figures.R` | `yield_main_default_total_agcros/results_main.csv`; `manuscript_figures_default_total_agcros/Fig3.png` |
-| Fig. 4 | B3 `B3_SHMI_yield_stability.R` (SPEI from B1 `B1_Get_SPEI.R`); assembled by B7 | `yield_stability_default_total_agcros/`; `manuscript_figures_default_total_agcros/Fig4.png` |
-| Extended Data Fig. 1, soil health model | A1c `A1c_soil_health_SEM.R`; loadings and adjustment slopes A8 `A8_Export_appendix_tables.R` | SEM outputs |
-| Extended Data Fig. 2, weights; Extended Data Table 1 | A3a `A3a_SHMI_calibration_plus.R`; report figures A3b `A3b_calibration_report_figures.R` | `Final_plus/` |
-| Extended Data Fig. 3, SHAPE | A6a-A6c (`A6a_Prepare_SHAPE.R`, the SHAPE app, `A6b_Merge_SHAPE_SHMI.R`, `A6c_SHMI_SHAPE_age.R`) | `SHAPE/`, `SHAPE_age/` |
-| Extended Data Fig. 4, slope per experiment; Supplementary Data Table 1 | B2 (section 7b: heterogeneity, contrast groups, scale checks); assembled by B7; treatment table B8 | `site_SHMI_ranges.csv`, `SHMI_heterogeneity.csv`, `SHMI_scale_check*.csv`; `ED_Fig4_sites.png`; `SHMI_study_treatments.xlsx` |
-| Extended Data Fig. 5, coarse records; Supplementary Data Table 2 | B9 `B9_SHMI_coarse_records.R` with `python/coarse_records/degrade_records.py` | `Coarse/` |
-| Supplementary Data Table 3, soil properties as carriers of the slope | B5 `B5_SHMI_soil_mediation.R` (crosswalk from B0 `B0_build_napeshm_crosswalk.R`) | `mediation_results.csv` |
-| Supplementary Data Fig. 1, weights by comparison | A5a `A5a_Run_within_calibration_scenarios.R`; figure A5b `A5b_SuppFig1_weights_by_comparison.R` | `Calib_scenarios/` |
-| Supplementary Data Fig. 2, effect sizes | B2 | `Fig_effect_sizes.png`, `Fig_effect_sizes.csv` |
-| Methods: fertilizer-N equivalent | B4 `B4_SHMI_N_equivalent.R` | `N_equivalent.csv` |
-| Methods: yield slope and the choice of weights | B5b `B5b_SHMI_yield_weights_sensitivity.R` | `yield_weights_agcros/weights_slopes.csv` |
-| Methods: N-accounting range | B6 `B6_SHMI_N_scenarios.R` | `N_scenarios_all_sites.csv` |
-| Methods: climate source check | A7 `A7_Check_climate_source.R` | season check |
+| In the paper | File in `Outputs/Manuscript/` | Computed by | Intermediate output (in `Outputs/`) |
+|---|---|---|---|
+| Fig. 1 (path diagram; example systems) and Table 1 | `Fig1.png`, `Table1.csv` (+ `Fig1_path_coefficients.csv`, `Fig1_example_systems.csv`) | C1 `C1_Fig1_and_Table1.R`, from `data/SHAPE_by_unit_with_SHMI.csv` and example records scored with SHMI 2.0.0 | |
+| Fig. 2 | `Fig2.png` | A3a `A3a_SHMI_calibration_plus.R` (a-c), A4a `A4a_SHMI_benchmark.R` (d); drawn by A4b `A4b_Fig2_soil_health.R` | `Final_plus/`, `Benchmark/` |
+| Fig. 3 | `Fig3.png` | B2 `B2_SHMI_yield_main.R`; assembled by B7 `B7_Assemble_manuscript_figures.R` | `yield_main_default_total_agcros/results_main.csv` |
+| Fig. 4 | `Fig4.png` | B3 `B3_SHMI_yield_stability.R` (SPEI from B1 `B1_Get_SPEI.R`); assembled by B7 | `yield_stability_default_total_agcros/` |
+| Table 2 | (text) | | |
+| Extended Data Fig. 1, soil health model | `ED_Fig1_loadings.csv` (the diagram is drawn by hand from these loadings) | A1c `A1c_soil_health_SEM.R`; A8 `A8_Export_appendix_tables.R` | `sem_noMX_standardized.csv`, `adjustment_slopes_noMX.csv` |
+| Extended Data Fig. 2, calibrated weights | `ED_Fig2.png` | A3a | `Final_plus/F1_weights.png` |
+| Extended Data Fig. 3, SHAPE | `ED_Fig3.png` | A6a-A6c (`A6a_Prepare_SHAPE.R`, the SHAPE app, `A6b_Merge_SHAPE_SHMI.R`, `A6c_SHMI_SHAPE_age.R`) | `SHAPE/`, `SHAPE_age/` |
+| Extended Data Fig. 4, slope per experiment | `ED_Fig4.png` | B2 (section 7b); assembled by B7 | `site_SHMI_ranges.csv`, `SHMI_heterogeneity.csv`, `SHMI_scale_check*.csv` |
+| Extended Data Fig. 5, coarse records | `ED_Fig5.png` | B9 `B9_SHMI_coarse_records.R` with `python/coarse_records/degrade_records.py` | `Coarse/` |
+| Extended Data Table 1, scores by system type | `ED_Table1.csv` | C2 `C2_export_tables.R`, from `data/SHAPE_by_unit_with_SHMI.csv` | |
+| Supplementary Data Table 1, the experiments | `SuppTable1.csv` | B2 (section 7b); treatment descriptions B8 | `site_SHMI_ranges.csv`; `SHMI_study_treatments.xlsx` |
+| Supplementary Data Table 2, record types | `SuppTable2.csv` | B9 | `Coarse/coarse_scenarios.csv` |
+| Supplementary Data Table 3, soil properties as carriers of the slope | `SuppTable3.csv` | B5 `B5_SHMI_soil_mediation.R` (crosswalk from B0 `B0_build_napeshm_crosswalk.R`) | `mediation_results.csv` |
+| Supplementary Data Table 4, SHMI against its parts | `SuppTable4.csv` | A4a | `Benchmark/benchmark_bootstrap.csv` |
+| Supplementary Data Fig. 1, weights by comparison | `SuppFig1.png` | A5a `A5a_Run_within_calibration_scenarios.R`; figure A5b `A5b_SuppFig1_weights_by_comparison.R` | `Calib_scenarios/` |
+| Supplementary Data Fig. 2, effect sizes | `SuppFig2.png` | B2 | `Fig_effect_sizes.csv` |
+| Methods: fertilizer-N equivalent | | B4 `B4_SHMI_N_equivalent.R` | `N_equivalent.csv` |
+| Methods: yield slope and the choice of weights | | B5b `B5b_SHMI_yield_weights_sensitivity.R` | `yield_weights_agcros/weights_slopes.csv` |
+| Methods: N-accounting range | | B6 `B6_SHMI_N_scenarios.R` | `N_scenarios_all_sites.csv` |
+| Methods: climate source check | | A7 `A7_Check_climate_source.R` | season check |
+
+Steps C1-C3 run at the end of every run and take seconds. When a part was not run (for example Part A, which is off by default), its items keep the copies already in `Outputs/Manuscript/`, and `manifest.csv` shows when each was written.
 
 ## Scripts (`R/`)
 
-Scripts are numbered in the order `run_all.Rmd` runs them: **A** = calibration (Part A), **B** = yield and records (Part B). Every step runs with SHMI 2.0.0. Alternative index structures were compared during development with an earlier build of the package; those scripts are not part of this release (A2a and A2b are therefore absent).
+Scripts are numbered in the order `run_all.R` runs them: **A** = calibration (Part A), **B** = yield and records (Part B), **C** = display items for the manuscript (Part C). Every step runs with SHMI 2.0.0. Alternative index structures were compared during development with an earlier build of the package; those scripts are not part of this release (A2a and A2b are therefore absent).
 
 | Step | Script | What it does |
 |---|---|---|
@@ -85,6 +97,9 @@ Scripts are numbered in the order `run_all.Rmd` runs them: **A** = calibration (
 | B6 | `B6_SHMI_N_scenarios.R` | 20 legume-credit x manure-availability assumptions |
 | B7 | `B7_Assemble_manuscript_figures.R` | assembles Figs. 3-4 and Extended Data Fig. 4 |
 | B9 | `B9_SHMI_coarse_records.R` | coarse-record test |
+| C1 | `C1_Fig1_and_Table1.R` | Fig. 1 (path coefficients with site-bootstrap intervals; example systems) and Table 1 |
+| C2 | `C2_export_tables.R` | Extended Data Table 1 and Supplementary Data Tables 1-4; `Tables.xlsx` |
+| C3 | `C3_collect_figures.R` | copies the other figures into `Outputs/Manuscript/` under the paper's numbering; `manifest.csv` |
 
 Helpers sourced by the scripts above: `run_helpers.R` (runs each step and logs it), `datasets.R` (calibration data sets), `SHMI_legume_credit.R` and `SHMI_manure_n.R` (N accounting for B2).
 
@@ -108,6 +123,7 @@ The raw AgCROS tables were used with permission and are not redistributed; the f
 ## Notes
 
 - Scripts use paths relative to the project root (`here::here()`); any script can also be run on its own from the project.
+- Random seeds are fixed in every script that resamples (calibration bootstraps and folds, the benchmark, the site bootstraps, random forests), so a rerun reproduces the outputs exactly with the same R and package versions. Each run writes `sessionInfo.txt` to its log folder. When Part A is run, `run_all.R` checks that the recalibrated weights match those built into SHMI 2.0.0 and says so in the console.
 - Site runs are cached in `Outputs/yield/site_runs`. The cache key covers each workbook, the period, the settings, the SHMI weights, the SHMI package (version and install time) and the scoring code. Delete the folder to force a full rescore.
 - Figures are saved without titles or captions (the legends are in the manuscript); set `options(shmi.ms_figures = FALSE)` before running a script to keep them for working plots.
 - The converter writes one `CD_term_date` (rule T1) and a zero-mixing placeholder pass at no-till sites (rule D3). Both were workarounds for two issues since fixed in the SHMI package. They do not change any score and are kept so the shipped workbooks are reproduced exactly.

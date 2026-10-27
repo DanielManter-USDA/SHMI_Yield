@@ -1,6 +1,6 @@
 # Inputs
 
-Files the analysis reads but does not create. `run_all.Rmd` checks this list before it starts and reports anything missing for the parts you chose to run.
+Files the analysis reads but does not create. `run_all.R` checks this list before it starts and reports anything missing for the parts you chose to run.
 
 **What is in the repository.** Everything needed to rerun the paper except the raw AgCROS tables:
 - `yield_workbooks/`: the SHMI workbooks of all yield experiments (the AgCROS ones are derived from the AgCROS records);
@@ -12,7 +12,7 @@ Files the analysis reads but does not create. `run_all.Rmd` checks this list bef
 - The raw AgCROS table export (`agcros/`): the database is being relaunched by USDA-ARS and is not redistributed here. It is needed only to rebuild the AgCROS workbooks and the soil carbon table (step B0), whose results are shipped (`yield_workbooks/`, `data/soil_c.csv`).
 - Large public files that are downloaded instead: the SPEI grid (`climate/spei03.nc`) and, optionally, gSSURGO.
 
-Derived files that would otherwise need restricted, very large or keyed sources are shipped in `data/` and copied into `Outputs/` by `run_all.Rmd` when missing: NASS county yields (`data/cache/`, so no NASS key is needed), gSSURGO soil groups (`data/cache/site_soils_ssurgo.csv`), AgCROS soil carbon (`data/soil_c.csv`) and the SHAPE scores by unit.
+Derived files that would otherwise need restricted, very large or keyed sources are shipped in `data/` and copied into `Outputs/` by `run_all.R` when missing: NASS county yields (`data/cache/`, so no NASS key is needed), gSSURGO soil groups (`data/cache/site_soils_ssurgo.csv`), AgCROS soil carbon (`data/soil_c.csv`) and the SHAPE scores by unit.
 
 ## Part B: corn yield (the default run)
 
