@@ -110,9 +110,9 @@ if (isTRUE(p$run_calibration)) {
   # A4. benchmark (Supplementary Data Table 4) and Fig. 2
   run_r("A4a_SHMI_benchmark.R")
   run_r("A4b_Fig2_soil_health.R")
-  # A5. weights by comparison (Supplementary Data Fig. 1)
+  # A5. weights by comparison (Supplementary Data Fig. 2)
   run_r("A5a_Run_within_calibration_scenarios.R")
-  run_r("A5b_SuppFig1_weights_by_comparison.R")
+  run_r("A5b_SuppFig2_weights_by_comparison.R")
   # A6. SHAPE (Extended Data Fig. 3); the SHAPE app runs outside R
   run_r("A6a_Prepare_SHAPE.R")
   dir.create("Outputs/SHAPE", showWarnings = FALSE, recursive = TRUE)
@@ -150,7 +150,7 @@ run_r("B0_build_napeshm_crosswalk.R")
 
 if (isTRUE(p$run_yield)) {
   run_r("B1_Get_SPEI.R")                    # growing-season SPEI for every site-year
-  run_r("B2_SHMI_yield_main.R")             # Fig. 3, Extended Data Fig. 4, Supp. Data Table 1, Supp. Data Fig. 2
+  run_r("B2_SHMI_yield_main.R")             # Fig. 3, Extended Data Fig. 4, Supp. Data Table 1, Supp. Data Fig. 1
   run_r("B3_SHMI_yield_stability.R")        # Fig. 4
   run_r("B4_SHMI_N_equivalent.R")           # fertilizer-N equivalent (reruns B2 in its own session)
   run_r("B5_SHMI_soil_mediation.R")         # Supp. Data Table 3 (reruns B2 in its own session)
@@ -180,7 +180,7 @@ run_r("C1b_ED_Fig2.R")              # Extended Data Fig. 2, from the saved calib
 if (!isTRUE(p$run_calibration)) {
   REDRAW <- c("A4b_Fig2_soil_health.R"                = "Outputs/Final_plus/us_oof_predictions.csv",          # Fig. 2
               "A6c_SHMI_SHAPE_age.R"                  = "Outputs/SHAPE/SHAPE_by_unit_with_SHMI.csv",          # Extended Data Fig. 3
-              "A5b_SuppFig1_weights_by_comparison.R"  = "Outputs/Calib_scenarios/scenario_summary.csv",       # Supplementary Data Fig. 1
+              "A5b_SuppFig2_weights_by_comparison.R"  = "Outputs/Calib_scenarios/scenario_summary.csv",       # Supplementary Data Fig. 2
               "A8_Export_appendix_tables.R"           = "Outputs/sem_noMX_projection.rds")                    # Extended Data Fig. 1 loadings
   if (!file.exists("Outputs/Benchmark/benchmark_summary.csv")) REDRAW <- REDRAW[names(REDRAW) != "A4b_Fig2_soil_health.R"]
   for (s in names(REDRAW)) {

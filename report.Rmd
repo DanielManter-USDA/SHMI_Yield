@@ -51,7 +51,7 @@ Part A is frozen for the paper and off by default; the tables below are shown wh
 show_csv(file.path(ROOT, "Outputs", "Benchmark", "benchmark_summary.csv"),
          "Fig. 2d and Supplementary Data Table 4: SHMI against its parts and unconstrained models")
 show_csv(file.path(ROOT, "Outputs", "Calib_scenarios", "scenario_summary.csv"),
-         "Supplementary Data Fig. 1: weights by comparison")
+         "Supplementary Data Fig. 2: weights by comparison")
 ```
 
 # Corn yield (Part B)

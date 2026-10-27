@@ -59,8 +59,8 @@ Every display item ends up in **`Outputs/Manuscript/`** under the paper's number
 | Supplementary Data Table 2, record types | `SuppTable2.csv` | B9 | `Coarse/coarse_scenarios.csv` |
 | Supplementary Data Table 3, soil properties as carriers of the slope | `SuppTable3.csv` | B5 `B5_SHMI_soil_mediation.R` (crosswalk from B0 `B0_build_napeshm_crosswalk.R`) | `mediation_results.csv` |
 | Supplementary Data Table 4, SHMI against its parts | `SuppTable4.csv` | A4a | `Benchmark/benchmark_bootstrap.csv` |
-| Supplementary Data Fig. 1, weights by comparison | `SuppFig1.png` | A5a `A5a_Run_within_calibration_scenarios.R`; figure A5b `A5b_SuppFig1_weights_by_comparison.R` | `Calib_scenarios/` |
-| Supplementary Data Fig. 2, effect sizes | `SuppFig2.png` | B2 | `Fig_effect_sizes.csv` |
+| Supplementary Data Fig. 1, effect sizes | `SuppFig1.png` | B2 | `Fig_effect_sizes.csv` |
+| Supplementary Data Fig. 2, weights by comparison | `SuppFig2.png` | A5a `A5a_Run_within_calibration_scenarios.R`; figure A5b `A5b_SuppFig2_weights_by_comparison.R` | `Calib_scenarios/` |
 | Methods: fertilizer-N equivalent | | B4 `B4_SHMI_N_equivalent.R` | `N_equivalent.csv` |
 | Methods: yield slope and the choice of weights | | B5b `B5b_SHMI_yield_weights_sensitivity.R` | `yield_weights_agcros/weights_slopes.csv` |
 | Methods: N-accounting range | | B6 `B6_SHMI_N_scenarios.R` | `N_scenarios_all_sites.csv` |
@@ -83,7 +83,7 @@ Scripts are numbered in the order `run_all.R` runs them: **A** = calibration (Pa
 | A3b | `A3b_calibration_report_figures.R` | in-sample and out-of-fold report figures and agreement table |
 | A4a | `A4a_SHMI_benchmark.R` | SHMI against its parts, reduced versions, fixed published weights and unconstrained models |
 | A4b | `A4b_Fig2_soil_health.R` | Fig. 2 |
-| A5a-A5b | `A5a_Run_within_calibration_scenarios.R`, `A5b_SuppFig1_weights_by_comparison.R` | weights fitted between sites, to all variation and within sites |
+| A5a-A5b | `A5a_Run_within_calibration_scenarios.R`, `A5b_SuppFig2_weights_by_comparison.R` | weights fitted between sites, to all variation and within sites |
 | A6a-A6c | `A6a_Prepare_SHAPE.R`, `A6b_Merge_SHAPE_SHMI.R`, `A6c_SHMI_SHAPE_age.R` | SHAPE benchmark |
 | A7 | `A7_Check_climate_source.R` | WorldClim against Daymet growing seasons |
 | A8 | `A8_Export_appendix_tables.R` | SEM loadings and adjustment slopes |

@@ -10,7 +10,7 @@
 #   Extended Data Fig. 4 and Supplementary Data Table 1 (section 7b): each
 #             experiment's SHMI range and own slope, the random-slope average,
 #             contrast groups, heterogeneity and SHMI-scale checks
-#   Supplementary Data Fig. 2: effect sizes of SHMI, N and the other treatments,
+#   Supplementary Data Fig. 1: effect sizes of SHMI, N and the other treatments,
 #             each over its typical range (Fig_effect_sizes)
 # Panels are assembled by B7_Assemble_manuscript_figures.R. Year conditions,
 # drought and worst years are in B3_SHMI_yield_stability.R.

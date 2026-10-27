@@ -1,0 +1,7 @@
+"Soil measure","Experiments (systems; plot-years)","r with SHMI","Change per 10 SHMI (95% CI)","Yield per unit, kg ha-1 (P)","Total SHMI slope","Indirect effect (95% CI)","Share carried, % (95% CI)","Share, leaving out one site, %"
+"Soil health, lv_SH (0-100; NAPESHM)","3 (23; 3,435)",0.76,"7.39 (4.09 to 10.69)","-7.3 (P = 0.44)",255,"-54 (-198 to 79)","-21 (-263 to 30)","-85 to 34"
+"SHAPE mean score (0-1; NAPESHM)","3 (23; 3,435)",0.73,"0.06 (0.03 to 0.09)","-535.4 (P = 0.62)",255,"-32 (-171 to 96)","-13 (-206 to 34)","-67 to 40"
+"SOC 0-15 cm (g/kg; NAPESHM + AgCROS)","9 (566; 8,628)",0.29,"0.71 (0.51 to 0.90)","22.7 (P = 0.06)",210,"16 (-0 to 35)","8 (-0 to 19)","2 to 11"
+"Active carbon, POXC (mg/kg; NAPESHM)","3 (23; 3,435)",0.76,"44.60 (24.55 to 64.65)","-0.2 (P = 0.90)",255,"-8 (-140 to 122)","-3 (-154 to 44)","-31 to 34"
+"Wet aggregate stability (NAPESHM)","3 (23; 3,435)",0.83,"4.38 (2.84 to 5.92)","-20.1 (P = 0.28)",255,"-88 (-256 to 64)","-34 (-442 to 37)","-118 to 9"
+"SOC 0-30 cm (g/kg; AgCROS)","6 (495; 4,867)",0.2,"0.45 (0.25 to 0.65)","32.7 (P = 0.02)",138,"15 (2 to 30)","11 (-5 to 64)","-21 to 11"
