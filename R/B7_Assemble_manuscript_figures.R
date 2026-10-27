@@ -50,9 +50,12 @@ dir.create(OUTM, recursive = TRUE, showWarnings = FALSE)
 WIDTH <- 3600                                   # final width in pixels (~12 in at 300 dpi)
 
 rd <- function(f) image_trim(image_read(f))
-lab <- function(img, letter) {
-  img <- image_border(img, "white", "40x60")
-  image_annotate(img, letter, size = 90, weight = 700, gravity = "northwest", location = "+10+0")
+# panel letter in a white strip of height `top` above the panel (letter size in pixels)
+lab <- function(img, letter, size = 90, top = 60) {
+  img <- image_border(img, "white", "40x0")
+  w <- image_info(img)$width
+  img <- image_append(c(image_blank(w, top, "white"), img, image_blank(w, 60, "white")), stack = TRUE)
+  image_annotate(img, letter, size = size, weight = 700, gravity = "northwest", location = "+10+0")
 }
 fit_w <- function(img, w) image_scale(img, as.character(w))
 fit_h <- function(img, h) image_scale(img, paste0("x", h))
@@ -63,9 +66,10 @@ save_fig <- function(img, name) {
 }
 
 # ---- Fig. 3 ---------------------------------------------------------------------------
-pa <- lab(rd(file.path(MAIN, "Fig1_within_sites.png")), "a")
-pb <- lab(rd(file.path(MAIN, "Fig2_SHMI_x_N.png")), "b")
-pc <- lab(rd(file.path(MAIN, "Fig3_SHMI_x_age.png")), "c")
+# smaller letters, set above each panel so they clear the axis titles
+pa <- lab(rd(file.path(MAIN, "Fig1_within_sites.png")), "a", size = 65, top = 85)
+pb <- lab(rd(file.path(MAIN, "Fig2_SHMI_x_N.png")), "b", size = 65, top = 85)
+pc <- lab(rd(file.path(MAIN, "Fig3_SHMI_x_age.png")), "c", size = 65, top = 85)
 top <- fit_w(pa, round(WIDTH * 0.62)); top <- pad_to(top, WIDTH, image_info(top)$height)
 half <- WIDTH / 2
 bc <- list(fit_w(pb, half), fit_w(pc, half))

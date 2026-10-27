@@ -403,6 +403,7 @@ if (length(pl)) {
     geom_vline(data = ref, aes(xintercept = ref), linetype = "dashed", colour = "grey55") +
     geom_errorbar(aes(xmin = lo, xmax = hi), width = 0.3) + geom_point(size = 2.2) +
     facet_grid(set ~ measure, scales = "free", space = "free_y") +
+    scale_x_continuous(expand = expansion(mult = 0.08), n.breaks = 5) +   # room at the panel edges
     scale_colour_manual(values = c("Record type" = "#1b7837", "Crops" = "#8c510a", "Cover crops" = "#35978f",
                                    "Dates" = "#2166ac", "Tillage" = "#b2182b", "Manure, grazing" = "#762a83"), name = NULL) +
     labs(x = NULL, y = NULL, title = "SHMI with less detailed management records",
@@ -412,10 +413,11 @@ if (length(pl)) {
                           "yields and N from the full record. Dashed: full record.")) +
     theme_bw(base_size = 10) +
     theme(legend.position = "bottom", plot.caption = element_text(hjust = 0, size = 7.5),
+          panel.spacing.x = unit(1.4, "lines"),                              # keeps axis labels of adjacent panels apart
           strip.text.y = element_text(angle = 0, face = "bold", hjust = 0))
   if (ms) g <- g + labs(title = NULL, subtitle = NULL, caption = NULL) +
     theme(strip.background = element_blank(), strip.text.x = element_text(face = "bold", size = 10, hjust = 0),
           strip.text.y = element_text(angle = 0, face = "bold", size = 13, hjust = 0))
-  ggsave(OUTC("Fig_coarse_records.png"), g, width = 11.5, height = 7, dpi = 300)
+  ggsave(OUTC("Fig_coarse_records.png"), g, width = 12, height = 7, dpi = 300)
 }
 message("Coarse-record test done: ", CFG_C$out_dir)
