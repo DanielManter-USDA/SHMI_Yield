@@ -27,7 +27,7 @@ SETTINGS <- list(
   run_coarse          = FALSE,  # B9  coarse-record test (hours)
   in_session          = FALSE,  # TRUE: run each step in this R session instead of a fresh one
                                 #   (use it if a step fails with "callr subprocess failed", e.g. on Windows)
-  python              = "",     # python executable; "" = the first working python on the PATH
+  python              = "",     # python executable; "" = RETICULATE_PYTHON (RStudio's Python option), else the PATH
   agcros_tables       = "Inputs/agcros/extracted_tables"
 )
 # Random steps use fixed seeds in the scripts (cross-validation folds 2026 + repeat,
@@ -52,13 +52,14 @@ message("SHMI_Yield run ", basename(LOG_DIR), " | logs: ", LOG_DIR)
 message("Settings: ", paste(names(p)[vapply(p, isTRUE, logical(1))], collapse = ", "))
 
 seed_outputs()     # shipped copies of derived inputs (data/), used when the local ones are missing
-PY <- tryCatch(find_python(p$python), error = function(e) NA_character_)
-if (!is.na(PY) && !isTRUE(tryCatch({ check_python(PY, quiet = TRUE); TRUE }, error = function(e) FALSE))) PY <- NA_character_
+PY <- find_python(p$python)
+PY_WHY <- attr(PY, "why"); PY <- as.character(PY)
 py_need <- python_needed(p)
 if (is.na(PY) && length(py_need))
   stop("Python is needed to build: ", paste(py_need, collapse = "; "),
-       ". Install python with pandas, openpyxl and numpy, or put those files in place (see Inputs/README.md).")
-message("Python: ", if (is.na(PY)) "not available (R-only run)" else PY,
+       ". Install python with pandas, openpyxl and numpy, set RUN_SETTINGS$python, or put those files in place (see Inputs/README.md).",
+       "\n  Pythons tried:\n    ", paste(PY_WHY, collapse = "\n    "))
+message("Python: ", if (is.na(PY)) paste0("not available (R-only run): ", paste(PY_WHY, collapse = "; ")) else PY,
         " | SHMI package: ", as.character(utils::packageVersion("SHMI")))
 need <- required_inputs(p)
 write.csv(need, file.path(LOG_DIR, "inputs_check.csv"), row.names = FALSE)

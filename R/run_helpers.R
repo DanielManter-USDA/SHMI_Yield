@@ -66,16 +66,25 @@ run_r <- function(script, vars = list(), opts = list(), label = sub("\\.R$", "",
   invisible(TRUE)
 }
 
-# the first python on the PATH that actually runs (on Windows, python3 is often a
-# Microsoft Store alias that does not)
+# The python to use: the one given (setting `python`), else the first that runs and has
+# pandas, openpyxl and numpy among RETICULATE_PYTHON (set by RStudio's Global Options >
+# Python), then python3, python and py on the PATH (on Windows, python3 is often a
+# Microsoft Store alias that does not run). Returns NA with the reasons as an attribute.
 find_python <- function(py = "") {
-  if (nzchar(py)) return(py)
-  for (p in c("python3", "python", "py")) {
-    w <- unname(Sys.which(p))
-    if (nzchar(w) && identical(suppressWarnings(system2(shQuote(w), "--version", stdout = FALSE, stderr = FALSE)), 0L))
-      return(w)
+  cands <- if (nzchar(py)) py else
+    unique(c(Sys.getenv("RETICULATE_PYTHON"), unname(Sys.which(c("python3", "python", "py")))))
+  cands <- cands[nzchar(cands)]
+  why <- character()
+  for (w in cands) {
+    if (!file.exists(w) && !nzchar(Sys.which(w))) { why <- c(why, paste0(w, ": not found")); next }
+    if (!identical(suppressWarnings(system2(shQuote(w), "--version", stdout = FALSE, stderr = FALSE)), 0L)) {
+      why <- c(why, paste0(w, ": does not run")); next }
+    ok <- tryCatch({ check_python(w, quiet = TRUE); TRUE }, error = function(e) FALSE)
+    if (ok) return(w)
+    why <- c(why, paste0(w, ": missing pandas, openpyxl or numpy (", shQuote(w), " -m pip install pandas openpyxl numpy)"))
   }
-  stop("No working python on the PATH; set params$python to the python executable.")
+  if (!length(cands)) why <- "no python on the PATH and RETICULATE_PYTHON not set"
+  structure(NA_character_, why = why)
 }
 
 check_python <- function(py, quiet = FALSE) {
