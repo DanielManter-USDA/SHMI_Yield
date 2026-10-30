@@ -26,6 +26,9 @@ Operations (--ops, comma-separated; always applied in this order):
   noamend    organic amendments (SA_cat "Organic") and grazing removed (amendments
              become zero fertilizer rows); fertilizer records are kept.
   last:N     only the last N calendar years of each unit's record are kept.
+  first:N    only the first N calendar years of each unit's record are kept (the mirror
+             of last:N: where a record is one representative rotation, first and last
+             years are different phases of the same system, not older and newer years).
   jitter:N   every crop and tillage date shifted by a random 0-N days, either
              way, within its calendar year (a row keeps its original dates if the
              shift breaks its order).
@@ -488,6 +491,30 @@ def op_last(wb, n, log):
     log.append((f"last:{n}", f"{dropped} records before each unit's last {n} years removed"))
 
 
+def op_first(wb, n, log):
+    first = {}
+    for name, fields in DATE_FIELDS.items():
+        if name not in wb.sheetnames: continue
+        sh = Sheet(wb[name])
+        for r in sh.rows:
+            for f in fields:
+                d = as_date(sh.get(r, f))
+                u = sh.get(r, "MGT_combo")
+                if d: first[u] = min(first.get(u, d.year), d.year)
+    dropped = 0
+    for name, fields in DATE_FIELDS.items():
+        if name not in wb.sheetnames: continue
+        sh = Sheet(wb[name]); keep = []
+        for r in sh.rows:
+            ds = [as_date(sh.get(r, f)) for f in fields]
+            ds = [d for d in ds if d]
+            u = sh.get(r, "MGT_combo")
+            if ds and u in first and min(ds).year > first[u] + n - 1: dropped += 1; continue
+            keep.append(r)
+        sh.rows = keep; sh.write()
+    log.append((f"first:{n}", f"{dropped} records after each unit's first {n} years removed"))
+
+
 def shift_in_year(d, n, rng):
     """d moved by a random 0-n days either way, reflected back if it would leave its
     calendar year: the scoring window runs from 1 January of the first year with a record
@@ -568,7 +595,7 @@ def main(argv=None):
     par = {}
     for o in ops:
         k, _, v = o.partition(":")
-        if k in ("last", "jitter", "sjitter"): par[k] = int(v)
+        if k in ("last", "first", "jitter", "sjitter"): par[k] = int(v)
         elif k == "misclass": par[k] = float(v)
         elif k not in known: sys.exit(f"unknown operation: {o}")
     flags = {o.partition(":")[0] for o in ops}
@@ -590,6 +617,7 @@ def main(argv=None):
     cd.write(); sd.write()
     if "noamend" in flags: op_noamend(wb, log)
     if "last" in flags: op_last(wb, par["last"], log)
+    if "first" in flags: op_first(wb, par["first"], log)
     os.makedirs(os.path.dirname(os.path.abspath(a.out)), exist_ok=True)
     wb.save(a.out)
     for k, m in log: print(f"  {k}: {m}")

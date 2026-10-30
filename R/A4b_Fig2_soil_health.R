@@ -1,14 +1,14 @@
 ################################################################################
 # A4b_Fig2_soil_health.R
 #
-# Manuscript Fig. 2: SHMI predicts soil health at sites withheld from
-# calibration, and better than any of its parts.
-#   a  out-of-fold predicted vs measured soil health, all 354 systems
-#   b  the same for the 74 site means
-#   c  the same within sites (deviations from site means)
-#   d  out-of-fold performance of SHMI, each part alone, and unconstrained
-#      models on the same inputs (from A4a_SHMI_benchmark.R), four metrics;
-#      shaded band = SHMI's 95% range across repeated fold assignments
+# Manuscript Fig. 2: the whole system predicts soil health better than any part.
+#   a  out-of-fold performance of SHMI, each part alone, and unconstrained
+#      models on the same inputs (from A4a_SHMI_benchmark.R): within sites first
+#      (correlation, sites ranked in the right direction), then between site means
+#      and overall R2; shaded band = SHMI's 95% range across repeated fold assignments
+#   b  out-of-fold predicted vs measured soil health, all 354 systems
+#   c  the same for the 74 site means
+#   d  the same within sites (deviations from site means)
 #
 # Inputs
 #   FIN/us_oof_predictions.csv          (A3a_SHMI_calibration_plus.R)
@@ -50,13 +50,13 @@ panel <- function(x, y, tag, xlab, ylab) {
 }
 sm <- d %>% group_by(sitecode) %>% summarise(x = mean(pred), y = mean(SH), .groups = "drop")
 wi <- d %>% group_by(sitecode) %>% mutate(x = pred - mean(pred), y = SH - mean(SH)) %>% ungroup()
-pa <- panel(d$pred, d$SH, "a", "Predicted soil health", "Measured soil health")
-pb <- panel(sm$x, sm$y, "b", "Site mean predicted soil health", "Site mean measured soil health")
-pc <- panel(wi$x, wi$y, "c", "Predicted, minus site mean", "Measured, minus site mean")
-cat(sprintf("a: n = %d systems | b: %d site means\n", nrow(d), nrow(sm)))
+pa <- panel(d$pred, d$SH, "b", "Predicted soil health", "Measured soil health")
+pb <- panel(sm$x, sm$y, "c", "Site mean predicted soil health", "Site mean measured soil health")
+pc <- panel(wi$x, wi$y, "d", "Predicted, minus site mean", "Measured, minus site mean")
+cat(sprintf("b: n = %d systems | c: %d site means\n", nrow(d), nrow(sm)))
 
 # ------------------------------------------------------------------------------
-# d: SHMI against its parts and unconstrained models
+# a: SHMI against its parts and unconstrained models
 # ------------------------------------------------------------------------------
 bs <- read.csv(BENCH, check.names = FALSE)
 
@@ -71,8 +71,8 @@ ROWS <- tibble::tribble(                       # benchmark name -> label, group 
 miss <- setdiff(ROWS$model, bs$model)
 if (length(miss)) stop("Not in benchmark_summary.csv: ", paste(miss, collapse = ", "))
 
-METRICS <- c(R2 = "Overall R²", between_r = "r between site means",
-             within_r = "r within sites", sites_correct_of_all = "Sites ranked correctly (%)")
+METRICS <- c(within_r = "r within sites", sites_correct_of_all = "Sites ranked in the right direction (%)",
+             between_r = "r between site means", R2 = "Overall R²")
 
 dd <- bs %>% filter(model %in% ROWS$model) %>%
   select(model, all_of(unlist(lapply(names(METRICS), function(m) c(m, paste0(m, c("_lo", "_hi"))))))) %>%
@@ -95,7 +95,7 @@ pd <- ggplot(dd, aes(med, label, colour = group)) +
   geom_point(size = 2.4) +
   facet_wrap(~ metric, nrow = 1, scales = "free_x") +
   scale_colour_manual(values = grp_col, name = NULL) +
-  labs(title = "d", x = "Median and 95% range across repeated fold assignments", y = NULL) +
+  labs(title = "a", x = "Median and 95% range across repeated fold assignments (sites withheld from fitting)", y = NULL) +
   tag_theme +
   theme(legend.position = "bottom", strip.background = element_blank(),
         strip.text = element_text(size = 10, face = "bold"),
@@ -103,7 +103,7 @@ pd <- ggplot(dd, aes(med, label, colour = group)) +
         panel.border = element_rect(fill = NA, colour = "grey60"), axis.line = element_blank())
 
 # Numbers for the text and caption
-cat("\nPanel d (median [95% range])\n")
+cat("\nPanel a (median [95% range])\n")
 print(dd %>% arrange(metric, desc(label)) %>%
         transmute(metric, label, value = sprintf("%.2f [%.2f, %.2f]", med, lo, hi)) %>% as.data.frame(),
       row.names = FALSE)
@@ -117,7 +117,8 @@ if ("SHMI, published weights (fixed)" %in% bs$model) {
 # ------------------------------------------------------------------------------
 # Assemble
 # ------------------------------------------------------------------------------
-fig <- (pa | pb | pc) / pd + patchwork::plot_layout(heights = c(1, 0.85))
-ggsave(file.path(OUT, "Fig2.png"), fig, width = 13, height = 8.6, dpi = 300)
-ggsave(file.path(OUT, "Fig2.pdf"), fig, width = 13, height = 8.6)
+# the comparison with the parts leads; the fit panels support it, smaller
+fig <- pd / (pa | pb | pc) + patchwork::plot_layout(heights = c(1, 0.75))
+ggsave(file.path(OUT, "Fig2.png"), fig, width = 13, height = 8, dpi = 300)
+ggsave(file.path(OUT, "Fig2.pdf"), fig, width = 13, height = 8)
 cat("\nSaved Fig2.png/.pdf in", OUT, "\n")

@@ -8,16 +8,27 @@
 #            ~ SHMI, with 95% intervals from a site-level bootstrap; the total effect
 #            of each sub-index on SHMI (weight + path to Cover/Roots x its weight)
 #            and their sum (the overstatement from adding practices one at a time).
-#   Fig. 1b  SHMI of example systems, scored with the SHMI package from example
-#            management records (below).
-#   Table 1  the example systems, their SHMI, and the expected corn yield change
+#   Fig. 1b  practices vary: pairs of annual systems at the same NAPESHM site that differ
+#            in one practice and match on every other practice label (tillage class,
+#            cover crop, rotation length, nutrient source, residue, grazing, irrigation,
+#            crop phase at sampling, crop category, other treatment). For each practice:
+#            the change in the part of SHMI it targets, in SHMI and in measured soil
+#            health (lv_SH), one dot per pair, medians and interquartile ranges.
+#   Fig. 1c  practices do not add up in measured soil health (no SHMI): each practice's own
+#            within-site effect on lv_SH, their sum, and all four together (from
+#            C1d_practice_additivity.R, run first; the all-four bar is split among the
+#            practices in proportion to their own effects, only its total is estimated)
+#   Table 1  the example systems (scored with the SHMI package from example records below), their SHMI, and the expected corn yield change
 #            relative to conventionally tilled corn-soybean at the average
 #            within-site slope at 150 kg N/ha.
 #
 # Inputs  data/SHAPE_by_unit_with_SHMI.csv (sub-indices, SHMI and lv_SH by unit)
+#         Inputs/napeshm/treatments.csv (NAPESHM practice labels, for Fig. 1b)
 #         Outputs/Benchmark/benchmark_summary.csv (out-of-fold R2, optional)
-# Outputs Outputs/Manuscript/Fig1.png, Fig1.pdf, Table1.csv, Fig1_path_coefficients.csv,
-#         Fig1_example_systems.csv
+#         Outputs/Practice_additivity/additivity_effects.csv (C1d, for Fig. 1c)
+# Outputs Outputs/Manuscript/Fig1.png, Fig1.pdf, Table1.csv, Table1_next_step.csv, Fig1_path_coefficients.csv,
+#         Fig1_example_systems.csv, Fig1b_practice_pairs.csv (one row per pair),
+#         Fig1b_practice_summary.csv
 #
 # The example records are constructed here: four years (2019-2022), corn planted
 # 1 May and harvested 1 October, soybean planted 15 May and harvested 5 October,
@@ -67,7 +78,7 @@ write.csv(coef_tab, file.path(OUT, "Fig1_path_coefficients.csv"), row.names = FA
 cat("Path coefficients (Fig. 1a):\n"); print(as.data.frame(coef_tab), digits = 3, row.names = FALSE)
 
 # ==============================================================================
-# 2. Example systems (Fig. 1b, Table 1)
+# 2. Example systems (Table 1)
 # ==============================================================================
 YEARS   <- 2019:2022
 CLIMATE <- list(tavg = c(-5, -3, 3, 10, 16, 21, 24, 23, 18, 11, 4, -2),
@@ -79,7 +90,12 @@ SYSTEMS <- tribble(
   "NT", "+ no-till",                                    "CS",      TRUE,    FALSE, FALSE,
   "RY", "+ cereal rye cover crop",                      "CS",      FALSE,   TRUE,  FALSE,
   "MN", "+ manure",                                     "CS",      FALSE,   FALSE, TRUE,
-  "AL", "+ no-till, rye and manure",                    "CS",      TRUE,    TRUE,  TRUE)
+  "AL", "+ no-till, rye and manure",                    "CS",      TRUE,    TRUE,  TRUE,
+  # the rest of the corn-soybean factorial, for the "what to add next" table (Table1_next_step.csv)
+  "NR", "+ no-till and rye",                            "CS",      TRUE,    TRUE,  FALSE,
+  "NM", "+ no-till and manure",                         "CS",      TRUE,    FALSE, TRUE,
+  "RM", "+ rye and manure",                             "CS",      FALSE,   TRUE,  TRUE)
+TABLE1_IDS <- c("CC", "CS", "NT", "RY", "MN", "AL")
 dt <- function(y, md) as.Date(sprintf("%d-%s", y, md))
 
 records <- function(s) {
@@ -128,13 +144,36 @@ print(as.data.frame(scores %>% select(label, Cover, Diversity, InvDist, SHMI_bas
                       mutate(across(where(is.numeric), ~ round(.x, 1)))), row.names = FALSE)
 
 ref <- scores$SHMI[scores$MGT_combo == "CS"]
-table1 <- scores %>%
-  transmute(System = label, SHMI = round(SHMI), dSHMI = round(SHMI - ref),
+table1 <- scores %>% filter(MGT_combo %in% TABLE1_IDS) %>%
+  # every column from the unrounded score (rounding SHMI first would feed the rounded value
+  # into the yield change: +2 kg/ha for the reference itself)
+  transmute(System = label, SHMI_r = round(SHMI), dSHMI = round(SHMI - ref),
             yield_kg_ha = ifelse(MGT_combo == "NT", NA, round(SLOPE_10 / 10 * (SHMI - ref))),
             bu_ac = round(yield_kg_ha / KG_PER_BU, 1),
-            value_usd_ac = round(bu_ac * PRICE_BU))
+            value_usd_ac = round(bu_ac * PRICE_BU)) %>%
+  rename(SHMI = SHMI_r)
 names(table1) <- c("System", "SHMI", "ΔSHMI", "Yield change, kg ha-1", "bu ac-1", "Value, $ ac-1")
 write.csv(table1, file.path(OUT, "Table1.csv"), row.names = FALSE, fileEncoding = "UTF-8")
+
+# What to add next: the SHMI gain from adding no-till, a rye cover crop or yearly manure to
+# each corn-soybean system (the full factorial of the three practices). Practices that act
+# on different parts (rye: Cover/Roots and Diversity; no-till: Inverse Disturbance) add;
+# the organic-input bonus closes a share of the gap to 100, so manure adds least, and
+# makes the others add less, where the score is already high.
+fac <- scores %>% filter(MGT_combo %in% c("CS", "NT", "RY", "MN", "NR", "NM", "RM", "AL")) %>%
+  left_join(SYSTEMS %>% select(MGT_combo = id, notill, rye, manure), by = "MGT_combo")
+key <- function(nt, ry, mn) fac$SHMI[fac$notill == nt & fac$rye == ry & fac$manure == mn]
+nxt <- fac %>% rowwise() %>%
+  mutate(`+ no-till` = if (notill) NA_real_ else key(TRUE, rye, manure) - SHMI,
+         `+ rye cover crop` = if (rye) NA_real_ else key(notill, TRUE, manure) - SHMI,
+         `+ manure` = if (manure) NA_real_ else key(notill, rye, TRUE) - SHMI) %>%
+  ungroup() %>%
+  mutate(System = c(CS = "Tilled corn–soybean", NT = "No-till", RY = "Rye", MN = "Manure", NR = "No-till + rye",
+                    NM = "No-till + manure", RM = "Rye + manure", AL = "All three")[MGT_combo]) %>%
+  arrange(SHMI) %>%
+  transmute(System, SHMI = round(SHMI), across(c(`+ no-till`, `+ rye cover crop`, `+ manure`), ~ round(.x)))
+write.csv(nxt, file.path(OUT, "Table1_next_step.csv"), row.names = FALSE, na = "", fileEncoding = "UTF-8")
+cat("\nWhat to add next (SHMI gain):\n"); print(as.data.frame(nxt), row.names = FALSE)
 
 # ==============================================================================
 # 3. Figure
@@ -182,20 +221,109 @@ pa <- ggplot() +
   coord_fixed(xlim = c(0, 100), ylim = c(3, 46), expand = FALSE) +
   theme_void()
 
-ladder <- scores %>% mutate(label = factor(label, rev(SYSTEMS$label)),
-                            col = c(CC = "#9e9e9e", CS = "#9e9e9e", NT = "#8a8a80", RY = "#1d9e75",
-                                    MN = "#b8731a", AL = BLUE)[MGT_combo])
-pb <- ggplot(ladder, aes(SHMI, label)) +
-  geom_col(aes(fill = col), width = 0.62, colour = "#444444", linewidth = 0.2) +
-  geom_vline(xintercept = ref, linetype = 2, linewidth = 0.3) +
-  geom_text(aes(label = round(SHMI)), hjust = -0.3, fontface = "bold", size = 3.4) +
-  scale_fill_identity() +
-  scale_x_continuous(limits = c(0, 100), breaks = seq(0, 100, 20), expand = c(0, 0)) +
-  labs(x = "SHMI (0–100)", y = NULL) +
+# ---- Fig. 1b: practices vary (matched within-site pairs) ------------------------------
+trt <- read.csv(here::here("Inputs", "napeshm", "treatments.csv"), stringsAsFactors = FALSE) %>%
+  mutate(MGT_combo = paste0("NAPESHM_", sitecode, "_", treatmentid),
+         across(c(eu_tillage, eu_cover_crops, eu_crop_rot, eu_nutr_type, eu_residue, eu_grazing,
+                  eu_irrigation, crop_phase, eu_crop_cat, eu_other_trt), ~ tolower(trimws(.x)))) %>%
+  select(-sitecode)
+an <- d %>% filter(system == "annual") %>% inner_join(trt, by = "MGT_combo")
+ALL_LABELS <- c("eu_tillage", "eu_cover_crops", "eu_crop_rot", "eu_nutr_type", "eu_residue",
+                "eu_grazing", "eu_irrigation", "crop_phase", "eu_crop_cat", "eu_other_trt")
+PRACTICES <- tribble(
+  ~practice,                          ~label,          ~target,       ~target_lab,           ~col,
+  "Cover crop vs none",               "eu_cover_crops", "Cover",       "Cover/Roots",         "#4c9a2a",
+  "Organic vs synthetic inputs",      "eu_nutr_type",   "Amend_bonus", "organic-input bonus", "#8e6c3a",
+  "Reduced vs conventional tillage",  "eu_tillage",     "InvDist",     "Inverse Disturbance", "#b5651d",
+  "Rotation vs monoculture",          "eu_crop_rot",    "Diversity",   "Diversity",           "#3a7dbf")
+group_of <- list(   # "A" = with the practice, "B" = without, NA = neither
+  eu_cover_crops = function(x) ifelse(x %in% c("grasses", "mix", "legume"), "A", ifelse(x == "none", "B", NA)),
+  eu_nutr_type   = function(x) ifelse(x %in% c("organic", "synthetic_and_organic"), "A", ifelse(x == "synthetic", "B", NA)),
+  eu_tillage     = function(x) ifelse(x %in% c("none", "minimum"), "A", ifelse(x %in% c("intense", "moderate"), "B", NA)),
+  eu_crop_rot    = function(x) ifelse(x %in% c("2", "3", "greater_than_3"), "A", ifelse(x == "1", "B", NA)))
+VARS <- c("Cover", "Diversity", "InvDist", "Amend_bonus", "SHMI", "SH")
+pairs <- bind_rows(lapply(seq_len(nrow(PRACTICES)), function(i) {
+  pr <- PRACTICES[i, ]; keys <- setdiff(ALL_LABELS, pr$label)
+  g <- an %>% mutate(grp = group_of[[pr$label]](.data[[pr$label]])) %>% filter(!is.na(grp))
+  A <- filter(g, grp == "A"); B <- filter(g, grp == "B")
+  inner_join(A, B, by = c("sitecode", keys), suffix = c("_A", "_B"), relationship = "many-to-many") %>%
+    transmute(practice = pr$practice, sitecode, unit_A = MGT_combo_A, unit_B = MGT_combo_B,
+              !!!setNames(lapply(VARS, function(v) rlang::expr(!!rlang::sym(paste0(v, "_A")) - !!rlang::sym(paste0(v, "_B")))),
+                          paste0("d_", VARS)))
+}))
+q <- function(x, p) unname(quantile(x, p))
+# change in the part each practice targets
+pairs <- pairs %>% left_join(select(PRACTICES, practice, target), by = "practice") %>%
+  mutate(d_target = case_when(target == "Cover" ~ d_Cover, target == "Diversity" ~ d_Diversity,
+                              target == "InvDist" ~ d_InvDist, target == "Amend_bonus" ~ d_Amend_bonus)) %>%
+  select(-target)
+summ <- pairs %>% group_by(practice) %>%
+  summarise(pairs = n(), sites = n_distinct(sitecode),
+            target_med = median(d_target), target_min = min(d_target), target_max = max(d_target),
+            shmi_med = median(d_SHMI), shmi_min = min(d_SHMI), shmi_max = max(d_SHMI),
+            sh_med = median(d_SH), sh_share_pos = mean(d_SH > 0), .groups = "drop")
+write.csv(pairs, file.path(OUT, "Fig1b_practice_pairs.csv"), row.names = FALSE)
+write.csv(mutate(summ, across(where(is.double), ~ round(.x, 2))), file.path(OUT, "Fig1b_practice_summary.csv"), row.names = FALSE)
+cat("\nFig. 1b, matched practice pairs:\n"); print(as.data.frame(summ), digits = 3, row.names = FALSE)
+
+COLS <- c("Change in the part it targets", "Change in SHMI", "Change in measured soil health")
+long <- pairs %>% left_join(PRACTICES, by = "practice") %>%
+  transmute(practice, col, target_lab, `Change in the part it targets` = d_target,
+            `Change in SHMI` = d_SHMI, `Change in measured soil health` = d_SH) %>%
+  pivot_longer(all_of(COLS), names_to = "panel", values_to = "value") %>%
+  mutate(panel = factor(panel, COLS),
+         dot = ifelse(panel == COLS[1], col, ifelse(panel == COLS[2], "#222222", "#8e44ad")))
+ylab <- summ %>% mutate(lab = sprintf("%s\n%d pairs, %d sites", practice, pairs, sites))
+long <- long %>% mutate(practice = factor(practice, rev(PRACTICES$practice), rev(ylab$lab[match(PRACTICES$practice, ylab$practice)])))
+med <- long %>% group_by(practice, panel) %>% summarise(m = median(value), lo = q(value, 0.25), hi = q(value, 0.75), .groups = "drop")
+tlab <- long %>% filter(panel == COLS[1]) %>% distinct(practice, panel, target_lab, col)
+pb <- ggplot(long, aes(value, practice)) +
+  geom_vline(xintercept = 0, linetype = 2, linewidth = 0.3, colour = "grey50") +
+  geom_point(aes(colour = dot), position = position_jitter(height = 0.2, width = 0, seed = 4), size = 1.1, alpha = 0.55) +
+  geom_segment(data = med, aes(x = lo, xend = hi, y = practice, yend = practice), linewidth = 1.6) +
+  geom_point(data = med, aes(m, practice), shape = 21, fill = "white", size = 2.6, stroke = 0.8) +
+  geom_text(data = tlab, aes(x = Inf, y = practice, label = target_lab, colour = col), hjust = 1.05, vjust = -1.1,
+            size = 2.6, fontface = "italic") +
+  facet_wrap(~ panel, nrow = 1, scales = "free_x") +
+  scale_colour_identity() +
+  labs(x = "Change between paired systems (points)", y = NULL) +
+  theme_bw(base_size = 10) +
+  theme(strip.background = element_blank(), strip.text = element_text(face = "bold"),
+        panel.grid.minor = element_blank(), panel.grid.major.y = element_blank())
+
+# ---- Fig. 1c: practices do not add up in measured soil health (C1d) ------------------
+ADD <- here::here("Outputs", "Practice_additivity", "additivity_effects.csv")
+if (!file.exists(ADD)) stop("Fig. 1c needs ", ADD, ": run C1d_practice_additivity.R first")
+ae <- read.csv(ADD, stringsAsFactors = FALSE); ge <- function(t) ae$estimate[ae$term == t]
+P4  <- c("cover", "organic", "reduced", "rotation")
+C4  <- setNames(PRACTICES$col, P4)                       # same colours as the practices in b
+XL  <- c(cover = "Cover\ncrop", organic = "Organic\ninputs", reduced = "Reduced\ntillage", rotation = "Rotation",
+         added = "Added\nup", together = "All four\ntogether")
+m4 <- sapply(P4, ge); tog <- ge("together")
+ia <- ae[ae$term == "interactions", ]
+cd <- bind_rows(tibble(x = P4, practice = P4, value = m4),
+                tibble(x = "added", practice = P4, value = m4),
+                tibble(x = "together", practice = P4, value = m4 * tog / sum(m4))) %>%
+  mutate(x = factor(XL[x], XL), practice = factor(practice, rev(P4)))
+ctot <- tibble(x = factor(XL[c("added", "together")], XL), value = c(sum(m4), tog))
+pc <- ggplot(cd, aes(x, value, fill = practice)) +
+  geom_col(width = 0.68, colour = "white", linewidth = 0.3) +
+  geom_text(data = ctot, aes(x, value, label = sprintf("+%.0f", value)), inherit.aes = FALSE,
+            vjust = -0.4, size = 3.6, fontface = "bold") +
+  annotate("text", x = 0.6, y = max(ctot$value) * 1.12, hjust = 0, vjust = 1, size = 3, colour = "grey30", lineheight = 1.1,
+           label = sprintf("interactions %.0f\n(95%% CI %.0f to %.0f)", ia$estimate, ia$lower, ia$upper)) +
+  geom_hline(yintercept = 0, colour = "grey50") +
+  scale_fill_manual(values = C4, guide = "none") +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.15))) +
+  labs(x = NULL, y = "Change in measured soil health (lv_SH)") +
   theme_classic(base_size = 10)
 
-fig <- (pa / pb) + plot_layout(heights = c(1.15, 0.85)) +
-  plot_annotation(tag_levels = "a") & theme(plot.tag = element_text(face = "bold", size = 16))
-ggsave(file.path(OUT, "Fig1.png"), fig, width = 10, height = 8.2, dpi = 300, bg = "white")
-ggsave(file.path(OUT, "Fig1.pdf"), fig, width = 10, height = 8.2, bg = "white")
+# a how SHMI scores the system (path diagram) across the top, so SHMI's parts are introduced
+# before b (practices vary: pairs) and c (they do not add up in measured soil health)
+bottom <- (pb | pc) + plot_layout(widths = c(1.75, 1))
+fig <- (pa / bottom) + plot_layout(heights = c(0.95, 1)) + plot_annotation(tag_levels = "a") &   # a about 15% shorter than before, b and c taller
+  theme(plot.tag = element_text(face = "bold", size = 16))
+ggsave(file.path(OUT, "Fig1.png"), fig, width = 12.5, height = 8.6, dpi = 300, bg = "white")
+tryCatch(ggsave(file.path(OUT, "Fig1.pdf"), fig, width = 12.5, height = 8.6, bg = "white", device = cairo_pdf),
+         error = function(e) message("Fig1.pdf not written (cairo_pdf unavailable): ", conditionMessage(e)))
 cat("\nSaved Fig1.png/.pdf, Table1.csv, Fig1_path_coefficients.csv and Fig1_example_systems.csv in", OUT, "\n")

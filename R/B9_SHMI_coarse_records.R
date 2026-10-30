@@ -52,7 +52,7 @@
 #      Settings: CFG_COARSE_OVERRIDE <- list(...) before sourcing (see CFG_C).
 # Outputs (Outputs/Coarse/): coarse_scenarios.csv, coarse_napeshm.csv,
 #      coarse_napeshm_repeats.csv, coarse_agreement.csv, coarse_yield.csv,
-#      coarse_yield_runs.csv, Fig_coarse_records.png, degrade_log.csv, the degraded
+#      coarse_yield_runs.csv, degrade_log.csv (Extended Data Fig. 5: C1c_ED_Fig5.R), the degraded
 #      workbooks, yield_<scenario>[_s0#]_agcros/ (main runs)
 ################################################################################
 suppressPackageStartupMessages({
@@ -69,7 +69,7 @@ CFG_C <- list(
   main_script  = here::here("R", "B2_SHMI_yield_main.R"),
   script       = here::here("python", "coarse_records", "degrade_records.py"),
   out_dir      = here::here("Outputs", "Coarse"),
-  python       = "",       # python executable; "" = python3, else python, on the PATH
+  python       = "",       # python executable (e.g. "~/.virtualenvs/r-reticulate/Scripts/python.exe"); "" = search as run_all.R does
   R            = NULL,     # CV repeats; NULL = the calibration's (100)
   n_noise      = 5,        # NAPESHM seeds of each random scenario (the prebuilt workbooks cover 5)
   refit        = TRUE,     # also refit the weights on the degraded records
@@ -79,7 +79,8 @@ CFG_C <- list(
   yield_scenarios = NULL,  # e.g. c("FARM", "RS"): run only these; the others are read from their saved runs
   yield_seeds  = list(default = 1, J30 = 1:3, FARM = 1:3, RSM = 1:3, RS = 1:3),   # yield seeds of each random scenario
   reuse_runs   = TRUE,     # read back yield runs already done (FALSE: rerun them all, as run_all.R does)
-  rebuild      = FALSE     # rewrite degraded workbooks that already exist
+  rebuild      = FALSE,    # rewrite degraded workbooks that already exist
+  record_length = FALSE    # TRUE: also the record-length scenarios L1-L4 (exploratory; see SCEN)
 )
 if (exists("CFG_COARSE_OVERRIDE")) CFG_C <- utils::modifyList(CFG_C, CFG_COARSE_OVERRIDE)
 dir.create(CFG_C$out_dir, recursive = TRUE, showWarnings = FALSE)
@@ -107,20 +108,44 @@ SCEN <- tribble(
   "TILL",    "a",  "Tillage",         "class only",                             "tillage",                                  FALSE,   TRUE,
   "TILL10",  "a",  "Tillage",         "class, 10% misclassified",               "tillage,misclass:0.1",                     TRUE,    TRUE,
   "TILL20",  "a",  "Tillage",         "class, 20% misclassified",               "tillage,misclass:0.2",                     TRUE,    TRUE,
-  "AMEND",   "a",  "Manure, grazing", "removed",                                "noamend",                                  FALSE,   TRUE) %>%
-  mutate(label = ifelse(set == "b", level, paste0(component, ": ", level)))
+  "AMEND",   "a",  "Manure, grazing", "removed",                                "noamend",                                  FALSE,   TRUE,
+  # c: record length (NAPESHM only; exploratory, off by default): each unit keeps only the
+  # last N calendar years of its record; units whose record is already that short are
+  # unchanged. NAPESHM records are not dated histories ending at sampling: many cooperators
+  # entered one representative rotation (the last full rotation, the previous ones being
+  # the same), so cutting the record removes rotation phases rather than older years, and
+  # the result cannot be read as the record length a score needs.
+  "L1",      "c",  "Record length",   "last year only",                         "last:1",                                   FALSE,   FALSE,
+  "L2",      "c",  "Record length",   "last 2 years",                           "last:2",                                   FALSE,   FALSE,
+  "L3",      "c",  "Record length",   "last 3 years",                           "last:3",                                   FALSE,   FALSE,
+  "L4",      "c",  "Record length",   "last 4 years",                           "last:4",                                   FALSE,   FALSE,
+  # the mirror: the first N years. If the record is one representative rotation, first
+  # and last years are different phases of one system, so F1 vs L1 separates "which
+  # phase" from "how recent"
+  "F1",      "c",  "Record length",   "first year only",                        "first:1",                                  FALSE,   FALSE,
+  "F2",      "c",  "Record length",   "first 2 years",                          "first:2",                                  FALSE,   FALSE) %>%
+  mutate(label = ifelse(set == "a", paste0(component, ": ", level), level))
+if (!isTRUE(CFG_C$record_length)) SCEN <- filter(SCEN, set != "c")
 write.csv(SCEN, OUTC("coarse_scenarios.csv"), row.names = FALSE)
 labs_all <- SCEN %>% select(scenario, label)
 
 # ==============================================================================
 # Degrading workbooks (python)
 # ==============================================================================
+# python: CFG_C$python if given (a leading ~ is expanded), else the same search as
+# run_all.R (RETICULATE_PYTHON / RETICULATE_PYTHON_FALLBACK, the PATH, conda installs),
+# keeping the first python that imports pandas, openpyxl and numpy
 PY <- local({
-  if (nzchar(CFG_C$python)) CFG_C$python else {
-    p <- unname(Sys.which(c("python3", "python", "py")))
-    p <- p[nzchar(p)]
-    ok <- vapply(p, function(x) identical(suppressWarnings(system2(shQuote(x), "--version", stdout = FALSE, stderr = FALSE)), 0L), logical(1))
-    if (any(ok)) p[ok][1] else ""
+  if (nzchar(CFG_C$python)) {
+    py <- path.expand(CFG_C$python)
+    if (!file.exists(py) && !nzchar(Sys.which(py)))
+      stop("CFG_COARSE_OVERRIDE$python not found: ", py, ". In a terminal with that python active, ",
+           "python -c \"import sys; print(sys.executable)\" gives its path.", call. = FALSE)
+    py
+  } else {
+    h <- new.env(); sys.source(here::here("R", "run_helpers.R"), envir = h)
+    p <- h$find_python()
+    if (is.na(p)) { message("No usable python: ", paste(attr(p, "why"), collapse = "; ")); "" } else as.character(p)
   }
 })
 degrade <- function(inp, out, ops, tillage, seed = 1, site_regex = "NONE") {
@@ -131,7 +156,7 @@ degrade <- function(inp, out, ops, tillage, seed = 1, site_regex = "NONE") {
   dir.create(dirname(out), recursive = TRUE, showWarnings = FALSE)
   args <- c(CFG_C$script, "--in", inp, "--out", out, "--ops", ops, "--tillage", tillage,
             "--seed", seed, "--site-regex", site_regex, "--log", OUTC("degrade_log.csv"))
-  res <- suppressWarnings(system2(shQuote(PY), shQuote(args), stdout = TRUE, stderr = TRUE))
+  res <- suppressWarnings(system2(if (.Platform$OS.type == "windows") PY else shQuote(PY), shQuote(args), stdout = TRUE, stderr = TRUE))
   if (!is.null(attr(res, "status")) && attr(res, "status") != 0)
     stop("degrade_records.py failed for ", basename(out), ":\n", paste(res, collapse = "\n"), call. = FALSE)
   message(basename(out), ": ", paste(trimws(res), collapse = " | "))
@@ -248,6 +273,7 @@ if (CFG_C$run_napeshm) {
     rho <- vapply(split(seq_along(s), D$sitecode), function(i)
       if (length(i) < 3 || sd(s[i]) == 0 || sd(s0[i]) == 0) NA_real_ else cor(s[i], s0[i], method = "spearman"), numeric(1))
     tibble(rms_diff = sqrt(mean((s - s0)^2)), bias = mean(s - s0), within_rho = median(rho, na.rm = TRUE),
+           units_changed = sum(abs(s - s0) > 1e-6),
            rms_cover = sqrt(mean((cover_of(D, W) - cover_of(D0, W))^2)),
            rms_diversity = sqrt(mean((D$Diversity - D0$Diversity)^2)),
            rms_invdist = sqrt(mean((D$InvDist - D0$InvDist)^2)),
@@ -379,45 +405,9 @@ if (CFG_C$run_yield) {
 }
 
 # ==============================================================================
-# Figure: a, components; b, record types (soil-health skill, ranking, yield slope)
+# Figure: Extended Data Fig. 5 (the four record types) is drawn by C1c_ED_Fig5.R from
+# coarse_napeshm.csv and coarse_yield.csv; the components removed one at a time are
+# reported in Supplementary Data Table 2 (C2_export_tables.R)
 # ==============================================================================
-if (!exists("nap_sum") && file.exists(OUTC("coarse_napeshm.csv"))) nap_sum <- read.csv(OUTC("coarse_napeshm.csv"), stringsAsFactors = FALSE)
-if (!exists("yld") && file.exists(OUTC("coarse_yield.csv"))) yld <- read.csv(OUTC("coarse_yield.csv"), stringsAsFactors = FALSE)
-pl <- list()
-if (exists("nap_sum")) {
-  ns <- nap_sum %>% filter(weights == "published", scenario %in% SCEN$scenario)
-  pl$r2 <- ns %>% transmute(scenario, measure = "Soil health: out-of-fold R²", est = R2_med, lo = R2_lo, hi = R2_hi)
-  pl$sc <- ns %>% transmute(scenario, measure = "Sites ranked correctly (%)", est = 100 * sites_correct_med,
-                            lo = 100 * sites_correct_lo, hi = 100 * sites_correct_hi)
-}
-if (exists("yld")) pl$y <- yld %>% filter(scenario %in% SCEN$scenario) %>%
-  transmute(scenario, measure = "Corn yield per 10 SHMI (kg/ha)", est = slope, lo = lower, hi = upper)
-if (length(pl)) {
-  ms <- isTRUE(getOption("shmi.ms_figures", TRUE))
-  fd <- bind_rows(pl) %>% left_join(SCEN %>% select(scenario, set, component, label), by = "scenario") %>%
-    mutate(measure = factor(measure, c("Soil health: out-of-fold R²", "Sites ranked correctly (%)", "Corn yield per 10 SHMI (kg/ha)")),
-           set = factor(set, c("a", "b"), if (ms) c("a", "b") else c("a  Components (each alone)", "b  Record types")),
-           label = factor(label, rev(SCEN$label)))
-  ref <- fd %>% filter(scenario == "D0") %>% select(measure, ref = est)
-  g <- ggplot(fd, aes(est, label, colour = component)) +
-    geom_vline(data = ref, aes(xintercept = ref), linetype = "dashed", colour = "grey55") +
-    geom_errorbar(aes(xmin = lo, xmax = hi), width = 0.3) + geom_point(size = 2.2) +
-    facet_grid(set ~ measure, scales = "free", space = "free_y") +
-    scale_x_continuous(expand = expansion(mult = 0.08), n.breaks = 5) +   # room at the panel edges
-    scale_colour_manual(values = c("Record type" = "#1b7837", "Crops" = "#8c510a", "Cover crops" = "#35978f",
-                                   "Dates" = "#2166ac", "Tillage" = "#b2182b", "Manure, grazing" = "#762a83"), name = NULL) +
-    labs(x = NULL, y = NULL, title = "SHMI with less detailed management records",
-         caption = paste0("Soil health: NAPESHM US units, published weights, the calibration's leave-site-out folds; median and 95% range over ",
-                          "repeats and seeds. Sites ranked correctly: without a random element the share is the same in every repeat.\n",
-                          "Yield: within-site slope of the Fig. 3a model at 150 kg N/ha (95% CI; mean over seeds); SHMI from the degraded record, ",
-                          "yields and N from the full record. Dashed: full record.")) +
-    theme_bw(base_size = 10) +
-    theme(legend.position = "bottom", plot.caption = element_text(hjust = 0, size = 7.5),
-          panel.spacing.x = unit(1.4, "lines"),                              # keeps axis labels of adjacent panels apart
-          strip.text.y = element_text(angle = 0, face = "bold", hjust = 0))
-  if (ms) g <- g + labs(title = NULL, subtitle = NULL, caption = NULL) +
-    theme(strip.background = element_blank(), strip.text.x = element_text(face = "bold", size = 10, hjust = 0),
-          strip.text.y = element_text(angle = 0, face = "bold", size = 13, hjust = 0))
-  ggsave(OUTC("Fig_coarse_records.png"), g, width = 12, height = 7, dpi = 300)
-}
+source(here::here("R", "C1c_ED_Fig5.R"), local = new.env())
 message("Coarse-record test done: ", CFG_C$out_dir)

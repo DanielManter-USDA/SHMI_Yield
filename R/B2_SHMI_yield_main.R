@@ -10,7 +10,7 @@
 #   Extended Data Fig. 4 and Supplementary Data Table 1 (section 7b): each
 #             experiment's SHMI range and own slope, the random-slope average,
 #             contrast groups, heterogeneity and SHMI-scale checks
-#   Supplementary Data Fig. 1: effect sizes of SHMI, N and the other treatments,
+#   Supplementary Data Fig. 3: effect sizes of SHMI, N and the other treatments,
 #             each over its typical range (Fig_effect_sizes)
 # Panels are assembled by B7_Assemble_manuscript_figures.R. Year conditions,
 # drought and worst years are in B3_SHMI_yield_stability.R.
@@ -597,6 +597,12 @@ corn <- corn %>% mutate(age_c = age - AGE_MEAN,
                         N_c = ifelse(site %in% n_var_sites, N100 - N_REF / 100, 0))
 message(sprintf("Average system age %.1f years; linear N at: %s; quadratic N at: %s; SHMI x N at: %s", AGE_MEAN,
                 paste(n_vary, collapse = ", "), paste(n_curve_sites, collapse = ", "), paste(n_var_sites, collapse = ", ")))
+# the site runs (all crops' yields and SHMI) and the corn data, for the soybean test
+# (B2b_SHMI_soybean.R); written on every run, read by nothing else
+saveRDS(list(runs = runs, site_start = site_start, corn = corn, AGE_MEAN = AGE_MEAN,
+             n_var_sites = n_var_sites, AGCROS_DIR = AGCROS_DIR, AGCROS_SITES = AGCROS_SITES,
+             AGCROS_CONVENTIONAL_ONLY = AGCROS_CONVENTIONAL_ONLY, EXCLUDE_NEL_600 = EXCLUDE_NEL_600),
+        file.path(OUT, "B2_data.rds"))
 
 
 ################################################################################
@@ -700,7 +706,7 @@ write.csv(excluded, file.path(OUT, "excluded_plot_years.csv"), row.names = FALSE
 ################################################################################
 # 4. FIGURE HELPERS
 ################################################################################
-YLAB  <- "Adjusted corn yield, relative to county (kg ha\u207B\u00B9)"   # level = average yield minus county; adjusted for the model's other terms
+YLAB  <- "Corn yield adjusted for site, year, N and other treatments (kg ha\u207B\u00B9)"   # level = overall mean yield
 XLAB  <- "Soil Health Management Index (SHMI)"
 PANEL <- force_panelsizes(rows = unit(2.6, "in"), cols = unit(3.6, "in"))
 # Manuscript figures: no title, subtitle or caption (the legend is written in the manuscript;
@@ -748,11 +754,11 @@ slope_at <- function(N = N_REF, age = AGE_MEAN) {
 }
 DF_W <- tt_full["SHMI_w", "DF"]
 
-# y level: the research plots' average yield minus their county's average
-# (site x year removes each site's level, so the figure places the points and lines
-# on this common baseline; only the slopes are estimated). Lines pivot at the
-# average SHMI of the data.
-base_y <- with(filter(corn, !is.na(county_kgha)), mean(yield_kgha - county_kgha))
+# y level: the overall mean yield of the research plots (site x year removes each
+# site's level, so the figure places the points and lines on this common baseline;
+# only the slopes are estimated). Until 30 Oct 2026 the baseline was the plots' average
+# yield minus their county's. Lines pivot at the average SHMI of the data.
+base_y <- mean(corn$yield_kgha)
 SHMI_PIV <- mean(corn$SHMI)
 
 # ---- Fig 1: the within-site slope -----------------------------------------------------
@@ -1475,6 +1481,29 @@ fig_rng <- ggplot(rng_dat, aes(y = site)) +
                         sprintf("%.0f-%.0f.", min(rng_dat$SHMI_min), max(rng_dat$SHMI_max)))) +
   theme_fig + theme(panel.grid.major.y = element_blank(), legend.position = "bottom")
 ggsave(file.path(OUT, "Fig_SHMI_ranges.png"), fig_rng + MS, width = 6.8, height = 1.6 + 0.32 * nrow(rng_dat), dpi = 300)
+
+# Extended Data Fig. 4a (since 30 Oct 2026): the ranges beside each experiment's own slope,
+# same rows and colours; one point per experiment (no sub-rows), with the global slope
+# (Fig. 3a) as a dashed line. Replaces the forest plot (EDFig7b_forest.png, still written).
+if (all(c("slope", "slope_lower", "slope_upper") %in% names(rng_dat)) && requireNamespace("patchwork", quietly = TRUE)) {
+  XLIM <- c(-1000, 1250); XLAB_EDGE <- 1500      # values printed right of the panel's data range
+  sl_dat <- rng_dat %>% mutate(lo_c = pmax(slope_lower, XLIM[1]), hi_c = pmin(slope_upper, XLIM[2]),
+                               cut = slope_lower < XLIM[1] | slope_upper > XLIM[2])
+  fig_sl <- ggplot(sl_dat, aes(y = site)) +
+    geom_vline(xintercept = 0, colour = "grey60") +
+    geom_vline(xintercept = 10 * s0$b, colour = "darkgreen", linetype = "dashed") +
+    geom_errorbar(aes(xmin = lo_c, xmax = hi_c, colour = grp), width = 0, orientation = "y") +
+    geom_point(aes(x = slope, fill = grp), shape = 21, size = 2.6, colour = "black") +
+    geom_text(aes(x = XLAB_EDGE, label = sprintf("%+.0f", slope)), hjust = 1, size = 3) +
+    grp_scale + guides(colour = "none", fill = "none") +
+    scale_x_continuous(limits = c(XLIM[1], XLAB_EDGE), breaks = seq(-1000, 1000, 500)) +
+    labs(x = expression("Each experiment's own slope (kg ha"^-1*" per 10 SHMI)"), y = NULL) +
+    theme_fig + theme(axis.text.y = element_blank(), axis.ticks.y = element_blank(), panel.grid.major.y = element_blank())
+  fig_rs <- (fig_rng + MS + labs(title = NULL) | fig_sl) + patchwork::plot_layout(widths = c(1.15, 1), guides = "collect") &
+    theme(legend.position = "bottom")
+  ggsave(file.path(OUT, "Fig_SHMI_ranges_slopes.png"), fig_rs, width = 11, height = 1.9 + 0.32 * nrow(rng_dat), dpi = 300)
+  if (any(sl_dat$cut)) message("Extended Data Fig. 4a: CI cut at the panel edge for ", paste(sl_dat$site[sl_dat$cut], collapse = ", "))
+}
 
 # (b) the forest plot for Extended Data Fig. 4
 fr_sum <- forest %>% filter(kind == "within") %>% select(label, kind, effect, lower, upper, display) %>%

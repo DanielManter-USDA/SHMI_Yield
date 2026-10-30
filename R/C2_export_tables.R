@@ -6,7 +6,7 @@
 #   Table 1                      C1_Fig1_and_Table1.R          Outputs/Manuscript/Table1.csv
 #   Extended Data Table 1        scores by system type          data/SHAPE_by_unit_with_SHMI.csv
 #   Supplementary Data Table 1   the ten experiments            B2 site_SHMI_ranges.csv
-#   Supplementary Data Table 2   coarse-record scenarios        B9 Coarse/coarse_scenarios.csv
+#   Supplementary Data Table 2   coarse-record scenarios        B9 Coarse/coarse_*.csv (definitions and results)
 #   Supplementary Data Table 3   soil properties as carriers    B5 mediation_results.csv
 #   Supplementary Data Table 4   SHMI against its parts          A4a Benchmark/benchmark_bootstrap.csv
 # (Table 2, "Scoring a field with SHMI", is text and has no computed values.)
@@ -50,8 +50,40 @@ add("ED_Table1", here::here("data", "SHAPE_by_unit_with_SHMI.csv"), function(f) 
 # Supplementary Data Table 1: the ten experiments (B2, section 7b)
 add("SuppTable1", file.path(MAIN, "site_SHMI_ranges.csv"), function(f) read.csv(f, check.names = FALSE))
 
-# Supplementary Data Table 2: record types and scenarios of the coarse-record test (B9)
-add("SuppTable2", here::here("Outputs", "Coarse", "coarse_scenarios.csv"), function(f) read.csv(f, check.names = FALSE))
+# Supplementary Data Table 2: every coarse-record scenario of B9 with its results (the four
+# record types are also drawn in Extended Data Fig. 5; the components removed one at a time
+# appear only here). Soil health: NAPESHM, out-of-fold, published weights, median (95% range);
+# yield: within-site slope per 10 SHMI (95% CI); agreement with the full-record score.
+add("SuppTable2", here::here("Outputs", "Coarse", "coarse_scenarios.csv"), function(f) {
+  CO <- function(x) here::here("Outputs", "Coarse", x)
+  sc <- read.csv(f, stringsAsFactors = FALSE) %>% filter(set %in% c("a", "b"))
+  mr <- function(m, lo, hi, d = 2) ifelse(is.na(m), "", ifelse(abs(hi - lo) < 1e-9, formatC(m, format = "f", digits = d),
+                  sprintf("%s (%s–%s)", formatC(m, format = "f", digits = d), formatC(lo, format = "f", digits = d), formatC(hi, format = "f", digits = d))))
+  t <- sc %>% transmute(scenario, `Set` = ifelse(set == "b", "Record type", "One detail removed"),
+                        `Detail` = ifelse(set == "b", "", component), `Record` = level)
+  if (file.exists(CO("coarse_agreement.csv"))) {
+    ag <- read.csv(CO("coarse_agreement.csv"), stringsAsFactors = FALSE)
+    t <- t %>% left_join(ag %>% transmute(scenario, `RMS difference from full score (SHMI points)` = round(rms_diff, 1),
+                                          `Mean bias (SHMI points)` = round(bias, 1),
+                                          `Within-site rank agreement (Spearman)` = round(within_rho, 2)), by = "scenario")
+  }
+  if (file.exists(CO("coarse_napeshm.csv"))) {
+    ns <- read.csv(CO("coarse_napeshm.csv"), stringsAsFactors = FALSE) %>% filter(weights == "published")
+    t <- t %>% left_join(ns %>% transmute(scenario,
+           `Within-site r` = mr(within_r_med, within_r_lo, within_r_hi),
+           `Sites ranked in the right direction (%)` = mr(100 * sites_correct_med, 100 * sites_correct_lo, 100 * sites_correct_hi, 0),
+           `Between-site r` = mr(between_r_med, between_r_lo, between_r_hi),
+           `Overall R2` = mr(R2_med, R2_lo, R2_hi)), by = "scenario")
+  }
+  if (file.exists(CO("coarse_yield.csv"))) {
+    y <- read.csv(CO("coarse_yield.csv"), stringsAsFactors = FALSE)
+    full <- y$slope[y$scenario == "D0"][1]
+    t <- t %>% left_join(y %>% transmute(scenario,
+           `Corn yield per 10 SHMI, kg ha-1 (95% CI)` = sprintf("%.0f (%.0f to %.0f)", slope, lower, upper),
+           `Yield slope, % of full record` = if (length(full) && !is.na(full)) round(100 * slope / full) else NA), by = "scenario")
+  }
+  t %>% arrange(match(Set, c("Record type", "One detail removed"))) %>% rename(Scenario = scenario)
+})
 
 # Supplementary Data Table 3: soil properties as carriers of the SHMI-yield slope (B5)
 add("SuppTable3", file.path(MAIN, "mediation_results.csv"), function(f) {

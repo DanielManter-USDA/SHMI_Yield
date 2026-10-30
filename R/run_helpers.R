@@ -70,17 +70,26 @@ run_r <- function(script, vars = list(), opts = list(), label = sub("\\.R$", "",
 # pandas, openpyxl and numpy among RETICULATE_PYTHON or RETICULATE_PYTHON_FALLBACK (set by RStudio's Global Options >
 # Python), then python3, python and py on the PATH (on Windows, python3 is often a
 # Microsoft Store alias that does not run). Returns NA with the reasons as an attribute.
+# The program to run, quoted for system2(): on Windows system2() quotes the command
+# itself (quoting it again makes it "not found"); elsewhere it does not, so quote it
+# there in case the path has spaces.
+qcmd <- function(x) if (.Platform$OS.type == "windows") x else shQuote(x)
+
 find_python <- function(py = "") {
   cands <- if (nzchar(py)) py else
     unique(c(Sys.getenv(c("RETICULATE_PYTHON", "RETICULATE_PYTHON_FALLBACK")), unname(Sys.which(c("python3", "python", "py"))),
              # conda installs that RStudio does not see on its PATH
-             Sys.getenv("CONDA_PYTHON_EXE"), path.expand(file.path("~", c("miniconda3", "anaconda3", "miniforge3"), "bin", "python"))))
+             Sys.getenv("CONDA_PYTHON_EXE"), path.expand(file.path("~", c("miniconda3", "anaconda3", "miniforge3"), "bin", "python")),
+             # Windows: conda's python.exe sits in the install folder itself (user or all-users install)
+             if (.Platform$OS.type == "windows")
+               file.path(c(Sys.getenv("USERPROFILE"), Sys.getenv("LOCALAPPDATA"), Sys.getenv("ProgramData")),
+                         rep(c("miniconda3", "anaconda3", "miniforge3"), each = 3), "python.exe")))
   cands <- cands[nzchar(cands)]
   why <- character()
   for (w in cands) {
     if (!file.exists(w) && !nzchar(Sys.which(w))) { why <- c(why, paste0(w, ": not found")); next }
     # one import test; its output is kept only to explain a failure
-    out <- suppressWarnings(system(paste(shQuote(w), "-c", shQuote("import pandas, openpyxl, numpy"), "2>&1"), intern = TRUE))
+    out <- suppressWarnings(system2(qcmd(w), c("-c", shQuote("import pandas, openpyxl, numpy")), stdout = TRUE, stderr = TRUE))
     if (is.null(attr(out, "status"))) return(w)
     why <- c(why, paste0(w, ": cannot import pandas, openpyxl and numpy [", utils::tail(c("", out), 1), "]"))
   }
@@ -89,7 +98,7 @@ find_python <- function(py = "") {
 }
 
 check_python <- function(py, quiet = FALSE) {
-  out <- suppressWarnings(system2(shQuote(py), c("-c", shQuote("import pandas, openpyxl, numpy; print('pandas', pandas.__version__)")),
+  out <- suppressWarnings(system2(qcmd(py), c("-c", shQuote("import pandas, openpyxl, numpy; print('pandas', pandas.__version__)")),
                                   stdout = TRUE, stderr = TRUE))
   if (!is.null(attr(out, "status")) && attr(out, "status") != 0)
     stop("python needs pandas, openpyxl and numpy: pip install pandas openpyxl numpy\n", paste(out, collapse = "\n"))
@@ -100,7 +109,7 @@ check_python <- function(py, quiet = FALSE) {
 run_py <- function(py, args, label) {
   log <- file.path(LOG_DIR, paste0(label, ".log"))
   t0 <- Sys.time(); message(format(t0, "%H:%M"), "  start  ", label)
-  status <- system2(shQuote(py), shQuote(args), stdout = log, stderr = log)
+  status <- system2(qcmd(py), shQuote(args), stdout = log, stderr = log)
   ok <- identical(as.integer(status), 0L)
   log_step(label, ok, t0, log)
   if (!ok) fail(label, log)
