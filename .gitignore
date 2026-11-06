@@ -1,7 +1,7 @@
 # generated
 Outputs/*
 # the manuscript's display items are shared (written by the C steps of run_all.R)
-!Outputs/Manuscript/
+!Outputs/Manuscript
 Outputs_ref/
 *.html
 .Rproj.user/

@@ -26,7 +26,7 @@
 #         Inputs/napeshm/treatments.csv (NAPESHM practice labels, for Fig. 1b)
 #         Outputs/Benchmark/benchmark_summary.csv (out-of-fold R2, optional)
 #         Outputs/Practice_additivity/additivity_effects.csv (C1d, for Fig. 1c)
-# Outputs Outputs/Manuscript/Fig1.png, Fig1.pdf, Table1.csv, Table1_next_step.csv, Fig1_path_coefficients.csv,
+# Outputs Outputs/Manuscript_work/Fig1.png, Fig1.pdf, Table1.csv, Table1_next_step.csv, Fig1_path_coefficients.csv,
 #         Fig1_example_systems.csv, Fig1b_practice_pairs.csv (one row per pair),
 #         Fig1b_practice_summary.csv
 #
@@ -41,7 +41,7 @@ suppressPackageStartupMessages({
   library(SHMI); library(dplyr); library(tidyr); library(ggplot2); library(patchwork)
 })
 stopifnot(packageVersion("SHMI") >= "2.0.0")
-OUT <- here::here("Outputs", "Manuscript")
+OUT <- here::here("Outputs", "Manuscript_work")   # working copies; C3 copies the paper's items to Outputs/Manuscript/numbered
 dir.create(OUT, recursive = TRUE, showWarnings = FALSE)
 SLOPE_10   <- 220      # kg/ha per 10 SHMI points at 150 kg N/ha, average age (B2; Fig. 3a)
 KG_PER_BU  <- 53.0     # kg/ha dry matter per bu/ac (25.4 kg/bu at 15.5% moisture)
@@ -321,9 +321,18 @@ pc <- ggplot(cd, aes(x, value, fill = practice)) +
 # a how SHMI scores the system (path diagram) across the top, so SHMI's parts are introduced
 # before b (practices vary: pairs) and c (they do not add up in measured soil health)
 bottom <- (pb | pc) + plot_layout(widths = c(1.75, 1))
-fig <- (pa / bottom) + plot_layout(heights = c(0.95, 1)) + plot_annotation(tag_levels = "a") &   # a about 15% shorter than before, b and c taller
-  theme(plot.tag = element_text(face = "bold", size = 16))
-ggsave(file.path(OUT, "Fig1.png"), fig, width = 12.5, height = 8.6, dpi = 300, bg = "white")
-tryCatch(ggsave(file.path(OUT, "Fig1.pdf"), fig, width = 12.5, height = 8.6, bg = "white", device = cairo_pdf),
+# d, e (C1f): how much of the data matched pairs can use, and SHMI on the data they leave out
+DB <- here::here("Outputs", "Practice_additivity", "Fig_data_budget_panels.rds")
+if (file.exists(DB)) {
+  db <- readRDS(DB)
+  row3 <- (db[[1]] | db[[2]]) + plot_layout(widths = c(1.15, 1))
+  fig <- (pa / bottom / row3) + plot_layout(heights = c(0.95, 1, 0.7)); FIG1_H <- 11.6
+} else {
+  message("Fig. 1 drawn without d and e: ", DB, " not found (run C1f_paired_data_budget.R)")
+  fig <- (pa / bottom) + plot_layout(heights = c(0.95, 1)); FIG1_H <- 8.6
+}
+fig <- fig + plot_annotation(tag_levels = "a") & theme(plot.tag = element_text(face = "bold", size = 16))
+ggsave(file.path(OUT, "Fig1.png"), fig, width = 12.5, height = FIG1_H, dpi = 300, bg = "white")
+tryCatch(ggsave(file.path(OUT, "Fig1.pdf"), fig, width = 12.5, height = FIG1_H, bg = "white", device = cairo_pdf),
          error = function(e) message("Fig1.pdf not written (cairo_pdf unavailable): ", conditionMessage(e)))
 cat("\nSaved Fig1.png/.pdf, Table1.csv, Fig1_path_coefficients.csv and Fig1_example_systems.csv in", OUT, "\n")

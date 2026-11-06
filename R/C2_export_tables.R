@@ -15,7 +15,7 @@
 # Output  Outputs/Manuscript/Tables.xlsx and Outputs/Manuscript/<table>.csv
 ################################################################################
 suppressPackageStartupMessages({ library(dplyr); library(tidyr) })
-OUT  <- here::here("Outputs", "Manuscript")
+OUT  <- here::here("Outputs", "Manuscript_work")
 MAIN <- here::here("Outputs", "yield_main_default_total_agcros")
 dir.create(OUT, recursive = TRUE, showWarnings = FALSE)
 TABLES <- list()

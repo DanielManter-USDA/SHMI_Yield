@@ -1,9 +1,0 @@
-"System","SHMI","+ no-till","+ rye cover crop","+ manure"
-"Tilled corn–soybean",48,7,29,31
-"No-till",55,,29,27
-"Rye",77,7,,14
-"Manure",79,3,12,
-"No-till + manure",82,,12,
-"No-till + rye",84,,,10
-"Rye + manure",91,3,,
-"All three",93,,,

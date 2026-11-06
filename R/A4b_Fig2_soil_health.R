@@ -25,7 +25,7 @@ if (!requireNamespace("patchwork", quietly = TRUE)) stop("Install patchwork: ins
 
 FIN   <- if (exists("FIN_DIR")) FIN_DIR else here::here("Outputs", "Final_plus")
 BENCH <- here::here("Outputs", "Benchmark", "benchmark_summary.csv")
-OUT   <- here::here("Outputs", "Manuscript")
+OUT   <- here::here("Outputs", "Manuscript_work")
 dir.create(OUT, recursive = TRUE, showWarnings = FALSE)
 
 # ------------------------------------------------------------------------------

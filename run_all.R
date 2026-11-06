@@ -40,7 +40,7 @@ SETTINGS <- list(
   run_weights         = FALSE,  # B5b yield slope with weights fitted between or within sites (reruns B2 three times)
   run_n_scenarios     = TRUE,   # B6  N-accounting sensitivity: 20 legume x manure scenarios (30-60 min)
   run_coarse          = FALSE,  # B9  coarse-record test (hours)
-  run_record_length   = TRUE,   # B2c yield slope by length of record, Fig. 3b (first run about an hour; cached after)
+  run_record_length   = TRUE,   # B2c yield slope by length of record; its current-season score feeds B2d (Fig. 3b dropped 6 Nov 2026)
   run_yield_parts     = TRUE,   # B2d yield: SHMI against its parts, Extended Data Fig. 4b (20-40 min)
 
   # Configuration
@@ -154,9 +154,10 @@ if (isTRUE(p$run_yield)) {
   run_r("B1_Get_SPEI.R")                    # growing-season SPEI for every site-year
   run_r("B2_SHMI_yield_main.R")             # Fig. 3a,c,d, Extended Data Fig. 4a, Supp. Data Table 1, Supp. Data Fig. 3
   run_r("B2b_SHMI_soybean.R")               # soybean test, Supp. Data Fig. 1 (same experiments, scores and model; no N terms)
-  if (isTRUE(p$run_record_length)) run_r("B2c_SHMI_record_length.R")   # Fig. 3b
+  if (isTRUE(p$run_record_length)) run_r("B2c_SHMI_record_length.R")   # current-season score for B2d (no longer a figure)
   if (isTRUE(p$run_yield_parts)) run_r("B2d_SHMI_yield_parts.R")       # Extended Data Fig. 4b (after B2c: current-season score)
   run_r("B2e_SHMI_yield_adjustment.R")      # raw -> adjusted yield in three steps (talk/explainer figure; a few minutes)
+  run_r("B2f_SHMI_yield_paired_budget.R")   # how much of the yield record matched pairs can use vs SHMI (several minutes)
   run_r("B3_SHMI_yield_stability.R")        # Fig. 4
   run_r("B4_SHMI_N_equivalent.R")           # fertilizer-N equivalent (reruns B2 in its own session)
   run_r("B5_SHMI_soil_mediation.R")         # Supp. Data Table 3 (reruns B2 in its own session)
@@ -178,8 +179,9 @@ if (isTRUE(p$run_coarse)) {
                                                                         reuse_runs = FALSE)))
 }
 
-# ---- Part C: display items into Outputs/Manuscript (seconds) ----------------------
+# ---- Part C: display items into Outputs/Manuscript/numbered (seconds) --------------
 run_r("C1d_practice_additivity.R")  # practices in measured soil health (Fig. 1c); about a minute
+run_r("C1f_paired_data_budget.R")    # how much soil-health data matched pairs can use vs SHMI (about a minute)
 run_r("C1e_labels_vs_SHMI.R")       # practice labels vs SHMI at held-out sites (seconds)
 run_r("C1_Fig1_and_Table1.R")       # Fig. 1, Table 1
 run_r("C1b_ED_Fig2.R")              # Extended Data Fig. 2, from the saved calibration (Outputs/Final_plus)
@@ -211,8 +213,8 @@ if (isTRUE(p$run_calibration) && file.exists(fr)) {
           if (isTRUE(all.equal(unname(round(got, 3)), unname(ref), tolerance = 1e-3))) " match" else " DIFFER FROM",
           " the SHMI package (", paste(sprintf("%.3f", ref), collapse = ", "), ")")
 }
-mf <- "Outputs/Manuscript/manifest.csv"
-if (file.exists(mf)) { m <- utils::read.csv(mf); message("Display items in Outputs/Manuscript: ", sum(m$present), " of ", nrow(m)) }
+mf <- "Outputs/Manuscript/numbered/manifest_numbered.csv"
+if (file.exists(mf)) { m <- utils::read.csv(mf); message("Display items in Outputs/Manuscript/numbered: ", sum(m$present), " of ", nrow(m)) }
 
 # ---- summary ---------------------------------------------------------------------
 steps <- utils::read.csv(file.path(LOG_DIR, "steps.csv"))

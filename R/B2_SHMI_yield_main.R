@@ -706,7 +706,7 @@ write.csv(excluded, file.path(OUT, "excluded_plot_years.csv"), row.names = FALSE
 ################################################################################
 # 4. FIGURE HELPERS
 ################################################################################
-YLAB  <- "Corn yield adjusted for site, year, N and other treatments (kg ha\u207B\u00B9)"   # level = overall mean yield
+YLAB  <- "Corn yield adjusted for site, year,\nN and other treatments (kg ha\u207B\u00B9)"   # level = overall mean yield
 XLAB  <- "Soil Health Management Index (SHMI)"
 PANEL <- force_panelsizes(rows = unit(2.6, "in"), cols = unit(3.6, "in"))
 # Manuscript figures: no title, subtitle or caption (the legend is written in the manuscript;
@@ -815,7 +815,7 @@ plot_slope <- function(xs, at, marks, xlab, p_term, p_lab, title, cap, col, rug,
     geom_rug(data = tibble(x = rug), aes(x = x), inherit.aes = FALSE, sides = "b", alpha = 0.25, colour = "grey30") +
     annotate("text", x = if (label_right) Inf else -Inf, y = Inf, hjust = if (label_right) 1.05 else -0.05, vjust = 1.4, size = 2.8,
              label = paste0("Yield change per 10 SHMI, 95% band; ", lab_p(tt_full[p_term, "p-value"], p_lab))) +
-    labs(x = xlab, y = "Corn yield change per 10 SHMI (kg ha⁻¹)", title = title, caption = cap) + theme_fig
+    labs(x = xlab, y = "Corn yield change\nper 10 SHMI (kg ha⁻¹)", title = title, caption = cap) + theme_fig
 }
 n_rug <- corn %>% filter(site %in% n_var_sites) %>% distinct(site, MGT_trt_base, year, N100) %>% pull(N100) * 100
 fig3 <- plot_slope(seq(1, max(corn$age), length.out = 100), function(a) slope_at(age = a), AGES,
@@ -826,7 +826,7 @@ fig3 <- plot_slope(seq(1, max(corn$age), length.out = 100), function(a) slope_at
                           "The slope, not the yield level, is plotted: site × year removes each site's level. Rug: corn years in the data."),
                    "#238b45", unique(corn$age))
 fig4 <- plot_slope(seq(N_FIG_MIN, max(N_LINES), length.out = 100), function(n) slope_at(N = n), N_LINES,
-                   "N applied (kg N/ha: fertilizer + available manure N + legume credit)", "SHMI_w:N_c", "SHMI × N",
+                   "N applied (kg N/ha)\nfertilizer + available manure N + legume credit", "SHMI_w:N_c", "SHMI × N",
                    "SHMI benefit and N rate (research sites)",
                    paste0("Within-site SHMI slope from the Fig 1 model at each N rate, at the average system age; 95% band. Estimated at\n",
                           "the sites with N contrasts (", paste(n_var_sites, collapse = ", "), "). The slope, not the yield level, is plotted:\n",

@@ -12,13 +12,13 @@
 #
 # Drawn from the saved B9 results, so B9 (hours) need not be rerun:
 #   Input   Outputs/Coarse/coarse_napeshm.csv, Outputs/Coarse/coarse_yield.csv
-#   Output  Outputs/Manuscript/ED_Fig5.png, ED_Fig5.pdf
+#   Output  Outputs/Manuscript_work/ED_Fig5.png, ED_Fig5.pdf
 #           (also Outputs/Coarse/Fig_coarse_records.png, the working copy)
 ################################################################################
 suppressPackageStartupMessages({ library(dplyr); library(tidyr); library(ggplot2) })
 if (!requireNamespace("patchwork", quietly = TRUE)) stop("Install patchwork: install.packages('patchwork')")
 CO  <- here::here("Outputs", "Coarse")
-OUT <- here::here("Outputs", "Manuscript")
+OUT <- here::here("Outputs", "Manuscript_work")   # working copies; C3 copies the paper's items to Outputs/Manuscript/numbered
 dir.create(OUT, recursive = TRUE, showWarnings = FALSE)
 f_nap <- file.path(CO, "coarse_napeshm.csv"); f_yld <- file.path(CO, "coarse_yield.csv")
 

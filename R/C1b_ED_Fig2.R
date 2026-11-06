@@ -15,7 +15,7 @@
 suppressPackageStartupMessages({ library(dplyr); library(tidyr); library(ggplot2) })
 if (!requireNamespace("patchwork", quietly = TRUE)) stop("Install patchwork: install.packages('patchwork')")
 FIN <- here::here("Outputs", "Final_plus", "final_results.rds")
-OUT <- here::here("Outputs", "Manuscript")
+OUT <- here::here("Outputs", "Manuscript_work")
 dir.create(OUT, recursive = TRUE, showWarnings = FALSE)
 if (!file.exists(FIN)) {
   message("Extended Data Fig. 2 not drawn: ", FIN, " not found (run Part A once).")

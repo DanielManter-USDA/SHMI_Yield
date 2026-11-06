@@ -4,9 +4,11 @@
 # Builds the multi-panel manuscript figures from the panel PNGs the analysis
 # scripts write, adding a / b / c labels:
 #   Fig. 3     a  <MAIN>/Fig1_within_sites.png         (B2_SHMI_yield_main.R)
-#              b  Outputs/yield_record_length/Fig_record_length.png  (B2c: record vs current season)
-#              c  <MAIN>/Fig2_SHMI_x_N.png
-#              d  <MAIN>/Fig3_SHMI_x_age.png
+#              b  <MAIN>/Fig2_SHMI_x_N.png
+#              c  <MAIN>/Fig3_SHMI_x_age.png
+#              (6 Nov 2026: the record-length panel (B2c) was dropped from Fig. 3; set
+#              FIG3_RECORD_LENGTH <- TRUE before sourcing to draw it again as b, with N
+#              and age as c and d)
 #   Fig. 4     a  <STAB>/FigS1_sensitivity.png         (B3_SHMI_yield_stability.R)
 #              b  <STAB>/FigS3_drought_summary.png
 #              c  <STAB>/FigS2_downside.png
@@ -41,6 +43,7 @@ cat("Panels from", MAIN, "and", STAB, "\n")
 # every panel must exist before anything is written (a missing panel usually means
 # the stability script was run on another site set, or not yet)
 REC   <- file.path("Outputs", "yield_record_length", "Fig_record_length.png")   # B2c (optional here)
+if (!exists("FIG3_RECORD_LENGTH")) FIG3_RECORD_LENGTH <- FALSE   # TRUE: record-length panel as Fig. 3b
 PARTS <- file.path("Outputs", "yield_parts", "Fig_yield_parts.png")            # B2d (optional here)
 PANELS <- c(file.path(MAIN, c("Fig1_within_sites.png", "Fig2_SHMI_x_N.png", "Fig3_SHMI_x_age.png",
                               "Fig_SHMI_ranges.png")),
@@ -84,7 +87,15 @@ row2 <- function(files, letters) {         # two panels side by side, each half 
   h <- max(sapply(x, function(i) image_info(i)$height))
   image_append(image_join(lapply(x, pad_to, w = half, h = h)))
 }
-if (file.exists(REC)) {
+pair_row <- function(files, letters) {     # two panels at a common height, together the full width
+  x <- lapply(files, rd)
+  hh <- max(sapply(x, function(i) image_info(i)$height))
+  x <- lapply(x, fit_h, h = hh)
+  k <- (WIDTH - 160) / sum(sapply(x, function(i) image_info(i)$width))
+  image_append(image_join(mapply(function(i, l) L3(fit_w(i, round(k * image_info(i)$width)), l), x, letters,
+                                 SIMPLIFY = FALSE)))
+}
+if (FIG3_RECORD_LENGTH && file.exists(REC)) {
   # top row: a and b at a common height, together the full width
   ra <- rd(file.path(MAIN, "Fig1_within_sites.png")); rb <- rd(REC)
   hh <- max(image_info(ra)$height, image_info(rb)$height)
@@ -94,10 +105,12 @@ if (file.exists(REC)) {
                         L3(fit_w(rb, round(k * image_info(rb)$width)), "b")))
   bottom <- row2(file.path(MAIN, c("Fig2_SHMI_x_N.png", "Fig3_SHMI_x_age.png")), c("c", "d"))
 } else {
-  message("Fig. 3 drawn without the record-length panel: ", REC, " not found (run B2c_SHMI_record_length.R)")
-  top <- L3(fit_w(rd(file.path(MAIN, "Fig1_within_sites.png")), round(WIDTH * 0.62)), "a")
+  if (FIG3_RECORD_LENGTH) message("Fig. 3 drawn without the record-length panel: ", REC, " not found (run B2c_SHMI_record_length.R)")
+  # a centred on top (wide enough that its margins are small); b and c below at a
+  # common height, so their tops and axes line up, together the full width
+  top <- L3(fit_w(rd(file.path(MAIN, "Fig1_within_sites.png")), round(WIDTH * 0.74)), "a")
   top <- pad_to(top, WIDTH, image_info(top)$height)
-  bottom <- row2(file.path(MAIN, c("Fig2_SHMI_x_N.png", "Fig3_SHMI_x_age.png")), c("b", "c"))
+  bottom <- pair_row(file.path(MAIN, c("Fig2_SHMI_x_N.png", "Fig3_SHMI_x_age.png")), c("b", "c"))
 }
 save_fig(image_append(c(top, bottom), stack = TRUE), "Fig3.png")
 
@@ -105,11 +118,14 @@ save_fig(image_append(c(top, bottom), stack = TRUE), "Fig3.png")
 # a  the slope against the year's conditions (county yield deviation)
 # b  the slope at SPEI -1.5 / 0 / +1.5: June-August and May-July, all and rainfed sites
 # c  worst years: relative to the site-year mean and to the plot's own mean
-pa <- lab(rd(file.path(STAB, "FigS1_sensitivity.png")), "a")
-pb <- lab(rd(file.path(STAB, "FigS3_drought_summary.png")), "b")
-pc <- lab(rd(file.path(STAB, "FigS2_downside.png")), "c")
-top <- fit_w(pa, round(WIDTH * 0.62)); top <- pad_to(top, WIDTH, image_info(top)$height)
-save_fig(image_append(c(top, fit_w(pb, WIDTH), fit_w(pc, WIDTH)), stack = TRUE), "Fig4.png")
+# panels scaled first and lettered after (as Fig. 3), so the letters have one size and
+# sit in a strip above each panel, clear of the axis titles
+pa <- L3(fit_w(rd(file.path(STAB, "FigS1_sensitivity.png")), round(WIDTH * 0.62)), "a")
+pb <- L3(fit_w(rd(file.path(STAB, "FigS3_drought_summary.png")), WIDTH - 80), "b")
+pc <- L3(fit_w(rd(file.path(STAB, "FigS2_downside.png")), WIDTH - 80), "c")
+top <- pad_to(pa, WIDTH, image_info(pa)$height)
+save_fig(image_append(c(top, pad_to(pb, WIDTH, image_info(pb)$height), pad_to(pc, WIDTH, image_info(pc)$height)),
+                      stack = TRUE), "Fig4.png")
 
 # ---- Extended Data Fig. 4: the experiments, and SHMI against its parts for yield -----
 # a each experiment's stretch of the SHMI scale; b SHMI against each part alone, equal

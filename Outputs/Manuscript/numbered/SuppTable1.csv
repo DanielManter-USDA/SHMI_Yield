@@ -1,4 +1,4 @@
-"Score","Overall R²: Value","r between site means: Value","r within sites: Value","Overall R²: Difference from SHMI (95% CI)","r between site means: Difference from SHMI (95% CI)","r within sites: Difference from SHMI (95% CI)"
+﻿"Score","Overall R²: Value","r between site means: Value","r within sites: Value","Overall R²: Difference from SHMI (95% CI)","r between site means: Difference from SHMI (95% CI)","r within sites: Difference from SHMI (95% CI)"
 "SHMI (weights refitted in each fold)","0.26","0.52","0.60","—","—","—"
 "SHMI, published weights held fixed","0.27","0.53","0.60","+0.012 (+0.008 to +0.017)*","+0.013 (+0.007 to +0.021)*","+0.004 (+0.002 to +0.007)*"
 "SHMI_base (no amendment term)","0.24","0.49","0.56","-0.027 (-0.074 to +0.022)","-0.026 (-0.066 to +0.018)","-0.037 (-0.084 to -0.004)*"

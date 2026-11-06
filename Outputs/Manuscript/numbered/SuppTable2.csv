@@ -1,4 +1,4 @@
-"Soil measure","Experiments (systems; plot-years)","r with SHMI","Change per 10 SHMI (95% CI)","Yield per unit, kg ha-1 (P)","Total SHMI slope","Indirect effect (95% CI)","Share carried, % (95% CI)","Share, leaving out one site, %"
+﻿"Soil measure","Experiments (systems; plot-years)","r with SHMI","Change per 10 SHMI (95% CI)","Yield per unit, kg ha-1 (P)","Total SHMI slope","Indirect effect (95% CI)","Share carried, % (95% CI)","Share, leaving out one site, %"
 "Soil health, lv_SH (0-100; NAPESHM)","3 (23; 3,435)",0.76,"7.39 (4.09 to 10.69)","-7.3 (P = 0.44)",255,"-54 (-198 to 79)","-21 (-263 to 30)","-85 to 34"
 "SHAPE mean score (0-1; NAPESHM)","3 (23; 3,435)",0.73,"0.06 (0.03 to 0.09)","-535.4 (P = 0.62)",255,"-32 (-171 to 96)","-13 (-206 to 34)","-67 to 40"
 "SOC 0-15 cm (g/kg; NAPESHM + AgCROS)","9 (566; 8,628)",0.29,"0.71 (0.51 to 0.90)","22.7 (P = 0.06)",210,"16 (-0 to 35)","8 (-0 to 19)","2 to 11"

@@ -70,17 +70,16 @@ show_csv(file.path(ROOT, "Outputs", "Coarse", "coarse_yield.csv"), "Coarse recor
 # Display items
 
 ```{r manifest}
-mf <- file.path(ROOT, "Outputs", "Manuscript", "manifest.csv")
-if (file.exists(mf)) knitr::kable(utils::read.csv(mf)[, c("item", "file", "script", "present", "modified")],
-                                  caption = "Display items in Outputs/Manuscript")
+mf <- file.path(ROOT, "Outputs", "Manuscript", "numbered", "manifest_numbered.csv")
+if (file.exists(mf)) knitr::kable(utils::read.csv(mf), caption = "Display items in Outputs/Manuscript/numbered (numbered as in the paper)")
 ```
 
 # Figures
 
 ```{r figures, out.width = "100%"}
-f <- file.path(ROOT, "Outputs", "Manuscript",
-               c("Fig1.png", "Fig2.png", "Fig3.png", "Fig4.png", "ED_Fig2.png", "ED_Fig3.png",
-                 "ED_Fig4.png", "ED_Fig5.png", "ED_Fig6.png", "SuppFig1.png", "SuppFig2.png", "SuppFig3.png"))
+f <- file.path(ROOT, "Outputs", "Manuscript", "numbered",
+               c("Fig1.png", "Fig2.png", "Fig3.png", "Fig4.png", "ED_Fig2.png", "ED_Fig3.png", "ED_Fig4.png",
+                 "ED_Fig5.png", "ED_Fig6.png", "SuppFig1.png", "SuppFig2.png", "SuppFig3.png", "SuppFig4.png"))
 knitr::include_graphics(f[file.exists(f)])
 ```
 
