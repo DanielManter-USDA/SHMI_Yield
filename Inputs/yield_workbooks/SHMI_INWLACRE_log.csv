@@ -1,0 +1,278 @@
+rule,unit,message
+A1,,3 plots carry more than one treatment over time; split into separate units
+C3,AgCROS_INWLACRE_ML_SA14_ML,2003-06-09 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_ML_SA14_ML,2005-05-11 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_ML_SA14_ML,2006-05-23 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_ML_SA14_ML,2007-05-22 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_ML_SA14_ML,2008-05-29 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_ML_SA14_ML,2009-05-29 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_ML_SA31_ML,2003-06-09 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_ML_SA31_ML,2005-05-11 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_ML_SA31_ML,2006-05-23 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_ML_SA31_ML,2007-05-22 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_ML_SA31_ML,2008-05-29 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_ML_SA31_ML,2009-05-29 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_ML_SA32_ML,2003-06-09 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_ML_SA32_ML,2005-05-11 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_ML_SA32_ML,2006-05-23 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_ML_SA32_ML,2007-05-22 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_ML_SA32_ML,2008-05-29 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_ML_SA32_ML,2009-05-29 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_ML_SA43_ML,2003-06-09 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_ML_SA43_ML,2005-05-11 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_ML_SA43_ML,2006-05-23 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_ML_SA43_ML,2007-05-22 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_ML_SA43_ML,2008-05-29 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_ML_SA43_ML,2009-05-29 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_MR_SA12_MR,2003-06-09 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_MR_SA12_MR,2005-05-11 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_MR_SA12_MR,2006-05-23 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_MR_SA12_MR,2007-05-22 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_MR_SA12_MR,2008-05-29 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_MR_SA12_MR,2009-05-29 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_MR_SA23_MR,2003-06-09 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_MR_SA23_MR,2005-05-11 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_MR_SA23_MR,2006-05-23 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_MR_SA23_MR,2007-05-22 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_MR_SA23_MR,2008-05-29 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_MR_SA23_MR,2009-05-29 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_MR_SA24_MR,2003-06-09 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_MR_SA24_MR,2005-05-11 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_MR_SA24_MR,2006-05-23 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_MR_SA24_MR,2007-05-22 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_MR_SA24_MR,2008-05-29 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_MR_SA24_MR,2009-05-29 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_MR_SA41_MR,2003-06-09 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_MR_SA41_MR,2005-05-11 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_MR_SA41_MR,2006-05-23 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_MR_SA41_MR,2007-05-22 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_MR_SA41_MR,2008-05-29 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_MR_SA41_MR,2009-05-29 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_MT_SA13_MR,2003-06-09 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_MT_SA13_MT,2005-05-11 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_MT_SA13_MT,2006-05-23 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_MT_SA13_MT,2007-05-22 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_MT_SA13_MT,2008-05-29 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_MT_SA13_MT,2009-05-29 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_MT_SA21_MR,2003-06-09 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_MT_SA21_MT,2005-05-11 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_MT_SA21_MT,2006-05-23 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_MT_SA21_MT,2007-05-22 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_MT_SA21_MT,2008-05-29 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_MT_SA21_MT,2009-05-29 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_MT_SA22_MT,2005-05-11 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_MT_SA22_MT,2006-05-23 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_MT_SA22_MT,2007-05-22 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_MT_SA22_MT,2008-05-29 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_MT_SA22_MT,2009-05-29 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_MT_SA44_MR,2003-06-09 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_MT_SA44_MT,2005-05-11 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_MT_SA44_MT,2006-05-23 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_MT_SA44_MT,2007-05-22 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_MT_SA44_MT,2008-05-29 Sudangrass: no harvest record; harvest date left blank
+C3,AgCROS_INWLACRE_MT_SA44_MT,2009-05-29 Sudangrass: no harvest record; harvest date left blank
+C1b,AgCROS_INWLACRE_NS_A85_NS,2006-05-08 Corn: replanted on 2006-06-01; earlier planting dropped
+C1b,AgCROS_INWLACRE_NS_A72_NS,2006-05-08 Corn: replanted on 2006-06-01; earlier planting dropped
+C1b,AgCROS_INWLACRE_NS_A64_NS,2006-05-08 Corn: replanted on 2006-06-01; earlier planting dropped
+C1b,AgCROS_INWLACRE_NS_A51_NS,2006-05-08 Corn: replanted on 2006-06-01; earlier planting dropped
+C1b,AgCROS_INWLACRE_NR_A42_NR,2008-05-06 Soybean: replanted on 2008-06-23; earlier planting dropped
+C1b,AgCROS_INWLACRE_NR_A33_NR,2008-05-06 Soybean: replanted on 2008-06-23; earlier planting dropped
+C1b,AgCROS_INWLACRE_NR_A24_NR,2008-05-06 Soybean: replanted on 2008-06-23; earlier planting dropped
+C1b,AgCROS_INWLACRE_NR_A11_NR,2008-05-06 Soybean: replanted on 2008-06-23; earlier planting dropped
+C1b,AgCROS_INWLACRE_NP_A81_NP,2006-05-08 Corn: replanted on 2006-06-01; earlier planting dropped
+C1b,AgCROS_INWLACRE_NP_A73_NP,2006-05-08 Corn: replanted on 2006-06-01; earlier planting dropped
+C1b,AgCROS_INWLACRE_NP_A61_NP,2006-05-08 Corn: replanted on 2006-06-01; earlier planting dropped
+C1b,AgCROS_INWLACRE_NP_A55_NP,2006-05-08 Corn: replanted on 2006-06-01; earlier planting dropped
+C1b,AgCROS_INWLACRE_NP_A43_NP,2008-05-06 Soybean: replanted on 2008-06-23; earlier planting dropped
+C1b,AgCROS_INWLACRE_NP_A35_NP,2008-05-06 Soybean: replanted on 2008-06-23; earlier planting dropped
+C1b,AgCROS_INWLACRE_NP_A22_NP,2008-05-06 Soybean: replanted on 2008-06-23; earlier planting dropped
+C1b,AgCROS_INWLACRE_NP_A12_NP,2008-05-06 Soybean: replanted on 2008-06-23; earlier planting dropped
+C1b,AgCROS_INWLACRE_NM_A83_NM,2006-05-08 Corn: replanted on 2006-06-01; earlier planting dropped
+C1b,AgCROS_INWLACRE_NM_A74_NM,2006-05-08 Corn: replanted on 2006-06-01; earlier planting dropped
+C1b,AgCROS_INWLACRE_NM_A65_NM,2006-05-08 Corn: replanted on 2006-06-01; earlier planting dropped
+C1b,AgCROS_INWLACRE_NM_A54_NM,2006-05-08 Corn: replanted on 2006-06-01; earlier planting dropped
+C1b,AgCROS_INWLACRE_NC_A84_NC,2006-05-08 Corn: replanted on 2006-06-01; earlier planting dropped
+C1b,AgCROS_INWLACRE_NC_A75_NC,2006-05-08 Corn: replanted on 2006-06-01; earlier planting dropped
+C1b,AgCROS_INWLACRE_NC_A62_NC,2006-05-08 Corn: replanted on 2006-06-01; earlier planting dropped
+C1b,AgCROS_INWLACRE_NC_A53_NC,2006-05-08 Corn: replanted on 2006-06-01; earlier planting dropped
+C1b,AgCROS_INWLACRE_NC_A41_NC,2008-05-06 Soybean: replanted on 2008-06-23; earlier planting dropped
+C1b,AgCROS_INWLACRE_NC_A34_NC,2008-05-06 Soybean: replanted on 2008-06-23; earlier planting dropped
+C1b,AgCROS_INWLACRE_NC_A25_NC,2008-05-06 Soybean: replanted on 2008-06-23; earlier planting dropped
+C1b,AgCROS_INWLACRE_NC_A14_NC,2008-05-06 Soybean: replanted on 2008-06-23; earlier planting dropped
+C1b,AgCROS_INWLACRE_IT_A44_IT,2008-05-06 Soybean: replanted on 2008-06-23; earlier planting dropped
+C1b,AgCROS_INWLACRE_IT_A31_IT,2008-05-06 Soybean: replanted on 2008-06-23; earlier planting dropped
+C1b,AgCROS_INWLACRE_IT_A23_IT,2008-05-06 Soybean: replanted on 2008-06-23; earlier planting dropped
+C1b,AgCROS_INWLACRE_IT_A15_IT,2008-05-06 Soybean: replanted on 2008-06-23; earlier planting dropped
+C1b,AgCROS_INWLACRE_CD_A82_CD,2006-05-08 Corn: replanted on 2006-06-01; earlier planting dropped
+C1b,AgCROS_INWLACRE_CD_A71_CD,2006-05-08 Corn: replanted on 2006-06-01; earlier planting dropped
+C1b,AgCROS_INWLACRE_CD_A63_CD,2006-05-08 Corn: replanted on 2006-06-01; earlier planting dropped
+C1b,AgCROS_INWLACRE_CD_A52_CD,2006-05-08 Corn: replanted on 2006-06-01; earlier planting dropped
+C1b,AgCROS_INWLACRE_CD_A45_CD,2008-05-06 Soybean: replanted on 2008-06-23; earlier planting dropped
+C1b,AgCROS_INWLACRE_CD_A32_CD,2008-05-06 Soybean: replanted on 2008-06-23; earlier planting dropped
+C1b,AgCROS_INWLACRE_CD_A21_CD,2008-05-06 Soybean: replanted on 2008-06-23; earlier planting dropped
+C1b,AgCROS_INWLACRE_CD_A13_CD,2008-05-06 Soybean: replanted on 2008-06-23; earlier planting dropped
+C4,AgCROS_INWLACRE_CD_A13_CD,2003-10-01 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_CD_A13_CD,2011-10-25 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_CD_A13_CD,2010-10-01 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_CD_A21_CD,2003-10-01 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_CD_A21_CD,2011-10-25 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_CD_A21_CD,2010-10-01 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_CD_A32_CD,2003-10-01 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_CD_A32_CD,2011-10-25 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_CD_A32_CD,2010-10-01 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_CD_A45_CD,2003-10-01 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_CD_A45_CD,2011-10-25 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_CD_A45_CD,2010-10-01 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_CD_A52_CD,2010-09-17 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_CD_A52_CD,2003-10-01 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_CD_A52_CD,2011-10-12 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_CD_A63_CD,2010-09-17 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_CD_A63_CD,2003-10-01 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_CD_A63_CD,2011-10-12 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_CD_A71_CD,2010-09-17 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_CD_A71_CD,2003-10-01 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_CD_A71_CD,2011-10-12 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_CD_A82_CD,2010-09-17 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_CD_A82_CD,2003-10-01 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_CD_A82_CD,2011-10-12 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_IT_A15_IT,2011-10-25 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_IT_A15_IT,2010-10-01 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_IT_A23_IT,2011-10-25 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_IT_A23_IT,2010-10-01 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_IT_A31_IT,2011-10-25 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_IT_A31_IT,2010-10-01 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_IT_A44_IT,2011-10-25 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_IT_A44_IT,2010-10-01 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_IT_A54_IT,2010-09-17 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_IT_A54_IT,2011-10-12 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_IT_A65_IT,2010-09-17 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_IT_A65_IT,2011-10-12 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_IT_A74_IT,2010-09-17 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_IT_A74_IT,2011-10-12 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_IT_A83_IT,2010-09-17 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_IT_A83_IT,2011-10-12 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NC_A14_NC,2003-10-01 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NC_A14_NC,2011-10-25 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NC_A14_NC,2010-10-01 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NC_A25_NC,2003-10-01 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NC_A25_NC,2011-10-25 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NC_A25_NC,2010-10-01 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NC_A34_NC,2003-10-01 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NC_A34_NC,2011-10-25 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NC_A34_NC,2010-10-01 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NC_A41_NC,2003-10-01 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NC_A41_NC,2011-10-25 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NC_A41_NC,2010-10-01 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NC_A53_NC,2010-09-17 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NC_A53_NC,2003-10-01 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NC_A53_NC,2011-10-12 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NC_A62_NC,2010-09-17 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NC_A62_NC,2003-10-01 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NC_A62_NC,2011-10-12 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NC_A75_NC,2010-09-17 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NC_A75_NC,2003-10-01 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NC_A75_NC,2011-10-12 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NC_A84_NC,2010-09-17 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NC_A84_NC,2003-10-01 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NC_A84_NC,2011-10-12 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NM_A15_NM,2003-10-01 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NM_A23_NM,2003-10-01 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NM_A31_NM,2003-10-01 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NM_A44_NM,2003-10-01 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NM_A54_NM,2004-10-01 Corn: harvest without planting; site's most common planting date 2004-04-19 used
+C4,AgCROS_INWLACRE_NM_A54_NM,2003-10-01 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NM_A65_NM,2004-10-01 Corn: harvest without planting; site's most common planting date 2004-04-19 used
+C4,AgCROS_INWLACRE_NM_A65_NM,2003-10-01 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NM_A74_NM,2004-10-01 Corn: harvest without planting; site's most common planting date 2004-04-19 used
+C4,AgCROS_INWLACRE_NM_A74_NM,2003-10-01 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NM_A83_NM,2004-10-01 Corn: harvest without planting; site's most common planting date 2004-04-19 used
+C4,AgCROS_INWLACRE_NM_A83_NM,2003-10-01 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NP_A12_NP,2003-10-01 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NP_A12_NP,2011-10-25 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NP_A12_NP,2010-10-01 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NP_A22_NP,2003-10-01 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NP_A22_NP,2011-10-25 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NP_A22_NP,2010-10-01 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NP_A35_NP,2003-10-01 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NP_A35_NP,2011-10-25 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NP_A35_NP,2010-10-01 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NP_A43_NP,2003-10-01 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NP_A43_NP,2011-10-25 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NP_A43_NP,2010-10-01 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NP_A55_NP,2010-09-17 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NP_A55_NP,2003-10-01 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NP_A55_NP,2011-10-12 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NP_A61_NP,2010-09-17 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NP_A61_NP,2003-10-01 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NP_A61_NP,2011-10-12 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NP_A73_NP,2010-09-17 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NP_A73_NP,2003-10-01 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NP_A73_NP,2011-10-12 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NP_A81_NP,2010-09-17 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NP_A81_NP,2003-10-01 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NP_A81_NP,2011-10-12 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NR_A11_NR,2011-10-25 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NR_A11_NR,2010-10-01 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NR_A24_NR,2011-10-25 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NR_A24_NR,2010-10-01 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NR_A33_NR,2011-10-25 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NR_A33_NR,2010-10-01 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NR_A42_NR,2011-10-25 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NR_A42_NR,2010-10-01 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NR_A51_NR,2010-09-17 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NR_A51_NR,2011-10-12 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NR_A64_NR,2010-09-17 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NR_A64_NR,2011-10-12 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NR_A72_NR,2010-09-17 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NR_A72_NR,2011-10-12 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NR_A85_NR,2010-09-17 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NR_A85_NR,2011-10-12 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NS_A11_NS,2003-10-01 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NS_A24_NS,2003-10-01 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NS_A33_NS,2003-10-01 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NS_A42_NS,2003-10-01 Corn: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NS_A51_NS,2003-10-01 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NS_A64_NS,2003-10-01 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NS_A72_NS,2003-10-01 Soybean: harvest without planting; plant date blank
+C4,AgCROS_INWLACRE_NS_A85_NS,2003-10-01 Soybean: harvest without planting; plant date blank
+M1,AgCROS_INWLACRE_NR_A11_NR,2011-06-08 N 134.0 kg/ha with no amendment type: kept as fertilizer
+M1,AgCROS_INWLACRE_CD_A82_CD,2010-06-04 N 224.0 kg/ha with no amendment type: kept as fertilizer
+M1,AgCROS_INWLACRE_CD_A52_CD,2010-06-04 N 224.0 kg/ha with no amendment type: kept as fertilizer
+M1,AgCROS_INWLACRE_CD_A71_CD,2010-06-04 N 224.0 kg/ha with no amendment type: kept as fertilizer
+M1,AgCROS_INWLACRE_CD_A63_CD,2010-06-04 N 224.0 kg/ha with no amendment type: kept as fertilizer
+M1,AgCROS_INWLACRE_IT_A54_IT,2010-06-04 N 224.0 kg/ha with no amendment type: kept as fertilizer
+M1,AgCROS_INWLACRE_IT_A83_IT,2010-06-04 N 224.0 kg/ha with no amendment type: kept as fertilizer
+M1,AgCROS_INWLACRE_IT_A74_IT,2010-06-04 N 224.0 kg/ha with no amendment type: kept as fertilizer
+M1,AgCROS_INWLACRE_IT_A65_IT,2010-06-04 N 224.0 kg/ha with no amendment type: kept as fertilizer
+M1,AgCROS_INWLACRE_NC_A75_NC,2010-06-04 N 224.0 kg/ha with no amendment type: kept as fertilizer
+M1,AgCROS_INWLACRE_NC_A62_NC,2010-06-04 N 224.0 kg/ha with no amendment type: kept as fertilizer
+M1,AgCROS_INWLACRE_NC_A53_NC,2010-06-04 N 224.0 kg/ha with no amendment type: kept as fertilizer
+M1,AgCROS_INWLACRE_NC_A84_NC,2010-06-04 N 224.0 kg/ha with no amendment type: kept as fertilizer
+M1,AgCROS_INWLACRE_NP_A12_NP,2011-06-08 N 168.0 kg/ha with no amendment type: kept as fertilizer
+M1,AgCROS_INWLACRE_NP_A61_NP,2010-06-04 N 224.0 kg/ha with no amendment type: kept as fertilizer
+M1,AgCROS_INWLACRE_NP_A55_NP,2010-06-04 N 224.0 kg/ha with no amendment type: kept as fertilizer
+M1,AgCROS_INWLACRE_NR_A85_NR,2010-06-04 N 179.0 kg/ha with no amendment type: kept as fertilizer
+M1,AgCROS_INWLACRE_NR_A64_NR,2010-06-04 N 179.0 kg/ha with no amendment type: kept as fertilizer
+M1,AgCROS_INWLACRE_NR_A51_NR,2010-06-04 N 179.0 kg/ha with no amendment type: kept as fertilizer
+M1,AgCROS_INWLACRE_NR_A72_NR,2010-06-04 N 179.0 kg/ha with no amendment type: kept as fertilizer
+M1,AgCROS_INWLACRE_NP_A81_NP,2010-06-04 N 224.0 kg/ha with no amendment type: kept as fertilizer
+M1,AgCROS_INWLACRE_NP_A73_NP,2010-06-04 N 224.0 kg/ha with no amendment type: kept as fertilizer
+M1,AgCROS_INWLACRE_NP_A43_NP,2011-06-08 N 168.0 kg/ha with no amendment type: kept as fertilizer
+M1,AgCROS_INWLACRE_CD_A21_CD,2011-06-08 N 168.0 kg/ha with no amendment type: kept as fertilizer
+M1,AgCROS_INWLACRE_CD_A32_CD,2011-06-08 N 168.0 kg/ha with no amendment type: kept as fertilizer
+M1,AgCROS_INWLACRE_CD_A45_CD,2011-06-08 N 168.0 kg/ha with no amendment type: kept as fertilizer
+M1,AgCROS_INWLACRE_CD_A13_CD,2011-06-08 N 168.0 kg/ha with no amendment type: kept as fertilizer
+M1,AgCROS_INWLACRE_IT_A23_IT,2011-06-08 N 168.0 kg/ha with no amendment type: kept as fertilizer
+M1,AgCROS_INWLACRE_IT_A15_IT,2011-06-08 N 168.0 kg/ha with no amendment type: kept as fertilizer
+M1,AgCROS_INWLACRE_IT_A44_IT,2011-06-08 N 168.0 kg/ha with no amendment type: kept as fertilizer
+M1,AgCROS_INWLACRE_IT_A31_IT,2011-06-08 N 168.0 kg/ha with no amendment type: kept as fertilizer
+M1,AgCROS_INWLACRE_NC_A25_NC,2011-06-08 N 168.0 kg/ha with no amendment type: kept as fertilizer
+M1,AgCROS_INWLACRE_NC_A14_NC,2011-06-08 N 168.0 kg/ha with no amendment type: kept as fertilizer
+M1,AgCROS_INWLACRE_NC_A41_NC,2011-06-08 N 168.0 kg/ha with no amendment type: kept as fertilizer
+M1,AgCROS_INWLACRE_NC_A34_NC,2011-06-08 N 168.0 kg/ha with no amendment type: kept as fertilizer
+M1,AgCROS_INWLACRE_NP_A35_NP,2011-06-08 N 168.0 kg/ha with no amendment type: kept as fertilizer
+M1,AgCROS_INWLACRE_NP_A22_NP,2011-06-08 N 168.0 kg/ha with no amendment type: kept as fertilizer
+M1,AgCROS_INWLACRE_NR_A42_NR,2011-06-08 N 134.0 kg/ha with no amendment type: kept as fertilizer
+M1,AgCROS_INWLACRE_NR_A24_NR,2011-06-08 N 134.0 kg/ha with no amendment type: kept as fertilizer
+M1,AgCROS_INWLACRE_NR_A33_NR,2011-06-08 N 134.0 kg/ha with no amendment type: kept as fertilizer
+T1,AgCROS_INWLACRE_CD_A13_CD,no termination dates at this site; harvest date copied to CD_term_date of one crop

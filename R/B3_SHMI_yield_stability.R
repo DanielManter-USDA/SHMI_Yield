@@ -31,6 +31,9 @@
 #       Outputs/yield/drought_years.csv (filled by B1_Get_SPEI.R from SPEIbase). A
 #       negative SPEI interaction = more SHMI benefit in drier years. Fig S3: the SHMI
 #       slope against SPEI for each analysis, plus a summary panel.
+#   S5  Drought as Bowles et al. (2020): the three years with the largest county crop-
+#       insurance (RMA) corn drought payouts per experiment; SHMI_w x drought year, and
+#       SHMI_w x payout (continuous). FigS5_insurance_drought.png.
 #   S4  Variance: the Fig 1 model with residual SD = sigma x exp(delta x SHMI_w / 10); the
 #       ratio exp(delta) is the change in year-to-year scatter per 10 SHMI (< 1 =
 #       steadier), after the mean effects (unlike CV or SD, it does not mix the mean
@@ -272,6 +275,7 @@ if (!file.exists(dfile)) {
                       "#b35806", unique(select(d3, site_year, spei))$spei, p_lab = "SHMI × SPEI")
       ggsave(file.path(OUTS, sprintf("FigS3_drought_%s_%s.png", w, set)), fig + MS + PANEL, width = 6.8, height = 4.4, dpi = 300)
       if (w == "mjj" && set == "all") ggsave(file.path(OUTS, "FigS3_drought.png"), fig + MS + PANEL, width = 6.8, height = 4.4, dpi = 300)
+      if (w == "jja" && set == "all") { m_jja <- m_sp; d_jja <- d3 }   # for the main-text panel (S6)
     }
   }
   res$spei <- bind_rows(s3_rows)
@@ -305,6 +309,229 @@ if (!file.exists(dfile)) {
     write.csv(ss %>% select(window, set, cond, b, se, lower, upper, p_main, p_int), file.path(OUTS, "FigS3_drought_summary.csv"), row.names = FALSE)
   }
 }
+
+################################################################################
+# S5. DROUGHT AS IN BOWLES ET AL. (2020): crop-insurance drought payouts
+################################################################################
+# Bowles et al. (2020, One Earth) took each experiment's three "putative drought years"
+# as the years with the highest crop-insurance indemnities for drought in its county
+# (USDA Risk Management Agency, cause of loss). Here the same rule, among the years each
+# experiment has corn yields (1989 onward, when the RMA files begin):
+#   - drought year = one of the county's three largest corn drought payouts (payout > 0);
+#     SHMI_w x drought year, as S3;
+#   - continuous: SHMI_w x the year's drought payout, log(1 + $) standardized within site.
+# For all sites and for rainfed sites (county payouts at the irrigated NEMEIRR and NECCIRR
+# mostly reflect dryland fields). Files: colsom_YYYY.zip from the RMA public file server,
+# cached in Outputs/yield/rma_cause_of_loss/ (pipe-delimited; commodity year first,
+# indemnity second to last). Output: rows "S5" in stability_results.csv,
+# insurance_drought_years.csv (each site's payouts and drought years) and
+# FigS5_insurance_drought.png.
+RMA_URL <- "https://pubfs-rma.fpac.usda.gov/pub/Web_Data_Files/Summary_of_Business/cause_of_loss/colsom_%d.zip"
+RMA_DIR <- file.path(CACHE, "rma_cause_of_loss"); dir.create(RMA_DIR, showWarnings = FALSE, recursive = TRUE)
+INS_TOP <- 3
+sc5 <- SITE_COUNTY %>% distinct(site, state, county) %>% mutate(state = toupper(trimws(state)), county = toupper(trimws(county)))
+yrs5 <- sort(unique(corn$year[corn$year >= 1989]))
+old_to <- getOption("timeout"); options(timeout = max(600, old_to))
+rma <- map_dfr(yrs5, function(y) {
+  zf <- file.path(RMA_DIR, sprintf("colsom_%d.zip", y))
+  if (!file.exists(zf) || file.size(zf) < 1000)
+    tryCatch(download.file(sprintf(RMA_URL, y), zf, mode = "wb", quiet = TRUE),
+             error = function(e) message("S5: could not download RMA cause of loss for ", y, ": ", conditionMessage(e)))
+  if (!file.exists(zf) || file.size(zf) < 1000) return(NULL)
+  nm <- utils::unzip(zf, list = TRUE)$Name[1]
+  x <- readLines(unz(zf, nm), warn = FALSE)
+  x <- x[grepl("\\|\\s*CORN\\s*\\|", x, ignore.case = TRUE)]   # all causes (10 Nov 2026: S5b)
+  if (!length(x)) return(NULL)
+  f <- strsplit(x, "|", fixed = TRUE)
+  tibble(year = as.integer(trimws(vapply(f, `[`, "", 1))),
+         state = toupper(trimws(vapply(f, `[`, "", 3))),
+         county = toupper(trimws(vapply(f, `[`, "", 5))),
+         commodity = toupper(trimws(vapply(f, `[`, "", 7))),
+         cause = trimws(vapply(f, `[`, "", 13)),
+         indemnity = suppressWarnings(as.numeric(trimws(vapply(f, function(r) r[length(r) - 1], "")))))
+})
+options(timeout = old_to)
+if (is.null(rma) || !nrow(rma)) {
+  message("S5 skipped: no RMA cause-of-loss files could be read (", RMA_DIR, ")")
+} else {
+  rma_all <- rma %>% filter(commodity == "CORN") %>% semi_join(sc5, by = c("state", "county"))
+  rma <- rma_all %>% filter(grepl("drought", cause, ignore.case = TRUE)) %>%
+    group_by(state, county, year) %>% summarise(drought_usd = sum(indemnity, na.rm = TRUE), .groups = "drop")
+  ins <- corn %>% filter(year >= 1989) %>% distinct(site, year) %>%
+    left_join(sc5, by = "site") %>% left_join(rma, by = c("state", "county", "year")) %>%
+    mutate(drought_usd = coalesce(drought_usd, 0)) %>%
+    group_by(site) %>% arrange(desc(drought_usd), .by_group = TRUE) %>%
+    mutate(rank = row_number(), drought_ins = as.integer(rank <= INS_TOP & drought_usd > 0),
+           ins_z = { v <- log1p(drought_usd); if (sd(v) > 0) (v - mean(v)) / sd(v) else 0 }) %>%
+    ungroup() %>% arrange(site, year)
+  write.csv(ins, file.path(OUTS, "insurance_drought_years.csv"), row.names = FALSE)
+  cat("\nS5: insurance-defined drought years (", INS_TOP, " largest county corn drought payouts per experiment):\n", sep = "")
+  print(ins %>% filter(drought_ins == 1) %>% group_by(site) %>%
+          summarise(years = paste(sort(year), collapse = ", "), usd = paste(round(drought_usd / 1e6, 1), collapse = "/")), n = Inf)
+  s5_rows <- list(); s5_fig <- list()
+  for (set in names(SITE_SETS)) {
+    lab <- sprintf("[Insurance drought, %s]", if (set == "all") "all sites" else "rainfed sites")
+    d5 <- corn %>% filter(!site %in% SITE_SETS[[set]]) %>%
+      inner_join(select(ins, site, year, drought_ins, ins_z), by = c("site", "year"))
+    ns <- n_distinct(d5$site)
+    m5 <- tryCatch(fit_fig1(d5, "SHMI_w:drought_ins"), error = function(e) { message("S5 ", lab, " failed: ", conditionMessage(e)); NULL })
+    if (!is.null(m5)) {
+      s5_rows[[length(s5_rows) + 1]] <- bind_rows(
+        row_int(m5, "SHMI_w:drought_ins", paste(lab, "SHMI x drought year: drought minus other years"), "S5", ns),
+        row_at(m5, "SHMI_w:drought_ins", 0, paste(lab, "Slope in other years"), "S5", ns),
+        row_at(m5, "SHMI_w:drought_ins", 1, paste(lab, "Slope in drought years"), "S5", ns))
+      df5 <- summary(m5)$tTable["SHMI_w", "DF"]
+      s5_fig[[length(s5_fig) + 1]] <- slope_x(m5, "SHMI_w:drought_ins", c(0, 1)) %>%
+        mutate(cond = c("Other years", "Insurance drought years"), set = if (set == "all") "All sites" else "Rainfed sites",
+               lower = b - qt(0.975, df5) * se, upper = b + qt(0.975, df5) * se,
+               p_int = summary(m5)$tTable["SHMI_w:drought_ins", "p-value"], sites = ns,
+               years = sum(distinct(d5, site, year, drought_ins)$drought_ins))
+    }
+    if (set == "all" && !is.null(m5)) { m5_all <- m5; d5_all <- d5 }   # for the main-text panel (S6)
+    m5c <- tryCatch(fit_fig1(d5, "SHMI_w:ins_z"), error = function(e) NULL)
+    if (!is.null(m5c)) s5_rows[[length(s5_rows) + 1]] <-
+      row_int(m5c, "SHMI_w:ins_z", paste(lab, "SHMI x drought payout (log $, per SD within site; positive = more benefit in high-payout years)"), "S5", ns)
+  }
+  res$ins <- bind_rows(s5_rows)
+  if (length(s5_fig)) {
+    f5 <- bind_rows(s5_fig) %>% mutate(cond = factor(cond, c("Other years", "Insurance drought years")),
+                                       set = paste0(set, "\n", sites, " sites, ", years, " drought site-years; ", lab_p(p_int, "SHMI × drought")))
+    write.csv(f5, file.path(OUTS, "FigS5_insurance_drought.csv"), row.names = FALSE)
+    figS5 <- ggplot(f5, aes(cond, b, colour = cond)) +
+      geom_hline(yintercept = 0, colour = "grey25", linewidth = 0.5) +
+      geom_pointrange(aes(ymin = lower, ymax = upper), size = 0.45) +
+      facet_wrap(~ set, nrow = 1) +
+      scale_colour_manual(values = c("grey40", "#b35806"), guide = "none") +
+      labs(x = NULL, y = "Corn yield change per 10 SHMI (kg ha⁻¹)",
+           title = "SHMI benefit in crop-insurance drought years (as Bowles et al. 2020)",
+           caption = paste0("Drought years: each experiment's ", INS_TOP, " years with the largest corn drought indemnities in its county (USDA RMA, 1989 onward).\n",
+                            "Within-site SHMI slope at ", N_REF, " kg N/ha and average system age, 95% CI.")) +
+      theme_fig + theme(strip.background = element_blank(), strip.text = element_text(face = "bold"))
+    ggsave(file.path(OUTS, "FigS5_insurance_drought.png"), figS5 + MS, width = 6.8, height = 4.2, dpi = 300)
+  }
+}
+
+################################################################################
+# S5b. EVERY CAUSE OF LOSS, AS BOWLES ET AL. (2020) FIG. 2 (10 Nov 2026)
+################################################################################
+# Bowles et al. tallied county corn indemnities by cause (drought, excess precipitation,
+# heat, hail, ...). For each weather cause here, each experiment's three years (1989 on,
+# among its corn years) with the largest county corn indemnities for that cause, and a
+# separate model SHMI_w x cause year: the slope in those years and in all other years.
+# Causes (RMA damage-cause descriptions): drought; excess moisture (excess moisture,
+# precipitation or rain, flood); heat (heat, hot wind); hail; cold (freeze, frost, cold
+# winter, cold wet weather). Drought repeats S5.
+INS_CAUSES <- c(Drought = "drought", `Excess moisture` = "excess moisture|precipitation|rain|flood",
+                Heat = "heat|hot wind", Hail = "hail", Cold = "freeze|frost|cold")
+s5b <- list()
+if (exists("rma_all") && nrow(rma_all)) {
+  cause_tab <- rma_all %>% group_by(cause) %>% summarise(usd = sum(indemnity, na.rm = TRUE), .groups = "drop") %>%
+    arrange(desc(usd)) %>% mutate(group = vapply(cause, function(cz) {
+      g <- names(INS_CAUSES)[vapply(INS_CAUSES, function(rx) grepl(rx, cz, ignore.case = TRUE), TRUE)]
+      if (length(g)) g[1] else "Other" }, ""))
+  write.csv(cause_tab, file.path(OUTS, "insurance_causes.csv"), row.names = FALSE)
+  rma_g <- rma_all %>% left_join(select(cause_tab, cause, group), by = "cause") %>%
+    group_by(state, county, year, group) %>% summarise(usd = sum(indemnity, na.rm = TRUE), .groups = "drop")
+  for (g in names(INS_CAUSES)) {
+    yrs_g <- corn %>% filter(year >= 1989) %>% distinct(site, year) %>% left_join(sc5, by = "site") %>%
+      left_join(filter(rma_g, group == g) %>% select(-group), by = c("state", "county", "year")) %>%
+      mutate(usd = coalesce(usd, 0)) %>% group_by(site) %>% arrange(desc(usd), .by_group = TRUE) %>%
+      mutate(cause_yr = as.integer(row_number() <= INS_TOP & usd > 0)) %>% ungroup()
+    dg <- corn %>% inner_join(select(yrs_g, site, year, cause_yr), by = c("site", "year"))
+    ny <- sum(distinct(dg, site, year, cause_yr)$cause_yr)
+    if (ny < 3) { message("S5b ", g, ": fewer than 3 site-years, skipped"); next }
+    mg <- tryCatch(fit_fig1(dg, "SHMI_w:cause_yr"), error = function(e) { message("S5b ", g, " failed: ", conditionMessage(e)); NULL })
+    if (is.null(mg)) next
+    df <- summary(mg)$tTable["SHMI_w", "DF"]
+    s5b[[g]] <- slope_x(mg, "SHMI_w:cause_yr", c(1, 0)) %>%
+      mutate(cause = g, cond = c(g, paste("Other than", tolower(g))), site_years = c(ny, NA),
+             sites = n_distinct(dg$site[dg$cause_yr == 1]),
+             lower = b - qt(0.975, df) * se, upper = b + qt(0.975, df) * se,
+             p_int = summary(mg)$tTable["SHMI_w:cause_yr", "p-value"],
+             ymean = c(mean(dg$yield_kgha[dg$cause_yr == 1]), mean(dg$yield_kgha[dg$cause_yr == 0])))
+  }
+  s5b <- bind_rows(s5b)
+  if (nrow(s5b)) {
+    write.csv(mutate(s5b, across(where(is.double), ~ signif(.x, 4))), file.path(OUTS, "insurance_by_cause.csv"), row.names = FALSE)
+    cat("\nS5b: SHMI slope in each experiment's 3 worst insurance years by cause (kg/ha per 10 SHMI):\n")
+    print(as.data.frame(select(s5b, cause, cond, b, lower, upper, p_int, site_years, sites, ymean)), digits = 3)
+  }
+}
+
+################################################################################
+# S6. MAIN-TEXT PANEL: the SHMI benefit in bad and good years, three ways (Fig. 2c)
+################################################################################
+# A buffering (resistance) claim needs the benefit in bad years compared with that in
+# good years, on the same scale. For three definitions of a bad year - the year's county
+# yield (S1), June-August SPEI-3 (S3, all sites) and the three largest county
+# crop-insurance drought payouts (S5, as Bowles et al. 2020) - the panel shows the slope
+# in absolute terms (kg/ha per 10 SHMI) and as a share of the mean yield of those years.
+# The share uses the mean corn yield of the plot-years in each class: county yield at or
+# below its 10th percentile / 40th-60th / at or above its 90th; SPEI <= -1 / -0.5 to 0.5 /
+# >= 1 (slopes at SPEI -1.5, 0 and +1.5); insurance drought years / other years. A
+# constant absolute benefit is a larger percentage in poor years because yields are lower.
+cls_row <- function(m, int, x, cond, ymean, measure) {
+  df <- summary(m)$tTable["SHMI_w", "DF"]
+  slope_x(m, int, x) %>% mutate(cond = cond, measure = measure, ymean = ymean,
+                                lower = b - qt(0.975, df) * se, upper = b + qt(0.975, df) * se,
+                                p_int = summary(m)$tTable[int, "p-value"])
+}
+s6 <- list()
+qq <- quantile(d1$env_c, c(0.1, 0.4, 0.6, 0.9))
+s6$fw <- cls_row(m_fw, "SHMI_w:env_c", q_env, c("Poor", "Typical", "Good"),
+                 c(mean(d1$yield_kgha[d1$env_c <= qq[1]]), mean(d1$yield_kgha[d1$env_c >= qq[2] & d1$env_c <= qq[3]]),
+                   mean(d1$yield_kgha[d1$env_c >= qq[4]])), "Year's county yield")
+if (exists("m_jja") && !is.null(m_jja))
+  s6$sp <- cls_row(m_jja, "SHMI_w:spei", c(-1.5, 0, 1.5), c("Dry", "Normal", "Wet"),
+                   c(mean(d_jja$yield_kgha[d_jja$spei <= -1]), mean(d_jja$yield_kgha[abs(d_jja$spei) < 0.5]),
+                     mean(d_jja$yield_kgha[d_jja$spei >= 1])), "June-August water balance (SPEI)")
+if (exists("m5_all") && !is.null(m5_all))
+  s6$ins <- cls_row(m5_all, "SHMI_w:drought_ins", c(1, 0), c("Drought payout", "Other"),
+                    c(mean(d5_all$yield_kgha[d5_all$drought_ins == 1]), mean(d5_all$yield_kgha[d5_all$drought_ins == 0])),
+                    "Crop-insurance drought years")
+s6 <- bind_rows(s6) %>% mutate(pct = 100 * b / ymean, pct_lo = 100 * lower / ymean, pct_hi = 100 * upper / ymean)
+write.csv(mutate(s6, across(where(is.double), ~ signif(.x, 4))), file.path(OUTS, "Fig2c_years.csv"), row.names = FALSE)
+cat("\nS6: SHMI benefit by year class (kg/ha per 10 SHMI; % of that class's mean yield):\n")
+print(as.data.frame(select(s6, measure, cond, b, lower, upper, ymean, pct, pct_lo, pct_hi, p_int)), digits = 3)
+# Figure (10 Nov 2026): slopes only (the % column stays in Fig2c_years.csv), facets side by
+# side by definition; the insurance facet shows each cause's worst years (S5b) and, for
+# reference, the slope in years outside the drought years.
+ins_pts <- if (exists("s5b") && is.data.frame(s5b) && nrow(s5b)) {
+  bind_rows(filter(s5b, cond == cause), filter(s5b, cause == "Drought", cond != cause) %>% mutate(cond = "Other years")) %>%
+    transmute(measure = "Crop-insurance worst years", cond, b, lower, upper,
+              lab = ifelse(cond == "Other years", "", ifelse(p_int < 0.001, "p < 0.001", sprintf("p = %.2f", p_int))))
+} else s6 %>% filter(measure == "Crop-insurance drought years") %>%
+  transmute(measure = "Crop-insurance worst years", cond = ifelse(cond == "Other", "Other years", "Drought"),
+            b, lower, upper, lab = ifelse(cond == "Other years", "", ifelse(p_int < 0.001, "p < 0.001", sprintf("p = %.2f", p_int))))
+f6 <- bind_rows(
+  s6 %>% filter(measure != "Crop-insurance drought years") %>%
+    transmute(measure, cond, b, lower, upper, lab = "", p_int),
+  ins_pts) %>%
+  group_by(measure) %>% mutate(head = if (first(measure) == "Crop-insurance worst years") "Crop-insurance\nworst years by cause"
+                                     else paste0(c(`Year's county yield` = "Year's county\ncorn yield",
+                                                   `June-August water balance (SPEI)` = "June-August\nSPEI")[first(measure)],
+                                                 "\n", ifelse(first(p_int) < 0.001, "p < 0.001", sprintf("p = %.2f", first(p_int))))) %>% ungroup()
+lv_cond <- c("Poor", "Typical", "Good", "Dry", "Normal", "Wet", names(INS_CAUSES), "Other years")
+f6 <- f6 %>% mutate(cond = factor(cond, intersect(lv_cond, unique(cond))),
+                    head = factor(head, unique(head)))
+col_cond <- c(Poor = "#b35806", Dry = "#b35806", Typical = "grey40", Normal = "grey40", `Other years` = "grey40",
+              Good = "#2166ac", Wet = "#2166ac", Drought = "#b35806", `Excess moisture` = "#2166ac",
+              Heat = "#d6604d", Hail = "#762a83", Cold = "#4393c3")
+# plot data for R/figures/F3_yield.R (Fig. 3c), 11 Nov 2026
+saveRDS(list(years = f6, colours = col_cond, N_REF = N_REF), file.path(OUTS, "plotdata_stability.rds"))
+fig6 <- ggplot(f6, aes(cond, b, colour = cond)) +
+  geom_hline(yintercept = 0, colour = "grey60", linetype = "dashed") +
+  geom_pointrange(aes(ymin = lower, ymax = upper), size = 0.4) +
+  geom_text(aes(y = upper, label = lab), vjust = -0.6, size = 2.3, colour = "grey30") +
+  facet_grid(. ~ head, scales = "free_x", space = "free_x") +
+  scale_colour_manual(values = col_cond, guide = "none") +
+  labs(x = NULL, y = "Corn yield change per 10 SHMI (kg ha\u207B\u00B9, 95% CI)",
+       title = "SHMI benefit in bad, typical and good years",
+       caption = paste0("Within-site slope at ", N_REF, " kg N/ha and average system age. Bad years by the county's corn yield (10th percentile), ",
+                        "June-August SPEI-3 (-1.5)\nor each experiment's 3 years with the largest county corn indemnities for each cause (USDA RMA, 1989 onward).")) +
+  theme_fig + theme(strip.background = element_blank(), strip.text = element_text(face = "bold", size = 8),
+                    axis.text.x = element_text(angle = 30, hjust = 1), panel.grid.major.x = element_blank())
+ggsave(file.path(OUTS, "Fig2c_years.png"), fig6 + MS, width = 7.2, height = 3.8, dpi = 300)
 
 ################################################################################
 # S4. VARIANCE: does year-to-year scatter change with SHMI?

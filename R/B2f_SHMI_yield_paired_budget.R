@@ -77,8 +77,16 @@ labels_site <- function(site) {
                 summarise(cover = any(CD_cat %in% "Cover"),
                           rotation = paste(sort(unique(tolower(trimws(CD_name[!CD_cat %in% "Cover"])))), collapse = "+"),
                           .groups = "drop"), by = "MGT_combo") %>%
-    left_join(sd %>% group_by(MGT_combo) %>%
-                summarise(tillage = ifelse(any(grepl("MOLDBOARD|PLOW, DISK", SD_equip)), "conventional", "reduced"),
+    # tillage class from the years of the record: no-till if fewer than 20% of years had
+    # any tillage; otherwise conventional if a moldboard or disk plow was used in at least
+    # half of the tilled years, else reduced. (Until 9 Nov 2026 one plow pass anywhere made
+    # the whole record conventional: Hoytville's no-till plots, plowed once in 1983, were
+    # labelled conventional, so pairs that differ in tillage counted as rotation-only pairs.)
+    left_join(sd %>% mutate(year = yr(SD_date)) %>% group_by(MGT_combo, year) %>%
+                summarise(conv = any(grepl("MOLDBOARD|PLOW, DISK", SD_equip)), .groups = "drop") %>%
+                group_by(MGT_combo) %>%
+                summarise(tillage = ifelse(n() < 0.2 * (y1 - y0 + 1), "no-till",
+                                           ifelse(mean(conv) >= 0.5, "conventional", "reduced")),
                           .groups = "drop"), by = "MGT_combo") %>%
     left_join(sa %>% distinct(MGT_combo) %>% mutate(manure = TRUE), by = "MGT_combo") %>%
     mutate(site = site, cover = coalesce(cover, FALSE), tillage = coalesce(tillage, "no-till"),

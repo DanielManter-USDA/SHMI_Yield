@@ -1,7 +1,7 @@
 """
 build_study_treatments.py
 Builds SHMI_study_treatments.xlsx (Supplementary table of sites and treatments) from the
-SHMI study workbooks used by B2_SHMI_yield_main.R, over each site's analysis period.
+SHMI study workbooks used by SHMI_yield_main.R, over each site's analysis period.
 
     python3 build_study_treatments.py --wb-dir DRIVES/final --units-dir DRIVES/final \
         --old SHMI_study_treatments_7sites.xlsx --out SHMI_study_treatments.xlsx
@@ -15,9 +15,9 @@ import pandas as pd
 
 warnings.filterwarnings("ignore")
 
-# ---- sites: period, exclusions and treatment code, as in B2_SHMI_yield_main.R ------------
+# ---- sites: period, exclusions and treatment code, as in SHMI_yield_main.R ------------
 SITES = {
-    "NELITCSE":  dict(start=1986, end=2014, loc="Lincoln, Nebraska"),
+    "NELITCSE":  dict(start=1986, end=2013, loc="Lincoln, Nebraska"),
     "NEMLTCRS":  dict(start=1983, end=2006, loc="Mead, Nebraska"),
     "OHTVD_Ho":  dict(start=1964, end=2012, loc="Hoytville, Ohio"),
     "OHTVD_Wo":  dict(start=1962, end=2021, loc="Wooster, Ohio"),
@@ -37,7 +37,8 @@ DESIGN = {
     "WICST_ARS": "5 cropping systems (conventional and organic grain and forage)",
     "NEMEIRR": "Irrigated continuous corn: no-till vs disk x 0, 50, 100% stover removal",
     "NECCIRR": "Irrigated no-till continuous corn: full vs deficit irrigation x amelioration (none, rye cover, manure) x N x stover removal",
-    "INWLACRE": "Corn-soybean: conventional till vs no-till, no-till with ryegrass cover, split N, modified planter; perennial plots (no corn). Redesigned in 2008: split N became reduced N, the modified planter became intermittent tillage",
+    "INWLACRE": "Corn-soybean: conventional till vs no-till, no-till with ryegrass cover, split N, modified planter; perennial plots (no corn)",
+    "INWLTPAC": "Corn-soybean: conventional till vs no-till, no-till with rye cover, split N, modified planter; sorghum-sudangrass plots (no corn). Ends before the 2008 redesign",
     "IAAM7071": "Continuous corn: chisel vs no-till x stover removal (0, medium, high) x N management; rye cover; clover living mulch; biochar",
     "PAUP": "No-till continuous corn and corn-soybean x stover removal (0, 50, 100%) x rye cover; twin rows",
 }
@@ -47,6 +48,7 @@ RECORDS = {
     "NEMEIRR": "AgCROS, converted with agcros2shmi.py",
     "NECCIRR": "AgCROS, converted with agcros2shmi.py; fertilizer and manure from a supplement (UNL CropWatch 2017)",
     "INWLACRE": "AgCROS, converted with agcros2shmi.py",
+    "INWLTPAC": "AgCROS, converted with agcros2shmi.py",
     "IAAM7071": "AgCROS, converted with agcros2shmi.py",
     "PAUP": "AgCROS, converted with agcros2shmi.py (no tillage records: no-till)",
 }
@@ -75,7 +77,8 @@ NEM_ROT = {"1": "continuous corn", "2": "continuous soybean", "3": "continuous s
            "6": "corn - oats/clover - sorghum - soybean", "7": "corn - soybean - sorghum - oats/clover"}
 NEM_N = {"0": "0 kg N/ha", "1": "low: 90 kg N/ha corn and sorghum; 34 soybean and oats",
          "2": "high: 180 kg N/ha corn and sorghum; 69 soybean and oats"}
-# as in B2_SHMI_yield_main.R with AGCROS_REFINE = FALSE: matched on the treatment descriptor
+# "other" factors as in the analysis as run (B2, AGCROS_REFINE = FALSE): the modified planter
+# at INWLACRE, plus stover removal at all three; biochar and twin rows are not modelled
 AGCROS_OTHER = {"INWLACRE": {"modified planter": "no-till planter with row cleaners"}}
 
 
@@ -157,7 +160,7 @@ def site_rows(site, cfg, wb_dir, units_dir, old):
         nrec = c.N_fert.notna().mean() if len(c) else float("nan")
         n_txt = f"{c.N_fert.mean():.0f} kg N/ha (fertilizer on corn, records; {nrec:.0%} of corn plot-years)" \
             if len(c) and c.N_fert.notna().any() else ""
-        r = dict(Site=site, **{"Treatment code": code}, Plots=plots,
+        r = dict(Site=site, **{"Treatment code": code, "Key (trt in the R outputs)": f"{site} {code}"}, Plots=plots,
                  **{"Corn plot-years with yield": len(c), "Years with corn yield": c.year.nunique(),
                     "Tillage passes recorded (implement: passes per plot-year)": passes, "_n": n_txt})
         r.update(describe(site, code, g, old))
@@ -176,8 +179,6 @@ def describe(site, code, g, old):
             for k in ["Rotation", "Tillage treatment", "N fertility", "Cover crop", "Organic inputs",
                       "Irrigation", "Other factors (not scored by SHMI)", "Tillage source", "Notes"]:
                 d[k] = "" if pd.isna(o[k]) else o[k]
-            # the recorded N is recomputed below; drop it if --old already carries it
-            d["N fertility"] = re.sub(r"; [0-9.]+ kg N/ha \(fertilizer on corn, records;[^)]*\)", "", d["N fertility"])
             return d
     base = {"Cover crop": "none", "Organic inputs": "none", "Irrigation": "none",
             "Other factors (not scored by SHMI)": "none", "Notes": ""}
@@ -200,19 +201,22 @@ def describe(site, code, g, old):
     if x.residue_removal in ("Partial", "Yes"):
         other.append("stover removal: " + x.residue_removal.lower())
     for k, lab in AGCROS_OTHER.get(site, {}).items():
-        if k in x.treatment_descriptor.lower():
+        if k in x.system.lower():
             other.append(lab)
     if x.organic_management == "Yes":
         other.append("organic management")
     base.update({"Rotation": x.rotation_descriptor, "Tillage treatment": till,
                  "N fertility": x.n_treatment_descriptor or "not stated",
-                 "Cover crop": x.cover_crop or "none",
+                 "Cover crop": x.cover_crop or ("perennial cover crop (living mulch), per the treatment description"
+                                                if "perennial cover crop" in str(x.treatment_descriptor).lower() else "none"),
                  "Irrigation": "none" if x.irrigation in ("", "No") else x.irrigation,
                  "Other factors (not scored by SHMI)": "; ".join(other) or "none",
                  "Tillage source": "records (AgCROS)" if site != "PAUP" else "no tillage (no-till study)",
                  "Notes": "AgCROS treatment(s): " + ", ".join(sorted(g.treatment_id.unique(), key=lambda s: (len(s), s)))})
-    if site == "INWLACRE" and x.treatment_id.endswith(("_NR", "_IT")):
-        base["Notes"] += "; from 2008, on the former " + ("NS (split N)" if x.treatment_id.endswith("_NR") else "NM (modified planter)") + " plots"
+    if site == "IAAM7071" and "charcoal" in x.system.lower():
+        base["Notes"] += "; biochar, not scored by SHMI (not an organic amendment; no amendment bonus) and not modelled separately"
+    if site == "PAUP" and "twin row" in x.system.lower():
+        base["Notes"] += "; twin-row planting (not modelled)"
     return base
 
 
@@ -238,7 +242,7 @@ def main():
     ag = t.Site.isin([s for s, c in SITES.items() if c.get("agcros")])
     t.loc[ag, "Treatment code"] = t.loc[ag, "Notes"].str.extract(r"AgCROS treatment\(s\): ([^;]+)")[0] \
         .str.replace(r"\b[A-Z0-9]+_", "", regex=True)
-    cols = ["Site", "Treatment code", "Rotation", "Tillage treatment",
+    cols = ["Site", "Treatment code", "Key (trt in the R outputs)", "Rotation", "Tillage treatment",
             "Tillage passes recorded (implement: passes per plot-year)", "N fertility", "Cover crop",
             "Organic inputs", "Irrigation", "Other factors (not scored by SHMI)", "Plots",
             "Corn plot-years with yield", "Years with corn yield", "Tillage source", "Notes"]
@@ -261,9 +265,10 @@ def main():
                                      "Treatments with corn": s["Treatments with corn"].sum()}])], ignore_index=True)
 
     notes = [
-        "Treatment summary for the SHMI corn-yield analysis", "",
+        "Treatment summary for the SHMI corn-yield analysis (ten long-term experiments)", "",
         "Counts and tillage passes are computed from the SHMI study workbooks (SHMI_<site>.xlsx) over each site's analysis period (build_study_treatments.py).",
-        "Treatment code: the treatment part of MGT_combo without the rotation phase. AgCROS sites (INWLACRE, IAAM7071, PAUP): the AgCROS treatment number(s) of one system; treatments that differ only in rotation phase are listed together.",
+        "Key: the treatment as named in the R outputs (trt = site + MGT_trt_base; e.g. treatment_labels.csv, N_by_treatment.csv), for joining. AgCROS sites: the system string B2 builds from the AgCROS descriptors.",
+        "Treatment code: the treatment part of MGT_combo without the rotation phase. AgCROS sites (Indiana, Iowa, Pennsylvania): the AgCROS treatment number(s) of one system; treatments that differ only in rotation phase are listed together.",
         "Plots: plots with crops in the analysis period. Corn plot-years: corn crops with a yield in the period (the yield model may use slightly fewer).",
         "Tillage passes: passes per plot per year in the analysis period, by implement (T-DISC implement names shortened). Recorded depth: mean working depth where the records give one.",
         "N fertility: from the treatment design; the mean recorded fertilizer N on corn is added where records exist (manure N is computed by the SHMI package and not shown).",
@@ -275,17 +280,19 @@ def main():
         "OHTVD_Ho: DRIVES tillage corrected with the Ohio management logs (duplicates and phase misassignment removed).",
         "OHTVD_Wo: DRIVES records only the tillage class; passes assumed from the Hoytville protocol. Coordinates approximate.",
         "WICST_ARS: implements, passes and depths from the station tillage log; all passes match DRIVES by plot and date.",
-        "INWLACRE: period 2004-2009, the years with planting, tillage and N records. In 2008 the split-N plots (NS) became reduced-N plots (NR) and the modified-planter plots (NM) became intermittent tillage (IT); each is listed as its own treatment, so those plots are counted twice. Missing N records take the treatment's median."
-        "IAAM7071: biochar treatments (Charcoal1, Charcoal2) are not scored by SHMI and are not a separate 'other' factor in the yield model (they differ from their controls only by biochar). Clover living-mulch plots (21, 22) change to corn-rye/soybean in 2011.",
-        "PAUP: no tillage records (no-till study). Twin-row planting is not scored by SHMI and is not a separate 'other' factor.",
+        "INWLACRE: 2004-2009, including the 2008 redesign (split N became reduced N, 175 vs 220 lbs/A; the modified planter became intermittent tillage). N is the recorded amount; the modified planter enters as an 'other' factor. A sensitivity version (AGCROS_REFINE in B2) ends in 2007 and sets every corn plot to the site-year median N.",
+        "IAAM7071: stover removal enters as an 'other' factor. Biochar (Charcoal1, Charcoal2) is not scored by SHMI: it is stable pyrolysed carbon, not an organic amendment, so those plots score as their no-biochar controls. Clover living-mulch plots (21, 22): perennial cover 2008-2010, then corn-rye-soybean (21) and rye-soybean-corn (22) from 2011 (Ag Data Commons 10.15482/USDA.ADC/1528303).",
+        "PAUP: no tillage records (no-till study); stover removal enters as an 'other' factor; twin-row planting is not modelled.",
         "", "Screened out",
-        "INWLTPAC (West Lafayette, TPAC): split-N plots became reduced-N plots in 2008 and N records are incomplete (split N records one of its two applications; modified planter about half the design N). Run as a sensitivity analysis only.",
         "MNMOFS (Morris, MN): fertilizer N missing in 2008-09 and only starter N recorded on many plots; organic plots have no manure N in AgCROS. Run as a sensitivity analysis only.",
+        "INWLTPAC (West Lafayette, TPAC): split-N plots became reduced-N plots in 2008 and N records are incomplete (split N records one of two applications; modified planter about half the design N).",
         "Other AgCROS locations were screened out for having no SHMI contrast (residue-removal-only studies), no corn treatment contrasts, too few plots, or locations needing to be split (agcros2shmi/agcros_location_screen.csv).",
         "", "Flags",
         "OHTVD_Ho chisel plots (T2) record moldboard plowing in many years: worth confirming with the site.",
+        "IAAM7071: AgCROS logs a mid-season sampling (about 20 June) like a harvest and has no cover-crop plantings. The converter (agcros2shmi.py, 7 Nov 2026) pairs each planting with its grain harvest and ignores samplings; the covers come from supplements/IAAM7071_covers.csv: cereal rye for treatments 19 and 20 with the planting and harvest dates supplied by the site (2008-09 to 2012-13), and a perennial white-clover living mulch assumed for treatments 21 and 22, planted with the first corn in 2008 and kept for the whole experiment (to be confirmed with the site).",
+        "INWLACRE: AgCROS has no 2004 corn planting record for the four modified-planter plots; the converter gives them the date of the site's other 2004 corn plantings (19 April 2004).",
         "NELITCSE: AgCROS has no 2014 corn yields (the DRIVES export has them), so the converted workbook's corn yields end in 2013 (60 fewer corn plot-years than the hand-built workbook).",
-        "INWLACRE: recorded N is below the design rate on the modified-planter plots (about 106 kg N/ha in 2005-06) and on the split-N plots in 2007 (one of two applications recorded).",
+        "INWLACRE: AgCROS records less N on some plots than the design (modified planter about 106 kg N/ha; split N one of its two applications); the analysis as run uses the recorded amounts.",
         "Sources: AgCROS (GRACEnet/REAP) database backup; DRIVES database export (yield_plant_harv_trt); WICST data request (6-5-2026); Ohio management logs; UNL CropWatch (2017).",
     ]
     with pd.ExcelWriter(a.out, engine="openpyxl") as w:
@@ -299,7 +306,7 @@ def main():
 def fmt(book):
     from openpyxl.styles import Alignment, Font, PatternFill
     widths = {"Sites": [11, 26, 10, 60, 50, 11, 8, 12, 12],
-              "Treatments": [11, 14, 26, 36, 48, 42, 24, 18, 14, 30, 7, 11, 10, 18, 50],
+              "Treatments": [11, 14, 30, 26, 36, 48, 42, 24, 18, 14, 30, 7, 11, 10, 18, 50],
               "Notes": [160]}
     for ws in book.worksheets:
         for i, wdt in enumerate(widths[ws.title], start=1):

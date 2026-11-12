@@ -1,0 +1,53 @@
+rule,unit,message
+A1b,IAAM7071_218,2 records labelled IAAM7071_18 (2008-04-16 to 2008-04-30) fall inside IAAM7071_8's period; reassigned to IAAM7071_8
+C3b,,432 extra harvest records of annual crops within 60 days merged into one harvest
+C4,,440 harvest-type records without a yield and not paired with a planting (samplings) ignored
+M2,AgCROS_IAAM7071_104_16,"2007-09-24 Biochar 18368.0 kg/ha: not scored as an organic amendment, not written"
+M2,AgCROS_IAAM7071_216_14,"2007-09-24 Biochar 18368.0 kg/ha: not scored as an organic amendment, not written"
+M2,AgCROS_IAAM7071_103_13,"2007-09-24 Biochar 9857.3 kg/ha: not scored as an organic amendment, not written"
+M2,AgCROS_IAAM7071_107_15,"2007-09-24 Biochar 9857.3 kg/ha: not scored as an organic amendment, not written"
+M2,AgCROS_IAAM7071_109_17,"2007-09-24 Biochar 9857.3 kg/ha: not scored as an organic amendment, not written"
+M2,AgCROS_IAAM7071_117_14,"2007-09-24 Biochar 18368.0 kg/ha: not scored as an organic amendment, not written"
+M2,AgCROS_IAAM7071_202_13,"2007-09-24 Biochar 9857.3 kg/ha: not scored as an organic amendment, not written"
+M2,AgCROS_IAAM7071_204_16,"2007-09-24 Biochar 18368.0 kg/ha: not scored as an organic amendment, not written"
+M2,AgCROS_IAAM7071_205_18,"2007-09-24 Biochar 18368.0 kg/ha: not scored as an organic amendment, not written"
+M2,AgCROS_IAAM7071_210_17,"2007-09-24 Biochar 9857.3 kg/ha: not scored as an organic amendment, not written"
+M2,AgCROS_IAAM7071_211_15,"2007-09-24 Biochar 9857.3 kg/ha: not scored as an organic amendment, not written"
+M2,AgCROS_IAAM7071_301_15,"2007-09-24 Biochar 9857.3 kg/ha: not scored as an organic amendment, not written"
+M2,AgCROS_IAAM7071_311_17,"2007-09-24 Biochar 9857.3 kg/ha: not scored as an organic amendment, not written"
+M2,AgCROS_IAAM7071_312_18,"2007-09-24 Biochar 18368.0 kg/ha: not scored as an organic amendment, not written"
+M2,AgCROS_IAAM7071_101_18,"2012-10-23 Biochar 11200.0 kg/ha: not scored as an organic amendment, not written"
+M2,AgCROS_IAAM7071_104_16,"2012-10-23 Biochar 11200.0 kg/ha: not scored as an organic amendment, not written"
+M2,AgCROS_IAAM7071_117_14,"2012-10-23 Biochar 11200.0 kg/ha: not scored as an organic amendment, not written"
+M2,AgCROS_IAAM7071_204_16,"2012-10-23 Biochar 11200.0 kg/ha: not scored as an organic amendment, not written"
+M2,AgCROS_IAAM7071_205_18,"2012-10-23 Biochar 11200.0 kg/ha: not scored as an organic amendment, not written"
+M2,AgCROS_IAAM7071_315_14,"2007-09-24 Biochar 18368.0 kg/ha: not scored as an organic amendment, not written"
+M2,AgCROS_IAAM7071_319_16,"2007-09-24 Biochar 18368.0 kg/ha: not scored as an organic amendment, not written"
+M2,AgCROS_IAAM7071_320_13,"2007-09-24 Biochar 9857.3 kg/ha: not scored as an organic amendment, not written"
+M2,AgCROS_IAAM7071_403_16,"2007-09-24 Biochar 18368.0 kg/ha: not scored as an organic amendment, not written"
+M2,AgCROS_IAAM7071_407_17,"2007-09-24 Biochar 9857.3 kg/ha: not scored as an organic amendment, not written"
+M2,AgCROS_IAAM7071_413_14,"2007-09-24 Biochar 18368.0 kg/ha: not scored as an organic amendment, not written"
+M2,AgCROS_IAAM7071_418_15,"2007-09-24 Biochar 9857.3 kg/ha: not scored as an organic amendment, not written"
+M2,AgCROS_IAAM7071_419_13,"2007-09-24 Biochar 9857.3 kg/ha: not scored as an organic amendment, not written"
+M1,AgCROS_IAAM7071_222_22,2011-05-03 N 0.0 kg/ha with no amendment type: kept as fertilizer
+M2,AgCROS_IAAM7071_406_18,"2007-09-24 Biochar 18368.0 kg/ha: not scored as an organic amendment, not written"
+M2,AgCROS_IAAM7071_101_18,"2007-09-24 Biochar 18368.0 kg/ha: not scored as an organic amendment, not written"
+M1,AgCROS_IAAM7071_303_22,2011-05-03 N 0.0 kg/ha with no amendment type: kept as fertilizer
+M1,AgCROS_IAAM7071_417_22,2011-05-03 N 0.0 kg/ha with no amendment type: kept as fertilizer
+M1,AgCROS_IAAM7071_111_22,2011-06-06 N 0.0 kg/ha with no amendment type: kept as fertilizer
+M1,AgCROS_IAAM7071_222_22,2011-06-06 N 0.0 kg/ha with no amendment type: kept as fertilizer
+M1,AgCROS_IAAM7071_303_22,2011-06-06 N 0.0 kg/ha with no amendment type: kept as fertilizer
+M1,AgCROS_IAAM7071_417_22,2011-06-06 N 0.0 kg/ha with no amendment type: kept as fertilizer
+M2,AgCROS_IAAM7071_216_14,"2012-10-23 Biochar 11200.0 kg/ha: not scored as an organic amendment, not written"
+M2,AgCROS_IAAM7071_312_18,"2012-10-23 Biochar 11200.0 kg/ha: not scored as an organic amendment, not written"
+M2,AgCROS_IAAM7071_315_14,"2012-10-23 Biochar 11200.0 kg/ha: not scored as an organic amendment, not written"
+M2,AgCROS_IAAM7071_319_16,"2012-10-23 Biochar 11200.0 kg/ha: not scored as an organic amendment, not written"
+M2,AgCROS_IAAM7071_403_16,"2012-10-23 Biochar 11200.0 kg/ha: not scored as an organic amendment, not written"
+M2,AgCROS_IAAM7071_406_18,"2012-10-23 Biochar 11200.0 kg/ha: not scored as an organic amendment, not written"
+M2,AgCROS_IAAM7071_413_14,"2012-10-23 Biochar 11200.0 kg/ha: not scored as an organic amendment, not written"
+M1,AgCROS_IAAM7071_111_22,2011-05-03 N 0.0 kg/ha with no amendment type: kept as fertilizer
+M1,AgCROS_IAAM7071_102_21,2012-06-04 N 0.0 kg/ha with no amendment type: kept as fertilizer
+M1,AgCROS_IAAM7071_215_21,2012-06-04 N 0.0 kg/ha with no amendment type: kept as fertilizer
+M1,AgCROS_IAAM7071_306_21,2012-06-04 N 0.0 kg/ha with no amendment type: kept as fertilizer
+M1,AgCROS_IAAM7071_412_21,2012-06-04 N 0.0 kg/ha with no amendment type: kept as fertilizer
+S1,,60 supplement rows added from IAAM7071_covers.csv

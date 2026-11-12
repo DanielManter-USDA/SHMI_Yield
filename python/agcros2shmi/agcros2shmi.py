@@ -35,12 +35,16 @@ imputation fills them. Rules:
       for grain; otherwise Annual.
   C3  Harvest date and grain yield (dry matter, kg/ha) from measresiduemgnt,
       measharvestfraction or measyieldnutuptake (grain fractions) for the same unit and
-      crop, first record 30-400 days after planting. Without one, the date is blank
+      crop: the first record with a grain yield 30-400 days after planting, else the first
+      record of any kind (7 Nov 2026: at IAAM7071 a mid-season above-ground sampling,
+      about 20 June, had been taken as the harvest and the grain harvest left orphaned). Without one, the date is blank
       (package imputes). Perennials get CD_harv_date only on the first harvest.
   C3c An annual crop without a harvest record takes the harvest date most often recorded
       for the same crop planted that year on the site's other plots (yield stays blank).
-  C4  Harvest-only records (yield with no planting, e.g. a planting missed in the
-      log) create a crop row with a blank planting date.
+  C4  Harvest-only records with a yield (a planting missed in the log) create a crop
+      row; its planting date is the date most often recorded for the same crop and year
+      on the site's other plots, if any and if the plot has no other annual crop planted
+      that year (7 Nov 2026: INWLACRE's modified-planter plots in 2004), else blank. Harvest-only records without a yield (samplings) are ignored.
   D1  Each tillage record is one pass, mapped by tillage_event (and the method text) to
       a T-DISC implement (TILLAGE_MAP). Recorded depth (cm) is written as SD_depth
       (inches); blank or 0 depth leaves the T-DISC default. "(Twice)" = two passes.
@@ -49,10 +53,15 @@ imputation fills them. Rules:
       hand-built DRIVES/AgCROS workbooks did not include them).
   D3  A site with no tillage record at all (no-till) gets one zero-mixing placeholder pass
       (SPRAYER/AERIAL/BROADCAST APPLICATION, mixing 0) so Soil_Disturbance is not empty.
+  D4  Tillage records that the site's own publications say did not happen are not written
+      (TILLAGE_NOT_DONE; NELITCSE no-till plots: row cultivation 1981-2000 and 2013, which
+      Sindelar et al. 2015 rule out). --keep-documented-errors keeps them (sensitivity).
   T1  If no crop has a termination date, the first annual crop with a harvest date
       gets that date as CD_term_date too (same day, so SHMI is unchanged): an all-blank
       CD_term_date column stops SHMI <= 1.2.x (SHMI_package_todo.md). Remove once fixed.
-  M1  Amendments: organic materials (manure, compost, biochar, litter, ...) ->
+  M2  Biochar (and charcoal) records are not written: biochar is not scored as an organic
+      amendment (stable pyrolysed carbon; the pairs analysis already excludes it).
+  M1  Amendments: organic materials (manure, compost, litter, ...) ->
       SA_cat Organic with rate and N; N fertilizers -> SA_cat Fertilizer with SA_N
       (kg N/ha). Lime, P/K-only products, pesticides and irrigation rows are skipped.
   G1  Grazing periods from mgtgrazing (start, end, species).
@@ -64,7 +73,7 @@ imputation fills them. Rules:
       manure). One row per record: location_id, unit_id (plot), sheet
       (Soil_Amendments, Soil_Disturbance or Crop_Diversity), date, the template columns
       of that sheet (SA_cat, SA_source, SA_N, ...; SD_equip, SD_depth; CD_cat, CD_name,
-      CD_harv_date), source and notes. The row joins the plot's unit whose record
+      CD_harv_date, CD_term_date, CD_yield), source and notes. The row joins the plot's unit whose record
       period contains the date; source and notes go into the notes column.
 """
 import argparse, os, re, sys, copy
@@ -85,6 +94,13 @@ CROP_NAME = {  # lower-case common name (from parentheses) -> template name
 }
 SCI_NAME = {"melilotus officinalis": "Clover, Sweet", "trifolium pratense": "Clover, Red",
             "trifolium repens": "Clover, White", "secale cereale": "Rye, Cereal", "vicia villosa": "Vetch, Hairy"}
+# Tillage records AgCROS holds that the site's own publications say did not happen. Each entry:
+# (location, regex on treatment_id, regex on "event / method", evidence). Rule D4; skipped with
+# --keep-documented-errors (sensitivity).
+TILLAGE_NOT_DONE = [
+    ("NELITCSE", r"^NELITCSE_NT", r"cultivator",
+     "Sindelar et al. 2015, Agron. J. 107:2241: cultivation 'in all tillage treatments except NT'"),
+]
 PERENNIAL = {"Alfalfa", "Switchgrass", "Ryegrass, Perennial", "Fescue, Tall", "Reed Canary Grass", "Timothy Grass"}
 COVER = {"Rye, Cereal", "Ryegrass, Annual", "Ryegrass", "Vetch, Hairy", "Turnip", "Radish", "Clover, Red",
          "Clover", "Clover, Sweet", "Clover, White", "Clover, Crimson", "Triticale"}
@@ -113,7 +129,11 @@ TILLAGE_MAP = [
     (r"rototill|rotary till", None, "ROTO-TILLER, ROTO-TILLER DIGGER, ROTERRA"),
     (r"flail|mow|shred", None, None),               # no soil movement
 ]
-ORGANIC = re.compile(r"manure|compost|litter|biosolid|biochar|slurry|sludge|guano|meal", re.I)
+ORGANIC = re.compile(r"manure|compost|litter|biosolid|slurry|sludge|guano|meal", re.I)
+# Biochar is not scored as an organic amendment (decided 9 Nov 2026): it is stable, pyrolysed
+# carbon rather than an input that feeds soil biology, and the long-term pairs analysis (B2f)
+# already excludes it. Its records are not written (rule M2).
+NOT_SCORED = re.compile(r"biochar|charcoal", re.I)
 NOT_N = re.compile(r"lime|^0-|potash|k2o|super ?phosphate|^K20$|gypsum", re.I)
 
 # ------------------------------------------------------------------ helpers
@@ -163,7 +183,8 @@ def to_date(s):
     return pd.to_datetime(s, errors="coerce", format="mixed")
 
 # ------------------------------------------------------------------ conversion
-def convert(tables, loc, template, outdir, study="AgCROS", planter=False, supplements=(), corrections=()):
+def convert(tables, loc, template, outdir, study="AgCROS", planter=False, supplements=(), corrections=(),
+            keep_documented_errors=False):
     log = []
     L = lambda rule, unit, msg: log.append({"rule": rule, "unit": unit, "message": msg})
     T = {k: read(tables, k) for k in ["metaunits", "metatreatments", "metasites", "mgtplanting", "mgttillage",
@@ -325,7 +346,8 @@ def convert(tables, loc, template, outdir, study="AgCROS", planter=False, supple
                 cand = H[(H.sp == sp) & (H.d >= r.d + timedelta(days=30)) & (H.d <= r.d + timedelta(days=400))]
                 harv, y = (None, None)
                 if len(cand):
-                    c0 = cand.sort_values("d").iloc[0]; harv, y = c0.d, c0.y
+                    cg = cand[cand.y.notna()]                      # C3: a grain harvest first
+                    c0 = (cg if len(cg) else cand).sort_values("d").iloc[0]; harv, y = c0.d, c0.y
                     used.add((uid, sp, c0.d))
                 nxt = [p for p in plant_dates if p > r.d]
                 if sp in PERENNIAL: cat = "Perennial"
@@ -366,16 +388,34 @@ def convert(tables, loc, template, outdir, study="AgCROS", planter=False, supple
                 row[5] = d
                 row[10] = (row[10] or "") + "; harvest date from the site's other plots (no record for this plot)"
                 L("C3c", row[0], f"{row[4].date()} {row[3]}: no harvest record; site's most common harvest date {d.date()} used")
-    # C4: harvests with no planting
+    # C4: harvests with no planting. Without a yield (a sampling) it is ignored; with one,
+    # the planting date is the site's most common planting date for that crop and year
+    pdate = Counter()
+    for row in crop_rows:
+        if row[1] == "Annual" and row[4] is not None: pdate[(row[3], row[4].year, row[4])] += 1
+    best_p = {}
+    for (sp, yr, d), n in pdate.items():
+        if (sp, yr) not in best_p or n > best_p[(sp, yr)][1]: best_p[(sp, yr)] = (d, n)
+    planted = {(row[0], row[4].year) for row in crop_rows if row[1] == "Annual" and row[4] is not None}
+    n_samp = 0
     for _, h in hv.iterrows():
         if (h.unit_id, h.sp, h.d) in used or h.sp is None: continue
         mc = combo.get((h.unit_id, h.treatment_id))
         if mc is None: continue
+        if pd.isna(h.y):
+            n_samp += 1; continue
         cat = "Perennial" if h.sp in PERENNIAL else "Annual"
-        crop_rows.append([mc, cat, None, h.sp, None, h.d.to_pydatetime(), None,
-                          None if pd.isna(h.y) else round(float(h.y), 1), None if pd.isna(h.y) else "kgs/hectare", None,
-                          "harvest record without planting record"])
-        L("C4", mc, f"{h.d.date()} {h.sp}: harvest without planting; plant date blank")
+        # not when the plot already has an annual crop planted that year (e.g. NEMLTCRS 1993:
+        # an oat harvest on plots that grew corn), which would add a crop the plot did not grow
+        p = best_p.get((h.sp, h.d.year)) if cat == "Annual" and (mc, h.d.year) not in planted else None
+        p = p[0] if p is not None and p[0] < h.d.to_pydatetime() else None
+        crop_rows.append([mc, cat, None, h.sp, p, h.d.to_pydatetime(), None,
+                          round(float(h.y), 1), "kgs/hectare", None,
+                          "harvest record without planting record" +
+                          (f"; planting date from the site's other plots ({p.date()})" if p is not None else "")])
+        L("C4", mc, f"{h.d.date()} {h.sp}: harvest without planting; " +
+          (f"site's most common planting date {p.date()} used" if p is not None else "plant date blank"))
+    if n_samp: L("C4", "", f"{n_samp} harvest-type records without a yield and not paired with a planting (samplings) ignored")
 
     # --- Soil_Disturbance
     sd_rows = []
@@ -385,6 +425,11 @@ def convert(tables, loc, template, outdir, study="AgCROS", planter=False, supple
         for _, r in ti.dropna(subset=["d"]).iterrows():
             mc = combo.get((r.unit_id, r.treatment_id))
             if mc is None: continue
+            hit = None if keep_documented_errors else next(
+                (ev for lc, tre, ere, ev in TILLAGE_NOT_DONE if lc == loc and re.search(tre, str(r.treatment_id))
+                 and re.search(ere, f"{r.tillage_event} / {r.tillage_event_method}", re.I)), None)
+            if hit:
+                L("D4", mc, f"{r.d.date()} {r.tillage_event} / {r.tillage_event_method}: not written ({hit})"); continue
             imp, note = tdisc_for(r.tillage_event, r.tillage_event_method, r.d)
             if imp is None:
                 L("D1", mc, f"{r.d.date()} {r.tillage_event} / {r.tillage_event_method}: no soil movement, not written"); continue
@@ -430,6 +475,8 @@ def convert(tables, loc, template, outdir, study="AgCROS", planter=False, supple
             typ = str(r.amend_type) if pd.notna(r.amend_type) else ""
             N = pd.to_numeric(r.total_n_amount_kgn_ha, errors="coerce")
             rate = pd.to_numeric(r.total_amend_amount_kg_ha, errors="coerce")
+            if NOT_SCORED.search(typ):
+                L("M2", mc, f"{r.d.date()} {typ} {'' if pd.isna(rate) else rate} kg/ha: not scored as an organic amendment, not written"); continue
             if ORGANIC.search(typ):
                 sa_rows.append([mc, r.d.to_pydatetime(), "Organic", typ, None if pd.isna(rate) else float(rate), "kgs/hectare",
                                 None if pd.isna(N) else float(N), None, None, None, None, "AgCROS amendment"])
@@ -475,8 +522,10 @@ def convert(tables, loc, template, outdir, study="AgCROS", planter=False, supple
                 sd_rows.append([mc, d.to_pydatetime(), txt("SD_equip"), None, None, None, num("SD_depth"), None, note])
             elif sheet == "Crop_Diversity":
                 hd = to_date(txt("CD_harv_date")) if txt("CD_harv_date") else None
+                td = to_date(txt("CD_term_date")) if txt("CD_term_date") else None
                 crop_rows.append([mc, txt("CD_cat"), None, txt("CD_name"), d.to_pydatetime(),
-                                  hd.to_pydatetime() if hd is not None and pd.notna(hd) else None, None,
+                                  hd.to_pydatetime() if hd is not None and pd.notna(hd) else None,
+                                  td.to_pydatetime() if td is not None and pd.notna(td) else None,
                                   num("CD_yield"), txt("CD_yield_units"), None, note])
             else:
                 L("S1", uid, f"unknown sheet '{sheet}' in supplement; row skipped"); continue
@@ -544,6 +593,9 @@ if __name__ == "__main__":
                     help="CSV of corrections to AgCROS records (repeatable): location_id, table, unit_id, new_unit_id, new_treatment_id, from_date, to_date, evidence")
     ap.add_argument("--supplement", action="append", default=[],
                     help="CSV of records missing from AgCROS (repeatable); see make_supplement.py")
+    ap.add_argument("--keep-documented-errors", action="store_true",
+                    help="keep AgCROS tillage records that the site's publications say did not happen (rule D4)")
     a = ap.parse_args()
     for loc in a.locations:
-        convert(a.tables, loc, a.template, a.out, a.study, a.planter_passes, a.supplement, a.corrections)
+        convert(a.tables, loc, a.template, a.out, a.study, a.planter_passes, a.supplement, a.corrections,
+                a.keep_documented_errors)

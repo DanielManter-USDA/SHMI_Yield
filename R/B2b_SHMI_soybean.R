@@ -22,6 +22,8 @@
 #   soy_site_slopes.csv  each experiment's own slope, both crops; pooled by random
 #                        effects (Knapp-Hartung) with I2
 #   soy_data_summary.csv experiments, systems, plot-years, SHMI range for soybean
+#   soy_treatment_yields.csv soybean yield by treatment (used by B8b)
+#   Fig_soybean_a.png    panel a alone, at the corn panel's size (B7 uses it as Fig. 2b)
 #   Fig_soybean.png/.pdf a: soybean yield against SHMI within sites (as Fig. 3a);
 #                        b: per-experiment and pooled slopes, % of mean yield per 10 SHMI,
 #                        soybean and corn
@@ -83,6 +85,9 @@ soy <- imap_dfr(runs, function(r, s) {
       NELITCSE  = d %>% filter(!is.na(tillage)) %>%
         mutate(MGT_trt_base = paste0(tillage, ifelse(rotation %in% c("CSB", "SBC"), "CS", rotation)), other = "none"),
       NEMLTCRS  = d %>% filter(year <= 2006) %>% mutate(other = "none"),
+      # Ohio establishment years excluded as in B2 (de Camargo Santos et al. 2025)
+      OHTVD_Wo  = d %>% filter(year >= 1964) %>% mutate(other = "none"),
+      OHTVD_Ho  = d %>% filter(year >= 1965, year != 1981) %>% mutate(other = "none"),   # 1981 flooded, replanted (field notes)
       WICST_ARS = d %>% mutate(other = ifelse(rotation %in% c("CS3", "CS5"), "WICST_organic", "none")),
       d %>% mutate(other = "none"))
   } else {                                                     # AgCROS sites: systems from the descriptors
@@ -158,6 +163,16 @@ soy <- split(soy, soy$site) %>% map_dfr(function(ds) {
 message(sum(abs(soy$resid_n) > RESID_CUT), " soybean plot-years set aside (|normalized residual| > ", RESID_CUT, ")")
 soy <- soy %>% filter(abs(resid_n) <= RESID_CUT) %>% select(-resid_n) %>% droplevels()
 soy$age_c <- soy$age - mean(soy$age)
+
+# soybean yield by treatment (for the treatment table, B8b): plain mean and mean relative to
+# the site-year mean of all soybean treatments (removes year)
+soy_trt <- soy %>% group_by(site, year) %>% mutate(dev = yield_kgha - mean(yield_kgha)) %>% ungroup() %>%
+  mutate(trt = as.character(trt)) %>% group_by(site, trt) %>%
+  summarise(soy_MGT_trt = paste(sort(unique(as.character(MGT_trt))), collapse = ", "),
+            soy_SHMI = round(mean(SHMI[!duplicated(MGT_combo)]), 1), soy_years = n_distinct(year),
+            soy_plot_years = n(), soy_yield_mean = round(mean(yield_kgha)), soy_yield_sd = round(sd(yield_kgha)),
+            soy_yield_vs_siteyr = round(mean(dev)), .groups = "drop")
+write.csv(soy_trt, file.path(OUT, "soy_treatment_yields.csv"), row.names = FALSE)
 
 per10 <- function(m, term = "SHMI_w") {
   tt <- summary(m)$tTable
@@ -244,24 +259,47 @@ tt_s <- summary(m_soy)$tTable["SHMI_w", ]
 b_s <- tt_s[["Value"]]; se_s <- tt_s[["Std.Error"]]; df_s <- tt_s[["DF"]]
 piv <- mean(soy$SHMI); y0 <- mean(soy$yield_kgha)
 soy$y_adj <- as.numeric(resid(m_soy, level = 0)) + b_s * (soy$SHMI - piv) + y0
-pts <- soy %>% group_by(site, SHMI_level = round(SHMI)) %>%
-  summarise(SHMI = mean(SHMI), y = mean(y_adj), se = sd(y_adj) / sqrt(n()), .groups = "drop")
+# Points as in Fig. 2a (10 Nov 2026): one per management system at each site, its mean SHMI
+# and mean adjusted yield over its plot-years; treatments with the same SHMI record (differing
+# only in factors SHMI does not score) merged. FIG3A_POINTS = "level" restores whole-point bins.
+if (!exists("FIG3A_POINTS")) FIG3A_POINTS <- "system"
+pts <- if (FIG3A_POINTS == "system") {
+  soy %>% group_by(site, MGT_trt_base) %>% mutate(SHMI_level = round(mean(SHMI), 1)) %>%
+    group_by(site, SHMI_level) %>%
+    summarise(SHMI = mean(SHMI), y = mean(y_adj), se = sd(y_adj) / sqrt(n()), .groups = "drop")
+} else {
+  soy %>% group_by(site, SHMI_level = round(SHMI)) %>%
+    summarise(SHMI = mean(SHMI), y = mean(y_adj), se = sd(y_adj) / sqrt(n()), .groups = "drop")
+}
 ln <- tibble(SHMI = seq(min(soy$SHMI), max(soy$SHMI), length.out = 200)) %>%
   mutate(fit = y0 + b_s * (SHMI - piv), half = qt(0.975, df_s) * se_s * abs(SHMI - piv),
          lower = fit - half, upper = fit + half)
-lab_a <- sprintf("Soybean yield change per 10 SHMI: %+.0f kg/ha (95%% CI %.0f\u2013%.0f); %s",
-                 10 * b_s, 10 * (b_s - qt(0.975, df_s) * se_s), 10 * (b_s + qt(0.975, df_s) * se_s),
-                 ifelse(tt_s[["p-value"]] < 0.001, "P < 0.001", sprintf("P = %.3f", tt_s[["p-value"]])))
+lab_a <- sprintf("Yield change per 10 SHMI: %+.0f kg/ha (95%% CI %.0f\u2013%.0f)",
+                 10 * b_s, 10 * (b_s - qt(0.975, df_s) * se_s), 10 * (b_s + qt(0.975, df_s) * se_s))
 ga <- ggplot() +
   geom_ribbon(data = ln, aes(SHMI, ymin = lower, ymax = upper), fill = "#2e7d32", alpha = 0.15) +
   geom_line(data = ln, aes(SHMI, fit), colour = "#2e7d32", linewidth = 1.1) +
   geom_errorbar(data = pts, aes(SHMI, ymin = y - se, ymax = y + se), width = 0, colour = "grey35") +
   geom_point(data = pts, aes(SHMI, y, fill = site), shape = 21, size = 2.6, colour = "black") +
   scale_fill_manual(values = site_cols, name = NULL) +
-  annotate("text", x = -Inf, y = Inf, hjust = -0.05, vjust = 1.4, size = 2.9, label = lab_a) +
-  labs(x = "Soil Health Management Index (SHMI)", y = expression("Adjusted soybean yield (kg ha"^-1*")")) +
+  # corner labels as in B2's corn panel (slope top-left, P bottom-right, size 2.8)
+  annotate("text", x = -Inf, y = Inf, hjust = -0.1, vjust = 1.1, size = 2.8, label = lab_a) +
+  annotate("text", x = Inf, y = -Inf, hjust = 1.1, vjust = -1, size = 2.8,
+           label = ifelse(tt_s[["p-value"]] < 0.001, "p < 0.001", sprintf("p = %.3f", tt_s[["p-value"]]))) +
+  labs(x = "Soil Health Management Index (SHMI)",
+       y = "Soybean yield adjusted for site, year\nand other treatments (kg ha\u207B\u00B9)") +
   theme_bw(base_size = 10)
 write.csv(pts, file.path(OUT, "Fig_soybean_points.csv"), row.names = FALSE)
+# plot data for R/figures/F3_yield.R (Fig. 3b), 11 Nov 2026
+saveRDS(list(points = pts, line = ln, points_mode = FIG3A_POINTS, site_cols = site_cols,
+             slope = 10 * b_s, lower = 10 * (b_s - qt(0.975, df_s) * se_s), upper = 10 * (b_s + qt(0.975, df_s) * se_s),
+             p = tt_s[["p-value"]], n_sites = n_distinct(soy$site)),
+        file.path(OUT, "plotdata_soybean.rds"))
+# panel a on its own at the corn panel's size and fonts (B2: 3.6 x 2.6 in panel, 6.8 x 4.6 in,
+# base size 10), so B7 can set it beside corn as Fig. 2b without cropping or shrinking
+ga_alone <- ga + if (requireNamespace("ggh4x", quietly = TRUE))
+  ggh4x::force_panelsizes(rows = unit(2.6, "in"), cols = unit(3.6, "in"))
+ggsave(file.path(OUT, "Fig_soybean_a.png"), ga_alone, width = 6.8, height = 4.6, dpi = 300, bg = "white")
 
 # b: the comparison with corn (% of mean yield), panel g above
 gb <- g + theme(legend.position = "bottom")

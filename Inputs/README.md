@@ -1,6 +1,6 @@
 # Inputs
 
-Files the analysis reads but does not create. `run_all.R` checks this list before it starts and reports anything missing for the parts you chose to run.
+Files the analysis reads but does not create. `run_all.R` checks this list before it starts and reports anything missing for the parts you chose to run; the `targets` pipeline tracks the same files and reruns the steps that use one when it changes.
 
 **What is in the repository.** Everything needed to rerun the paper except the raw AgCROS tables:
 - `yield_workbooks/`: the SHMI workbooks of all yield experiments (the AgCROS ones are derived from the AgCROS records);
@@ -9,16 +9,16 @@ Files the analysis reads but does not create. `run_all.R` checks this list befor
 - `SHAPE/`: the SHAPE app's scores for the NAPESHM units.
 
 **Not in the repository.**
-- The raw AgCROS table export (`agcros/`): used with permission and not redistributed; the AgCROS database is offline pending relaunch by USDA-ARS. The analyses use the workbooks and soil carbon table made from it (`yield_workbooks/`, `data/soil_c.csv`). The conversion (`run_conversion = TRUE`, step B0) is kept to show how they were made, and reruns for anyone with the tables.
+- The raw AgCROS table export (`agcros/`): used with permission and not redistributed; the AgCROS database is offline pending relaunch by USDA-ARS. The analyses use the workbooks made from it (`yield_workbooks/`). The conversion (`run_conversion = TRUE`, step B0) is kept to show how they were made, and reruns for anyone with the tables.
 - Large public files, downloaded if wanted: the SPEI grid (`climate/spei03.nc`; its site values are shipped in `data/cache/site_spei.csv`) and gSSURGO.
 
-Derived files that would otherwise need restricted, very large or keyed sources are shipped in `data/` and copied into `Outputs/` by `run_all.R` when missing: NASS county yields (`data/cache/`, so no NASS key is needed), gSSURGO soil groups (`data/cache/site_soils_ssurgo.csv`), AgCROS soil carbon (`data/soil_c.csv`) and the SHAPE scores by unit.
+Derived files that would otherwise need restricted, very large or keyed sources are shipped in `data/` and copied into `Outputs/` by `run_all.R` when missing: NASS county yields (`data/cache/`, so no NASS key is needed), gSSURGO soil groups (`data/cache/site_soils_ssurgo.csv`) and the SHAPE scores by unit.
 
 ## Part B: corn yield (the default run)
 
 | Path | What | Source |
 |---|---|---|
-| `agcros/extracted_tables/*.csv` (only for `run_conversion = TRUE`) | AgCROS (GRACEnet/REAP) table export, one CSV per table. Used: `meassoilchem`, `measyieldnutuptake`, `measharvestfraction`, `measresiduemgnt`, `mgtplanting`, `mgttillage`, `mgtamendments`, `mgtgrazing`, `metatreatments`, `metaunits`, `metasites` | USDA-ARS AgCROS; snapshot exported 2026-04-21 |
+| `agcros/extracted_tables/*.csv` (only for `run_conversion = TRUE`) | AgCROS (GRACEnet/REAP) table export, one CSV per table. Used: `measyieldnutuptake`, `measharvestfraction`, `measresiduemgnt`, `mgtplanting`, `mgttillage`, `mgtamendments`, `mgtgrazing`, `metatreatments`, `metaunits`, `metasites` | USDA-ARS AgCROS; snapshot exported 2026-04-21 |
 | `yield_workbooks/SHMI_OHTVD_Ho.xlsx` | Hoytville, OH: SHMI workbook built by hand from DRIVES, tillage corrected with the Ohio management logs | DRIVES |
 | `yield_workbooks/SHMI_OHTVD_Wo.xlsx` | Wooster, OH: SHMI workbook built by hand from DRIVES | DRIVES |
 | `yield_workbooks/SHMI_WICST_ARS.xlsx` | Arlington, WI (WICST): SHMI workbook built by hand from DRIVES and the station records | DRIVES; WICST data request (6-5-2026) |
@@ -39,7 +39,6 @@ They are in the repository and used as they are. With `run_conversion = TRUE` an
 |---|---|---|
 | `NAPESHM_rebuilt.xlsx` | NAPESHM management records in the SHMI template, after QC. This is the workbook used in the paper. | built by `python/napeshm_rebuild` from the raw NAPESHM files, then QC |
 | `napeshm/sites.csv`, `treatments.csv`, `soildata.csv`, `plfa_ng.csv` | NAPESHM site (climate, descriptors, coordinates), treatment, soil and PLFA tables | NAPESHM, https://doi.org/10.15482/USDA.ADC/25632270 |
-| `napeshm/sites_AI_startdate.csv` (optional) | updated treatment start dates, read by `A6c_SHMI_SHAPE_age.R` | NAPESHM site contacts |
 | `gSSURGO_CONUS.gpkg` (optional) | gSSURGO CONUS geopackage, for SHAPE soil groups. Large; set `GSSURGO_GPKG` to its path instead of copying it. Without it, put `site_soils_ssurgo.csv` in `Outputs/`. | USDA-NRCS |
 | `SHAPE/batch_Combined_scores.csv` | Output of the SHAPE app for `Outputs/SHAPE/SHAPE_multi_indicator_input.csv` | SHAPE app (run outside R) |
 | `worldclim/` | WorldClim 2.1 normals, downloaded by `A1d_Get_site_climate.R` on the first run | https://www.worldclim.org |

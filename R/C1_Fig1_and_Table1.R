@@ -18,6 +18,8 @@
 #            within-site effect on lv_SH, their sum, and all four together (from
 #            C1d_practice_additivity.R, run first; the all-four bar is split among the
 #            practices in proportion to their own effects, only its total is estimated)
+#   Fig. 1d  how much of the data matched pairs can use (C1f, Fig_data_budget_panels.rds).
+#            Layout since 7 Nov 2026: a / b / c | d (panel e dropped; FIG1E <- TRUE restores it)
 #   Table 1  the example systems (scored with the SHMI package from example records below), their SHMI, and the expected corn yield change
 #            relative to conventionally tilled corn-soybean at the average
 #            within-site slope at 150 kg N/ha.
@@ -26,7 +28,7 @@
 #         Inputs/napeshm/treatments.csv (NAPESHM practice labels, for Fig. 1b)
 #         Outputs/Benchmark/benchmark_summary.csv (out-of-fold R2, optional)
 #         Outputs/Practice_additivity/additivity_effects.csv (C1d, for Fig. 1c)
-# Outputs Outputs/Manuscript_work/Fig1.png, Fig1.pdf, Table1.csv, Table1_next_step.csv, Fig1_path_coefficients.csv,
+# Outputs Outputs/Manuscript_work/Fig1.png, Fig1.pdf, ED_Fig_path.png (the path diagram, Extended Data since 7 Nov 2026), Table1.csv, Table1_next_step.csv, Fig1_path_coefficients.csv,
 #         Fig1_example_systems.csv, Fig1b_practice_pairs.csv (one row per pair),
 #         Fig1b_practice_summary.csv
 #
@@ -43,7 +45,14 @@ suppressPackageStartupMessages({
 stopifnot(packageVersion("SHMI") >= "2.0.0")
 OUT <- here::here("Outputs", "Manuscript_work")   # working copies; C3 copies the paper's items to Outputs/Manuscript/numbered
 dir.create(OUT, recursive = TRUE, showWarnings = FALSE)
-SLOPE_10   <- 220      # kg/ha per 10 SHMI points at 150 kg N/ha, average age (B2; Fig. 3a)
+SLOPE_10   <- 220      # kg/ha per 10 SHMI points at 150 kg N/ha, average age (B2; Fig. 2a); read from B2 below
+RM <- here::here("Outputs", "yield_main_default_total_agcros", "results_main.csv")
+if (file.exists(RM)) {
+  rm_ <- read.csv(RM, stringsAsFactors = FALSE)
+  s10 <- rm_$effect[rm_$figure == "Fig 1" & grepl("^Within sites, at 150", rm_$estimate)][1]
+  if (length(s10) && !is.na(s10)) SLOPE_10 <- s10
+}
+message("Table 1 uses ", round(SLOPE_10, 1), " kg/ha per 10 SHMI points")
 KG_PER_BU  <- 53.0     # kg/ha dry matter per bu/ac (25.4 kg/bu at 15.5% moisture)
 PRICE_BU   <- 4.50     # $/bu
 B          <- 2000     # site-bootstrap draws
@@ -248,9 +257,47 @@ pairs <- bind_rows(lapply(seq_len(nrow(PRACTICES)), function(i) {
   A <- filter(g, grp == "A"); B <- filter(g, grp == "B")
   inner_join(A, B, by = c("sitecode", keys), suffix = c("_A", "_B"), relationship = "many-to-many") %>%
     transmute(practice = pr$practice, sitecode, unit_A = MGT_combo_A, unit_B = MGT_combo_B,
+              # 10 Nov 2026: the practice's own label in each system, and the background the two
+              # systems share (every other label is identical within a pair, by construction)
+              with_practice = .data[[paste0(pr$label, "_A")]], without_practice = .data[[paste0(pr$label, "_B")]],
+              !!!setNames(lapply(keys, function(k) rlang::sym(k)), paste0("bg_", sub("^eu_", "", keys))),
               !!!setNames(lapply(VARS, function(v) rlang::expr(!!rlang::sym(paste0(v, "_A")) - !!rlang::sym(paste0(v, "_B")))),
                           paste0("d_", VARS)))
 }))
+# Shared background used to mark Fig. 1a: tillage for cover-crop, organic-input and rotation
+# pairs (no-till or minimum vs moderate or intense); cover crop for tillage pairs.
+pairs <- pairs %>% mutate(
+  background = case_when(
+    practice != "Reduced vs conventional tillage" & bg_tillage %in% c("none", "minimum") ~ "No-till or minimum tillage",
+    practice != "Reduced vs conventional tillage" & bg_tillage %in% c("moderate", "intense") ~ "Moderate or intense tillage",
+    practice == "Reduced vs conventional tillage" & bg_cover_crops %in% c("grasses", "mix", "legume") ~ "With a cover crop",
+    practice == "Reduced vs conventional tillage" & bg_cover_crops == "none" ~ "Without a cover crop",
+    TRUE ~ "Other or not recorded"),
+  bg_fill = background %in% c("No-till or minimum tillage", "With a cover crop"))
+# Does the practice's soil-health change depend on the shared background? Per practice:
+# pairs, sites and median change in lv_SH in each background, and a Wilcoxon rank-sum test
+# between the two main backgrounds (descriptive: pairs share systems and sites).
+bg_test <- pairs %>% filter(background != "Other or not recorded") %>% group_by(practice) %>%
+  group_modify(function(g, k) {
+    s <- g %>% group_by(background) %>% summarise(pairs = n(), sites = n_distinct(sitecode),
+                                                    median_dSH = median(d_SH), .groups = "drop")
+    p <- if (n_distinct(g$background) == 2 && min(table(g$background)) >= 3)
+      suppressWarnings(wilcox.test(d_SH ~ background, data = g)$p.value) else NA_real_
+    mutate(s, p_wilcoxon = p)
+  }) %>% ungroup()
+write.csv(mutate(bg_test, across(where(is.double), ~ round(.x, 3))), file.path(OUT, "Fig1a_background_effects.csv"), row.names = FALSE)
+cat("\nFig. 1a, change in soil health by shared background:\n"); print(as.data.frame(bg_test), digits = 3, row.names = FALSE)
+# every pair with its shared background (Supplementary Table 6); written once d_target exists
+write_supp6 <- function() write.csv(pairs %>% transmute(Practice = practice, Site = sitecode, `System with practice` = unit_A,
+                              `System without` = unit_B, `Practice label (with / without)` = paste(with_practice, "/", without_practice),
+                              `Shared: tillage` = bg_tillage, `Shared: cover crop` = bg_cover_crops,
+                              `Shared: rotation (crops)` = bg_crop_rot, `Shared: nutrient source` = bg_nutr_type,
+                              `Shared: residue` = bg_residue, `Shared: grazing` = bg_grazing, `Shared: irrigation` = bg_irrigation,
+                              `Shared: crop phase at sampling` = bg_crop_phase, `Shared: crop category` = bg_crop_cat,
+                              `Shared: other treatment` = bg_other_trt,
+                              `Change in targeted part` = round(d_target, 1), `Change in SHMI` = round(d_SHMI, 1),
+                              `Change in soil health (lv_SH)` = round(d_SH, 1)),
+          file.path(OUT, "SuppTable6_practice_pairs.csv"), row.names = FALSE, na = "")
 q <- function(x, p) unname(quantile(x, p))
 # change in the part each practice targets
 pairs <- pairs %>% left_join(select(PRACTICES, practice, target), by = "practice") %>%
@@ -263,15 +310,20 @@ summ <- pairs %>% group_by(practice) %>%
             shmi_med = median(d_SHMI), shmi_min = min(d_SHMI), shmi_max = max(d_SHMI),
             sh_med = median(d_SH), sh_share_pos = mean(d_SH > 0), .groups = "drop")
 write.csv(pairs, file.path(OUT, "Fig1b_practice_pairs.csv"), row.names = FALSE)
+write_supp6()
 write.csv(mutate(summ, across(where(is.double), ~ round(.x, 2))), file.path(OUT, "Fig1b_practice_summary.csv"), row.names = FALSE)
 cat("\nFig. 1b, matched practice pairs:\n"); print(as.data.frame(summ), digits = 3, row.names = FALSE)
 
 COLS <- c("Change in the part it targets", "Change in SHMI", "Change in measured soil health")
+# 10 Nov 2026: the middle column (change in SHMI) is no longer drawn; FIG1A_SHMI <- TRUE restores it
+if (!exists("FIG1A_SHMI")) FIG1A_SHMI <- FALSE
+COLS_SHOW <- if (FIG1A_SHMI) COLS else COLS[c(1, 3)]
 long <- pairs %>% left_join(PRACTICES, by = "practice") %>%
-  transmute(practice, col, target_lab, `Change in the part it targets` = d_target,
+  transmute(practice, col, target_lab, bg_fill, `Change in the part it targets` = d_target,
             `Change in SHMI` = d_SHMI, `Change in measured soil health` = d_SH) %>%
   pivot_longer(all_of(COLS), names_to = "panel", values_to = "value") %>%
-  mutate(panel = factor(panel, COLS),
+  filter(panel %in% COLS_SHOW) %>%
+  mutate(panel = factor(panel, COLS_SHOW),
          dot = ifelse(panel == COLS[1], col, ifelse(panel == COLS[2], "#222222", "#8e44ad")))
 ylab <- summ %>% mutate(lab = sprintf("%s\n%d pairs, %d sites", practice, pairs, sites))
 long <- long %>% mutate(practice = factor(practice, rev(PRACTICES$practice), rev(ylab$lab[match(PRACTICES$practice, ylab$practice)])))
@@ -279,7 +331,11 @@ med <- long %>% group_by(practice, panel) %>% summarise(m = median(value), lo = 
 tlab <- long %>% filter(panel == COLS[1]) %>% distinct(practice, panel, target_lab, col)
 pb <- ggplot(long, aes(value, practice)) +
   geom_vline(xintercept = 0, linetype = 2, linewidth = 0.3, colour = "grey50") +
-  geom_point(aes(colour = dot), position = position_jitter(height = 0.2, width = 0, seed = 4), size = 1.1, alpha = 0.55) +
+  # filled: the pair shares no-till or minimum tillage (tillage pairs: shares a cover crop);
+  # open: shares moderate or intense tillage (tillage pairs: no cover crop)
+  geom_point(aes(colour = dot, fill = ifelse(bg_fill, dot, "white")), shape = 21, stroke = 0.6,
+             position = position_jitter(height = 0.2, width = 0, seed = 4), size = 1.5, alpha = 0.8) +
+  scale_fill_identity() +
   geom_segment(data = med, aes(x = lo, xend = hi, y = practice, yend = practice), linewidth = 1.6) +
   geom_point(data = med, aes(m, practice), shape = 21, fill = "white", size = 2.6, stroke = 0.8) +
   geom_text(data = tlab, aes(x = Inf, y = practice, label = target_lab, colour = col), hjust = 1.05, vjust = -1.1,
@@ -320,15 +376,67 @@ pc <- ggplot(cd, aes(x, value, fill = practice)) +
 
 # a how SHMI scores the system (path diagram) across the top, so SHMI's parts are introduced
 # before b (practices vary: pairs) and c (they do not add up in measured soil health)
-bottom <- (pb | pc) + plot_layout(widths = c(1.75, 1))
-# d, e (C1f): how much of the data matched pairs can use, and SHMI on the data they leave out
+# 7 Nov 2026: Fig. 1e (C1f's SHMI on the systems pairs leave out) dropped; layout a / b / c | d.
+# FIG1E <- TRUE before sourcing restores the earlier layout (a; b | c; d | e).
+if (!exists("FIG1E")) FIG1E <- FALSE
 DB <- here::here("Outputs", "Practice_additivity", "Fig_data_budget_panels.rds")
-if (file.exists(DB)) {
+# 7 Nov 2026 (FIG1_MERGED, default TRUE): to fit Nature's page budget, Figs 1 and 2 merge into
+# one soil-health figure: a practices vary (old 1b), b they do not add up (old 1c), c matched
+# pairs use a minority (old 1d), d SHMI against its parts at held-out sites (old Fig. 2a, from
+# A4b's Fig2a_panel.rds; run A4b first). The path diagram (old 1a) is saved alone as
+# ED_Fig_path.png for Extended Data. FIG1_MERGED <- FALSE restores the layout below.
+if (!exists("FIG1_MERGED")) FIG1_MERGED <- TRUE
+F2A <- file.path(OUT, "Fig2a_panel.rds")
+ggsave(file.path(OUT, "ED_Fig_path.png"), pa, width = 12.5, height = 4.6, dpi = 300, bg = "white")
+# 10 Nov 2026 (FIG1_V3, default TRUE): a practices vary (target part and soil health only),
+# b they do not add up, c SHMI against its parts at held-out sites (two within-site
+# measures). The data-budget panel is dropped (its numbers are in the text).
+if (!exists("FIG1_V3")) FIG1_V3 <- TRUE
+# 10 Nov 2026 (FIG_V4, default TRUE): two soil-health figures.
+#   Fig. 1  a how SHMI scores the system (path diagram); b SHMI against measured soil health:
+#           all systems, between and within sites (C1h)
+#   Fig. 2  a what a yes/no practice label and SHMI each explain within sites (C1g);
+#           b how much of the data matched pairs can use (C1f); c SHMI against its parts at
+#           held-out sites (A4b)
+# "Practices do not add up" (old Fig. 1b) is saved alone for Extended Data (ED_Fig_additivity.png);
+# the matched-pair panel (old Fig. 1a) is no longer drawn (its pairs are Supplementary Table 6).
+if (!exists("FIG_V4")) FIG_V4 <- TRUE
+PA2 <- here::here("Outputs", "Practice_additivity")
+F1B <- file.path(PA2, "Fig_SHMI_vs_SH_panel.rds"); F2L <- file.path(PA2, "Fig_label_vs_SHMI_panel.rds")
+ggsave(file.path(OUT, "ED_Fig_additivity.png"), pc, width = 6, height = 4.2, dpi = 300, bg = "white")
+if (FIG_V4 && all(file.exists(c(F1B, F2L, DB, F2A)))) {
+  f1b <- readRDS(F1B); f2l <- readRDS(F2L); db <- readRDS(DB); p2a <- readRDS(F2A)
+  row_b <- ((db[[1]] + labs(title = NULL)) | wrap_elements(full = p2a)) + plot_layout(widths = c(1, 1.2))
+  fig2 <- (wrap_elements(full = f2l) / row_b) + plot_layout(heights = c(1, 1)) +
+    plot_annotation(tag_levels = "a") & theme(plot.tag = element_text(face = "bold", size = 16))
+  ggsave(file.path(OUT, "Fig2.png"), fig2, width = 12.5, height = 9, dpi = 300, bg = "white")
+  fig <- (pa / wrap_elements(full = f1b)) + plot_layout(heights = c(1, 0.8)); FIG1_H <- 8.4
+} else if (FIG_V4) {
+  stop("Fig. 1/2 need ", paste(c(F1B, F2L, DB, F2A)[!file.exists(c(F1B, F2L, DB, F2A))], collapse = ", "),
+       ": run C1h, C1g, C1f and A4b first (or set FIG_V4 <- FALSE for the old layout)")
+} else if (FIG1_V3 && file.exists(F2A)) {
+  p2a <- readRDS(F2A)
+  fig <- pb / ((wrap_elements(full = pc) | wrap_elements(full = p2a)) + plot_layout(widths = c(1, 1.35))) +
+    plot_layout(heights = c(1, 0.95)); FIG1_H <- 8.6
+} else if (FIG1_MERGED && file.exists(DB) && file.exists(F2A)) {
+  db <- readRDS(DB); p2a <- readRDS(F2A)
+  row2 <- (wrap_elements(full = pc) | (db[[1]] + labs(title = NULL))) + plot_layout(widths = c(1, 1.4))
+  fig <- (pb / row2 / wrap_elements(full = p2a)) + plot_layout(heights = c(0.9, 0.8, 0.85)); FIG1_H <- 11.5
+} else if (file.exists(DB) && !FIG1E) {
+  if (FIG1_MERGED) message("Fig. 1 drawn unmerged: ", F2A, " not found (run A4b_Fig2_soil_health.R first)")
   db <- readRDS(DB)
+  # b (the pairs) across the full width; c (practices do not add up) beside d (data budget)
+  # c wrapped so its axis is not aligned to b's long row labels; d without its working title
+  row3 <- (wrap_elements(full = pc) | (db[[1]] + labs(title = NULL))) + plot_layout(widths = c(1, 1.4))
+  fig <- (pa / pb / row3) + plot_layout(heights = c(0.95, 0.85, 0.75)); FIG1_H <- 12
+} else if (file.exists(DB)) {
+  db <- readRDS(DB)
+  bottom <- (pb | pc) + plot_layout(widths = c(1.75, 1))
   row3 <- (db[[1]] | db[[2]]) + plot_layout(widths = c(1.15, 1))
   fig <- (pa / bottom / row3) + plot_layout(heights = c(0.95, 1, 0.7)); FIG1_H <- 11.6
 } else {
-  message("Fig. 1 drawn without d and e: ", DB, " not found (run C1f_paired_data_budget.R)")
+  message("Fig. 1 drawn without d: ", DB, " not found (run C1f_paired_data_budget.R)")
+  bottom <- (pb | pc) + plot_layout(widths = c(1.75, 1))
   fig <- (pa / bottom) + plot_layout(heights = c(0.95, 1)); FIG1_H <- 8.6
 }
 fig <- fig + plot_annotation(tag_levels = "a") & theme(plot.tag = element_text(face = "bold", size = 16))

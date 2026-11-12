@@ -1,0 +1,3 @@
+rule,unit,message
+D3,AgCROS_PAUP_101_1,site has no tillage records; one zero-disturbance placeholder pass written
+T1,AgCROS_PAUP_101_1,no termination dates at this site; harvest date copied to CD_term_date of one crop

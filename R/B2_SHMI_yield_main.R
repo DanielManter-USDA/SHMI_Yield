@@ -450,13 +450,23 @@ if (INCLUDE_AGCROS) {
 # Treatment factors that SHMI does not score enter as "other" (baseline "none" at
 # every site, so the term only compares plots within a site): NEMEIRR residue
 # removal; NECCIRR irrigation level x residue removal; WICST organic systems (CS3, CS5).
-site_start <- c(NELITCSE = 1986, NEMLTCRS = 1983, OHTVD_Ho = 1964, OHTVD_Wo = 1962,
+# Ohio (Triplett-Van Doren experiment): established at Wooster in 1962 and at Hoytville in
+# 1963 (Dick & Van Doren 1985). The first years had many compromised stands while equipment
+# and field operations were refined, and are excluded from the yield analysis as in
+# de Camargo Santos et al. (2025, Field Crops Res. 331, 109993), who analyse Wooster from
+# 1964 and Hoytville from 1965. Management in those years still counts toward SHMI.
+OHIO_YIELD_FROM <- c(OHTVD_Wo = 1964, OHTVD_Ho = 1965)
+# Hoytville 1981: 10.75" of rain in June and cutworms; many plots replanted "to preserve
+# history", yields incomplete, and NT corn "essentially eliminated from consideration"
+# (Hoytville field notes, Dick, Triplett & Van Doren 2013, OSU Knowledge Bank).
+OHIO_HO_DROP <- 1981
+site_start <- c(NELITCSE = 1986, NEMLTCRS = 1983, OHTVD_Ho = 1963, OHTVD_Wo = 1962,
                 WICST_ARS = 1990, NEMEIRR = 2001, NECCIRR = 2010, agcros_start)
 corn <- bind_rows(
   nel$yield %>% mutate(other = "none"),
   nem$yield %>% mutate(other = "none") %>% filter(year <= 2006),
-  oh$yield  %>% mutate(other = "none"),
-  wo$yield  %>% mutate(other = "none"),
+  oh$yield  %>% mutate(other = "none") %>% filter(year >= OHIO_YIELD_FROM[["OHTVD_Ho"]], !year %in% OHIO_HO_DROP),
+  wo$yield  %>% mutate(other = "none") %>% filter(year >= OHIO_YIELD_FROM[["OHTVD_Wo"]]),
   wi$yield  %>% mutate(other = ifelse(rotation %in% c("CS3", "CS5"), "WICST_organic", "none")),
   mei$yield %>% mutate(other = ifelse(residue == "0", "none", paste0("NEMEIRR_res", residue))),
   cci$yield %>% mutate(other = ifelse(irrigation == "Full" & residue == "N", "none",
@@ -728,6 +738,11 @@ coef_row <- function(figure, estimate, b, se, df, p, n)
          p_val = p, n) %>%
   mutate(lower = effect - qt(0.975, df) * se, upper = effect + qt(0.975, df) * se, .after = df)
 results <- list()
+# PLOT DATA (11 Nov 2026): everything the manuscript figures draw is collected in PD and
+# saved as <OUT>/plotdata_yield_main.rds at the end of section 7. The figure scripts in
+# R/figures/ draw from that file only, so a figure can be changed without rerunning this
+# script. The figures this script still draws itself are kept for comparison.
+PD <- list()
 
 
 ################################################################################
@@ -763,14 +778,28 @@ SHMI_PIV <- mean(corn$SHMI)
 
 # ---- Fig 1: the within-site slope -----------------------------------------------------
 # points: each treatment's yields with the model's other terms removed (residual +
-# fitted SHMI line: a partial-residual plot), at 150 kg N/ha and average age;
-# treatments with the same SHMI at a site are averaged (they differ only in factors
-# SHMI does not score, e.g. N rate, irrigation, residue removal)
+# fitted SHMI line: a partial-residual plot), at 150 kg N/ha and average age.
+# FIG3A_POINTS = "system" (default): one point per management system at each site, its
+#   mean SHMI and mean adjusted yield over all its plot-years. Treatments that differ only
+#   in factors SHMI does not score (N rate, irrigation, residue removal) have the same SHMI
+#   record and are merged into one point. The line is still fitted to every plot-year.
+# FIG3A_POINTS = "level": plot-years grouped by SHMI rounded to a whole point (before 9 Nov
+#   2026); one point can then mix systems, and one system can span several points.
+if (!exists("FIG3A_POINTS")) FIG3A_POINTS <- "system"
 s0 <- slope_at()
 corn$y_adj <- as.numeric(resid(m_full, level = 0)) + s0$b * (corn$SHMI - SHMI_PIV) + base_y
-pts2 <- corn %>% group_by(site, SHMI_level = round(SHMI)) %>%
-  summarise(SHMI = mean(SHMI), y = mean(y_adj), se = sd(y_adj) / sqrt(n()), n_trt = n_distinct(MGT_trt_base),
-            years = n_distinct(year), .groups = "drop")
+if (FIG3A_POINTS == "system") {
+  pts2 <- corn %>% group_by(site, MGT_trt_base) %>% mutate(SHMI_level = round(mean(SHMI), 1)) %>%
+    group_by(site, SHMI_level) %>%
+    summarise(SHMI = mean(SHMI), y = mean(y_adj), se = sd(y_adj) / sqrt(n()), n_trt = n_distinct(MGT_trt_base),
+              treatments = paste(sort(unique(MGT_trt_base)), collapse = " "),
+              years = n_distinct(year), plot_years = n(), .groups = "drop")
+} else {
+  pts2 <- corn %>% group_by(site, SHMI_level = round(SHMI)) %>%
+    summarise(SHMI = mean(SHMI), y = mean(y_adj), se = sd(y_adj) / sqrt(n()), n_trt = n_distinct(MGT_trt_base),
+              treatments = paste(sort(unique(MGT_trt_base)), collapse = " "),
+              years = n_distinct(year), plot_years = n(), .groups = "drop")
+}
 write.csv(pts2, file.path(OUT, "Fig1_points.csv"), row.names = FALSE)
 line_at <- function(sl, label = NULL) tibble(SHMI = seq(min(corn$SHMI), max(corn$SHMI), length.out = 200)) %>%
   mutate(fit = base_y + sl$b * (SHMI - SHMI_PIV), se = sl$se * abs(SHMI - SHMI_PIV),
@@ -788,7 +817,9 @@ fig2 <- ggplot() +
        caption = paste0("Treatments compared within each site and year. Model (annual plot yields): yield ~ site \u00D7 year\n",
                         "(which removes weather, county yield, soil and the site's level) + N per site + other treatment factors\n",
                         "+ SHMI + SHMI \u00D7 N + SHMI \u00D7 system age + (1 | treatment/plot), AR(1). Slope at ", N_REF, " kg N/ha and the average\n",
-                        sprintf("system age (%.0f years). Each point: treatments with the same SHMI at a site (\u00B1 SE). Each site's level is\n", AGE_MEAN),
+                        sprintf("system age (%.0f years). Each point: %s (\u00B1 SE). Each site's level is\n", AGE_MEAN,
+                                if (FIG3A_POINTS == "system") "one management system at a site, mean over its plot-years"
+                                else "plot-years with the same SHMI (whole point) at a site"),
                         "set by site \u00D7 year, so its points sit along the line; their spread around it is the within-site evidence.")) +
   theme_fig
 ggsave(file.path(OUT, "Fig1_within_sites.png"), fig2 + MS + PANEL, width = 6.8, height = 4.6, dpi = 300)
@@ -835,6 +866,21 @@ fig4 <- plot_slope(seq(N_FIG_MIN, max(N_LINES), length.out = 100), function(n) s
                    "#b30000", n_rug[n_rug >= N_FIG_MIN & n_rug <= max(N_LINES)], label_right = TRUE)
 ggsave(file.path(OUT, "Fig3_SHMI_x_age.png"), fig3 + MS + PANEL, width = 6.8, height = 4.4, dpi = 300)
 ggsave(file.path(OUT, "Fig2_SHMI_x_N.png"),   fig4 + MS + PANEL, width = 6.8, height = 4.4, dpi = 300)
+# plot data: Fig. 3a (the within-site slope) and Fig. 4a,b (the slope against N and age)
+slope_curve <- function(xs, at) map_dfr(xs, function(x) { s <- at(x); tibble(x = x, b = 10 * s$b, se = 10 * s$se) }) %>%
+  mutate(lower = b - qt(0.975, DF_W) * se, upper = b + qt(0.975, DF_W) * se)
+slope_marks <- function(marks, at) map_dfr(marks, function(x) tibble(x = x, b = 10 * at(x)$b)) %>% mutate(lab = sprintf("%+.0f", b))
+PD$fig3a <- list(points = pts2, line = ln2, points_mode = FIG3A_POINTS, site_cols = site_cols,
+                 slope = 10 * s0$b, lower = 10 * (s0$b - qt(0.975, DF_W) * s0$se), upper = 10 * (s0$b + qt(0.975, DF_W) * s0$se),
+                 p = tt_full["SHMI_w", "p-value"], n_sites = n_distinct(corn$site), N_REF = N_REF, AGE_MEAN = AGE_MEAN)
+PD$fig4ab <- list(
+  N   = list(curve = slope_curve(seq(N_FIG_MIN, max(N_LINES), length.out = 100), function(n) slope_at(N = n)),
+             marks = slope_marks(N_LINES, function(n) slope_at(N = n)),
+             rug = n_rug[n_rug >= N_FIG_MIN & n_rug <= max(N_LINES)], p = tt_full["SHMI_w:N_c", "p-value"]),
+  age = list(curve = slope_curve(seq(1, max(corn$age), length.out = 100), function(a) slope_at(age = a)),
+             marks = slope_marks(AGES, function(a) slope_at(age = a)),
+             rug = unique(corn$age), p = tt_full["SHMI_w:age_c", "p-value"]),
+  global_slope = 10 * s0$b, N_REF = N_REF, AGE_MEAN = AGE_MEAN)
 
 # ---- Fig 2b (alternative): lines of yield vs SHMI at the N_LINES rates, each at its own height
 # Height at the average SHMI = baseline + the average N response of the N-trial sites
@@ -1103,6 +1149,24 @@ sub_n <- map_dfr(n_var_sites, function(s_) {
            p_val = 2 * pnorm(-abs(est / se)))
   })
 })
+# SHMI x N in each experiment's own model, wherever N varies within the experiment (Methods:
+# "SHMI x N in each experiment's own model"); per 10 SHMI points per 100 kg N/ha.
+nx_tab <- map_dfr(names(site_models), function(s_) {
+  d <- filter(corn, site == s_)
+  if (!is.finite(sd(d$N_c, na.rm = TRUE)) || sd(d$N_c, na.rm = TRUE) * 100 < 1) return(NULL)
+  m <- tryCatch(fit_site(d, extra = "SHMI_w:N_c"), error = function(e) NULL)
+  if (is.null(m)) return(NULL)
+  tt <- summary(m)$tTable
+  if (!"SHMI_w:N_c" %in% rownames(tt)) return(NULL)
+  r <- tt["SHMI_w:N_c", ]
+  tibble(site = s_, N_range = paste(round(range(d$N_c, na.rm = TRUE) * 100 + N_REF), collapse = "-"),
+         SHMIxN_per10_per100N = 10 * r[["Value"]], se = 10 * r[["Std.Error"]], df = r[["DF"]], p = r[["p-value"]]) %>%
+    mutate(lower = SHMIxN_per10_per100N - qt(0.975, df) * se, upper = SHMIxN_per10_per100N + qt(0.975, df) * se)
+})
+if (nrow(nx_tab)) {
+  write.csv(mutate(nx_tab, across(where(is.double), ~ signif(.x, 4))), file.path(OUT, "SHMI_x_N_by_site.csv"), row.names = FALSE)
+  cat("\nSHMI x N in each experiment's own model (per 10 SHMI per 100 kg N/ha):\n"); print(as.data.frame(nx_tab), digits = 3)
+}
 # sub-rows: NECCIRR by irrigation (full vs deficit), from NECCIRR's own model with
 # SHMI x irrigation (centred, so its main row stays the average slope). Exploratory: does
 # the SHMI benefit differ when water is short?
@@ -1123,6 +1187,73 @@ sub_irr <- if ("NECCIRR" %in% names(site_models)) {
       transmute(parent = "NECCIRR", label = paste0("NECCIRR, ", irr, " irrigation"), effect, se, df, p_val)
   }
 } else NULL
+# ---- SHMI x other treatment factors, each experiment (7 Nov 2026) -----------------------
+# For every experiment with a treatment factor SHMI does not score ("other": residue
+# removal, irrigation, organic system, planter), its own model (as fit_site) with the SHMI
+# slope free to differ by level: one SHMI_w x level term for each non-reference level in
+# which SHMI varies. Levels in which SHMI does not vary have no slope of their own (noted).
+# Reported per level: slope per 10 SHMI at the experiment's own N and age, and moved to
+# N_REF and the average age by the experiment's shift in site_SHMI_ranges (slope_adj -
+# slope); the SHMI x level interaction F test (the slope is the same in every level):
+# F = Wald chi2 / numerator df, denominator df from lme for the interaction terms. Exploratory; the pooled
+# slope in Fig. 3c assumes one slope per experiment. Written: SHMI_x_other_by_site.csv
+# (Supplementary Data Table 5); Fig. 3c flags these experiments with a dagger.
+OTHER_BASE <- c(NEMEIRR = "0% stover removed", NECCIRR = "full irrigation, residue kept",
+                WICST_ARS = "conventional", IAAM7071 = "conventional, residue kept",
+                PAUP = "conventional, residue kept", INWLACRE = "standard (conventional, residue kept)")
+other_label <- function(x, s_) {
+  if (x == "none") return(if (!is.na(OTHER_BASE[s_])) OTHER_BASE[[s_]] else "reference")
+  x <- sub(paste0("^", s_, "_"), "", x)
+  x <- sub("^res(\\d+)$", "\\1% stover removed", x)
+  x <- gsub("Dfct", "deficit irrigation", gsub("Full", "full irrigation", x))
+  x <- gsub("_resN", ", residue kept", gsub("_resA", ", residue removed", x))
+  x <- gsub("resPartial", "residue partly removed", gsub("resYes", "residue removed", x))
+  gsub("_", ", ", x)
+}
+shift_of <- setNames(site_adj$effect - site_rows$effect, site_rows$label)
+other_tab <- imap_dfr(site_models, function(m0, s_) {
+  d <- droplevels(filter(corn, site == s_))
+  if (nlevels(d$other) < 2) return(NULL)
+  lev <- levels(d$other)
+  info <- map_dfr(lev, function(l) {
+    x <- d %>% filter(other == l) %>% distinct(MGT_trt_base, .keep_all = TRUE)
+    tibble(level = l, n_trt = nrow(x), plot_years = sum(d$other == l),
+           SHMI_range = sprintf("%.0f-%.0f", min(x$SHMI), max(x$SHMI)),
+           vary = n_distinct(round(x$SHMI, 1)) > 1)
+  })
+  est <- info$level[info$vary]
+  out <- info %>% mutate(site = s_, factor_level = vapply(level, other_label, "", s_ = s_),
+                         slope = NA_real_, se = NA_real_, lower = NA_real_, upper = NA_real_,
+                         slope_adj = NA_real_, F_int = NA_real_, df1 = NA_integer_, df2 = NA_real_, p_int = NA_real_,
+                         note = ifelse(vary, "", "SHMI does not vary within this level: no slope of its own"))
+  if (length(est) < 2) { out$note[out$vary] <- "only one level with an SHMI contrast: no test"; return(out) }
+  vn <- paste0("oth_", make.names(est[-1]))
+  for (k in seq_along(vn)) d[[vn[k]]] <- as.numeric(d$other == est[k + 1])
+  ex <- paste0("SHMI_w:", vn)
+  m <- tryCatch(fit_site(d, extra = ex), error = function(e) { message("  ", s_, " SHMI x other: ", conditionMessage(e)); NULL })
+  if (is.null(m)) { out$note[out$vary] <- "SHMI x level model not estimable"; return(out) }
+  bm <- fixef(m); Vm <- vcov(m); ex <- intersect(ex, names(bm))
+  dfm <- summary(m)$tTable["SHMI_w", "DF"]
+  W <- tryCatch(drop(t(bm[ex]) %*% solve(Vm[ex, ex, drop = FALSE]) %*% bm[ex]), error = function(e) NA_real_)
+  for (i in seq_along(est)) {
+    L <- setNames(numeric(length(bm)), names(bm)); L["SHMI_w"] <- 1
+    if (i > 1 && paste0("SHMI_w:", vn[i - 1]) %in% ex) L[paste0("SHMI_w:", vn[i - 1])] <- 1
+    b <- 10 * sum(L * bm); se <- 10 * sqrt(drop(t(L) %*% Vm %*% L)); j <- which(out$level == est[i])
+    out$slope[j] <- b; out$se[j] <- se
+    out$lower[j] <- b - qt(0.975, dfm) * se; out$upper[j] <- b + qt(0.975, dfm) * se
+    out$slope_adj[j] <- b + shift_of[[s_]]
+  }
+  df2 <- min(summary(m)$tTable[ex, "DF"])
+  out$F_int <- W / length(ex); out$df1 <- length(ex); out$df2 <- df2
+  out$p_int <- pf(W / length(ex), length(ex), df2, lower.tail = FALSE)
+  out
+}) %>% { if (nrow(.)) select(., site, factor_level, n_trt, plot_years, SHMI_range, slope, lower, upper, slope_adj,
+                                 F_int, df1, df2, p_int, note) else . }
+if (nrow(other_tab)) {
+  write.csv(mutate(other_tab, across(where(is.double), ~ signif(.x, 4))), file.path(OUT, "SHMI_x_other_by_site.csv"), row.names = FALSE)
+  cat("\nSHMI slope by level of the treatment factors SHMI does not score (per 10 SHMI):\n"); print(as.data.frame(other_tab), digits = 3)
+}
+
 subs <- bind_rows(tibble(parent = character(), label = character(), effect = numeric(), se = numeric(),
                          df = numeric(), p_val = numeric()), sub_mei, sub_n, sub_irr)
 forest <- bind_rows(
@@ -1354,6 +1485,12 @@ site_tab <- corn %>% group_by(site) %>%
   left_join(site_rows %>% transmute(site = label, slope = effect, slope_lower = effect - qt(0.975, df) * se,
                                     slope_upper = effect + qt(0.975, df) * se), by = "site") %>%
   mutate(location = unname(SITE_LOC[site]), .after = site) %>%
+  # each experiment's slope moved to N_REF kg N/ha and the average system age with the
+  # Fig. 3a model's SHMI x N and SHMI x age coefficients (as in the heterogeneity section;
+  # the interval keeps the site's own width and ignores the adjustment's uncertainty)
+  left_join(site_adj %>% transmute(site = label, N_mean = round(N_mean), age_mean = round(age_mean, 1),
+                                   slope_adj = effect), by = "site") %>%
+  mutate(slope_adj_lower = slope_adj - (slope - slope_lower), slope_adj_upper = slope_adj + (slope_upper - slope)) %>%
   arrange(SHMI_mean)
 # What drives each site's SHMI range (from the shares; the rule was set after seeing the
 # site table, so groups are descriptive): tillage only (share_dist >= 0.8); rotation,
@@ -1410,7 +1547,7 @@ if (!is.null(m_rs)) {
 if (parts_ok) {
   mr_dat <- site_rows %>% transmute(site = label, effect, se) %>%
     left_join(select(site_adj, site = label, effect_adj = effect), by = "site") %>%
-    left_join(select(site_tab, site, share_dist, contrast), by = "site") %>% droplevels()
+    left_join(select(site_tab, site, share_dist, share_div, share_amend, contrast), by = "site") %>% droplevels()
   meta_rows <- function(yname, lab) {
     d <- mutate(mr_dat, yi = .data[[yname]])
     m_d <- rma(yi = yi, sei = se, mods = ~ share_dist, data = d, method = "REML", test = "knha")
@@ -1418,6 +1555,18 @@ if (parts_ok) {
                   estimate = paste0("(f) ", lab, ": change in slope from no disturbance share to all (share_dist 0 to 1)"),
                   effect = m_d$beta[2], se = m_d$se[2], df = m_d$k - m_d$p, lower = m_d$ci.lb[2], upper = m_d$ci.ub[2],
                   p_val = m_d$pval[2], n = m_d$k)
+    # 9 Nov 2026: the return per point against the share of each experiment's SHMI spread that
+    # came from crop diversity (Fig. 3c is ordered by it); per 10 percentage points of share.
+    # Sensitivity: diversity plus amendment share (WICST's manure).
+    for (mv in c("share_div", "share_divam")) {
+      d$share_divam <- d$share_div + d$share_amend
+      m_v <- rma(yi = yi, sei = se, mods = as.formula(paste("~ I(", mv, "* 10)")), data = d, method = "REML", test = "knha")
+      out <- bind_rows(out, tibble(figure = "Fig 1, heterogeneity",
+        estimate = paste0("(f) ", lab, c(": change in slope per 10 percentage points of ", ": share of between-site variance explained by "),
+                          if (mv == "share_div") "diversity share" else "diversity + amendment share", c("", " (R2, %)")),
+        effect = c(m_v$beta[2], m_v$R2), se = c(m_v$se[2], NA), df = c(m_v$k - m_v$p, NA),
+        lower = c(m_v$ci.lb[2], NA), upper = c(m_v$ci.ub[2], NA), p_val = c(m_v$pval[2], NA), n = m_v$k))
+    }
     if (n_distinct(d$contrast) > 1) {
       m_g  <- rma(yi = yi, sei = se, mods = ~ contrast, data = d, method = "REML", test = "knha")
       m_g0 <- rma(yi = yi, sei = se, mods = ~ contrast - 1, data = d, method = "REML", test = "knha")
@@ -1487,22 +1636,275 @@ ggsave(file.path(OUT, "Fig_SHMI_ranges.png"), fig_rng + MS, width = 6.8, height 
 # (Fig. 3a) as a dashed line. Replaces the forest plot (EDFig7b_forest.png, still written).
 if (all(c("slope", "slope_lower", "slope_upper") %in% names(rng_dat)) && requireNamespace("patchwork", quietly = TRUE)) {
   XLIM <- c(-1000, 1250); XLAB_EDGE <- 1500      # values printed right of the panel's data range
-  sl_dat <- rng_dat %>% mutate(lo_c = pmax(slope_lower, XLIM[1]), hi_c = pmin(slope_upper, XLIM[2]),
-                               cut = slope_lower < XLIM[1] | slope_upper > XLIM[2])
+  # ED5A_COMMON (default TRUE, 6 Nov 2026): plot each experiment's slope at N_REF kg N/ha
+  # and the average system age (filled, with its interval), the slope as estimated in the
+  # experiment's own model shown as an open grey circle; FALSE restores the earlier panel.
+  if (!exists("ED5A_COMMON")) ED5A_COMMON <- TRUE
+  common <- ED5A_COMMON && "slope_adj" %in% names(rng_dat)
+  sl_dat <- rng_dat %>% mutate(x  = if (common) slope_adj else slope,
+                               lo = if (common) slope_adj_lower else slope_lower,
+                               hi = if (common) slope_adj_upper else slope_upper,
+                               lo_c = pmax(lo, XLIM[1]), hi_c = pmin(hi, XLIM[2]),
+                               cut = lo < XLIM[1] | hi > XLIM[2])
   fig_sl <- ggplot(sl_dat, aes(y = site)) +
     geom_vline(xintercept = 0, colour = "grey60") +
     geom_vline(xintercept = 10 * s0$b, colour = "darkgreen", linetype = "dashed") +
     geom_errorbar(aes(xmin = lo_c, xmax = hi_c, colour = grp), width = 0, orientation = "y") +
-    geom_point(aes(x = slope, fill = grp), shape = 21, size = 2.6, colour = "black") +
-    geom_text(aes(x = XLAB_EDGE, label = sprintf("%+.0f", slope)), hjust = 1, size = 3) +
+    { if (common) geom_point(aes(x = pmin(pmax(slope, XLIM[1]), XLIM[2])), shape = 21, size = 2.2,
+                             colour = "grey45", fill = "white") } +
+    geom_point(aes(x = x, fill = grp), shape = 21, size = 2.6, colour = "black") +
+    geom_text(aes(x = XLAB_EDGE, label = sprintf("%+.0f", x)), hjust = 1, size = 3) +
     grp_scale + guides(colour = "none", fill = "none") +
     scale_x_continuous(limits = c(XLIM[1], XLAB_EDGE), breaks = seq(-1000, 1000, 500)) +
-    labs(x = expression("Each experiment's own slope (kg ha"^-1*" per 10 SHMI)"), y = NULL) +
+    labs(x = if (common) expression(atop("Each experiment's own slope at 150 kg N ha"^-1*" and average age", "(kg ha"^-1*" per 10 SHMI; open: as estimated)")) else
+               expression("Each experiment's own slope (kg ha"^-1*" per 10 SHMI)"), y = NULL) +
     theme_fig + theme(axis.text.y = element_blank(), axis.ticks.y = element_blank(), panel.grid.major.y = element_blank())
   fig_rs <- (fig_rng + MS + labs(title = NULL) | fig_sl) + patchwork::plot_layout(widths = c(1.15, 1), guides = "collect") &
     theme(legend.position = "bottom")
   ggsave(file.path(OUT, "Fig_SHMI_ranges_slopes.png"), fig_rs, width = 11, height = 1.9 + 0.32 * nrow(rng_dat), dpi = 300)
   if (any(sl_dat$cut)) message("Extended Data Fig. 4a: CI cut at the panel edge for ", paste(sl_dat$site[sl_dat$cut], collapse = ", "))
+}
+
+# ---- Corn-every-year systems: yield per SHMI point by route (7 Nov 2026, exploratory) -----
+# Systems whose only harvested crop is corn (cover crops, living mulches and manure allowed:
+# they have no yield), so rotation cannot explain the slope. Within each experiment, SHMI is
+# split into the points from Inverse Disturbance (p_dist = wI x InvDist) and the rest (living
+# cover, diversity and the amendment bonus: SHMI - p_dist), each centred on the experiment's
+# mean over its units, as SHMI_w is. One model for all such plots, with the terms of each
+# experiment's own model (site x year, N terms, other factors) and a slope for each route;
+# slopes per 10 points at the data's own N and age. Written: SHMI_route_continuous_corn.csv
+# (Its objects are suffixed _cc so the main model's b, V and tt are not overwritten.)
+if (parts_ok && exists("runs")) {
+  cc_units <- imap_dfr(runs, function(r, s_) {
+    y <- r$inputs$yield
+    if (is.null(y) || !nrow(y)) return(NULL)
+    y %>% filter(!is.na(yield_kg_ha)) %>% distinct(MGT_combo, crop = tolower(trimws(CD_name))) %>%
+      group_by(MGT_combo) %>% summarise(cc = all(grepl("^corn", crop)), .groups = "drop") %>% mutate(site = s_)
+  })
+  dcc <- corn %>% left_join(cc_units, by = c("site", "MGT_combo")) %>% filter(cc %in% TRUE) %>%
+    mutate(p_dist = w_hat[["InvDist"]] * InvDist, p_rest = SHMI - p_dist) %>%
+    group_by(site) %>%
+    mutate(dist_w = p_dist - mean(p_dist[!duplicated(MGT_combo)]),
+           rest_w = p_rest - mean(p_rest[!duplicated(MGT_combo)])) %>%
+    filter(n_distinct(MGT_trt_base) >= 2, diff(range(SHMI)) >= 2) %>% ungroup() %>% droplevels()
+  cc_sites <- dcc %>% group_by(site) %>%
+    summarise(treatments = n_distinct(MGT_trt_base), plot_years = n(),
+              SHMI_range = sprintf("%.0f-%.0f", min(SHMI), max(SHMI)),
+              dist_range = round(diff(range(p_dist)), 1), rest_range = round(diff(range(p_rest)), 1), .groups = "drop")
+  print(cc_sites)
+  m_cc <- tryCatch(fit_site(dcc, x = c("dist_w", "rest_w")),
+                   error = function(e) { message("corn-every-year route model failed: ", conditionMessage(e)); NULL })
+  if (!is.null(m_cc)) {
+    tt_cc <- summary(m_cc)$tTable; b_cc <- fixef(m_cc); V_cc <- vcov(m_cc)
+    row_of <- function(k, lab) tibble(route = lab, effect = 10 * tt_cc[k, "Value"], se = 10 * tt_cc[k, "Std.Error"],
+                                      df = tt_cc[k, "DF"], p = tt_cc[k, "p-value"]) %>%
+      mutate(lower = effect - qt(0.975, df) * se, upper = effect + qt(0.975, df) * se)
+    dlt <- b_cc[["rest_w"]] - b_cc[["dist_w"]]
+    se_d <- sqrt(V_cc["rest_w", "rest_w"] + V_cc["dist_w", "dist_w"] - 2 * V_cc["rest_w", "dist_w"])
+    df_d <- min(tt_cc[c("dist_w", "rest_w"), "DF"])
+    route_tab <- bind_rows(row_of("dist_w", "Inverse Disturbance points (less tillage)"),
+                           row_of("rest_w", "Other points (living cover, diversity, amendments)"),
+                           tibble(route = "Difference (other minus disturbance)", effect = 10 * dlt, se = 10 * se_d, df = df_d,
+                                  p = 2 * pt(-abs(dlt / se_d), df_d)) %>%
+                             mutate(lower = effect - qt(0.975, df) * se, upper = effect + qt(0.975, df) * se)) %>%
+      mutate(experiments = paste(cc_sites$site, collapse = ", "), plot_years = nrow(dcc))
+    write.csv(mutate(route_tab, across(where(is.double), ~ signif(.x, 4))), file.path(OUT, "SHMI_route_continuous_corn.csv"), row.names = FALSE)
+    write.csv(cc_sites, file.path(OUT, "SHMI_route_continuous_corn_sites.csv"), row.names = FALSE)
+    cat("\nCorn-every-year systems: yield change per 10 SHMI points by route:\n"); print(as.data.frame(route_tab), digits = 3)
+  }
+}
+
+# ---- Fig. 4 (7 Nov 2026): what the SHMI yield benefit depends on -----------------------------
+# a the slope against N (Fig2_SHMI_x_N), b against system age (Fig3_SHMI_x_age), c each
+# experiment's own slope at N_REF kg N/ha and the average age (slope_adj; filled: 95% CI
+# excludes zero), grouped by what drove its SHMI range, with each group's mean (meta-analysis
+# of the adjusted slopes) as a line and band; NEMEIRR also by share of stover removed
+# (diamonds). All three on one y-axis (yield change per 10 SHMI); the dashed green line in c
+# is the slope of Fig. 3a. FIG4_SAME_Y (default TRUE): one y range for a-c; experiment
+# intervals beyond it are cut at the edge (arrow). FIG4_YLIM: set c(lo, hi) to choose it.
+# Written: Fig4_moderators.png, lettered a-c (B7 copies it as Fig. 4). Replaces Extended Data Fig. 5a.
+if (has_grp && "slope_adj" %in% names(site_tab) && requireNamespace("patchwork", quietly = TRUE)) {
+  if (!exists("FIG4_SAME_Y")) FIG4_SAME_Y <- TRUE
+  if (!exists("FIG3C_LEVELS")) FIG3C_LEVELS <- FALSE   # TRUE: NEMEIRR's slope by stover removal as diamonds
+  oth_sites <- if (exists("other_tab") && nrow(other_tab)) unique(other_tab$site[!is.na(other_tab$slope)]) else character()
+  GRP_SHORT <- setNames(c("Tillage\nonly", "Mostly\ncover crops", "Cover crops\nand tillage", "Rotation,\nlegumes, manure"),
+                        CONTRAST_LEVELS)
+  c_dat <- site_tab %>% filter(!is.na(contrast)) %>%
+    mutate(sig = slope_adj_lower > 0 | slope_adj_upper < 0,
+           lab = sprintf("%s (%.0f–%.0f)%s", site, SHMI_min, SHMI_max, ifelse(site %in% oth_sites, " \u2020", "")),
+           grp = factor(GRP_SHORT[as.character(contrast)], levels = GRP_SHORT)) %>%
+    arrange(contrast, slope_adj) %>% mutate(lab = factor(lab, levels = lab))
+  g_mean <- results$het_x %>%
+    filter(grepl(sprintf("Site slopes at %d kg N/ha and average age: mean slope, ", N_REF), estimate, fixed = TRUE)) %>%
+    mutate(contrast = sub(" \\(.*$", "", sub("^.*mean slope, ", "", estimate))) %>%
+    filter(contrast %in% CONTRAST_LEVELS) %>%
+    transmute(grp = factor(GRP_SHORT[contrast], levels = GRP_SHORT), est = effect, lo = lower, hi = upper)
+  # NEMEIRR by stover removed: its own SHMI x residue rows, moved by NEMEIRR's N and age shift
+  mei <- forest %>% filter(FIG3C_LEVELS, grepl("^NEMEIRR, no-till vs disk, \\d+% residue removed", label))
+  if (nrow(mei) && "NEMEIRR" %in% c_dat$site) {
+    nm <- filter(c_dat, site == "NEMEIRR")
+    mei <- mei %>% mutate(pct = sub("^.*disk, (\\d+)% residue removed.*$", "\\1", label),
+                          y = effect + (nm$slope_adj - nm$slope), lab = nm$lab, grp = nm$grp)
+  } else mei <- NULL
+  # the moderator panels' bands and the experiments' point estimates set the shared range
+  band <- function(xs, at) map_dfr(xs, function(x) { s <- at(x); tibble(b = 10 * s$b, se = 10 * s$se) }) %>%
+    mutate(lo = b - qt(0.975, DF_W) * se, hi = b + qt(0.975, DF_W) * se)
+  bands <- bind_rows(band(seq(N_FIG_MIN, max(N_LINES), length.out = 50), function(n) slope_at(N = n)),
+                     band(seq(1, max(corn$age), length.out = 50), function(a) slope_at(age = a)))
+  PD$fig4c <- list(sites = c_dat %>% left_join(select(site_rows2, site = label, se), by = "site"),
+                   groups = g_mean, nemeirr = mei, bands = bands, global_slope = 10 * s0$b,
+                   group_short = GRP_SHORT, contrast_cols = CONTRAST_COLS)
+  YL <- if (exists("FIG4_YLIM")) FIG4_YLIM else {
+    r <- range(c(bands$lo, bands$hi, c_dat$slope_adj, g_mean$lo, g_mean$hi, 0), na.rm = TRUE)   # NEMEIRR's diamonds may fall outside (drawn at the edge)
+    c(floor(r[1] / 100) * 100 - 50, ceiling(r[2] / 100) * 100 + 50)
+  }
+  c_dat <- c_dat %>% mutate(lo_c = pmax(slope_adj_lower, YL[1]), hi_c = pmin(slope_adj_upper, YL[2]),
+                            cut_lo = slope_adj_lower < YL[1], cut_hi = slope_adj_upper > YL[2])
+  if (!is.null(mei)) mei <- mei %>% mutate(cut = y < YL[1] | y > YL[2], y = pmin(pmax(y, YL[1]), YL[2]),
+                                           tag = ifelse(cut, paste0(pct, "% \u2193"), paste0(pct, "%")))   # value of a cut diamond: in the legend
+  YT <- "Corn yield change\nper 10 SHMI (kg ha⁻¹)"
+  GCOLS <- setNames(CONTRAST_COLS[CONTRAST_LEVELS], GRP_SHORT)
+  if (!exists("FIG3C_ORDER")) FIG3C_ORDER <- "diversity"   # "diversity" (default; no fitted line since 10 Nov 2026), "scatter" or "groups" (earlier)
+  if (FIG3C_ORDER == "scatter") {
+    # Each experiment's slope against the share of its SHMI spread that came from crop
+    # diversity, on a continuous axis, with the meta-regression of slope on that share
+    # (precision-weighted, REML, Knapp-Hartung) as one straight line and its 95% band.
+    # Points shaded by the disturbance share; filled if the experiment's CI excludes zero.
+    dd <- c_dat %>% left_join(select(site_rows2, site = label, se), by = "site") %>%
+      mutate(x = 100 * share_div)
+    m_div <- rma(yi = slope_adj, sei = se, mods = ~ share_div, data = dd, method = "REML", test = "knha")
+    xs <- seq(0, max(dd$share_div), length.out = 100)
+    pr <- predict(m_div, newmods = xs)
+    ln <- tibble(x = 100 * xs, fit = pr$pred, lo = pmax(pr$ci.lb, YL[1]), hi = pmin(pr$ci.ub, YL[2]))
+    # leave-one-experiment-out: does the line depend on any one experiment?
+    loo <- map_dfr(dd$site, function(s) {
+      m <- rma(yi = slope_adj, sei = se, mods = ~ share_div, data = filter(dd, site != s), method = "REML", test = "knha")
+      tibble(left_out = s, per10 = m$beta[2] / 10, lower = m$ci.lb[2] / 10, upper = m$ci.ub[2] / 10, p = m$pval[2])
+    })
+    write.csv(loo, file.path(OUT, "Fig3c_meta_loo.csv"), row.names = FALSE)
+    cat(sprintf("Fig. 3c meta-regression, leave one out: %.0f to %.0f per 10 points of share, P %.3f to %.3f\n",
+                min(loo$per10), max(loo$per10), min(loo$p), max(loo$p)))
+    pr_s <- predict(m_div, newmods = dd$share_div)
+    write.csv(dd %>% transmute(site, share_cover, share_div, share_dist, share_amend, slope_adj, slope_adj_lower, slope_adj_upper, se,
+                               pred = pr_s$pred, pred_lo = pr_s$ci.lb, pred_hi = pr_s$ci.ub),
+              file.path(OUT, "Fig3c_sites_by_diversity.csv"), row.names = FALSE)
+    lab_m <- sprintf("%+.0f per 10 points of diversity share (95%% CI %.0f to %.0f), P = %s; R\u00B2 = %.0f%%",
+                     m_div$beta[2] / 10, m_div$ci.lb[2] / 10, m_div$ci.ub[2] / 10,
+                     format.pval(m_div$pval[2], digits = 2, eps = 0.001), m_div$R2)
+    dd <- dd %>% mutate(y_pt = pmin(pmax(slope_adj, YL[1]), YL[2]), cut_pt = slope_adj < YL[1] | slope_adj > YL[2])
+    DCOL <- c("#56B4E9", "#D55E00")
+    rep_ok <- requireNamespace("ggrepel", quietly = TRUE)
+    lab_layer <- if (rep_ok) ggrepel::geom_text_repel(aes(y = y_pt, label = lab), size = 2.3, colour = "grey25",
+                                                      min.segment.length = 0.2, box.padding = 0.35, seed = 1, max.overlaps = Inf)
+                 else geom_text(aes(y = y_pt, label = lab), size = 2.3, colour = "grey25", hjust = -0.12, vjust = -0.6)
+    fig_c <- ggplot(dd, aes(x, slope_adj)) +
+      geom_hline(yintercept = 0, linetype = "dashed", colour = "grey60") +
+      geom_hline(yintercept = 10 * s0$b, colour = "darkgreen", linetype = "dashed") +
+      geom_ribbon(data = ln, inherit.aes = FALSE, aes(x, ymin = lo, ymax = hi), fill = "grey50", alpha = 0.18) +
+      geom_line(data = ln, inherit.aes = FALSE, aes(x, fit), colour = "grey20", linewidth = 0.9) +
+      geom_linerange(aes(ymin = lo_c, ymax = hi_c, colour = pmax(share_dist, 0)), linewidth = 0.6) +
+      geom_point(data = filter(dd, cut_hi), aes(y = YL[2], colour = pmax(share_dist, 0)), shape = 17, size = 1.8) +
+      geom_point(data = filter(dd, cut_lo), aes(y = YL[1], colour = pmax(share_dist, 0)), shape = 25, size = 1.8, fill = "grey40") +
+      geom_point(aes(y = y_pt, colour = pmax(share_dist, 0), fill = ifelse(sig, pmax(share_dist, 0), NA),
+                     shape = ifelse(cut_pt, "cut", "in")), size = 2.8, stroke = 1) +
+      scale_shape_manual(values = c(`in` = 21, cut = 25), guide = "none") +
+      lab_layer +
+      annotate("text", x = 0, y = YL[2], hjust = 0, vjust = 1, size = 2.5, label = lab_m) +
+      scale_x_continuous(expand = expansion(mult = c(0.03, 0.06))) +
+      scale_colour_gradient(low = DCOL[1], high = DCOL[2], limits = c(0, 1), name = "Disturbance\nshare") +
+      scale_fill_gradient(low = DCOL[1], high = DCOL[2], limits = c(0, 1), na.value = "white", guide = "none") +
+      labs(x = "Share of the experiment's SHMI spread from Diversity (%)", y = YT) +
+      theme_fig + theme(panel.grid.minor = element_blank(),
+                        legend.position = c(0.99, 0.02), legend.justification = c(1, 0),
+                        legend.key.height = unit(8, "pt"), legend.title = element_text(size = 7),
+                        legend.text = element_text(size = 6.5), legend.background = element_blank())
+  } else if (FIG3C_ORDER == "diversity") {
+    # Experiments ordered by the share of their SHMI spread that came from crop diversity
+    # (computed in this run, so the order follows the data); points shaded by the disturbance
+    # share; line and band: meta-regression of the slope on the diversity share (precision-
+    # weighted, Knapp-Hartung), evaluated at each experiment's share.
+    dd <- c_dat %>% left_join(select(site_rows2, site = label, se), by = "site") %>%
+      arrange(share_div, slope_adj) %>% mutate(i = row_number())
+    # The meta-regression of slope on diversity share is reported in the text only (no line
+    # on the categorical axis, 10 Nov 2026); it and its leave-one-out refits are written here.
+    m_div <- rma(yi = slope_adj, sei = se, mods = ~ share_div, data = dd, method = "REML", test = "knha")
+    loo <- map_dfr(dd$site, function(s) {
+      m <- rma(yi = slope_adj, sei = se, mods = ~ share_div, data = filter(dd, site != s), method = "REML", test = "knha")
+      tibble(left_out = s, per10 = m$beta[2] / 10, lower = m$ci.lb[2] / 10, upper = m$ci.ub[2] / 10, p = m$pval[2])
+    })
+    write.csv(loo, file.path(OUT, "Fig3c_meta_loo.csv"), row.names = FALSE)
+    cat(sprintf("Fig. 3c meta-regression: %+.0f per 10 points of diversity share (%.0f to %.0f), P = %.3f, R2 = %.0f%%; leave one out %.0f to %.0f, P %.3f to %.3f\n",
+                m_div$beta[2] / 10, m_div$ci.lb[2] / 10, m_div$ci.ub[2] / 10, m_div$pval[2], m_div$R2,
+                min(loo$per10), max(loo$per10), min(loo$p), max(loo$p)))
+    pr <- predict(m_div, newmods = dd$share_div)
+    dd <- dd %>% mutate(pred = pr$pred, pred_lo = pmax(pr$ci.lb, YL[1]), pred_hi = pmin(pr$ci.ub, YL[2]),
+                        xlab = sprintf("%s\n%.0f%%", as.character(lab), 100 * share_div))
+    cat(sprintf("Fig. 3c order (diversity share): %s\n", paste(sprintf("%s %.0f%%", dd$site, 100 * dd$share_div), collapse = ", ")))
+    lab_m <- sprintf("Slope vs diversity share: %+.0f per 10 points of share (95%% CI %.0f to %.0f), P = %s",
+                     m_div$beta[2] / 10, m_div$ci.lb[2] / 10, m_div$ci.ub[2] / 10, format.pval(m_div$pval[2], digits = 2, eps = 0.001))
+    write.csv(dd %>% transmute(site, share_cover, share_div, share_dist, share_amend, slope_adj, slope_adj_lower, slope_adj_upper, se,
+                               pred = pr$pred, pred_lo = pr$ci.lb, pred_hi = pr$ci.ub),
+              file.path(OUT, "Fig3c_sites_by_diversity.csv"), row.names = FALSE)
+    DCOL <- c("#56B4E9", "#D55E00")
+    fig_c <- ggplot(dd, aes(i, slope_adj)) +
+      geom_hline(yintercept = 0, linetype = "dashed", colour = "grey60") +
+      geom_hline(yintercept = 10 * s0$b, colour = "darkgreen", linetype = "dashed") +
+      geom_linerange(aes(ymin = lo_c, ymax = hi_c, colour = pmax(share_dist, 0)), linewidth = 0.6) +
+      geom_point(data = filter(dd, cut_hi), aes(y = YL[2], colour = pmax(share_dist, 0)), shape = 17, size = 1.8) +
+      geom_point(data = filter(dd, cut_lo), aes(y = YL[1], colour = pmax(share_dist, 0)), shape = 25, size = 1.8,
+                 fill = "grey40") +
+      geom_point(aes(colour = pmax(share_dist, 0), fill = ifelse(sig, pmax(share_dist, 0), NA)), shape = 21, size = 2.8, stroke = 1) +
+      scale_x_continuous(breaks = dd$i, labels = dd$xlab, expand = expansion(add = 0.5)) +
+      scale_colour_gradient(low = DCOL[1], high = DCOL[2], limits = c(0, 1), name = "Disturbance\nshare") +
+      scale_fill_gradient(low = DCOL[1], high = DCOL[2], limits = c(0, 1), na.value = "white", guide = "none") +
+      labs(x = "Experiment (SHMI range), ordered by the diversity share of its SHMI spread", y = YT) +
+      theme_fig + theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 7),
+                        panel.grid.major.x = element_blank(), panel.grid.minor = element_blank(),
+                        legend.position = c(0.99, 0.02), legend.justification = c(1, 0),
+                        legend.key.height = unit(8, "pt"), legend.title = element_text(size = 7),
+                        legend.text = element_text(size = 6.5), legend.background = element_blank())
+  } else {
+  fig_c <- ggplot(c_dat, aes(lab, slope_adj)) +
+      geom_hline(yintercept = 0, linetype = "dashed", colour = "grey60") +
+      geom_hline(yintercept = 10 * s0$b, colour = "darkgreen", linetype = "dashed") +
+      geom_rect(data = g_mean, aes(xmin = -Inf, xmax = Inf, ymin = pmax(lo, YL[1]), ymax = pmin(hi, YL[2]), fill = grp),
+                inherit.aes = FALSE, alpha = 0.15) +
+      geom_hline(data = g_mean, aes(yintercept = est, colour = grp), linewidth = 0.9) +
+      geom_linerange(aes(ymin = lo_c, ymax = hi_c, colour = grp), linewidth = 0.6) +
+      geom_point(data = filter(c_dat, cut_hi), aes(y = YL[2], fill = grp), shape = 24, size = 1.8, colour = NA) +
+      geom_point(data = filter(c_dat, cut_lo), aes(y = YL[1], fill = grp), shape = 25, size = 1.8, colour = NA) +
+      geom_point(aes(colour = grp, fill = ifelse(sig, as.character(grp), NA)), shape = 21, size = 2.8, stroke = 1) +
+      { if (!is.null(mei)) list(
+          geom_point(data = mei, aes(lab, y), inherit.aes = FALSE, position = position_nudge(x = 0.32),
+                     shape = 23, size = 1.9, colour = GCOLS[[1]], fill = "white", stroke = 0.7),
+          geom_text(data = mei, aes(lab, y, label = tag), inherit.aes = FALSE,
+                    position = position_nudge(x = 0.52), hjust = 0, size = 2.3, colour = "grey30")) } +
+      facet_grid(. ~ grp, scales = "free_x", space = "free_x") +
+      scale_colour_manual(values = GCOLS, guide = "none") +
+      scale_fill_manual(values = GCOLS, na.value = "white", guide = "none") +
+      labs(x = NULL, y = YT) +
+      theme_fig + theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 7.5),
+                        panel.grid.major.x = element_blank(), panel.grid.minor = element_blank(),
+                        strip.background = element_rect(fill = "grey95"), strip.text = element_text(size = 7.5),
+                        panel.spacing.x = unit(2, "pt"))
+  }
+  same_y <- if (FIG4_SAME_Y) coord_cartesian(ylim = YL) else NULL
+  # 10 Nov 2026: a and b side by side above c (c full width); FIG4_ONE_ROW = TRUE for the old 1 x 3 row
+  if (!exists("FIG4_ONE_ROW")) FIG4_ONE_ROW <- FALSE
+  pc <- fig_c + (if (FIG4_SAME_Y) coord_cartesian(ylim = YL, clip = "off") else NULL)
+  if (FIG4_ONE_ROW) {
+    fig4_all <- patchwork::wrap_plots(fig4 + MS + same_y + labs(y = YT), fig3 + MS + same_y + labs(y = NULL),
+                                      pc + labs(y = NULL), nrow = 1, widths = c(1, 1, 1.35))
+    f4w <- 13; f4h <- 4.6
+  } else {
+    fig4_all <- (fig4 + MS + same_y + labs(y = YT) | fig3 + MS + same_y + labs(y = NULL)) / (pc + labs(y = YT)) +
+      patchwork::plot_layout(heights = c(1, 1.15))
+    f4w <- 9; f4h <- 8.4
+  }
+  fig4_all <- fig4_all + patchwork::plot_annotation(tag_levels = "a") & theme(plot.tag = element_text(face = "bold", size = 14))
+  ggsave(file.path(OUT, "Fig4_moderators.png"), fig4_all, width = f4w, height = f4h, dpi = 300, bg = "white")
+  cat(sprintf("Fig. 4: y range %.0f to %.0f kg/ha per 10 SHMI; experiments with intervals cut: %s\n", YL[1], YL[2],
+              paste(c_dat$site[c_dat$cut_lo | c_dat$cut_hi], collapse = ", ")))
 }
 
 # (b) the forest plot for Extended Data Fig. 4
@@ -1540,6 +1942,14 @@ fig_fr <- ggplot(fr, aes(effect, row)) +
 ggsave(file.path(OUT, "EDFig7b_forest.png"),
        fig_fr + MS + force_panelsizes(rows = unit(0.22 * nrow(fr), "in"), cols = unit(3.4, "in")),
        width = 6.8, height = 2.0 + 0.22 * nrow(fr), dpi = 300)
+
+
+saveRDS(PD, file.path(OUT, "plotdata_yield_main.rds"))
+# the fitted main model and what B4 needs with it (11 Nov 2026), so B4 no longer reruns B2
+saveRDS(list(m_full = m_full, corn = corn, n_var_sites = n_var_sites, n_curve_sites = n_curve_sites,
+             N_REF = N_REF, AGE_MEAN = AGE_MEAN, OUT = OUT),
+        file.path(OUT, "B2_model.rds"))
+message("Plot data for the figure scripts: ", file.path(OUT, "plotdata_yield_main.rds"))
 
 
 ################################################################################

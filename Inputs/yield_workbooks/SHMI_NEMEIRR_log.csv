@@ -1,0 +1,36 @@
+rule,unit,message
+A1b,NEMEIRR_101,5 records labelled NEMEIRR_NT100 (2013-07-10 to 2015-07-01) fall inside NEMEIRR_NT0's period; reassigned to NEMEIRR_NT0
+A1b,NEMEIRR_102,5 records labelled NEMEIRR_NT100 (2013-07-10 to 2015-07-01) fall inside NEMEIRR_DK100's period; reassigned to NEMEIRR_DK100
+A1b,NEMEIRR_103,5 records labelled NEMEIRR_NT100 (2013-07-10 to 2015-07-01) fall inside NEMEIRR_NT50's period; reassigned to NEMEIRR_NT50
+A1b,NEMEIRR_104,5 records labelled NEMEIRR_NT100 (2013-07-10 to 2015-07-01) fall inside NEMEIRR_DK50's period; reassigned to NEMEIRR_DK50
+A1b,NEMEIRR_106,5 records labelled NEMEIRR_NT100 (2013-07-10 to 2015-07-01) fall inside NEMEIRR_DK0's period; reassigned to NEMEIRR_DK0
+A1b,NEMEIRR_201,5 records labelled NEMEIRR_NT100 (2013-07-10 to 2015-07-01) fall inside NEMEIRR_NT0's period; reassigned to NEMEIRR_NT0
+A1b,NEMEIRR_202,5 records labelled NEMEIRR_NT100 (2013-07-10 to 2015-07-01) fall inside NEMEIRR_DK0's period; reassigned to NEMEIRR_DK0
+A1b,NEMEIRR_204,5 records labelled NEMEIRR_NT100 (2013-07-10 to 2015-07-01) fall inside NEMEIRR_DK100's period; reassigned to NEMEIRR_DK100
+A1b,NEMEIRR_205,5 records labelled NEMEIRR_NT100 (2013-07-10 to 2015-07-01) fall inside NEMEIRR_NT50's period; reassigned to NEMEIRR_NT50
+A1b,NEMEIRR_206,5 records labelled NEMEIRR_NT100 (2013-07-10 to 2015-07-01) fall inside NEMEIRR_DK50's period; reassigned to NEMEIRR_DK50
+A1b,NEMEIRR_301,5 records labelled NEMEIRR_NT100 (2013-07-10 to 2015-07-01) fall inside NEMEIRR_DK100's period; reassigned to NEMEIRR_DK100
+A1b,NEMEIRR_302,5 records labelled NEMEIRR_NT100 (2013-07-10 to 2015-07-01) fall inside NEMEIRR_NT0's period; reassigned to NEMEIRR_NT0
+A1b,NEMEIRR_303,5 records labelled NEMEIRR_NT100 (2013-07-10 to 2015-07-01) fall inside NEMEIRR_DK50's period; reassigned to NEMEIRR_DK50
+A1b,NEMEIRR_304,5 records labelled NEMEIRR_NT100 (2013-07-10 to 2015-07-01) fall inside NEMEIRR_NT50's period; reassigned to NEMEIRR_NT50
+A1b,NEMEIRR_305,5 records labelled NEMEIRR_NT100 (2013-07-10 to 2015-07-01) fall inside NEMEIRR_DK0's period; reassigned to NEMEIRR_DK0
+A1b,NEMEIRR_401,5 records labelled NEMEIRR_NT100 (2013-07-10 to 2015-07-01) fall inside NEMEIRR_NT0's period; reassigned to NEMEIRR_NT0
+A1b,NEMEIRR_402,5 records labelled NEMEIRR_NT100 (2013-07-10 to 2015-07-01) fall inside NEMEIRR_DK0's period; reassigned to NEMEIRR_DK0
+A1b,NEMEIRR_404,5 records labelled NEMEIRR_NT100 (2013-07-10 to 2015-07-01) fall inside NEMEIRR_DK100's period; reassigned to NEMEIRR_DK100
+A1b,NEMEIRR_405,5 records labelled NEMEIRR_NT100 (2013-07-10 to 2015-07-01) fall inside NEMEIRR_NT50's period; reassigned to NEMEIRR_NT50
+A1b,NEMEIRR_406,5 records labelled NEMEIRR_NT100 (2013-07-10 to 2015-07-01) fall inside NEMEIRR_DK50's period; reassigned to NEMEIRR_DK50
+A1b,NEMEIRR_501,5 records labelled NEMEIRR_NT100 (2013-07-10 to 2015-07-01) fall inside NEMEIRR_DK100's period; reassigned to NEMEIRR_DK100
+A1b,NEMEIRR_502,5 records labelled NEMEIRR_NT100 (2013-07-10 to 2015-07-01) fall inside NEMEIRR_NT50's period; reassigned to NEMEIRR_NT50
+A1b,NEMEIRR_503,5 records labelled NEMEIRR_NT100 (2013-07-10 to 2015-07-01) fall inside NEMEIRR_DK0's period; reassigned to NEMEIRR_DK0
+A1b,NEMEIRR_505,5 records labelled NEMEIRR_NT100 (2013-07-10 to 2015-07-01) fall inside NEMEIRR_DK50's period; reassigned to NEMEIRR_DK50
+A1b,NEMEIRR_506,5 records labelled NEMEIRR_NT100 (2013-07-10 to 2015-07-01) fall inside NEMEIRR_NT0's period; reassigned to NEMEIRR_NT0
+A1b,NEMEIRR_601,5 records labelled NEMEIRR_NT100 (2013-07-10 to 2015-07-01) fall inside NEMEIRR_DK50's period; reassigned to NEMEIRR_DK50
+A1b,NEMEIRR_602,5 records labelled NEMEIRR_NT100 (2013-07-10 to 2015-07-01) fall inside NEMEIRR_NT0's period; reassigned to NEMEIRR_NT0
+A1b,NEMEIRR_603,5 records labelled NEMEIRR_NT100 (2013-07-10 to 2015-07-01) fall inside NEMEIRR_DK0's period; reassigned to NEMEIRR_DK0
+A1b,NEMEIRR_603,1 records labelled NEMEIRR_DK50 (2004-04-20 to 2004-04-20) fall inside NEMEIRR_DK0's period; reassigned to NEMEIRR_DK0
+A1b,NEMEIRR_604,5 records labelled NEMEIRR_NT100 (2013-07-10 to 2015-07-01) fall inside NEMEIRR_NT50's period; reassigned to NEMEIRR_NT50
+A1b,NEMEIRR_605,5 records labelled NEMEIRR_NT100 (2013-07-10 to 2015-07-01) fall inside NEMEIRR_DK100's period; reassigned to NEMEIRR_DK100
+A1b,NEMEIRR_605,1 records labelled NEMEIRR_DK50 (2004-04-20 to 2004-04-20) fall inside NEMEIRR_DK100's period; reassigned to NEMEIRR_DK100
+C3b,,72 later non-grain harvest records (<=150 days after grain harvest) ignored
+C3b,,192 extra harvest records of annual crops within 60 days merged into one harvest
+T1,AgCROS_NEMEIRR_101_NT0,no termination dates at this site; harvest date copied to CD_term_date of one crop

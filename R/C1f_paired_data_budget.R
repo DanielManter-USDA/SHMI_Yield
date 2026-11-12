@@ -24,6 +24,12 @@
 #   the out-of-fold comparison is C1e (Extended Data Fig. 6). Site-bootstrap interval
 #   for the R2 difference on the strict pairs.
 #
+# 3b Can a practice checklist rank each pair at all? Pair types (one practice differs;
+#   several, same way; several, opposite ways; none differ), how often the checklist and
+#   SHMI give the direction of the soil-health change (data_budget_pair_types.csv; text).
+#   Fig. 1e (SHMI on the systems pairs leave out) was dropped 7 Nov 2026: its "no partner"
+#   row mixed in reference and perennial systems; the panel is still saved in the rds.
+#
 # 4 Soil health per SHMI point from each part (all systems, within and between sites):
 #   are points interchangeable? (data_budget_parts.csv)
 #
@@ -148,6 +154,43 @@ explain_tab <- bind_rows(
   mutate(by_ndiff, set = "All within-site pairs, annual systems"))
 write.csv(mutate(explain_tab, across(where(is.double), ~ round(.x, 3))), file.path(OUT, "data_budget_explain.csv"), row.names = FALSE)
 cat("\n== What explains the change in soil health (in-sample) ==\n"); print(as.data.frame(explain_tab), digits = 3)
+
+# ---- 3b can a practice checklist rank the pair at all? (7 Nov 2026; reported in the text) ----
+# All within-site pairs of annual systems with the four practices defined (as section 3).
+# Pair types by the four practices: one differs; several differ, all the same way (the
+# checklist can still say which system should be healthier); several differ in opposite
+# directions, and none differ (the checklist cannot rank them). For each type: how often
+# the checklist and SHMI give the direction of the change in soil health, and the
+# uncentred correlation of the change in SHMI with the change in soil health (the order of
+# a pair is arbitrary). 95% intervals from site bootstrap resamples.
+ap <- ap %>% mutate(up = rowSums(DL > 0), dn = rowSums(DL < 0),
+                    type = case_when(up + dn == 0 ~ "None of the four differ",
+                                     up + dn == 1 ~ "One practice differs",
+                                     up == 0 | dn == 0 ~ "Several differ, all the same way",
+                                     TRUE ~ "Several differ, in opposite directions"),
+                    call = ifelse(up == 0 | dn == 0, sign(up - dn), NA_real_))
+r_unc <- function(x, y) sum(x * y) / sqrt(sum(x^2) * sum(y^2))
+type_stats <- function(p) p %>% group_by(type) %>%
+  summarise(pairs = n(), sites = n_distinct(sitecode),
+            checklist_ranks = mean(!is.na(call) & call != 0),
+            checklist_right = if (any(!is.na(call) & call != 0)) mean((sign(d_SH) == call)[!is.na(call) & call != 0]) else NA_real_,
+            SHMI_right = mean(sign(d_SHMI) == sign(d_SH)),
+            r_dSHMI_dSH = r_unc(d_SHMI, d_SH), .groups = "drop")
+pt <- type_stats(ap)
+ap_sites <- unique(ap$sitecode)
+pt_boot <- bind_rows(lapply(seq_len(min(B_BOOT, 1000)), function(i) {
+  s <- sample(ap_sites, replace = TRUE)
+  type_stats(bind_rows(lapply(seq_along(s), function(k) mutate(filter(ap, sitecode == s[k]), sitecode = paste0(s[k], "_", k)))))
+}))
+pt <- pt %>% left_join(pt_boot %>% group_by(type) %>%
+                         summarise(across(c(checklist_right, SHMI_right, r_dSHMI_dSH),
+                                          list(lo = ~ quantile(.x, 0.025, na.rm = TRUE), hi = ~ quantile(.x, 0.975, na.rm = TRUE)))),
+                       by = "type") %>%
+  bind_rows(tibble(type = "All pairs", pairs = nrow(ap), sites = n_distinct(ap$sitecode),
+                   checklist_ranks = mean(!is.na(ap$call) & ap$call != 0), SHMI_right = mean(sign(ap$d_SHMI) == sign(ap$d_SH)),
+                   r_dSHMI_dSH = r_unc(ap$d_SHMI, ap$d_SH)))
+write.csv(mutate(pt, across(where(is.double), ~ round(.x, 3))), file.path(OUT, "data_budget_pair_types.csv"), row.names = FALSE)
+cat("\n== Can a checklist rank the pair? ==\n"); print(as.data.frame(pt), digits = 2)
 
 # ---- 4 is a SHMI point worth the same soil health whichever part it comes from? -----------
 # SHMI = 0.687 Cover + 0.150 Diversity + 0.163 InvDist + amendment bonus (to within

@@ -33,18 +33,18 @@ SETTINGS <- list(
                                 #     keep them. The paper used the snapshot exported 2026-04-21; a newer export
                                 #     can change the workbooks and results.
                                 #     Overwrites the files in Inputs/yield_workbooks (git shows any change)
-  agcros_tables       = "Inputs/agcros/extracted_tables",   # raw AgCROS tables (run_conversion only)
+  agcros_tables       = "Inputs/agcros",   # raw AgCROS tables (run_conversion only)
 
   # Part B
   run_yield           = TRUE,   # B1-B5, B7-B8 yield analyses, figures and treatment table
-  run_weights         = FALSE,  # B5b yield slope with weights fitted between or within sites (reruns B2 three times)
+  run_weights         = TRUE,   # B5b yield slope with weights fitted between or within sites (reruns B2 three times)
   run_n_scenarios     = TRUE,   # B6  N-accounting sensitivity: 20 legume x manure scenarios (30-60 min)
-  run_coarse          = FALSE,  # B9  coarse-record test (hours)
+  run_coarse          = FALSE,   # B9  coarse-record test (hours)
   run_record_length   = TRUE,   # B2c yield slope by length of record; its current-season score feeds B2d (Fig. 3b dropped 6 Nov 2026)
   run_yield_parts     = TRUE,   # B2d yield: SHMI against its parts, Extended Data Fig. 4b (20-40 min)
 
   # Configuration
-  in_session          = FALSE,  # TRUE: run each step in this R session instead of a fresh one
+  in_session          = TRUE,  # TRUE: run each step in this R session instead of a fresh one
                                 #   (use it if a step fails with "callr subprocess failed", e.g. on Windows)
   python              = ""      # python executable; "" = RETICULATE_PYTHON (RStudio's Python option), else the PATH
 )
@@ -143,12 +143,13 @@ if (conv_needed(p)) {
   conv(c("NELITCSE", "NEMLTCRS", "NEMEIRR", "NECCIRR"),
        c("--supplement", "python/agcros2shmi/supplements/NECCIRR_amendments.csv",
          "--corrections", "python/agcros2shmi/corrections/NEMLTCRS_corrections.csv"), "B0_convert_nebraska")
-  conv(c("INWLACRE", "IAAM7071", "PAUP"), label = "B0_convert_added")
+  conv(c("INWLACRE", "IAAM7071", "PAUP"),
+       c("--supplement", "python/agcros2shmi/supplements/IAAM7071_covers.csv"), "B0_convert_added")   # IAAM7071 rye and clover (not in AgCROS)
 }
 dir.create("Outputs/yield", showWarnings = FALSE, recursive = TRUE)
 if (conv_needed(p) || !file.exists("Outputs/yield/soil_c.csv"))
   run_py(PY, c("python/build_soil_c.py", p$agcros_tables, "Outputs/yield"), "B0_soil_c")
-run_r("B0_build_napeshm_crosswalk.R")
+# retired 11 Nov 2026 (R/archive; crosswalk used only by B5): run_r("B0_build_napeshm_crosswalk.R")
 
 if (isTRUE(p$run_yield)) {
   run_r("B1_Get_SPEI.R")                    # growing-season SPEI for every site-year
@@ -156,21 +157,24 @@ if (isTRUE(p$run_yield)) {
   run_r("B2b_SHMI_soybean.R")               # soybean test, Supp. Data Fig. 1 (same experiments, scores and model; no N terms)
   if (isTRUE(p$run_record_length)) run_r("B2c_SHMI_record_length.R")   # current-season score for B2d (no longer a figure)
   if (isTRUE(p$run_yield_parts)) run_r("B2d_SHMI_yield_parts.R")       # Extended Data Fig. 4b (after B2c: current-season score)
-  run_r("B2e_SHMI_yield_adjustment.R")      # raw -> adjusted yield in three steps (talk/explainer figure; a few minutes)
+# retired 11 Nov 2026 (R/archive): run_r("B2e_SHMI_yield_adjustment.R")      # raw -> adjusted yield in three steps (talk/explainer figure; a few minutes)
   run_r("B2f_SHMI_yield_paired_budget.R")   # how much of the yield record matched pairs can use vs SHMI (several minutes)
+# retired 11 Nov 2026 (R/archive): run_r("B2h_practice_pairs.R")
   run_r("B3_SHMI_yield_stability.R")        # Fig. 4
   run_r("B4_SHMI_N_equivalent.R")           # fertilizer-N equivalent (reruns B2 in its own session)
-  run_r("B5_SHMI_soil_mediation.R")         # Supp. Data Table 3 (reruns B2 in its own session)
+# retired 11 Nov 2026 (R/archive): run_r("B5_SHMI_soil_mediation.R")         # Supp. Data Table 3 (reruns B2 in its own session)
 }
 if (isTRUE(p$run_weights)) run_r("B5b_SHMI_yield_weights_sensitivity.R")   # Methods: weights by comparison
 if (isTRUE(p$run_n_scenarios)) run_r("B6_SHMI_N_scenarios.R")               # Methods: N accounting
 if (isTRUE(p$run_yield)) {
-  run_r("B7_Assemble_manuscript_figures.R") # Figs. 3-4, Extended Data Fig. 4
+# retired 11 Nov 2026 (R/archive): run_r("B2g_ED_Fig5a.R")                   # Extended Data Fig. 5a from B2, B2f and B6 results (seconds)
+  source(here::here("R", "figures", "run_figures.R"))   # Figs 3 and 4 (replaces B7, 11 Nov 2026)
   if (!is.na(PY)) {
     run_py(PY, c("python/build_study_treatments.py", "--wb-dir", "Inputs/yield_workbooks",
                  "--units-dir", "Inputs/yield_workbooks", "--old", "data/SHMI_study_treatments_descriptions.xlsx",
                  "--out", "Outputs/SHMI_study_treatments.xlsx"), "B8_study_treatments")
   } else message("  No python: treatment table (B8) not rebuilt")
+  run_r("B8b_study_treatments_with_yield.R")   # the treatment table with SHMI and mean corn/soybean yields (seconds)
 }
 if (isTRUE(p$run_coarse)) {
   # B9. coarse records (Extended Data Fig. 5; Supp. Data Table 2); python writes the coarse
@@ -183,8 +187,10 @@ if (isTRUE(p$run_coarse)) {
 run_r("C1d_practice_additivity.R")  # practices in measured soil health (Fig. 1c); about a minute
 run_r("C1f_paired_data_budget.R")    # how much soil-health data matched pairs can use vs SHMI (about a minute)
 run_r("C1e_labels_vs_SHMI.R")       # practice labels vs SHMI at held-out sites (seconds)
+run_r("C1g_label_vs_SHMI.R")
+run_r("C1h_SHMI_vs_soil_health.R")
 run_r("C1_Fig1_and_Table1.R")       # Fig. 1, Table 1
-run_r("C1b_ED_Fig2.R")              # Extended Data Fig. 2, from the saved calibration (Outputs/Final_plus)
+# retired 11 Nov 2026 (R/archive): run_r("C1b_ED_Fig2.R")              # Extended Data Fig. 2, from the saved calibration (Outputs/Final_plus)
 run_r("C1c_ED_Fig5.R")              # Extended Data Fig. 5, from the saved coarse-record results (Outputs/Coarse)
 # When Part A was not run, its drawing steps (seconds each) are rerun from the saved
 # Part A outputs, so every display item is current; a step whose input is missing is skipped
@@ -200,6 +206,7 @@ if (!isTRUE(p$run_calibration)) {
 }
 run_r("C2_export_tables.R")         # Extended Data Table 1, Supplementary Data Tables 1-4, Tables.xlsx
 run_r("C3_collect_figures.R")       # the other figures, under the paper's numbering; manifest.csv
+run_r("C4_bundle_for_review.R")      # one zip of every small results file, for checking the text
 
 # ---- checks ----------------------------------------------------------------------
 # a rerun of Part A must reproduce the weights frozen in the SHMI package

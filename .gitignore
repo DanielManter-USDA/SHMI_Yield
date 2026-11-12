@@ -25,3 +25,5 @@ R/archive/
 R/local/
 data/archive/
 python/archive/
+# targets store (rebuilt by tar_make); _targets.yaml is shared
+_targets/

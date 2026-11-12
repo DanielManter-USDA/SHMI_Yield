@@ -2,8 +2,8 @@
 # A4b_Fig2_soil_health.R
 #
 # Manuscript Fig. 2: the whole system predicts soil health better than any part.
-#   a  out-of-fold performance of SHMI, each part alone, and unconstrained
-#      models on the same inputs (from A4a_SHMI_benchmark.R): within sites first
+#   a  out-of-fold performance of SHMI and each part alone (unconstrained models
+#      optional, FIG2_UNCONSTRAINED; from A4a_SHMI_benchmark.R): within sites first
 #      (correlation, sites ranked in the right direction), then between site means
 #      and overall R2; shaded band = SHMI's 95% range across repeated fold assignments
 #   b  out-of-fold predicted vs measured soil health, all 354 systems
@@ -14,7 +14,8 @@
 #   FIN/us_oof_predictions.csv          (A3a_SHMI_calibration_plus.R)
 #   Outputs/Benchmark/benchmark_summary.csv (A4a_SHMI_benchmark.R)
 # Output
-#   Outputs/Manuscript/Fig2.png (and .pdf)
+#   Outputs/Manuscript_work/Fig2.png (and .pdf); Fig2a_panel.rds (panel a, drawn by C1 as
+#   Fig. 1d since 7 Nov 2026) and ED_Fig_validation.png (b-d as an Extended Data figure)
 #
 # Run after A3a_SHMI_calibration_plus.R and A4a_SHMI_benchmark.R.
 ################################################################################
@@ -65,9 +66,15 @@ ROWS <- tibble::tribble(                       # benchmark name -> label, group 
   "SHMI",                         "SHMI",                          "SHMI",
   "Cover/Roots",                  "Cover/Roots alone",             "Single part",
   "Diversity",                    "Diversity alone",               "Single part",
-  "InvDist",                      "Inverse Disturbance alone",     "Single part",
+  "InvDist",                      "Inverse Disturbance alone",     "Single part")
+# 6 Nov 2026: the unconstrained models ("OLS on all inputs", "Random forest on all inputs")
+# are no longer drawn (a freely fitted model is not a transferable score); their results
+# stay in benchmark_summary.csv and Supplementary Data Table 1. Set FIG2_UNCONSTRAINED <- TRUE
+# before sourcing to draw them again.
+if (exists("FIG2_UNCONSTRAINED") && isTRUE(FIG2_UNCONSTRAINED)) ROWS <- dplyr::bind_rows(ROWS, tibble::tribble(
+  ~model,                         ~label,                          ~group,
   "OLS on all inputs",            "Linear model, all inputs",      "Unconstrained model",
-  "Random forest on all inputs",  "Random forest, all inputs",     "Unconstrained model")
+  "Random forest on all inputs",  "Random forest, all inputs",     "Unconstrained model"))
 miss <- setdiff(ROWS$model, bs$model)
 if (length(miss)) stop("Not in benchmark_summary.csv: ", paste(miss, collapse = ", "))
 
@@ -84,9 +91,18 @@ dd <- bs %>% filter(model %in% ROWS$model) %>%
   mutate(label  = factor(label, rev(ROWS$label)),
          group  = factor(group, unique(ROWS$group)),
          metric = factor(METRICS[metric], METRICS))
+
+# 10 Nov 2026: Fig. 1c shows the two within-site measures only (between-site r and R2 are
+# given in the text and Supplementary Table 1); FIG1C_ALL_METRICS <- TRUE draws all four.
+dd_all <- dd
+if (!(exists("FIG1C_ALL_METRICS") && isTRUE(FIG1C_ALL_METRICS)))
+  dd <- dd %>% filter(metric %in% METRICS[c("within_r", "sites_correct_of_all")]) %>%
+    mutate(metric = factor(ifelse(metric == METRICS[["within_r"]], "r within sites", "Sites ranked in the\nright direction (%)"),
+                           c("r within sites", "Sites ranked in the\nright direction (%)")))
+X_LAB_1C <- if (exists("FIG1C_ALL_METRICS") && isTRUE(FIG1C_ALL_METRICS)) NULL else "Median and 95% range across repeated folds\n(sites withheld from fitting)"
 band <- dd %>% filter(model == "SHMI")
 
-grp_col <- c("SHMI" = "#1b6ca8", "Single part" = "#8a8a8a", "Unconstrained model" = "#e6a141")
+grp_col <- c("SHMI" = "#1b6ca8", "Single part" = "#8a8a8a", "Unconstrained model" = "#e6a141")[levels(dd$group)]
 pd <- ggplot(dd, aes(med, label, colour = group)) +
   geom_rect(data = band, inherit.aes = FALSE, aes(xmin = lo, xmax = hi, ymin = -Inf, ymax = Inf),
             fill = "#1b6ca8", alpha = 0.15) +
@@ -95,7 +111,7 @@ pd <- ggplot(dd, aes(med, label, colour = group)) +
   geom_point(size = 2.4) +
   facet_wrap(~ metric, nrow = 1, scales = "free_x") +
   scale_colour_manual(values = grp_col, name = NULL) +
-  labs(title = "a", x = "Median and 95% range across repeated fold assignments (sites withheld from fitting)", y = NULL) +
+  labs(title = "a", x = if (exists("X_LAB_1C") && !is.null(X_LAB_1C)) X_LAB_1C else "Median and 95% range across repeated fold assignments (sites withheld from fitting)", y = NULL) +
   tag_theme +
   theme(legend.position = "bottom", strip.background = element_blank(),
         strip.text = element_text(size = 10, face = "bold"),
@@ -104,7 +120,7 @@ pd <- ggplot(dd, aes(med, label, colour = group)) +
 
 # Numbers for the text and caption
 cat("\nPanel a (median [95% range])\n")
-print(dd %>% arrange(metric, desc(label)) %>%
+print(dd_all %>% arrange(metric, desc(label)) %>%
         transmute(metric, label, value = sprintf("%.2f [%.2f, %.2f]", med, lo, hi)) %>% as.data.frame(),
       row.names = FALSE)
 if ("SHMI, published weights (fixed)" %in% bs$model) {
@@ -118,7 +134,14 @@ if ("SHMI, published weights (fixed)" %in% bs$model) {
 # Assemble
 # ------------------------------------------------------------------------------
 # the comparison with the parts leads; the fit panels support it, smaller
-fig <- pd / (pa | pb | pc) + patchwork::plot_layout(heights = c(1, 0.75))
+fig <- patchwork::wrap_elements(full = pd) / (pa | pb | pc) + patchwork::plot_layout(heights = c(1, 0.75))
 ggsave(file.path(OUT, "Fig2.png"), fig, width = 13, height = 8, dpi = 300)
 ggsave(file.path(OUT, "Fig2.pdf"), fig, width = 13, height = 8)
 cat("\nSaved Fig2.png/.pdf in", OUT, "\n")
+
+# 7 Nov 2026 (main figures merged to fit Nature's page budget): panel a goes into Fig. 1
+# (as 1d, drawn by C1 from this rds), and b-d become an Extended Data figure, relettered a-c.
+saveRDS(pd + labs(title = NULL), file.path(OUT, "Fig2a_panel.rds"))
+ed_val <- (pa + labs(title = "a")) | (pb + labs(title = "b")) | (pc + labs(title = "c"))
+ggsave(file.path(OUT, "ED_Fig_validation.png"), ed_val, width = 13, height = 4.4, dpi = 300, bg = "white")
+cat("Saved Fig2a_panel.rds (for C1) and ED_Fig_validation.png in", OUT, "\n")

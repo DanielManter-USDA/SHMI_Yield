@@ -1,0 +1,108 @@
+rule,unit,message
+C3b,,337 extra harvest records of annual crops within 60 days merged into one harvest
+C3,AgCROS_NECCIRR_001_DfctX0N,2014-05-02 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_007_FullX0N,2010-04-21 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_007_FullX0N,2014-05-02 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_008_FullX0A,2010-04-21 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_101_FullX125A,2010-04-21 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_102_FullX200N,2010-04-21 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_107_FullC200N,2010-04-21 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_108_FullC125A,2010-04-21 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_110_FullM200N,2010-04-21 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_111_FullM125A,2010-04-21 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_115_DfctC200N,2010-04-21 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_116_DfctC125A,2010-04-21 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_117_DfctM200A,2010-04-21 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_120_DfctM125N,2010-04-21 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_123_DfctX200N,2010-04-21 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_124_DfctX125A,2010-04-21 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_201_DfctX200N,2010-04-21 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_202_DfctX125A,2010-04-21 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_207_DfctM125N,2010-04-21 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_208_DfctM200A,2010-04-21 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_209_DfctC125A,2010-04-21 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_210_DfctC200N,2010-04-21 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_215_FullC200A,2010-04-21 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_216_FullC125N,2010-04-21 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_219_FullX200N,2010-04-21 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_220_FullX125A,2010-04-21 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_222_FullM200N,2010-04-21 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_223_FullM125A,2010-04-21 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_303_FullM125N,2010-04-21 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_304_FullM200A,2010-04-21 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_305_FullX200A,2010-04-21 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_306_FullX125N,2010-04-21 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_311_FullC200A,2010-04-21 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_312_FullC125N,2010-04-21 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_313_DfctM200A,2010-04-21 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_314_DfctM125N,2010-04-21 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_317_DfctX125N,2010-04-21 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_320_DfctX200A,2010-04-21 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_323_DfctC200A,2010-04-21 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_324_DfctC125N,2010-04-21 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_401_DfctC200N,2010-04-21 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_402_DfctC125A,2010-04-21 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_407_DfctM200A,2010-04-21 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_408_DfctM125N,2010-04-21 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_409_DfctX200A,2010-04-21 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_410_DfctX125N,2010-04-21 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_414_FullX125N,2010-04-21 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_415_FullX200A,2010-04-21 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_417_FullC125A,2010-04-21 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_418_FullC200N,2010-04-21 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_421_FullM200N,2010-04-21 Corn: no harvest record; harvest date left blank
+C3,AgCROS_NECCIRR_422_FullM125A,2010-04-21 Corn: no harvest record; harvest date left blank
+C3c,AgCROS_NECCIRR_001_DfctX0N,2014-05-02 Corn: no harvest record; site's most common harvest date 2014-10-01 used
+C3c,AgCROS_NECCIRR_007_FullX0N,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+C3c,AgCROS_NECCIRR_007_FullX0N,2014-05-02 Corn: no harvest record; site's most common harvest date 2014-10-01 used
+C3c,AgCROS_NECCIRR_008_FullX0A,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+C3c,AgCROS_NECCIRR_101_FullX125A,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+C3c,AgCROS_NECCIRR_102_FullX200N,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+C3c,AgCROS_NECCIRR_107_FullC200N,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+C3c,AgCROS_NECCIRR_108_FullC125A,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+C3c,AgCROS_NECCIRR_110_FullM200N,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+C3c,AgCROS_NECCIRR_111_FullM125A,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+C3c,AgCROS_NECCIRR_115_DfctC200N,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+C3c,AgCROS_NECCIRR_116_DfctC125A,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+C3c,AgCROS_NECCIRR_117_DfctM200A,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+C3c,AgCROS_NECCIRR_120_DfctM125N,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+C3c,AgCROS_NECCIRR_123_DfctX200N,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+C3c,AgCROS_NECCIRR_124_DfctX125A,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+C3c,AgCROS_NECCIRR_201_DfctX200N,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+C3c,AgCROS_NECCIRR_202_DfctX125A,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+C3c,AgCROS_NECCIRR_207_DfctM125N,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+C3c,AgCROS_NECCIRR_208_DfctM200A,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+C3c,AgCROS_NECCIRR_209_DfctC125A,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+C3c,AgCROS_NECCIRR_210_DfctC200N,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+C3c,AgCROS_NECCIRR_215_FullC200A,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+C3c,AgCROS_NECCIRR_216_FullC125N,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+C3c,AgCROS_NECCIRR_219_FullX200N,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+C3c,AgCROS_NECCIRR_220_FullX125A,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+C3c,AgCROS_NECCIRR_222_FullM200N,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+C3c,AgCROS_NECCIRR_223_FullM125A,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+C3c,AgCROS_NECCIRR_303_FullM125N,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+C3c,AgCROS_NECCIRR_304_FullM200A,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+C3c,AgCROS_NECCIRR_305_FullX200A,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+C3c,AgCROS_NECCIRR_306_FullX125N,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+C3c,AgCROS_NECCIRR_311_FullC200A,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+C3c,AgCROS_NECCIRR_312_FullC125N,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+C3c,AgCROS_NECCIRR_313_DfctM200A,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+C3c,AgCROS_NECCIRR_314_DfctM125N,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+C3c,AgCROS_NECCIRR_317_DfctX125N,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+C3c,AgCROS_NECCIRR_320_DfctX200A,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+C3c,AgCROS_NECCIRR_323_DfctC200A,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+C3c,AgCROS_NECCIRR_324_DfctC125N,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+C3c,AgCROS_NECCIRR_401_DfctC200N,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+C3c,AgCROS_NECCIRR_402_DfctC125A,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+C3c,AgCROS_NECCIRR_407_DfctM200A,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+C3c,AgCROS_NECCIRR_408_DfctM125N,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+C3c,AgCROS_NECCIRR_409_DfctX200A,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+C3c,AgCROS_NECCIRR_410_DfctX125N,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+C3c,AgCROS_NECCIRR_414_FullX125N,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+C3c,AgCROS_NECCIRR_415_FullX200A,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+C3c,AgCROS_NECCIRR_417_FullC125A,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+C3c,AgCROS_NECCIRR_418_FullC200N,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+C3c,AgCROS_NECCIRR_421_FullM200N,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+C3c,AgCROS_NECCIRR_422_FullM125A,2010-04-21 Corn: no harvest record; site's most common harvest date 2010-09-23 used
+S1,,992 supplement rows added from NECCIRR_amendments.csv
+T1,AgCROS_NECCIRR_001_DfctX0N,no termination dates at this site; harvest date copied to CD_term_date of one crop

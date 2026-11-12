@@ -1,7 +1,7 @@
 ﻿"System","SHMI","ΔSHMI","Yield change, kg ha-1","bu ac-1","Value, $ ac-1"
-"Conventional-till continuous corn",47,-1,-20,-0.4,-2
+"Conventional-till continuous corn",47,-1,-19,-0.4,-2
 "Conventional-till corn–soybean (reference)",48,0,0,0,0
 "+ no-till",55,7,NA,NA,NA
-"+ cereal rye cover crop",77,29,635,12,54
-"+ manure",79,31,688,13,58
-"+ no-till, rye and manure",93,45,1001,18.9,85
+"+ cereal rye cover crop",77,29,600,11.3,51
+"+ manure",79,31,650,12.3,55
+"+ no-till, rye and manure",93,45,946,17.8,80

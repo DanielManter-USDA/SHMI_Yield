@@ -40,6 +40,10 @@ if (exists("RL_K_OVERRIDE")) OUT <- paste0(OUT, "_K", paste(K_SET, collapse = "-
 dir.create(OUT, recursive = TRUE, showWarnings = FALSE)
 N_REF   <- 150
 REBUILD <- exists("RL_REBUILD") && isTRUE(RL_REBUILD)   # TRUE: recompute the rolling scores
+# RL_FULL (11 Nov 2026): FALSE (default) stops after the rolling scores, which is all B2d
+# needs (the current-season score); TRUE also runs the record-length analysis (about an
+# hour of model fits; not in the paper).
+FULL <- exists("RL_FULL") && isTRUE(RL_FULL)
 ctrl <- lmeControl(opt = "optim", maxIter = 200, msMaxIter = 200)
 
 D <- readRDS(IN)
@@ -60,6 +64,14 @@ shmi_window <- function(inputs, climate, start, end) {       # as B2's shmi_for_
            error = function(e) { message("    ", start, " to ", end, ": ", conditionMessage(e)); NULL })
 }
 roll_file <- file.path(OUT, "rolling_shmi.rds")
+# rescore when B2's data has changed since the scores were made (new workbooks or package);
+# the check is on the file's contents, so rerunning B2 with nothing changed keeps the scores
+src_md5  <- unname(tools::md5sum(IN))
+md5_file <- sub("\\.rds$", "_source.md5", roll_file)
+if (file.exists(roll_file) && (!file.exists(md5_file) || readLines(md5_file, warn = FALSE)[1] != src_md5)) {
+  if (file.exists(md5_file)) { message("B2's data changed since ", roll_file, " was made: rescoring"); REBUILD <- TRUE }
+  else writeLines(src_md5, md5_file)   # first run with this check: keep the existing scores
+}
 if (file.exists(roll_file) && !REBUILD) {
   roll <- readRDS(roll_file)
 } else {
@@ -76,9 +88,11 @@ if (file.exists(roll_file) && !REBUILD) {
         x %>% mutate(site = s, year = year, K = K)
       })
   })
-  saveRDS(roll, roll_file)
+  saveRDS(roll, roll_file); writeLines(src_md5, md5_file)
 }
 
+if (!FULL) message("Rolling scores ready (", roll_file, "); record-length analysis skipped (RL_FULL <- TRUE to run it)")
+if (FULL) {
 # a window is complete when it starts no earlier than the record (allowing the record to
 # start up to three months into the first crop year, e.g. on 1 January): with K = 4, a
 # plot's first three harvests have no complete window
@@ -219,3 +233,4 @@ if (requireNamespace("ggplot2", quietly = TRUE)) {
   ggsave(file.path(OUT, "Fig_record_length.pdf"), g, width = 5.5, height = 4)
 }
 message("Record-length test done: ", OUT)
+}   # end if (FULL)

@@ -20,11 +20,15 @@
 # The old manuscript number (13 kg grain per kg N) is the average over 112-200 kg N,
 # printed here for comparison.
 #
-# RUN: after B2_SHMI_yield_main.R in the same R session (it uses m_full, corn,
-#      n_var_sites, N_REF, AGE_MEAN, OUT); sources it if m_full is missing.
+# RUN: after B2_SHMI_yield_main.R. Uses m_full, corn, n_var_sites, N_REF, AGE_MEAN and OUT
+#      from B2's B2_model.rds (or from the session, or by sourcing B2 if neither exists).
 # Outputs (OUT): N_equivalent.csv, N_equivalent_by_site.csv, Fig_N_equivalent.png
 ################################################################################
-if (!exists("m_full")) source(here::here("R", "B2_SHMI_yield_main.R"))
+# 11 Nov 2026: B2 saves its fitted model (B2_model.rds); B4 loads it instead of rerunning B2
+if (!exists("m_full")) {
+  mf <- here::here("Outputs", "yield_main_default_total_agcros", "B2_model.rds")
+  if (file.exists(mf)) list2env(readRDS(mf), environment()) else source(here::here("R", "B2_SHMI_yield_main.R"))
+}
 suppressPackageStartupMessages({ library(dplyr); library(tidyr); library(ggplot2); library(nlme) })
 
 N_GRID   <- seq(25, 250, by = 5)     # kg N/ha for the curves

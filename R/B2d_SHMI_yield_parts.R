@@ -40,6 +40,19 @@ if (!file.exists(IN)) stop(IN, " not found: run B2_SHMI_yield_main.R first")
 dir.create(OUT, recursive = TRUE, showWarnings = FALSE)
 ctrl <- lmeControl(opt = "optim", maxIter = 200, msMaxIter = 200)
 W <- c(Cover = 0.687, Diversity = 0.150, InvDist = 0.163); AMEND_GAP <- 0.60
+# 11 Nov 2026: the ~170 model fits run in parallel. B2D_WORKERS sets the number of R
+# processes (default: cores - 1, at most 6; 1 = one after another, as before). The fits and
+# results are the same either way.
+WORKERS <- if (exists("B2D_WORKERS")) B2D_WORKERS else max(1, min(6, parallel::detectCores() - 1))
+par_map <- function(X, FUN) {
+  if (WORKERS <= 1 || length(X) < 2) return(lapply(X, FUN))
+  cl <- parallel::makeCluster(min(WORKERS, length(X)))
+  on.exit(parallel::stopCluster(cl))
+  parallel::clusterEvalQ(cl, suppressPackageStartupMessages({ library(dplyr); library(purrr); library(nlme); library(tibble) }))
+  e <- environment(FUN)
+  parallel::clusterExport(cl, ls(e, all.names = TRUE), envir = e)
+  parallel::parLapply(cl, X, FUN)
+}
 
 REDRAW <- exists("B2D_REDRAW") && isTRUE(B2D_REDRAW)   # TRUE: only redraw the figure from yield_parts.csv
 if (!REDRAW) {
@@ -66,7 +79,21 @@ message("Parts: ", paste(c(col_cover, col_div, col_inv, col_amend), collapse = "
 corn <- corn %>% mutate(P_cover = .data[[col_cover]], P_div = .data[[col_div]], P_inv = .data[[col_inv]],
                         P_amend = 100 * .data[[col_amend]],
                         EQ_base = (P_cover + P_div + P_inv) / 3,
-                        P_equal = EQ_base + AMEND_GAP * .data[[col_amend]] * (100 - EQ_base))
+                        P_equal = EQ_base + AMEND_GAP * .data[[col_amend]] * (100 - EQ_base),
+                        # 10 Nov 2026: the variants of Supplementary Table 1, with the published
+                        # weights (the remaining parts' weights rescaled to sum to 1; the amendment
+                        # term applied as in SHMI). SHMI_base: SHMI without the amendment term.
+                        P_base   = W[["Cover"]] * P_cover + W[["Diversity"]] * P_div + W[["InvDist"]] * P_inv,
+                        B_nocov  = (W[["Diversity"]] * P_div + W[["InvDist"]] * P_inv) / (W[["Diversity"]] + W[["InvDist"]]),
+                        B_nodiv  = (W[["Cover"]] * P_cover + W[["InvDist"]] * P_inv) / (W[["Cover"]] + W[["InvDist"]]),
+                        B_noinv  = (W[["Cover"]] * P_cover + W[["Diversity"]] * P_div) / (W[["Cover"]] + W[["Diversity"]]),
+                        P_nocov  = B_nocov + AMEND_GAP * .data[[col_amend]] * (100 - B_nocov),
+                        P_nodiv  = B_nodiv + AMEND_GAP * .data[[col_amend]] * (100 - B_nodiv),
+                        P_noinv  = B_noinv + AMEND_GAP * .data[[col_amend]] * (100 - B_noinv))
+# check: SHMI rebuilt from its parts with these formulas (should be ~1; if not, the variants
+# above are approximations of the package's scoring and the log says so)
+chk <- cor(corn$SHMI, corn$P_base + AMEND_GAP * corn[[col_amend]] * (100 - corn$P_base), use = "complete.obs")
+message(sprintf("SHMI rebuilt from its parts: r = %.4f", chk))
 
 # current-season SHMI (B2c, K = 1), if available
 has_k1 <- file.exists(ROLL)
@@ -76,7 +103,10 @@ if (has_k1) {
 }
 CAND <- c("SHMI" = "SHMI", "Cover/Roots alone" = "P_cover", "Diversity alone" = "P_div",
           "Inverse Disturbance alone" = "P_inv", "Share of years amended alone" = "P_amend",
-          "SHMI, equal weights" = "P_equal", if (has_k1) c("SHMI, current season only" = "P_season"))
+          "SHMI, equal weights" = "P_equal", "SHMI_base (no amendment term)" = "P_base",
+          "SHMI without Cover/Roots" = "P_nocov", "SHMI without Diversity" = "P_nodiv",
+          "SHMI without Inverse Disturbance" = "P_noinv",
+          if (has_k1) c("SHMI, current season only" = "P_season"))
 d <- corn %>% filter(if_all(all_of(unname(CAND)), ~ !is.na(.x))) %>% droplevels()
 message(nrow(d), " of ", nrow(corn), " corn plot-years have every score")
 for (v in unname(CAND)) d <- d %>% group_by(site) %>% mutate("{v}_w" := .data[[v]] - mean(.data[[v]])) %>% ungroup()
@@ -98,16 +128,36 @@ base_rhs <- c("site_year", n_terms(d), fac_term(d, "other"), xtra(d))
 inter <- function(x) c(x, if (varies(d, "N_c")) paste0(x, ":N_c"), paste0(x, ":age_c"))
 
 # one candidate on data dd: AIC (ML) and the yield change per within-site SD (single scores)
-one <- function(label, x, dd = d) {
+# 10 Nov 2026: also likelihood-ratio tests (ML) of nested models against SHMI: does the
+# candidate add to SHMI (SHMI vs SHMI + candidate), and does SHMI add to the candidate
+# (candidate vs SHMI + candidate)? Each score enters with its N and age interactions.
+NESTED <- !exists("B2D_NO_NESTED")
+terms_of <- function(xw, dd) c(xw, if (varies(dd, "N_c")) paste0(xw, ":N_c"), paste0(xw, ":age_c"))
+lrt <- function(m0, m1) {
+  a <- anova(m0, m1); tibble(chisq = a$L.Ratio[2], df = a$df[2] - a$df[1], p = a$`p-value`[2])
+}
+one <- function(label, x, dd = d, nested = FALSE) {
   xw <- paste0(x, "_w")
   rhs <- c("site_year", n_terms(dd), fac_term(dd, "other"), xtra(dd))
-  m  <- fit(dd, c(rhs, xw, if (varies(dd, "N_c")) paste0(xw, ":N_c"), paste0(xw, ":age_c")), "ML")
+  m  <- fit(dd, c(rhs, terms_of(xw, dd)), "ML")
   b  <- fixef(m); V <- vcov(m); cn <- nm(xw); sdx <- sd(dd[[xw]])
   est <- b[[cn]] * sdx; se <- sqrt(V[cn, cn]) * sdx
-  tibble(score = label, AIC = AIC(m), slope_per_sd = est, se = se, lower = est - 1.96 * se, upper = est + 1.96 * se)
+  out <- tibble(score = label, AIC = AIC(m), slope_per_sd = est, se = se, lower = est - 1.96 * se, upper = est + 1.96 * se,
+                p_slope = 2 * pnorm(-abs(est / se)))
+  if (nested && x != "SHMI") {
+    m_ref  <- fit(dd, c(rhs, terms_of("SHMI_w", dd)), "ML")
+    m_both <- tryCatch(fit(dd, c(rhs, terms_of("SHMI_w", dd), terms_of(xw, dd)), "ML"), error = function(e) NULL)
+    if (!is.null(m_both) && length(fixef(m_both)) > length(fixef(m_ref))) {
+      a1 <- lrt(m_ref, m_both); a2 <- lrt(m, m_both)
+      out <- out %>% mutate(p_adds_to_SHMI = a1$p, df_adds = a1$df, p_SHMI_adds = a2$p, df_SHMI_adds = a2$df)
+    } else out <- out %>% mutate(p_adds_to_SHMI = NA_real_, p_SHMI_adds = NA_real_)   # aliased with SHMI
+  }
+  out
 }
-res <- bind_rows(unname(imap(CAND, function(v, lab) one(lab, v)))) %>%
-  mutate(dAIC_vs_SHMI = AIC - AIC[score == "SHMI"])
+message("Fitting ", length(CAND), " scores (", WORKERS, " R processes)")
+res <- bind_rows(par_map(seq_along(CAND), function(i) one(names(CAND)[i], unname(CAND)[i], nested = NESTED))) %>%
+  mutate(dAIC_vs_SHMI = AIC - AIC[score == "SHMI"],
+         pct_of_SHMI = 100 * slope_per_sd / slope_per_sd[score == "SHMI"])
 
 # weights yield would choose: all four parts entered together (in-sample; reported, not plotted)
 xw4 <- c("P_cover_w", "P_div_w", "P_inv_w", "P_amend_w")
@@ -123,7 +173,8 @@ write.csv(mutate(free, across(where(is.double), ~ signif(.x, 4))), file.path(OUT
 cat("\nParts entered together (in-sample), and the weights they imply:\n"); print(free, width = Inf)
 
 # each experiment's own model: is the slope positive?
-sites <- imap_dfr(CAND, function(v, lab) split(d, d$site) %>% imap_dfr(function(ds, s) {
+sites <- bind_rows(par_map(seq_along(CAND), function(i) { v <- unname(CAND)[i]; lab <- names(CAND)[i]
+ split(d, d$site) %>% imap_dfr(function(ds, s) {
   ds <- droplevels(ds); x <- paste0(v, "_w")
   if (sd(ds[[x]]) < 1e-8) return(NULL)
   m <- tryCatch(fit(ds, c("site_year", n_terms(ds), fac_term(ds, "other"), xtra(ds), x), "REML"),
@@ -131,6 +182,7 @@ sites <- imap_dfr(CAND, function(v, lab) split(d, d$site) %>% imap_dfr(function(
   if (is.null(m)) return(NULL)
   tt <- summary(m)$tTable[nm(x), ]
   tibble(score = lab, site = s, slope_per_10 = 10 * tt[["Value"]], p = tt[["p-value"]])
+ })
 }))
 pos <- sites %>% group_by(score) %>% summarise(experiments = n(), positive = sum(slope_per_10 > 0),
                                                positive_p05 = sum(slope_per_10 > 0 & p < 0.05), .groups = "drop")
@@ -139,12 +191,12 @@ pos <- sites %>% group_by(score) %>% summarise(experiments = n(), positive = sum
 # (every candidate refitted without it; 10 x candidates ML fits, the slow part)
 DO_LOO <- !exists("B2D_NO_LOO")
 if (DO_LOO) {
-  loo <- map_dfr(sort(unique(as.character(d$site))), function(s) {
-    message("  leaving out ", s)
+  message("Leaving out each experiment in turn (", WORKERS, " R processes)")
+  loo <- bind_rows(par_map(sort(unique(as.character(d$site))), function(s) {
     dd <- droplevels(filter(d, site != s))
     bind_rows(unname(imap(CAND, function(v, lab) one(lab, v, dd)))) %>%
       mutate(left_out = s, dAIC_vs_SHMI = AIC - AIC[score == "SHMI"])
-  })
+  }))
   write.csv(mutate(loo, across(where(is.double), ~ signif(.x, 4))), file.path(OUT, "yield_parts_loo.csv"), row.names = FALSE)
   rng <- loo %>% group_by(score) %>%
     summarise(dAIC_loo_min = min(dAIC_vs_SHMI), dAIC_loo_max = max(dAIC_vs_SHMI),
@@ -168,6 +220,17 @@ cat("\nCorn yield within sites: SHMI against its parts (same", nrow(d), "plot-ye
 # ---- figure (Extended Data Fig. 4b, assembled by B7) ---------------------------------------------------
 # two panels; the AIC comparison (yield_parts.csv) is reported in the legend
 # bars: range when each experiment is left out in turn (if run), else the slope's 95% CI
+# 6 Nov 2026: the figure drops the current-season score (B2D_SHOW_SEASON) and the count of
+# experiments with a positive slope (B2D_SHOW_COUNT; it raised the question of significance and
+# Extended Data Fig. 5a now shows each experiment's slope); yield_parts.csv keeps every row.
+if (!exists("B2D_SHOW_SEASON")) B2D_SHOW_SEASON <- FALSE
+if (!exists("B2D_SHOW_COUNT"))  B2D_SHOW_COUNT  <- FALSE
+if (!exists("B2D_SHOW_EQUAL"))  B2D_SHOW_EQUAL  <- FALSE   # equal weights: reported in the legend / Supp. Data Table 1
+res_fig <- res %>% filter(score != "All parts entered freely", B2D_SHOW_SEASON | score != "SHMI, current season only",
+                          B2D_SHOW_EQUAL | score != "SHMI, equal weights",
+                          !score %in% c("SHMI_base (no amendment term)", "SHMI without Cover/Roots",
+                                        "SHMI without Diversity", "SHMI without Inverse Disturbance"))
+res <- res_fig
 lev <- rev(res$score)
 lo_s <- if (DO_LOO) res$slope_loo_min else res$lower; hi_s <- if (DO_LOO) res$slope_loo_max else res$upper
 P1 <- "Experiments with a positive slope"
@@ -175,6 +238,7 @@ P3 <- "Yield change per within-site SD of the score (kg/ha)"
 fd <- bind_rows(
   res %>% transmute(score, panel = P1, est = positive, lo = NA, hi = NA, txt = sprintf("%d of %d", positive, experiments)),
   res %>% transmute(score, panel = P3, est = slope_per_sd, lo = lo_s, hi = hi_s)) %>%
+  filter(B2D_SHOW_COUNT | panel != P1) %>%
   mutate(panel = factor(panel, c(P1, P3)), score = factor(score, lev),
          grp = case_when(score == "SHMI" ~ "SHMI", grepl("alone", score) ~ "Single part", TRUE ~ "Other"))
 g <- ggplot(fd, aes(est, score, colour = grp)) +
@@ -190,6 +254,7 @@ g <- ggplot(fd, aes(est, score, colour = grp)) +
   theme_bw(base_size = 10) +
   theme(legend.position = "bottom", strip.background = element_blank(), strip.text = element_text(face = "bold"),
         panel.spacing.x = unit(1.5, "lines"))                     # keeps axis labels of adjacent panels apart
-ggsave(file.path(OUT, "Fig_yield_parts.png"), g, width = 8, height = 3.6, dpi = 300)
-ggsave(file.path(OUT, "Fig_yield_parts.pdf"), g, width = 8, height = 3.6)
+W_FIG <- if (B2D_SHOW_COUNT) 8 else 5
+ggsave(file.path(OUT, "Fig_yield_parts.png"), g, width = W_FIG, height = 3.3, dpi = 300)
+ggsave(file.path(OUT, "Fig_yield_parts.pdf"), g, width = W_FIG, height = 3.3)
 message("Yield parts comparison done: ", OUT)
