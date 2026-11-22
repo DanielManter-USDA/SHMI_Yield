@@ -2,11 +2,24 @@
 Outputs/*
 # the manuscript's display items are shared (written by the C steps of run_all.R)
 !Outputs/Manuscript
+# frozen Part A outputs read by the pipeline (Parts B and C), so it runs without rerunning
+# Part A (hours; downloads WorldClim and Daymet). About 4 MB in all.
+!Outputs/Final_plus/
+!Outputs/Benchmark/
+!Outputs/SHAPE/
+!Outputs/semDF_prepped.rds
+!Outputs/sem_noMX_projection.rds
+!Outputs/sem_noMX_standardized.csv
+!Outputs/adjustment_slopes_noMX.csv
+!Outputs/site_climate_monthly.rds
+!Outputs/site_climate_monthly.csv
 Outputs_ref/
 *.html
 .Rproj.user/
 .Rhistory
 .RData
+.Renviron
+.env
 __pycache__/
 # inputs: only the SHMI workbooks (and this README) are shared. The raw AgCROS tables,
 # the SPEI grid and the NAPESHM source files are not redistributed (see Inputs/README.md)

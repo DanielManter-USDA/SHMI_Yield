@@ -15,7 +15,7 @@ SHMI scores are computed with the SHMI R package, version 2.0.0: https://github.
 
 1. Open `SHMI_Yield.Rproj` in RStudio.
 2. Run `install_packages.R` (includes `targets`), then install SHMI 2.0.0 (`remotes::install_github("DanielManter-USDA/SHMI@v2.0.0")`). Python 3.9+ (`pip install pandas openpyxl numpy`) is needed only to rebuild workbooks (A0, B0) and the treatment table (B8).
-3. Everything needed is in the repository except the raw AgCROS tables (below). The SPEI grid (`Inputs/climate/spei03.nc`, see `Inputs/README.md`) is optional: without it, the site values in `data/cache/site_spei.csv` are used.
+3. Everything needed is in the repository except the raw AgCROS tables (below), including the saved Part A outputs the pipeline reads (`Outputs/Final_plus/`, `Outputs/Benchmark/`, `Outputs/SHAPE/` and the `Outputs/sem_noMX_*`, `semDF_prepped` and `site_climate_monthly` files), so Parts B and C run without rerunning Part A. B3 downloads the USDA-RMA cause-of-loss files from the RMA public server on its first run (cached in `Outputs/yield/`). The SPEI grid (`Inputs/climate/spei03.nc`, see `Inputs/README.md`) is optional: without it, the site values in `data/cache/site_spei.csv` are used.
 4. **Parts B and C (yield, soil-health comparisons, display items): use the `targets` pipeline.**
 
    ```r
@@ -122,6 +122,7 @@ Only the analyses in the paper are included. Scripts for analyses tried during t
 - **`data/cache/nass_site_county_corn_yield.csv`:** USDA-NASS county corn yields for the yield sites, so no NASS key is needed.
 - **`data/cache/site_soils_ssurgo.csv`:** gSSURGO soil groups by NAPESHM site, so gSSURGO is not needed.
 - **`data/cache/site_spei.csv`:** SPEI-3 at each yield site, so the SPEI grid is not needed.
+- **`data/treatment_labels.csv`:** practice labels, median recorded N and other factors for each yield treatment, used in Supplementary Table 3 (from a retired script).
 - **`data/SHAPE_by_unit_with_SHMI.csv`:** SHAPE scores, measured soil health and SHMI by NAPESHM system (output of A6a-A6b), used when Part A is not run.
 - **`python/agcros2shmi/supplements/`:** NECCIRR fertilizer and manure (missing from AgCROS; UNL CropWatch 2017) and IAAM7071 cover-crop dates (supplied by the site).
 - **`python/agcros2shmi/corrections/NEMLTCRS_corrections.csv`:** two record errors in AgCROS, with their evidence.

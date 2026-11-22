@@ -12,7 +12,7 @@
 # Neither yield adjusts for N or the other treatment factors (that is the model's job).
 #
 # Input   Outputs/SHMI_study_treatments.xlsx (B8); Outputs/yield_main_default_total_agcros/
-#         B2_data.rds (B2); Outputs/yield_paired_budget/treatment_labels.csv (B2f);
+#         B2_data.rds (B2); data/treatment_labels.csv (from B2f, retired);
 #         Outputs/yield_soybean/soy_treatment_yields.csv (B2b)
 # Output  Outputs/SHMI_study_treatments_with_yield.xlsx
 ################################################################################
@@ -39,8 +39,12 @@ corn_trt <- corn %>% group_by(site, year) %>% mutate(dev = yield_kgha - mean(yie
             yield_mean = round(mean(yield_kgha)), yield_sd = round(sd(yield_kgha)),
             yield_vs_siteyr = round(mean(dev)), .groups = "drop")
 
-lab_f <- "Outputs/yield_paired_budget/treatment_labels.csv"
-lab <- if (file.exists(lab_f)) read.csv(lab_f, stringsAsFactors = FALSE) %>%
+# Treatment labels, median recorded N and other factors were written by B2f (retired; not in the
+# paper). Its output is shipped as data/treatment_labels.csv, so this table does not need B2f.
+lab_f <- c("Outputs/yield_paired_budget/treatment_labels.csv", "data/treatment_labels.csv")
+lab_f <- lab_f[file.exists(lab_f)][1]
+if (is.na(lab_f)) warning("data/treatment_labels.csv not found: label, N_rec_median and other_factor columns left out")
+lab <- if (!is.na(lab_f)) read.csv(lab_f, stringsAsFactors = FALSE) %>%
   transmute(trt = as.character(trt), N_rec_median = N_rec, other_factor = other,
             label_cover = cover, label_tillage = tillage, label_rotation = rotation, label_manure = manure) else NULL
 soy_f <- "Outputs/yield_soybean/soy_treatment_yields.csv"
