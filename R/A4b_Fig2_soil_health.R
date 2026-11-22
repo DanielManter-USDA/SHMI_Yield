@@ -123,9 +123,9 @@ cat("\nPanel a (median [95% range])\n")
 print(dd_all %>% arrange(metric, desc(label)) %>%
         transmute(metric, label, value = sprintf("%.2f [%.2f, %.2f]", med, lo, hi)) %>% as.data.frame(),
       row.names = FALSE)
-if ("SHMI, published weights (fixed)" %in% bs$model) {
-  fx <- bs %>% filter(model %in% c("SHMI", "SHMI, published weights (fixed)"))
-  cat("\nRefitted vs published weights (for the caption):\n")
+if ("SHMI, weights refitted in each fold" %in% bs$model) {
+  fx <- bs %>% filter(model %in% c("SHMI", "SHMI, weights refitted in each fold"))
+  cat("\nPublished vs refitted weights (for the caption):\n")
   print(fx %>% select(model, R2, between_r, within_r, sites_correct_of_all) %>%
           mutate(across(where(is.numeric), ~ round(.x, 3))), row.names = FALSE)
 }

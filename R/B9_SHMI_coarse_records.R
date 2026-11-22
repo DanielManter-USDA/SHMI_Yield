@@ -31,6 +31,22 @@
 #                            no manure or grazing (not visible)
 #      Remote sensing + reported manure, grazing   the remote-sensing record with
 #                            manure, compost and grazing added from the farmer
+# d. (17 Nov 2026) Categories that existing data sources report, with no random error:
+#    each piece of detail reduced to a category, deterministically, so the test asks what
+#    information SHMI needs rather than how much simulated error it tolerates
+#      Dates            NASS Crop Progress: the day the state reached 50% planted or
+#                       harvested that year (B9a_NASS_progress.R; non-US sites and crops
+#                       NASS does not report keep the site-typical date)
+#      Cover crops      presence only, from 14 days after harvest to 14 days before the
+#                       next planting (dates unknown as well as species)
+#      Tillage          class only, one pass of the class's representative implement
+#                       (T-DISC; nothing borrowed from the site's own record)
+#      Crops, manure    main crop only (CROP) and manure and grazing removed (AMEND), as in a
+#      Record types     categories only (CAT), and categories with farmer-reported manure,
+#                       compost and grazing (CATM)
+#    Run only these, keeping the saved a-b results:
+#      CFG_COARSE_OVERRIDE <- list(napeshm_scenarios = c("NASS", "COVERSTD", "TILLREP", "CAT", "CATM"),
+#                                  yield_scenarios   = c("NASS", "COVERSTD", "TILLREP", "CAT", "CATM"))
 # Scenarios with a random element are repeated with several seeds (NAPESHM: n_noise;
 # yield: yield_seeds).
 #
@@ -68,6 +84,8 @@ CFG_C <- list(
   yield_wb_dir = here::here("Inputs", "yield_workbooks"),
   main_script  = here::here("R", "B2_SHMI_yield_main.R"),
   script       = here::here("python", "coarse_records", "degrade_records.py"),
+  nass_file    = here::here("data", "cache", "nass_progress_50pct.csv"),   # B9a (NASS Crop Progress)
+  nass_script  = here::here("R", "B9a_NASS_progress.R"),
   out_dir      = here::here("Outputs", "Coarse"),
   python       = "",       # python executable (e.g. "~/.virtualenvs/r-reticulate/Scripts/python.exe"); "" = search as run_all.R does
   R            = NULL,     # CV repeats; NULL = the calibration's (100)
@@ -109,6 +127,12 @@ SCEN <- tribble(
   "TILL10",  "a",  "Tillage",         "class, 10% misclassified",               "tillage,misclass:0.1",                     TRUE,    TRUE,
   "TILL20",  "a",  "Tillage",         "class, 20% misclassified",               "tillage,misclass:0.2",                     TRUE,    TRUE,
   "AMEND",   "a",  "Manure, grazing", "removed",                                "noamend",                                  FALSE,   TRUE,
+  # d (17 Nov 2026): categories existing data sources report, no random error (see the header)
+  "NASS",     "d", "Dates",           "NASS state progress dates",              "nassdates",                                FALSE,   TRUE,
+  "COVERSTD", "d", "Cover crops",     "presence only, standard window",         "cover:std",                                FALSE,   TRUE,
+  "TILLREP",  "d", "Tillage",         "class only, representative implement",   "tillage:rep",                              FALSE,   TRUE,
+  "CAT",      "d", "Record type",     "Categories only",                        "nassdates,cover:std,maincrop,tillage:rep,noamend", FALSE, TRUE,
+  "CATM",     "d", "Record type",     "Categories + reported manure, grazing",  "nassdates,cover:std,maincrop,tillage:rep", FALSE, TRUE,
   # c: record length (NAPESHM only; exploratory, off by default): each unit keeps only the
   # last N calendar years of its record; units whose record is already that short are
   # unchanged. NAPESHM records are not dated histories ending at sampling: many cooperators
@@ -124,7 +148,7 @@ SCEN <- tribble(
   # phase" from "how recent"
   "F1",      "c",  "Record length",   "first year only",                        "first:1",                                  FALSE,   FALSE,
   "F2",      "c",  "Record length",   "first 2 years",                          "first:2",                                  FALSE,   FALSE) %>%
-  mutate(label = ifelse(set == "a", paste0(component, ": ", level), level))
+  mutate(label = ifelse(set == "a" | (set == "d" & component != "Record type"), paste0(component, ": ", level), level))
 if (!isTRUE(CFG_C$record_length)) SCEN <- filter(SCEN, set != "c")
 write.csv(SCEN, OUTC("coarse_scenarios.csv"), row.names = FALSE)
 labs_all <- SCEN %>% select(scenario, label)
@@ -148,7 +172,15 @@ PY <- local({
     if (is.na(p)) { message("No usable python: ", paste(attr(p, "why"), collapse = "; ")); "" } else as.character(p)
   }
 })
-degrade <- function(inp, out, ops, tillage, seed = 1, site_regex = "NONE") {
+# NASS Crop Progress 50% dates for the nassdates scenarios (downloaded once; B9a)
+if (any(grepl("nassdates", SCEN$ops)) && !file.exists(CFG_C$nass_file)) {
+  message("NASS Crop Progress dates not found; downloading (B9a_NASS_progress.R)")
+  sys.source(CFG_C$nass_script, envir = new.env(parent = globalenv()))
+}
+# states of the yield experiments (as SITE_COUNTY in B2); NAPESHM units take theirs from the unit code
+YIELD_STATE <- c(NELITCSE = "NE", NEMLTCRS = "NE", NEMEIRR = "NE", NECCIRR = "NE", OHTVD_Ho = "OH", OHTVD_Wo = "OH",
+                 WICST_ARS = "WI", INWLACRE = "IN", INWLTPAC = "IN", IAAM7071 = "IA", PAUP = "PA", MNMOFS = "MN")
+degrade <- function(inp, out, ops, tillage, seed = 1, site_regex = "NONE", state = NULL) {
   if (!nzchar(ops)) return(inp)
   if (file.exists(out) && !CFG_C$rebuild) return(out)
   if (!nzchar(PY)) stop("No python found to write ", basename(out), ". Unzip the prebuilt coarse workbooks into ",
@@ -156,6 +188,10 @@ degrade <- function(inp, out, ops, tillage, seed = 1, site_regex = "NONE") {
   dir.create(dirname(out), recursive = TRUE, showWarnings = FALSE)
   args <- c(CFG_C$script, "--in", inp, "--out", out, "--ops", ops, "--tillage", tillage,
             "--seed", seed, "--site-regex", site_regex, "--log", OUTC("degrade_log.csv"))
+  if (grepl("nassdates", ops)) {
+    args <- c(args, "--nass", CFG_C$nass_file)
+    if (!is.null(state) && !is.na(state)) args <- c(args, "--state", state)
+  }
   res <- suppressWarnings(system2(if (.Platform$OS.type == "windows") PY else shQuote(PY), shQuote(args), stdout = TRUE, stderr = TRUE))
   if (!is.null(attr(res, "status")) && attr(res, "status") != 0)
     stop("degrade_records.py failed for ", basename(out), ":\n", paste(res, collapse = "\n"), call. = FALSE)
@@ -369,7 +405,8 @@ if (CFG_C$run_yield) {
     env$OUT_OVERRIDE <- out
     if (sc != "D0") {
       dir_s <- OUTC("yield_workbooks", tag)
-      for (f in wbs) degrade(f, file.path(dir_s, basename(f)), ysc$ops[i], tillage = "epa", seed = seed, site_regex = "NONE")
+      for (f in wbs) degrade(f, file.path(dir_s, basename(f)), ysc$ops[i], tillage = "epa", seed = seed, site_regex = "NONE",
+                             state = YIELD_STATE[sub("^SHMI_(.*)\\.xlsx$", "\\1", basename(f))])
       env$SCORE_WB_DIR_OVERRIDE <- dir_s
     }
     sys.source(CFG_C$main_script, envir = env)

@@ -20,7 +20,7 @@ The second line matters. The default live progress bar can be cleared by the scr
 | list what `tar_make()` would run, without running it | `targets::tar_outdated()` |
 | get the files a step wrote | `targets::tar_read(B2_main)` |
 | force one step to rerun | `targets::tar_invalidate(B3_stability)`, then `tar_make()` |
-| run one step and what it needs | `targets::tar_make(F4_moderators)` |
+| run one step and what it needs | `targets::tar_make(F5_fig)` |
 
 Each step runs one script from `R/`. Its log goes to `Outputs/logs/<date-time>/<script>.log`, as with `run_all.R`.
 
@@ -70,7 +70,9 @@ Each step runs one script from `R/`. Its log goes to `Outputs/logs/<date-time>/<
 
 ## Adding a figure
 
-1. Have the analysis script save what the figure draws as `plotdata_<name>.rds` in its output folder.
-2. Add the path to `PLOTDATA` in `R/figures/fig_common.R`.
-3. Write `R/figures/F<n>_<name>.R`, which reads the plot data with `read_pd()` and saves with `save_fig()`.
-4. Add a `figure()` target in `_targets.R`, and the script to `s_fig`.
+1. Have the analysis script save what the figure draws: plot data as `plotdata_<name>.rds` in its output folder (preferred: the figure script then draws everything), or a finished panel as a ggplot object in `Outputs/panels/` (the figure script can restyle it, but changing what it plots means rerunning the analysis).
+2. Add the path to `PLOTDATA` or `PANELS` in `R/figures/fig_common.R`.
+3. Write `R/figures/F<n>_<name>.R`, which reads with `read_pd()` or `read_panel()`, assembles with patchwork and saves with `save_fig(tag_fig(fig), ...)`.
+4. Add a script target `s_F<n>` and a `figure()` target in `_targets.R`, listing the analysis steps it reads, and add the figure to C3's numbering.
+
+Current figures (Nature Communications layout, 13 Nov 2026): F1 soil-health model (drawn from the SEM table), F2 system score, F3 practices, F4 components, F5 yield, F6 outcome-specific principles, F7 simplified records, S1 SHMI within labels. Text size for all figures is set once by `FONT_SCALE` in `fig_common.R`.

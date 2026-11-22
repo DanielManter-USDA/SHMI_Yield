@@ -80,7 +80,9 @@ coef_tab <- tibble(term = names(est), estimate = unname(est),
                    lo95 = apply(boot, 2, quantile, 0.025), hi95 = apply(boot, 2, quantile, 0.975))
 r2_in <- summary(lm(SH ~ SHMI, data = d))$r.squared
 bf <- here::here("Outputs", "Benchmark", "benchmark_summary.csv")
-r2_oof <- if (file.exists(bf)) { b <- read.csv(bf); b$R2[b$model == "SHMI"] } else NA_real_
+# Out-of-fold R2 with the weights refitted in each fold (0.26), as in the calibration;
+# the "SHMI" row holds the published weights fixed, so its R2 (0.27) is not fully out of fold.
+r2_oof <- if (file.exists(bf)) { b <- read.csv(bf); b$R2[b$model == "SHMI, weights refitted in each fold"] } else NA_real_
 coef_tab <- bind_rows(coef_tab, tibble(term = c("R2_in_sample", "R2_out_of_fold"),
                                        estimate = c(r2_in, r2_oof), lo95 = NA, hi95 = NA))
 write.csv(coef_tab, file.path(OUT, "Fig1_path_coefficients.csv"), row.names = FALSE)
@@ -217,12 +219,17 @@ pa <- ggplot() +
   geom_label(data = filter(arrows, nzchar(lab)), aes(x = lx, y = ly, label = lab, colour = col),
              fontface = "bold", size = 3.6, label.size = 0, fill = "white", label.padding = unit(0.08, "lines")) +
   geom_tile(data = boxes, aes(x = x, y = y, width = w, height = h, fill = fill), colour = "#444444", linewidth = 0.5) +
-  geom_text(data = boxes, aes(x = x, y = y + ifelse(is.na(total), 0, 1.0), label = key),
+  geom_text(data = filter(boxes, key != "SHMI_base"), aes(x = x, y = y + ifelse(is.na(total), 0, 1.0), label = key),
             fontface = "bold", size = 3.6) +
+  # SHMI with "base" as a subscript (plotmath)
+  geom_text(data = filter(boxes, key == "SHMI_base"), aes(x = x, y = y), label = "bold(SHMI[base])",
+            parse = TRUE, size = 3.6) +
   geom_text(data = filter(boxes, !is.na(total)), aes(x = x, y = y - 1.4, label = paste("total", f2(total))),
             colour = BLUE, size = 3.2) +
-  annotate("text", x = 64, y = 6.5, label = sprintf("SHMI = (1 − %.1fp) × SHMI_base + %dp", par$amend_gap, round(100 * par$amend_gap)),
-           colour = ORANGE, fontface = "bold", size = 3.4) +
+  annotate("text", x = 64, y = 6.5, parse = TRUE,
+           label = sprintf("bold(SHMI == (1 - %.1f*italic(p)) %%*%% SHMI[base] + %d*italic(p))",
+                           par$amend_gap, round(100 * par$amend_gap)),
+           colour = ORANGE, size = 3.4) +
   annotate("text", x = 91, y = 18.6, hjust = 0.5, vjust = 1, size = 3, colour = "#444444", lineheight = 1.3,
            label = sprintf("R² (in-sample) = %.2f%s", r2_in,
                            if (is.na(r2_oof)) "" else sprintf("\nR² (out-of-fold) = %.2f", r2_oof))) +
@@ -233,11 +240,12 @@ pa <- ggplot() +
 # ---- Fig. 1b: practices vary (matched within-site pairs) ------------------------------
 trt <- read.csv(here::here("Inputs", "napeshm", "treatments.csv"), stringsAsFactors = FALSE) %>%
   mutate(MGT_combo = paste0("NAPESHM_", sitecode, "_", treatmentid),
-         across(c(eu_tillage, eu_cover_crops, eu_crop_rot, eu_nutr_type, eu_residue, eu_grazing,
-                  eu_irrigation, crop_phase, eu_crop_cat, eu_other_trt), ~ tolower(trimws(.x)))) %>%
+         across(c(eu_tillage, eu_cover_crops, eu_crop_rot, eu_nutr_type, eu_nutr_rate, eu_residue, eu_grazing,
+                  eu_irrigation, crop_phase, eu_crop_cat, eu_other_trt), ~ tolower(trimws(as.character(.x))))) %>%
   select(-sitecode)
 an <- d %>% filter(system == "annual") %>% inner_join(trt, by = "MGT_combo")
-ALL_LABELS <- c("eu_tillage", "eu_cover_crops", "eu_crop_rot", "eu_nutr_type", "eu_residue",
+# 16 Nov 2026: N rate (eu_nutr_rate) added, so a strict pair differs in no other recorded label
+ALL_LABELS <- c("eu_tillage", "eu_cover_crops", "eu_crop_rot", "eu_nutr_type", "eu_nutr_rate", "eu_residue",
                 "eu_grazing", "eu_irrigation", "crop_phase", "eu_crop_cat", "eu_other_trt")
 PRACTICES <- tribble(
   ~practice,                          ~label,          ~target,       ~target_lab,           ~col,
@@ -287,17 +295,73 @@ bg_test <- pairs %>% filter(background != "Other or not recorded") %>% group_by(
   }) %>% ungroup()
 write.csv(mutate(bg_test, across(where(is.double), ~ round(.x, 3))), file.path(OUT, "Fig1a_background_effects.csv"), row.names = FALSE)
 cat("\nFig. 1a, change in soil health by shared background:\n"); print(as.data.frame(bg_test), digits = 3, row.names = FALSE)
-# every pair with its shared background (Supplementary Table 6); written once d_target exists
-write_supp6 <- function() write.csv(pairs %>% transmute(Practice = practice, Site = sitecode, `System with practice` = unit_A,
-                              `System without` = unit_B, `Practice label (with / without)` = paste(with_practice, "/", without_practice),
-                              `Shared: tillage` = bg_tillage, `Shared: cover crop` = bg_cover_crops,
-                              `Shared: rotation (crops)` = bg_crop_rot, `Shared: nutrient source` = bg_nutr_type,
-                              `Shared: residue` = bg_residue, `Shared: grazing` = bg_grazing, `Shared: irrigation` = bg_irrigation,
-                              `Shared: crop phase at sampling` = bg_crop_phase, `Shared: crop category` = bg_crop_cat,
-                              `Shared: other treatment` = bg_other_trt,
-                              `Change in targeted part` = round(d_target, 1), `Change in SHMI` = round(d_SHMI, 1),
-                              `Change in soil health (lv_SH)` = round(d_SH, 1)),
-          file.path(OUT, "SuppTable6_practice_pairs.csv"), row.names = FALSE, na = "")
+# ---- Supplementary Table 6 (16 Nov 2026): every with/without comparison at a site ----------
+# For each practice, every pair of annual systems at the same site with and without it. Pair
+# type: "Strict match" when every other recorded label is identical (Fig. 3a-c), otherwise
+# "Practice match" (other labels also differ; these systems enter Fig. 3d). The other labels
+# that differ are named, and each pair is checked against the Soil Health Institute's list
+# (rr_lookup.csv, either order). Shared columns give a label's value when both systems share
+# it and are blank when it differs. C1i adds whether the pair entered the meta-analysis.
+LAB_NAME <- c(eu_tillage = "tillage", eu_cover_crops = "cover crop", eu_crop_rot = "rotation (crops)",
+              eu_nutr_type = "nutrient source", eu_nutr_rate = "N rate", eu_residue = "residue",
+              eu_grazing = "grazing", eu_irrigation = "irrigation", crop_phase = "crop phase at sampling",
+              eu_crop_cat = "crop category", eu_other_trt = "other treatment")
+rr_type <- local({
+  f <- here::here("Inputs", "napeshm", "rr_lookup.csv")
+  if (!file.exists(f)) return(character())
+  rr <- read.csv(f, stringsAsFactors = FALSE)
+  a <- paste0("NAPESHM_", rr$sitecode, "_", rr$treatmentid_control)
+  b <- paste0("NAPESHM_", rr$sitecode, "_", rr$treatmentid_treatment)
+  ty <- tapply(rr$comparisontype, paste(a, b), function(x) paste(unique(x), collapse = "; "))
+  ty2 <- tapply(rr$comparisontype, paste(b, a), function(x) paste(unique(x), collapse = "; "))
+  c(ty, ty2[setdiff(names(ty2), names(ty))])
+})
+same_val <- function(x, y) (is.na(x) & is.na(y)) | (!is.na(x) & !is.na(y) & x == y)
+all_pairs <- bind_rows(lapply(seq_len(nrow(PRACTICES)), function(i) {
+  pr <- PRACTICES[i, ]; keys <- setdiff(ALL_LABELS, pr$label)
+  g <- an %>% mutate(grp = group_of[[pr$label]](.data[[pr$label]])) %>% filter(!is.na(grp))
+  j <- inner_join(filter(g, grp == "A"), filter(g, grp == "B"), by = "sitecode",
+                  suffix = c("_A", "_B"), relationship = "many-to-many")
+  if (!nrow(j)) return(NULL)
+  same <- sapply(keys, function(k) same_val(j[[paste0(k, "_A")]], j[[paste0(k, "_B")]]))
+  same <- matrix(same, nrow = nrow(j), dimnames = list(NULL, keys))
+  differ <- vapply(seq_len(nrow(j)), function(r) {
+    k <- keys[!same[r, ]]
+    if (!length(k)) return("")
+    a <- vapply(k, function(z) as.character(j[[paste0(z, "_A")]][r]), "")
+    b <- vapply(k, function(z) as.character(j[[paste0(z, "_B")]][r]), "")
+    paste(sprintf("%s (%s / %s)", LAB_NAME[k], a, b), collapse = "; ")
+  }, "")
+  out <- tibble(practice = pr$practice, sitecode = j$sitecode, unit_A = j$MGT_combo_A, unit_B = j$MGT_combo_B,
+                with_practice = j[[paste0(pr$label, "_A")]], without_practice = j[[paste0(pr$label, "_B")]],
+                pair_type = ifelse(rowSums(!same) == 0, "Strict match", "Practice match"),
+                other_differ = differ)
+  for (k in ALL_LABELS) out[[paste0("sh_", k)]] <- if (k == pr$label) NA_character_ else
+    ifelse(same[, k], as.character(j[[paste0(k, "_A")]]), NA_character_)
+  for (v in VARS) out[[paste0("d_", v)]] <- j[[paste0(v, "_A")]] - j[[paste0(v, "_B")]]
+  out
+})) %>%
+  mutate(key = paste(unit_A, unit_B),
+         shi = ifelse(key %in% names(rr_type), unname(rr_type[key]), "No"),
+         target = PRACTICES$target[match(practice, PRACTICES$practice)],
+         d_target = case_when(target == "Cover" ~ d_Cover, target == "Diversity" ~ d_Diversity,
+                              target == "InvDist" ~ d_InvDist, target == "Amend_bonus" ~ d_Amend_bonus))
+stopifnot(sum(all_pairs$pair_type == "Strict match") == nrow(pairs))   # same strict pairs as above
+cat("\nSupplementary Table 6 pairs:\n"); print(table(all_pairs$practice, all_pairs$pair_type))
+write_supp6 <- function() write.csv(all_pairs %>% arrange(practice, desc(pair_type == "Strict match"), sitecode) %>%
+  transmute(Practice = practice, Site = sitecode, `System with practice` = unit_A, `System without` = unit_B,
+            `Practice label (with / without)` = paste(with_practice, "/", without_practice),
+            `Pair type` = pair_type, `Other labels that differ (with / without)` = other_differ,
+            `Listed by the Soil Health Institute (comparison type)` = shi,
+            `Shared: tillage` = sh_eu_tillage, `Shared: cover crop` = sh_eu_cover_crops,
+            `Shared: rotation (crops)` = sh_eu_crop_rot, `Shared: nutrient source` = sh_eu_nutr_type,
+            `Shared: N rate` = sh_eu_nutr_rate,
+            `Shared: residue` = sh_eu_residue, `Shared: grazing` = sh_eu_grazing, `Shared: irrigation` = sh_eu_irrigation,
+            `Shared: crop phase at sampling` = sh_crop_phase, `Shared: crop category` = sh_eu_crop_cat,
+            `Shared: other treatment` = sh_eu_other_trt,
+            `Change in targeted part` = round(d_target, 1), `Change in SHMI` = round(d_SHMI, 1),
+            `Change in soil health (lv_SH)` = round(d_SH, 1)),
+  file.path(OUT, "SuppTable6_practice_pairs.csv"), row.names = FALSE, na = "")
 q <- function(x, p) unname(quantile(x, p))
 # change in the part each practice targets
 pairs <- pairs %>% left_join(select(PRACTICES, practice, target), by = "practice") %>%
@@ -388,6 +452,10 @@ DB <- here::here("Outputs", "Practice_additivity", "Fig_data_budget_panels.rds")
 if (!exists("FIG1_MERGED")) FIG1_MERGED <- TRUE
 F2A <- file.path(OUT, "Fig2a_panel.rds")
 ggsave(file.path(OUT, "ED_Fig_path.png"), pa, width = 12.5, height = 4.6, dpi = 300, bg = "white")
+# 12 Nov 2026: panels for the figure scripts in R/figures (Nature Communications layout)
+PNL_DIR <- here::here("Outputs", "panels"); dir.create(PNL_DIR, recursive = TRUE, showWarnings = FALSE)
+saveRDS(pa, file.path(PNL_DIR, "panel_path.rds"))          # Fig. 1a
+saveRDS(pc, file.path(PNL_DIR, "panel_additivity.rds"))    # Fig. 2a
 # 10 Nov 2026 (FIG1_V3, default TRUE): a practices vary (target part and soil health only),
 # b they do not add up, c SHMI against its parts at held-out sites (two within-site
 # measures). The data-budget panel is dropped (its numbers are in the text).
@@ -400,7 +468,10 @@ if (!exists("FIG1_V3")) FIG1_V3 <- TRUE
 #           held-out sites (A4b)
 # "Practices do not add up" (old Fig. 1b) is saved alone for Extended Data (ED_Fig_additivity.png);
 # the matched-pair panel (old Fig. 1a) is no longer drawn (its pairs are Supplementary Table 6).
-if (!exists("FIG_V4")) FIG_V4 <- TRUE
+# 17 Nov 2026: the paper's figures come from R/figures (Fig. 1b uses panel_path.rds, saved above);
+# the combined Fig1.png/Fig2.png below are working copies only. FIG_V4 now defaults to FALSE so
+# C1 no longer needs the retired C1g (label vs SHMI) and A4b (parts panel) outputs.
+if (!exists("FIG_V4")) FIG_V4 <- FALSE
 PA2 <- here::here("Outputs", "Practice_additivity")
 F1B <- file.path(PA2, "Fig_SHMI_vs_SH_panel.rds"); F2L <- file.path(PA2, "Fig_label_vs_SHMI_panel.rds")
 ggsave(file.path(OUT, "ED_Fig_additivity.png"), pc, width = 6, height = 4.2, dpi = 300, bg = "white")

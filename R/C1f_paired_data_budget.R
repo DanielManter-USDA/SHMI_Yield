@@ -46,7 +46,8 @@ B_BOOT <- if (exists("BUDGET_BOOT")) BUDGET_BOOT else 2000
 set.seed(2026)
 
 d <- read.csv(here::here("data", "SHAPE_by_unit_with_SHMI.csv"))
-ALL_LABELS <- c("eu_tillage", "eu_cover_crops", "eu_crop_rot", "eu_nutr_type", "eu_residue",
+# 16 Nov 2026: N rate (eu_nutr_rate) added, so a strict pair differs in no other recorded label
+ALL_LABELS <- c("eu_tillage", "eu_cover_crops", "eu_crop_rot", "eu_nutr_type", "eu_nutr_rate", "eu_residue",
                 "eu_grazing", "eu_irrigation", "crop_phase", "eu_crop_cat", "eu_other_trt")
 trt <- read.csv(here::here("Inputs", "napeshm", "treatments.csv"), stringsAsFactors = FALSE) %>%
   mutate(MGT_combo = paste0("NAPESHM_", sitecode, "_", treatmentid),
@@ -96,6 +97,7 @@ budget <- bind_rows(
   bind_rows(Map(budget_row, strict, names(strict), "strict")),
   bind_rows(Map(budget_row, loose, names(loose), "loose")),
   budget_row(S_ALL, "Any of the four", "strict"),
+  budget_row(bind_rows(loose), "Any of the four", "loose"),   # 16 Nov 2026: for Fig. 3c (practice match)
   tibble(practice = "SHMI", pairing = "all within-site comparisons", comparisons = sum(choose(n_by_site, 2)),
          systems = N_SYS, pct_systems = 100, sites = N_SITES))
 write.csv(mutate(budget, across(where(is.double), ~ round(.x, 3))), file.path(OUT, "data_budget.csv"), row.names = FALSE)

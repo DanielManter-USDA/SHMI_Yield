@@ -50,3 +50,43 @@ ggsave(file.path(OUT, "Fig_SHMI_vs_SH.png"), fig1b, width = 11, height = 3.6, dp
 ed <- (sp$plots$all | sp$plots$between | sp$plots$within) + plot_annotation(tag_levels = "a") &
   theme(plot.tag = element_text(face = "bold", size = 14))
 ggsave(file.path(OUT, "Fig_SHMI_vs_SHAPE.png"), ed, width = 11, height = 3.6, dpi = 300, bg = "white")
+# 12 Nov 2026: panels for the figure scripts in R/figures (Fig. 1c and 3b)
+PNL_DIR <- here::here("Outputs", "panels"); dir.create(PNL_DIR, recursive = TRUE, showWarnings = FALSE)
+saveRDS(sh$plots, file.path(PNL_DIR, "panel_SHMI_vs_SH.rds"))      # list: all, between, within
+saveRDS(sp$plots, file.path(PNL_DIR, "panel_SHMI_vs_SHAPE.rds"))
+
+# ---- SHMI, its parts and individual indicators (16 Nov 2026) --------------------------------
+# Within site (site means removed), across all systems: the correlation of SHMI and of each part
+# alone (Cover/Roots, Diversity, Inverse Disturbance, amendment bonus) with lv_SH and with single
+# measured indicators; and the best that indicator-specific weights could do, by non-negative
+# least squares on the four parts, in sample and with each site left out in turn (weights refitted
+# without the site). Asks whether separate principles, or weights tuned to each indicator, beat
+# the one set of soil-health weights.
+IND  <- c("lv_SH" = "SH", "Soil organic carbon" = "SOC_raw", "Wet aggregate stability" = "KSSL_WAS_raw",
+          "Respiration" = "Resp_raw", "Active carbon (POXC)" = "AC_raw", "ACE protein" = "ACE_raw")
+PRTS <- c("Cover/Roots" = "Cover", "Diversity" = "Diversity", "Inverse Disturbance" = "InvDist",
+          "Amendments" = "Amend_bonus")
+nnls_fit <- function(X, y) {                      # non-negative least squares, base R
+  f <- function(b) sum((y - X %*% b)^2)
+  optim(rep(0.1, ncol(X)), f, method = "L-BFGS-B", lower = 0)$par
+}
+ind_rows <- list()
+for (nm in names(IND)) {
+  yv <- IND[[nm]]
+  if (!yv %in% names(d)) { message("  indicator not found: ", yv); next }
+  z <- d %>% filter(!is.na(.data[[yv]]), !is.na(SHMI), if_all(all_of(unname(PRTS)), ~ !is.na(.x))) %>%
+    group_by(sitecode) %>% filter(n() >= 2) %>% ungroup()
+  wd <- function(v) z[[v]] - ave(z[[v]], z$sitecode)
+  y <- wd(yv); X <- sapply(unname(PRTS), wd)
+  b <- nnls_fit(X, y)
+  pred <- numeric(length(y))
+  for (s in unique(z$sitecode)) { m <- z$sitecode == s; pred[m] <- X[m, , drop = FALSE] %*% nnls_fit(X[!m, , drop = FALSE], y[!m]) }
+  ind_rows[[nm]] <- tibble(indicator = nm, systems = nrow(z), sites = n_distinct(z$sitecode),
+                           r_SHMI = cor(wd("SHMI"), y),
+                           !!!setNames(lapply(unname(PRTS), function(p) cor(wd(p), y)), paste0("r_", names(PRTS))),
+                           r_best_in = cor(X %*% b, y), r_best_site_out = cor(pred, y))
+}
+ind_tab <- bind_rows(ind_rows)
+write.csv(mutate(ind_tab, across(where(is.double), ~ round(.x, 3))), file.path(OUT, "SHMI_parts_by_indicator.csv"), row.names = FALSE)
+cat("\n== Within-site r with lv_SH and single indicators: SHMI, each part, indicator-specific weights ==\n")
+print(as.data.frame(ind_tab), digits = 2)

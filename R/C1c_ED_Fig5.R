@@ -82,6 +82,9 @@ if (!file.exists(f_nap)) {
           strip.background = element_blank(), strip.text = element_text(face = "bold", size = 9, hjust = 0),
           panel.spacing.x = unit(1.1, "lines"), panel.grid.minor = element_blank())
 
+  # 12 Nov 2026: panels for R/figures/F6_records.R (Fig. 6), without their letter titles
+  PNL_DIR <- here::here("Outputs", "panels"); dir.create(PNL_DIR, recursive = TRUE, showWarnings = FALSE)
+  saveRDS(list(a = pa + labs(title = NULL), b = pb + labs(title = NULL)), file.path(PNL_DIR, "panel_records.rds"))
   fig <- patchwork::wrap_plots(pa, pb, widths = c(1.35, 2.65))
   for (f in c(file.path(OUT, "ED_Fig5.png"), file.path(CO, "Fig_coarse_records.png")))
     ggsave(f, fig, width = 15, height = 3.6, dpi = 300)

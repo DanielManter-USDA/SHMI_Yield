@@ -12,10 +12,20 @@ Operations (--ops, comma-separated; always applied in this order):
              site's typical day of year for that crop and date (median over the
              site's records; the year is kept): programs know what was grown,
              not when.
+  nassdates  (17 Nov 2026) every cash crop's planting and harvest dates set to the day
+             its state reached 50% planted or harvested that calendar year in USDA-NASS
+             Crop Progress (--nass; the state from --state or --state-regex). Fallbacks,
+             in order: the state's median over years, the US median that year, the US
+             median over years; crops NASS does not report (perennials, hay, peas,
+             sudangrass, silage) and non-US sites keep the site-typical date of
+             'dates'. Cover crops are left to 'cover'.
   cover      cover crops reduced to present/absent: all cover rows between two
              cash crops become one generic cover crop (the workbook's most common
              cover species) spanning the group's dates (crops without an end date
              end at the next planting), within the gap between the cash crops.
+             cover:std (17 Nov 2026): the dates are not known either; the cover runs
+             from 14 days after the previous cash harvest to 14 days before the next
+             planting (a gap without both ends keeps the group's dates).
   maincrop   one crop at a time: a crop that overlaps an earlier-listed crop of
              the same unit for more than half its duration is dropped
              (mixtures, companion crops, intercrops); covers are kept.
@@ -23,6 +33,10 @@ Operations (--ops, comma-separated; always applied in this order):
              no-till, reduced, conventional: T-DISC designations): its passes are
              replaced by one pass at the typical intensity of that class in
              this workbook (median of the intervals in the class).
+             tillage:rep (17 Nov 2026): one pass of the class's representative
+             implement from the T-DISC tables instead (no-till planter, field
+             cultivator, moldboard plow), the same everywhere, so no intensity is
+             borrowed from the site's own record.
   noamend    organic amendments (SA_cat "Organic") and grazing removed (amendments
              become zero fertilizer rows); fertilizer records are kept.
   last:N     only the last N calendar years of each unit's record are kept.
@@ -196,6 +210,88 @@ def op_dates(sh, site_of, log):
     log.append(("dates", f"{changed} crop rows set to site-typical dates; {reverted} kept (order would break)"))
 
 
+# NASS Crop Progress commodities for the crop names in the workbooks (lower case, regex)
+NASS_CROPS = [(r"silage", None), (r"\bcorn\b|maize", "CORN"), (r"soy", "SOYBEANS"),
+              (r"sorghum|milo", "SORGHUM"), (r"\boats?\b", "OATS"), (r"barley", "BARLEY"),
+              (r"winter wheat", "WHEAT, WINTER"), (r"spring wheat", "WHEAT, SPRING"),
+              (r"\bwheat\b", "WHEAT"), (r"cotton", "COTTON"), (r"sunflower", "SUNFLOWER"),
+              (r"peanut", "PEANUTS"), (r"\brice\b", "RICE"), (r"sugar ?beet", "SUGARBEETS"),
+              (r"dry (edible )?bean", "BEANS, DRY EDIBLE")]
+
+def nass_commodity(name, plant):
+    n = str(name or "").lower()
+    for rx, c in NASS_CROPS:
+        if re.search(rx, n):
+            if c == "WHEAT":                     # unnamed wheat: winter if sown August-December
+                c = "WHEAT, WINTER" if plant and plant.month >= 8 else "WHEAT, SPRING"
+            return c
+    return None
+
+def load_nass(path):
+    """state, commodity, stage (planted/harvested), year, doy50 -> lookup with fallbacks"""
+    yr = {}; per = defaultdict(list)
+    with open(path, newline="", encoding="utf-8") as f:
+        for r in csv.DictReader(f):
+            k = (r["state"].upper(), r["commodity"].upper(), r["stage"].lower())
+            y, d = int(r["year"]), float(r["doy50"])
+            yr[k + (y,)] = d; per[k].append(d)
+    med = {k: statistics.median(v) for k, v in per.items()}
+    us_yr = defaultdict(list)
+    for (s, c, g, y), d in yr.items():
+        if s != "US": us_yr[(c, g, y)].append(d)
+    for (c, g, y), v in us_yr.items(): yr.setdefault(("US", c, g, y), statistics.median(v))
+    us_med = defaultdict(list)
+    for (s, c, g), d in med.items():
+        if s != "US": us_med[(c, g)].append(d)
+    for (c, g), v in us_med.items(): med.setdefault(("US", c, g), statistics.median(v))
+    def look(state, comm, stage, year):
+        if state is None: return None, None      # non-US units: no NASS dates (site-typical instead)
+        for k, src in (((state, comm, stage, year), "state-year"), ((state, comm, stage), "state"),
+                       (("US", comm, stage, year), "US-year"), (("US", comm, stage), "US")):
+            tab = yr if len(k) == 4 else med
+            if k in tab: return tab[k], src
+        return None, None
+    return look
+
+def op_nassdates(sh, look, state_of, site_of, log):
+    """Cash crops to NASS 50% planted/harvested dates; everything else (covers aside) to
+    the site-typical date as in op_dates. Covers are left to op_cover."""
+    doy = defaultdict(list)
+    for r in sh.rows:
+        site = site_of(sh.get(r, "MGT_combo")); name = sh.get(r, "CD_name")
+        for f in ("CD_plant_date", "CD_harv_date", "CD_term_date"):
+            d = as_date(sh.get(r, f))
+            if d: doy[(site, name, f)].append(d.timetuple().tm_yday)
+    med = {k: int(round(statistics.median(v))) for k, v in doy.items()}
+    def on(d, day):
+        n = 366 if d.year % 4 == 0 else 365
+        return dt.date(d.year, 1, 1) + dt.timedelta(days=int(round(min(max(day, 1), n))) - 1)
+    src_n = Counter(); unmapped = Counter(); changed = reverted = 0
+    for r in sh.rows:
+        if is_cover(sh, r): continue
+        u = sh.get(r, "MGT_combo"); site = site_of(u); name = sh.get(r, "CD_name")
+        p0, h0, t0 = crop_dates(sh, r)
+        comm = nass_commodity(name, p0) if is_cash(sh, r) else None
+        st = state_of(u)
+        new = {}
+        for f, d, stage in (("CD_plant_date", p0, "planted"), ("CD_harv_date", h0, "harvested"), ("CD_term_date", t0, None)):
+            if not d: continue
+            day, src = (look(st, comm, stage, d.year) if comm and stage else (None, None))
+            if day is None:
+                day, src = med[(site, name, f)], "site"
+                if f != "CD_term_date" and is_cash(sh, r): unmapped[str(name) if comm is None else ("no state (non-US)" if st is None else f"{name} ({st})")] += 1
+            new[f] = on(d, day); src_n[src] += 1
+        if h0 and t0 and h0 == t0 and "CD_harv_date" in new: new["CD_term_date"] = new["CD_harv_date"]   # rule T1
+        p = new.get("CD_plant_date"); e = [new.get("CD_harv_date"), new.get("CD_term_date")]
+        if p and any(x and x <= p for x in e):
+            reverted += 1; continue
+        for f, d in new.items(): sh.set(r, f, to_cell(d))
+        changed += 1
+    top = ", ".join(f"{k} x{v}" for k, v in unmapped.most_common(8))
+    log.append(("nassdates", f"{changed} crop rows dated ({dict(src_n)}); {reverted} kept (order would break); "
+                             f"site-typical for: {top or 'none'}"))
+
+
 def gaps_of(cash):
     """Gaps between consecutive cash crops: list of (prev_harvest or None, next_plant or None)."""
     out = [(None, cash[0][0] if cash else None)]
@@ -207,7 +303,7 @@ def gaps_of(cash):
 def gap_index(cash, d):
     return sum(1 for (_, h) in cash if h < d)
 
-def op_cover(sh, rng, p_flip, log):
+def op_cover(sh, rng, p_flip, log, std=False):
     names = Counter(sh.get(r, "CD_name") for r in sh.rows if is_cover(sh, r))
     if not names:
         log.append(("cover", "no cover crops in this workbook")); return
@@ -243,9 +339,11 @@ def op_cover(sh, rng, p_flip, log):
             gs = [sp[id(r)] for r in grp]
             start = min([s for s, _ in gs if s], default=None)
             end = max([e for _, e in gs if e], default=None)
-            if not grp:                                    # misclassified as present: standard window
-                start = prev_h + dt.timedelta(days=COVER_GAP_DAYS) if prev_h else None
-                end = next_p - dt.timedelta(days=COVER_GAP_DAYS) if next_p else None
+            if (not grp or std) and prev_h and next_p:     # standard window: misclassified as present, or cover:std
+                start = prev_h + dt.timedelta(days=COVER_GAP_DAYS)
+                end = next_p - dt.timedelta(days=COVER_GAP_DAYS)
+            elif not grp:
+                start = end = None
             if start and prev_h and start <= prev_h: start = prev_h + dt.timedelta(days=1)
             if end and next_p and end >= next_p: end = next_p - dt.timedelta(days=1)
             if not start or not end or end <= start: continue
@@ -262,7 +360,7 @@ def op_cover(sh, rng, p_flip, log):
     keep.sort(key=lambda r: (str(sh.get(r, "MGT_combo")), order.get(id(r), 10**9)))
     n0 = sum(1 for r in sh.rows if is_cover(sh, r))
     sh.rows = keep
-    log.append(("cover", f"{n0} cover rows -> {made} generic '{generic}' covers; {flipped} gaps flipped"))
+    log.append(("cover", f"{n0} cover rows -> {made} generic '{generic}' covers{' (standard window)' if std else ''}; {flipped} gaps flipped"))
 
 
 def op_maincrop(sh, log):
@@ -339,6 +437,14 @@ def tdisc_window(d, plant, harvests):
 
 CLASSES = ["Z", "NT", "RT", "CT"]
 REP_IMPLEMENT = {"NT": "PLANTER, NO-TILL", "RT": "CULTIVATOR, FIELD", "CT": "PLOW, MOLDBOARD"}  # names only; intensity set below
+def rep_ti(imp):
+    """T-DISC intensity of one pass of each class's representative implement (EPA mixing)."""
+    out = {}
+    for c, name in REP_IMPLEMENT.items():
+        me, d = imp[key(name)]
+        out[c] = min(me * min(d, 30) / 30, 1.0)
+    return out
+
 def designation(ti):
     if ti < 0.001: return "Z"
     return "NT" if ti <= 0.075 else ("RT" if ti <= 0.252 else "CT")
@@ -365,7 +471,7 @@ def intervals(cd, unit_rows, first, last):
         out.append((start, e, None, set())); start = e + dt.timedelta(days=1)
     return out
 
-def op_tillage(sd, cd, method, rng, p_flip, log):
+def op_tillage(sd, cd, method, rng, p_flip, log, rep=False):
     imp, mp = load_tdisc()
     crop_units = by_unit(cd); sd_units = by_unit(sd)
     unresolved = 0
@@ -396,6 +502,7 @@ def op_tillage(sd, cd, method, rng, p_flip, log):
             rows.append([cls, when, ti])
         plan[u] = rows
     typical = {c: statistics.median(v) for c, v in tis.items() if v}
+    if rep: typical = rep_ti(imp)       # 17 Nov 2026: representative implements, not this workbook's medians
     flipped = 0
     if p_flip > 0:
         for rows in plan.values():
@@ -441,7 +548,7 @@ def op_tillage(sd, cd, method, rng, p_flip, log):
         keep.append(nr)
     sd.rows = keep
     n_iv = Counter(x[0] for rows in plan.values() for x in rows)
-    log.append(("tillage", f"intervals by class {dict(n_iv)}; typical TI {({k: round(v, 3) for k, v in typical.items()})}; "
+    log.append(("tillage", f"intervals by class {dict(n_iv)}; {'representative' if rep else 'typical'} TI {({k: round(v, 3) for k, v in typical.items()})}; "
                            f"{made} passes written; {flipped} classes flipped; {unresolved} passes unresolved (ignored)"))
 
 
@@ -588,15 +695,21 @@ def main(argv=None):
     ap.add_argument("--seed", type=int, default=1)
     ap.add_argument("--site-regex", default=r"^(NAPESHM_[^_]+)_", help="site = first group of MGT_combo; NONE or no match = the whole workbook is one site")
     ap.add_argument("--log", default=None)
+    ap.add_argument("--nass", default=None, help="NASS Crop Progress 50%% dates (state, commodity, stage, year, doy50), for nassdates")
+    ap.add_argument("--state", default=None, help="two-letter state of every unit (a single-site workbook), for nassdates")
+    ap.add_argument("--state-regex", default=r"^NAPESHM_US([A-Z]{2})", help="state = first group of MGT_combo (non-matching units: no state)")
     a = ap.parse_args(argv)
 
     ops = [o.strip() for o in a.ops.split(",") if o.strip()]
-    known = {"dates", "cover", "maincrop", "tillage", "noamend"}
+    known = {"dates", "nassdates", "cover", "maincrop", "tillage", "noamend"}
     par = {}
     for o in ops:
         k, _, v = o.partition(":")
         if k in ("last", "first", "jitter", "sjitter"): par[k] = int(v)
         elif k == "misclass": par[k] = float(v)
+        elif k in ("cover", "tillage") and v:
+            if (k, v) not in (("cover", "std"), ("tillage", "rep")): sys.exit(f"unknown option: {o}")
+            par[k] = v
         elif k not in known: sys.exit(f"unknown operation: {o}")
     flags = {o.partition(":")[0] for o in ops}
     rng = random.Random(a.seed)
@@ -608,12 +721,19 @@ def main(argv=None):
     log = []
     cd = Sheet(wb["Crop_Diversity"]); sd = Sheet(wb["Soil_Disturbance"])
     p_flip = par.get("misclass", 0.0)
+    if "dates" in flags and "nassdates" in flags: sys.exit("use dates or nassdates, not both")
     if "dates" in flags: op_dates(cd, site_of, log)
-    if "cover" in flags: op_cover(cd, rng, p_flip, log)
+    if "nassdates" in flags:
+        if not a.nass: sys.exit("nassdates needs --nass")
+        srx = None if a.state_regex in ("", "NONE") else re.compile(a.state_regex)
+        state_of = ((lambda u: a.state.upper()) if a.state else
+                    (lambda u: (srx.match(str(u)).group(1) if srx and srx.match(str(u)) else None)))
+        op_nassdates(cd, load_nass(a.nass), state_of, site_of, log)
+    if "cover" in flags: op_cover(cd, rng, p_flip, log, std=par.get("cover") == "std")
     if "maincrop" in flags: op_maincrop(cd, log)
     if "jitter" in flags: op_jitter(cd, sd, par["jitter"], rng, log)
     if "sjitter" in flags: op_sjitter(cd, sd, par["sjitter"], rng, site_of, log)
-    if "tillage" in flags: op_tillage(sd, cd, a.tillage, rng, p_flip, log)
+    if "tillage" in flags: op_tillage(sd, cd, a.tillage, rng, p_flip, log, rep=par.get("tillage") == "rep")
     cd.write(); sd.write()
     if "noamend" in flags: op_noamend(wb, log)
     if "last" in flags: op_last(wb, par["last"], log)

@@ -1,5 +1,5 @@
 ################################################################################
-# A4a_SHMI_benchmark.R  (v3: adds SHMI with the published weights held fixed)
+# A4a_SHMI_benchmark.R  (v4, 16 Nov 2026: SHMI = published weights held fixed; refitted SHMI is a sensitivity row)
 #
 # Two questions, both on US units with exactly the calibration's machinery
 # (A3a_SHMI_calibration_plus.R: sites weighted equally, 10-fold leave-sites-out CV
@@ -164,16 +164,28 @@ rf_model <- function(Dtr, w) {
 # ==============================================================================
 # Candidates (SHMI must stay first: every paired comparison is against it)
 # ==============================================================================
+# 16 Nov 2026: SHMI and its reduced versions use the PUBLISHED (calibrated) weights, held fixed,
+# so the comparison with the parts is of the index as users apply it. Only the line from score
+# to soil health is fitted in each fold. Dropping a part rescales the remaining published
+# weights to sum to one. The version with weights refitted in each fold is kept as a sensitivity
+# row (it shows the advantage is not from fitting the weights to the same data).
+fixed_base <- function(D, use = c("cover", "diversity", "disturbance")) {
+  X <- list(cover = D$Cover_cal, diversity = D$Diversity, disturbance = D$InvDist)
+  w <- unlist(W_FINAL[use]); Reduce(`+`, Map(function(v, k) v * X[[k]], w / sum(w), use))
+}
+fixed_drop <- function(use, amend = TRUE) line_model(function(D) {
+  base <- fixed_base(D, use)
+  if (amend) base + CFG$amend_gap * D$p_amend * (100 - base) else base
+})
 cand <- list(
-  list("SHMI",                          "SHMI",       shmi_model()),
-  list("SHMI, published weights (fixed)", "SHMI",     fixed_model),
-  list("SHMI_base (no amendment term)", "SHMI",       shmi_model(score_gap = 0)),
-  list("SHMI without Cover/Roots",      "Drop-one",   shmi_model(use = "InvDist")),
-  list("SHMI without Diversity",        "Drop-one",   shmi_model(div = 0)),
-  list("SHMI without InvDist",          "Drop-one",   shmi_model(use = c("NonGrow", "Grow"))),
-  list("SHMI without amendments",       "Drop-one",   shmi_model(gap = 0)),
+  list("SHMI",                          "SHMI",       fixed_model),
+  list("SHMI, weights refitted in each fold", "SHMI", shmi_model()),
+  list("SHMI_base (no amendment term)", "SHMI",       fixed_drop(c("cover", "diversity", "disturbance"), amend = FALSE)),
+  list("SHMI without Cover/Roots",      "Drop-one",   fixed_drop(c("diversity", "disturbance"))),
+  list("SHMI without Diversity",        "Drop-one",   fixed_drop(c("cover", "disturbance"))),
+  list("SHMI without InvDist",          "Drop-one",   fixed_drop(c("cover", "diversity"))),
   list("SHMI, equal weights",           "Drop-one",   equal_model),
-  list("Cover/Roots",                   "Component",  cover_fold_model),
+  list("Cover/Roots",                   "Component",  var_model("Cover_cal")),   # published season split
   list("Diversity",                     "Component",  var_model("Diversity")),
   list("InvDist",                       "Component",  var_model("InvDist")),
   list("Amendments",                    "Component",  var_model("p_amend"))
@@ -263,9 +275,9 @@ pair_summ <- pair_tab %>% group_by(model) %>%
             across(starts_with("d_"), ~ median(.x, na.rm = TRUE)), .groups = "drop")
 
 pub <- res$us_cv$R2_median[res$us_cv$score == "SHMI"]
-now <- summ$R2[summ$model == "SHMI"]
+now <- summ$R2[summ$model == "SHMI, weights refitted in each fold"]   # the calibration refits in each fold
 if (length(pub) && length(CFG_B$drop_systems) == 0 && R_rep == CFG$R) {
-  cat(sprintf("\nCheck: SHMI OOF R2 here %.4f vs calibration %.4f %s\n", now, pub,
+  cat(sprintf("\nCheck: refitted SHMI OOF R2 here %.4f vs calibration %.4f %s\n", now, pub,
               if (abs(now - pub) < 1e-6) "(identical)" else "(DIFFERENT -- check inputs)"))
 }
 

@@ -46,21 +46,20 @@ SHMI scores are computed with the SHMI R package, version 2.0.0: https://github.
 
 ## Where each result comes from
 
-Every display item ends up in **`Outputs/Manuscript/numbered/`** under the paper's numbering (manuscript of 11 Nov 2026), with `manifest_numbered.csv` listing each file, its source and whether it is present. Only this folder is shared in git. C3 copies the items there from where the scripts write them.
+Every display item ends up in **`Outputs/Manuscript/numbered/`** under the paper's numbering (Nature Communications version, 12 Nov 2026), with `manifest_numbered.csv` listing each file, its source and whether it is present. Only this folder is shared in git. C3 copies the items there from where the scripts write them.
 
 | In the paper | File in `numbered/` | Computed by | Drawn by |
 |---|---|---|---|
-| Fig. 1 (a, SEM paths; b, SHMI against measured soil health) | `Fig1.png` | A1c, A3a; C1h | C1 |
-| Fig. 2 (a, practice labels vs SHMI at held-out sites; b, how much data matched pairs can use; c, SHMI against its parts) | `Fig2.png` | C1g (weights refitted in each fold), C1f, A4a/A4b | C1 |
-| Fig. 3 (a, corn within experiments; b, soybean; c, poor, dry and good years) | `Fig3.png` | B2, B2b, B3 (SPEI from B1) | `R/figures/F3_yield.R` |
-| Fig. 4 (a, SHMI × N; b, SHMI × age; c, each experiment's slope) | `Fig4.png` | B2 | `R/figures/F4_yield_moderators.R` |
-| Extended Data Fig. 1, soil health model | `ED_Fig1_loadings.csv` (diagram drawn by hand) | A1c, A8 | |
-| Extended Data Fig. 2, practices do not add up | `ED_Fig2.png` | C1d | C1 |
-| Extended Data Fig. 3, SHMI within practice-label categories | `ED_Fig3.png` | C1g | C1g |
-| Extended Data Fig. 4, SHMI and SHAPE | `ED_Fig4.png` | A6a-A6b, C1h | C1h |
-| Extended Data Fig. 5, four record types | `ED_Fig5.png` | B9 (`python/coarse_records/`) | C1c |
+| Fig. 1 (the soil-health model: loadings and residual correlations) | `Fig1.png` | A1c, A8 | `R/figures/F1_soil_health_model.R` |
+| Fig. 2 (a, how SHMI scores a system; b, SHMI against measured soil health) | `Fig2.png` | A3a; C1, C1h | `R/figures/F2_system_score.R` |
+| Fig. 3 (a, practices do not add up; b, practice labels vs SHMI at held-out sites; c, how much data matched pairs can use) | `Fig3.png` | C1d, C1g, C1f | `R/figures/F3_practices.R` |
+| Fig. 4 (a, SHMI against its parts at held-out sites; b, SHMI and SHAPE) | `Fig4.png` | A4a/A4b; A6a-A6b, C1h | `R/figures/F4_components.R` |
+| Fig. 5 (a, corn; b, soybean; c, SHMI × N; d, SHMI × years; e, poor, dry and good years) | `Fig5.png` | B2, B2b, B3 (SPEI from B1) | `R/figures/F5_yield.R` |
+| Fig. 6 (a, SHMI and each principle for soil health and for yield; b, each experiment's slope) | `Fig6.png` | A4a, B2d; B2 | `R/figures/F6_outcome.R` |
+| Fig. 7 (simplified records) | `Fig7.png` | B9 (`python/coarse_records/`), C1c | `R/figures/F7_records.R` |
+| Supplementary Fig. 1 (SHMI within practice-label categories) | `SuppFig1.png` | C1g | `R/figures/S1_label_within.R` |
 | Table 1 | `Table1.csv` | C1 | |
-| Extended Data Table 1, scores by system type | `ED_Table1.csv` | C2 | |
+| Scores by system type (Extended Data Table 1 in the Nature draft) | `ED_Table1.csv` | C2 | |
 | Supplementary Table 1, SHMI against its variants and parts (soil health and corn yield) | `Supplementary_Tables.xlsx` [Table 1] | A4a, B2d; C2, C3 | |
 | Supplementary Table 2, the ten experiments | [Table 2] | B2, B8; C2 | |
 | Supplementary Table 3, slope by level of the factors SHMI does not score | [Table 3] | B2 | |
@@ -114,7 +113,7 @@ Scripts are numbered by part: **A** = calibration, **B** = yield and records, **
 | C2 | `C2_export_tables.R` | Extended Data Table 1 and the Supplementary Tables |
 | C3 | `C3_collect_figures.R` | copies every display item into `Outputs/Manuscript/numbered/` (`manifest_numbered.csv`) |
 | C4 | `C4_bundle_for_review.R` | (`run_all.R` only) one zip of the small results files, for checking the text |
-| F3, F4 | `figures/F3_yield.R`, `figures/F4_yield_moderators.R` | Figs. 3 and 4 from `plotdata_*.rds`; shared settings in `figures/fig_common.R`; `figures/run_figures.R` redraws both without `targets` |
+| F1–F7, S1 | `figures/F1_soil_health_model.R` … `figures/F7_records.R`, `figures/S1_label_within.R` | Figs. 1–7 and Supplementary Fig. 1 from plot data (`plotdata_*.rds`), result tables and panels saved by the soil-health scripts (`Outputs/panels/`); `figures/yield_panels.R` and `figures/moderator_panels.R` build the yield panels for Figs. 5 and 6; shared settings, including text size (`FONT_SCALE`), in `figures/fig_common.R`; `figures/run_figures.R` redraws all |
 
 Pipeline: `_targets.R` (steps and dependencies), `targets_helpers.R` (running and logging each step). Helpers sourced by the scripts: `run_helpers.R`, `datasets.R` (calibration data sets), `SHMI_legume_credit.R` and `SHMI_manure_n.R` (N accounting for B2).
 

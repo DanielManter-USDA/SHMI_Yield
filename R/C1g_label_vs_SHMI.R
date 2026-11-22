@@ -208,4 +208,8 @@ edw <- ggplot(w, aes(x, y)) +
   theme_bw(base_size = 10) + theme(strip.background = element_blank(), strip.text = element_text(face = "bold"),
                                    panel.grid.minor = element_blank(), legend.position = "bottom")
 ggsave(file.path(OUT, "Fig_label_within.png"), edw, width = 11, height = 3.6, dpi = 300, bg = "white")
+# 12 Nov 2026: panels for the figure scripts in R/figures (Fig. 2b and 2c)
+PNL_DIR <- here::here("Outputs", "panels"); dir.create(PNL_DIR, recursive = TRUE, showWarnings = FALSE)
+saveRDS(fig2a, file.path(PNL_DIR, "panel_label_vs_SHMI.rds"))
+saveRDS(edw,   file.path(PNL_DIR, "panel_label_within.rds"))
 message("Wrote ", file.path(OUT, "label_vs_SHMI.csv"), " and the Fig. 2a / Extended Data Fig. 3 panels")
