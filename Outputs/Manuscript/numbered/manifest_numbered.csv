@@ -3,10 +3,11 @@
 "Fig2.png","D:/SHMI_Yield/Outputs/figures/F2_system_score.png",TRUE
 "Fig3.png","D:/SHMI_Yield/Outputs/figures/F3_yield.png",TRUE
 "Fig4.png","D:/SHMI_Yield/Outputs/figures/F4_yield_moderators.png",TRUE
-"Fig5.png","D:/SHMI_Yield/Outputs/figures/F5_records.png",TRUE
 "Table1.csv","D:/SHMI_Yield/Outputs/Manuscript_work/ED_Table1.csv",TRUE
 "Table2.csv","D:/SHMI_Yield/Outputs/Manuscript_work/Table2.csv",TRUE
-"Table3.csv","D:/SHMI_Yield/Outputs/Manuscript_work/Table3.csv",TRUE
-"Supplementary_Tables.xlsx [Table 1]","D:/SHMI_Yield/Outputs/Manuscript_work/SuppTable1.csv",TRUE
-"Supplementary_Tables.xlsx [Table 2]","D:/SHMI_Yield/Outputs/SHMI_study_treatments_with_yield.xlsx",TRUE
-"Supplementary_Tables.xlsx [Table 3]","D:/SHMI_Yield/Outputs/Manuscript_work/SuppTable2.csv",TRUE
+"Supplementary_Tables.xlsx [Table 1]","D:/SHMI_Yield/Outputs/Manuscript_work/SuppTable_sites.csv",TRUE
+"Supplementary_Tables.xlsx [Table 2]","D:/SHMI_Yield/Outputs/Manuscript_work/SuppTable1.csv",TRUE
+"Supplementary_Tables.xlsx [Table 3]","D:/SHMI_Yield/Outputs/SHMI_study_treatments_with_yield.xlsx",TRUE
+"Supplementary_Tables.xlsx [Table 4]","D:/SHMI_Yield/Outputs/Manuscript_work/SuppTable_sem.csv",TRUE
+"Supplementary_Tables.xlsx [Table 5]","D:/SHMI_Yield/Outputs/Manuscript_work/SuppTable_commonality.csv",TRUE
+"Supplementary_Tables.xlsx [Table 6]","D:/SHMI_Yield/Outputs/Manuscript_work/SuppTable_N_scenarios.csv",TRUE

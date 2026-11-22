@@ -43,6 +43,12 @@ They are in the repository and used as they are. With `run_conversion = TRUE` an
 | `SHAPE/batch_Combined_scores.csv` | Output of the SHAPE app for `Outputs/SHAPE/SHAPE_multi_indicator_input.csv` | SHAPE app (run outside R) |
 | `worldclim/` | WorldClim 2.1 normals, downloaded by `A1d_Get_site_climate.R` on the first run | https://www.worldclim.org |
 
+## Part C: soil-health replicates
+
+| Path | What | Source |
+|---|---|---|
+| `napeshm/soildata.csv` | NAPESHM soil measurements for every field replicate (composite sample per plot), read by `C1k_ceiling.R` for the ceiling on explainable within-site variation | NAPESHM, https://doi.org/10.15482/USDA.ADC/25632270 |
+
 ## Part A0: NAPESHM workbook from the raw files (`run_napeshm_rebuild = TRUE`)
 
 Optional; everything it needs is in the repository. Uses the same `napeshm/` folder: `mgmtdata.csv` (the management event log), `treatments.csv` and `sites.csv`, with `NAPESHM_test.xlsx` as the template layout.

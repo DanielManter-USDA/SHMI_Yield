@@ -25,10 +25,10 @@ SETTINGS <- list(
                                 #     writes Outputs/NAPESHM_rebuilt.xlsx (before QC) to compare with the
                                 #     distributed copy, Inputs/NAPESHM_rebuilt.xlsx (after QC)
   # Part A
-  run_calibration     = FALSE,  # A1-A8 soil health model, SHMI calibration, benchmark, SHAPE (hours; frozen for the paper)
+  run_calibration     = FALSE,  # A1-A8 soil health model, SHMI calibration, benchmark, fixed-value grid, SHAPE (hours; frozen for the paper)
 
   # Part B (optional)
-  run_conversion      = FALSE,  # B0  AgCROS workbooks and soil C from the raw AgCROS tables (python). The tables
+  run_conversion      = FALSE,  # B0  AgCROS workbooks from the raw AgCROS tables (python). The tables
                                 #     are not redistributed here; if you have them, set agcros_tables to where you
                                 #     keep them. The paper used the snapshot exported 2026-04-21; a newer export
                                 #     can change the workbooks and results.
@@ -36,12 +36,10 @@ SETTINGS <- list(
   agcros_tables       = "Inputs/agcros",   # raw AgCROS tables (run_conversion only)
 
   # Part B
-  run_yield           = TRUE,   # B1-B5, B7-B8 yield analyses, figures and treatment table
-  run_weights         = TRUE,   # B5b yield slope with weights fitted between or within sites (reruns B2 three times)
+  run_yield           = TRUE,   # B1-B4, B8 yield analyses, figures and treatment table
   run_n_scenarios     = TRUE,   # B6  N-accounting sensitivity: 20 legume x manure scenarios (30-60 min)
-  run_coarse          = FALSE,   # B9  coarse-record test (hours)
-  run_record_length   = TRUE,   # B2c yield slope by length of record; its current-season score feeds B2d (Fig. 3b dropped 6 Nov 2026)
-  run_yield_parts     = TRUE,   # B2d yield: SHMI against its parts, Extended Data Fig. 4b (20-40 min)
+  run_record_length   = TRUE,   # B2c rolling (current-season) scores, used by B2d
+  run_yield_parts     = TRUE,   # B2d yield: SHMI against its parts, Table 2 (20-40 min)
 
   # Configuration
   in_session          = TRUE,  # TRUE: run each step in this R session instead of a fresh one
@@ -104,34 +102,30 @@ if (isTRUE(p$run_calibration)) {
   run_r("A1b_Prepare_SEM.R")
   run_r("A1c_soil_health_SEM.R")
   if (!file.exists("Outputs/site_climate_monthly.rds")) run_r("A1d_Get_site_climate.R")
-  # A2. the US soil health model applied to the Mexican sites (the independent test in A3a)
+  # A2. the US soil health model applied to the Mexican sites (read by A3a; not in the paper)
   run_r("A2c_Project_SH.R")
-  # A3. final calibration (Extended Data Fig. 2; Extended Data Table 1)
+  # A3. final calibration (weights, growing-season share; out-of-fold predictions)
   run_r("A3a_SHMI_calibration_plus.R")
-  run_r("A3b_calibration_report_figures.R")
-  # A4. benchmark (Supplementary Data Table 4) and Fig. 2
+  # A4. benchmark: out-of-fold R2 with the weights refitted in each fold (Fig. 1b, Results)
   run_r("A4a_SHMI_benchmark.R")
-  run_r("A4b_Fig2_soil_health.R")
-  # A5. weights by comparison (Supplementary Data Fig. 2)
+  # A5. fixed-value grid: Diversity weight, livestock and amendment shares (Methods, Supplementary Methods)
   run_r("A5a_Run_within_calibration_scenarios.R")
-  run_r("A5b_SuppFig2_weights_by_comparison.R")
-  # A6. SHAPE (Extended Data Fig. 3); the SHAPE app runs outside R
+  # A6. SHAPE (Table 2); the SHAPE app runs outside R
   run_r("A6a_Prepare_SHAPE.R")
   dir.create("Outputs/SHAPE", showWarnings = FALSE, recursive = TRUE)
   if (file.exists("Inputs/SHAPE/batch_Combined_scores.csv")) {
     file.copy("Inputs/SHAPE/batch_Combined_scores.csv", "Outputs/SHAPE/batch_Combined_scores.csv", overwrite = TRUE)
     run_r("A6b_Merge_SHAPE_SHMI.R")
-    run_r("A6c_SHMI_SHAPE_age.R")
   } else message("  SHAPE: run Outputs/SHAPE/SHAPE_multi_indicator_input.csv through the SHAPE app, put ",
                  "batch_Combined_scores.csv in Inputs/SHAPE/, then rerun.")
-  # A7-A8. climate source check (Methods); SEM loadings and adjustment slopes (Extended Data Fig. 1)
+  # A7-A8. climate source check (Supplementary Methods); SEM loadings for Fig. 1a
   run_r("A7_Check_climate_source.R")
   run_r("A8_Export_appendix_tables.R")
 }
 
 # ---- Part B: corn yield --------------------------------------------------------
-# B0. AgCROS workbooks and soil C, converted from the raw AgCROS tables only with
-# run_conversion = TRUE (both are shipped); NAPESHM crosswalk for the mediation test
+# B0. AgCROS workbooks, converted from the raw AgCROS tables only with
+# run_conversion = TRUE (the workbooks are shipped)
 TEMPLATE <- system.file("extdata", "SHMI_template.xlsx", package = "SHMI")
 if (!nzchar(TEMPLATE)) stop("SHMI_template.xlsx not found in the installed SHMI package (extdata)")
 WB <- "Inputs/yield_workbooks"
@@ -147,66 +141,42 @@ if (conv_needed(p)) {
        c("--supplement", "python/agcros2shmi/supplements/IAAM7071_covers.csv"), "B0_convert_added")   # IAAM7071 rye and clover (not in AgCROS)
 }
 dir.create("Outputs/yield", showWarnings = FALSE, recursive = TRUE)
-if (conv_needed(p) || !file.exists("Outputs/yield/soil_c.csv"))
-  run_py(PY, c("python/build_soil_c.py", p$agcros_tables, "Outputs/yield"), "B0_soil_c")
-# retired 11 Nov 2026 (R/archive; crosswalk used only by B5): run_r("B0_build_napeshm_crosswalk.R")
 
 if (isTRUE(p$run_yield)) {
   run_r("B1_Get_SPEI.R")                    # growing-season SPEI for every site-year
-  run_r("B2_SHMI_yield_main.R")             # Fig. 3a,c,d, Extended Data Fig. 4a, Supp. Data Table 1, Supp. Data Fig. 3
-  run_r("B2b_SHMI_soybean.R")               # soybean test, Supp. Data Fig. 1 (same experiments, scores and model; no N terms)
-  if (isTRUE(p$run_record_length)) run_r("B2c_SHMI_record_length.R")   # current-season score for B2d (no longer a figure)
-  if (isTRUE(p$run_yield_parts)) run_r("B2d_SHMI_yield_parts.R")       # Extended Data Fig. 4b (after B2c: current-season score)
-# retired 11 Nov 2026 (R/archive): run_r("B2e_SHMI_yield_adjustment.R")      # raw -> adjusted yield in three steps (talk/explainer figure; a few minutes)
-  run_r("B2f_SHMI_yield_paired_budget.R")   # how much of the yield record matched pairs can use vs SHMI (several minutes)
-# retired 11 Nov 2026 (R/archive): run_r("B2h_practice_pairs.R")
-  run_r("B3_SHMI_yield_stability.R")        # Fig. 4
-  run_r("B4_SHMI_N_equivalent.R")           # fertilizer-N equivalent (reruns B2 in its own session)
-# retired 11 Nov 2026 (R/archive): run_r("B5_SHMI_soil_mediation.R")         # Supp. Data Table 3 (reruns B2 in its own session)
+  run_r("B2_SHMI_yield_main.R")             # Figs 3 and 4, Supplementary Table 2
+  run_r("B2b_SHMI_soybean.R")               # soybean (Fig. 3a)
+  if (isTRUE(p$run_record_length)) run_r("B2c_SHMI_record_length.R")   # rolling (current-season) scores for B2d
+  if (isTRUE(p$run_yield_parts)) run_r("B2d_SHMI_yield_parts.R")       # Table 2, corn yield (after B2c)
+  run_r("B2i_SHMI_variance_shares.R")       # share of within-site SHMI variance from each part (Fig. 3b, Supplementary Table 2)
+  run_r("B3_SHMI_yield_stability.R")        # Fig. 4c
+  run_r("B4_SHMI_N_equivalent.R")           # fertilizer-N equivalent (reads B2_model.rds)
 }
-if (isTRUE(p$run_weights)) run_r("B5b_SHMI_yield_weights_sensitivity.R")   # Methods: weights by comparison
-if (isTRUE(p$run_n_scenarios)) run_r("B6_SHMI_N_scenarios.R")               # Methods: N accounting
+if (isTRUE(p$run_n_scenarios)) run_r("B6_SHMI_N_scenarios.R")               # Supplementary Table 6
 if (isTRUE(p$run_yield)) {
-# retired 11 Nov 2026 (R/archive): run_r("B2g_ED_Fig5a.R")                   # Extended Data Fig. 5a from B2, B2f and B6 results (seconds)
-  source(here::here("R", "figures", "run_figures.R"))   # Figs 3 and 4 (replaces B7, 11 Nov 2026)
   if (!is.na(PY)) {
     run_py(PY, c("python/build_study_treatments.py", "--wb-dir", "Inputs/yield_workbooks",
-                 "--units-dir", "Inputs/yield_workbooks", "--old", "data/SHMI_study_treatments_descriptions.xlsx",
+                 "--units-dir", "Inputs/yield_workbooks",
+                 "--old", "data/SHMI_study_treatments_descriptions.xlsx",
                  "--out", "Outputs/SHMI_study_treatments.xlsx"), "B8_study_treatments")
   } else message("  No python: treatment table (B8) not rebuilt")
-  run_r("B8b_study_treatments_with_yield.R")   # the treatment table with SHMI and mean corn/soybean yields (seconds)
-}
-if (isTRUE(p$run_coarse)) {
-  # B9. coarse records (Extended Data Fig. 5; Supp. Data Table 2); python writes the coarse
-  # workbooks only when they are not already in Outputs/Coarse/
-  run_r("B9_SHMI_coarse_records.R", vars = list(CFG_COARSE_OVERRIDE = list(python = if (is.na(PY)) "" else PY,
-                                                                        reuse_runs = FALSE)))
+  run_r("B8b_study_treatments_with_yield.R")   # Supplementary Table 3: every treatment, with SHMI and mean yields
 }
 
-# ---- Part C: display items into Outputs/Manuscript/numbered (seconds) --------------
-run_r("C1d_practice_additivity.R")  # practices in measured soil health (Fig. 1c); about a minute
-run_r("C1f_paired_data_budget.R")    # how much soil-health data matched pairs can use vs SHMI (about a minute)
-run_r("C1e_labels_vs_SHMI.R")       # practice labels vs SHMI at held-out sites (seconds)
-run_r("C1g_label_vs_SHMI.R")
-run_r("C1h_SHMI_vs_soil_health.R")
-run_r("C1_Fig1_and_Table1.R")       # Fig. 1, Table 1
-# retired 11 Nov 2026 (R/archive): run_r("C1b_ED_Fig2.R")              # Extended Data Fig. 2, from the saved calibration (Outputs/Final_plus)
-run_r("C1c_ED_Fig5.R")              # Extended Data Fig. 5, from the saved coarse-record results (Outputs/Coarse)
-# When Part A was not run, its drawing steps (seconds each) are rerun from the saved
-# Part A outputs, so every display item is current; a step whose input is missing is skipped
-if (!isTRUE(p$run_calibration)) {
-  REDRAW <- c("A4b_Fig2_soil_health.R"                = "Outputs/Final_plus/us_oof_predictions.csv",          # Fig. 2
-              "A6c_SHMI_SHAPE_age.R"                  = "Outputs/SHAPE/SHAPE_by_unit_with_SHMI.csv",          # Extended Data Fig. 3
-              "A5b_SuppFig2_weights_by_comparison.R"  = "Outputs/Calib_scenarios/scenario_summary.csv",       # Supplementary Data Fig. 2
-              "A8_Export_appendix_tables.R"           = "Outputs/sem_noMX_projection.rds")                    # Extended Data Fig. 1 loadings
-  if (!file.exists("Outputs/Benchmark/benchmark_summary.csv")) REDRAW <- REDRAW[names(REDRAW) != "A4b_Fig2_soil_health.R"]
-  for (s in names(REDRAW)) {
-    if (file.exists(REDRAW[[s]])) run_r(s) else message("  ", s, " skipped: ", REDRAW[[s]], " not found (run Part A)")
-  }
-}
-run_r("C2_export_tables.R")         # Extended Data Table 1, Supplementary Data Tables 1-4, Tables.xlsx
-run_r("C3_collect_figures.R")       # the other figures, under the paper's numbering; manifest.csv
-run_r("C4_bundle_for_review.R")      # one zip of every small results file, for checking the text
+# ---- Part C: soil-health analyses, figures and tables (minutes) -----------------
+run_r("C1_Fig1_path.R")             # Fig. 1b, the path diagram
+run_r("C1f_paired_data_budget.R")   # share of systems usable by strict single-practice pairs (Discussion)
+run_r("C1h_SHMI_vs_soil_health.R")  # Fig. 2; SHAPE
+run_r("C1j_SHMI_vs_parts.R")        # Table 2, soil-health columns
+run_r("C1k_ceiling.R")              # ceiling on explainable within-site variation (Results)
+run_r("C1l_rf_within.R")            # within-site random forests (Results, Supplementary Methods)
+# When Part A was not run, A8 (seconds) is rerun from the saved Part A outputs for Fig. 1a
+if (!isTRUE(p$run_calibration) && file.exists("Outputs/sem_noMX_projection.rds")) run_r("A8_Export_appendix_tables.R")
+run_r("C1m_supp_tables.R")          # Supplementary Tables 1, 4, 5 and 6
+source(here::here("R", "figures", "run_figures.R"))   # Figs 1-4 from the saved plot data and panels
+run_r("C2_export_tables.R")         # Tables 1-2, Supplementary Table 2
+run_r("C3_collect_figures.R")       # every display item under the paper's numbering; manifest_numbered.csv
+run_r("C4_bundle_for_review.R")     # one zip of every small results file, for checking the text
 
 # ---- checks ----------------------------------------------------------------------
 # a rerun of Part A must reproduce the weights frozen in the SHMI package

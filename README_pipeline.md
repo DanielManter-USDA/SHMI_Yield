@@ -20,7 +20,7 @@ The second line matters. The default live progress bar can be cleared by the scr
 | list what `tar_make()` would run, without running it | `targets::tar_outdated()` |
 | get the files a step wrote | `targets::tar_read(B2_main)` |
 | force one step to rerun | `targets::tar_invalidate(B3_stability)`, then `tar_make()` |
-| run one step and what it needs | `targets::tar_make(F5_fig)` |
+| run one step and what it needs | `targets::tar_make(F4_fig)` |
 
 Each step runs one script from `R/`. Its log goes to `Outputs/logs/<date-time>/<script>.log`, as with `run_all.R`.
 
@@ -37,19 +37,13 @@ Each step runs one script from `R/`. Its log goes to `Outputs/logs/<date-time>/<
 - **Accepting work that already finished.** If `tar_make()` stops after a step has written its files (for example, because of the progress-bar error), register that step without rerunning it:
 
   ```r
-  Sys.setenv(SHMI_KEEP = "B5b")   # script prefixes, comma-separated: "B4,B5b"
+  Sys.setenv(SHMI_KEEP = "B6")   # script prefixes, comma-separated: "B4,B6"
   targets::tar_make()
   Sys.unsetenv("SHMI_KEEP")
   ```
 
 - **Part A (the calibration) is frozen.** Its outputs are tracked as inputs. To recalibrate, use `run_all.R` with `run_calibration = TRUE`.
-- **B9 (the coarse-record test) takes hours.** It reruns only when forced: `Sys.setenv(SHMI_FORCE = "B9"); targets::tar_make()`. Otherwise its existing outputs are kept.
-- **Retired scripts are not run:**
-  - B2e (talk figure);
-  - B2g, B2h (practice pairs for yield);
-  - B5 (mediation) and B0, which builds the crosswalk only B5 uses;
-  - C1b;
-  - the A5b and A6c redraws.
+- **Only the analyses in the paper are run.** Scripts for analyses tried during the project but not in the paper (practice labels against SHMI, practice additivity, strict-pair meta-analysis, coarse records, weights fitted to yield comparisons, yield pairs) are not included in this version (they remain in the git history; local copies live in the git-ignored `R/archive/`).
 
 ## Speed settings (set before `tar_make()`)
 
@@ -75,4 +69,4 @@ Each step runs one script from `R/`. Its log goes to `Outputs/logs/<date-time>/<
 3. Write `R/figures/F<n>_<name>.R`, which reads with `read_pd()` or `read_panel()`, assembles with patchwork and saves with `save_fig(tag_fig(fig), ...)`.
 4. Add a script target `s_F<n>` and a `figure()` target in `_targets.R`, listing the analysis steps it reads, and add the figure to C3's numbering.
 
-Current figures (Nature Communications layout, 13 Nov 2026): F1 soil-health model (drawn from the SEM table), F2 system score, F3 practices, F4 components, F5 yield, F6 outcome-specific principles, F7 simplified records, S1 SHMI within labels. Text size for all figures is set once by `FONT_SCALE` in `fig_common.R`.
+Current figures (submission, 21 Nov 2026): F1 soil health and management as systems (a, the SEM, from A8; b, the path diagram, from C1), F2 SHMI against soil health (C1h), F3 corn and soybean yield and each experiment (B2, B2b), F4 the yield benefit with N, time and growing conditions (B2, B3). Text size for all figures is set once by `FONT_SCALE` in `fig_common.R`.

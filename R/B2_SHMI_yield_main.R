@@ -94,7 +94,7 @@ library(daymetr)
 
 setwd(here::here())                 # the project root (SHMI_Yield.Rproj)
 OUT   <- "Outputs/yield_main_default_total"     # this script's figures and tables
-# To rerun with other SHMI weights at the research sites (R/B5b_SHMI_yield_weights_sensitivity.R),
+# To rerun with other SHMI weights at the research sites (R/archive/B5b_SHMI_yield_weights_sensitivity.R; not in the paper),
 # set before sourcing: SHMI_WEIGHTS_OVERRIDE <- list(weights = c(Cover =, Diversity =, InvDist =),
 # growing_share = ) and OUT_OVERRIDE <- "<folder>".
 if (exists("OUT_OVERRIDE")) OUT <- OUT_OVERRIDE
@@ -277,7 +277,7 @@ run_site <- function(file, start, end, exclude = NULL, trt_regex, trt_parts,
   r
 }
 
-# Coarse-record test (R/B9_SHMI_coarse_records.R): with SCORE_WB_DIR_OVERRIDE set, SHMI is
+# Coarse-record test (R/archive/B9_SHMI_coarse_records.R; not in the paper): with SCORE_WB_DIR_OVERRIDE set, SHMI is
 # scored from the degraded copy of each workbook in that folder (same file name), while
 # yields, N, climate and everything else come from the full record (the cached full run).
 # Not part of SITE_CODE_HASH, so adding it leaves the full-record cache valid.

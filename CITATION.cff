@@ -1,0 +1,37 @@
+cff-version: 1.2.0
+message: "If you use this code or data, please cite the paper and this archive."
+title: "SHMI_Yield: analysis code and data for \"Scoring management as a system predicts soil health, an emergent property of agricultural soils\""
+version: 1.0.0
+license: CC0-1.0
+repository-code: "https://github.com/DanielManter-USDA/SHMI_Yield"
+authors:
+  - family-names: Moore
+    given-names: Jennifer M.
+    affiliation: "USDA-ARS, Forage Seed and Cereal Research, Corvallis, OR, USA"
+    orcid: "https://orcid.org/0000-0001-5403-8184"
+  - family-names: Manter
+    given-names: Daniel K.
+    affiliation: "USDA-ARS, Soil Management and Sugar Beet Research, Fort Collins, CO, USA"
+    orcid: "https://orcid.org/0000-0001-7729-7197"
+keywords:
+  - soil health
+  - management index
+  - corn yield
+  - long-term experiments
+  - NAPESHM
+references:
+  - type: software
+    title: "SHMI: Soil Health Management Index (R package), version 2.0.0"
+    doi: 10.5281/zenodo.23682170
+  - type: dataset
+    title: "North American Project to Evaluate Soil Health Measurements (NAPESHM)"
+    doi: 10.15482/USDA.ADC/25632270
+preferred-citation:
+  type: article
+  title: "Scoring management as a system predicts soil health, an emergent property of agricultural soils"
+  authors:
+    - family-names: Moore
+      given-names: Jennifer M.
+    - family-names: Manter
+      given-names: Daniel K.
+  status: submitted

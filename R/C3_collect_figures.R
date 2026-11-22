@@ -1,27 +1,21 @@
 ################################################################################
-# C3_collect_figures.R
+# C3_collect_figures.R  (21 Nov 2026: submission layout)
 #
-# 17 Nov 2026: Figs 1-5, Tables 1-3 (Table 4 is text), Supplementary Tables 1-3; no Supplementary Figs.
-# 16 Nov 2026: Figs 1-5 and Supplementary Figs 1-3 and Tables 1-6, numbered by first citation (see NUMBERED below).
 # Copies every display item from the folder of the step that makes it into
-# Outputs/Manuscript/numbered, under its number in the paper (manuscript v5,
-# 6 Nov 2026: items renumbered in order of first citation; 7 Nov 2026: Fig. 3 corn and
-# soybean, Fig. 4 SHMI x N, x age and the experiments, stability to Extended Data Fig. 5,
-# soybean Supplementary Fig. removed), with a manifest
+# Outputs/Manuscript/numbered, under its number in the paper, with a manifest
 # (manifest_numbered.csv: file, source, present). Only that folder is shared in git.
-# Fig. 1, Fig. 2, Table 1, Extended Data Figs 2 and 6 (written as ED_Fig2.png and
-# ED_Fig5.png), Extended Data Table 1 and the Supplementary Data Tables (written by C2
-# under their earlier numbers) are made by their own scripts in Outputs/Manuscript_work
-# (not shared); this script only copies them. Anything still written straight to
-# Outputs/Manuscript is moved to Outputs/Manuscript_work first.
-#
-# Extended Data Fig. 1 (the soil health model diagram) is drawn by hand from the SEM
-# loadings exported by A8 (Outputs/sem_noMX_standardized.csv), so the loadings file is
-# copied in its place.
+#   Figs 1-4     R/figures/F1-F4 (Outputs/figures)
+#   Tables 1-2   C2 (Outputs/Manuscript_work: ED_Table1.csv, Table2.csv)
+#   Supplementary Tables 1-6, combined into Supplementary_Tables.xlsx (one sheet per table,
+#   a Contents sheet with each title and its notes):
+#     1 NAPESHM sites (C1m), 2 the ten experiments (C2 from B2), 3 every treatment (B8, B8b),
+#     4 structural equation model (C1m from A1c), 5 commonality analysis (C1m),
+#     6 N-accounting alternatives (C1m from B6)
+# Anything still written straight to Outputs/Manuscript is moved to Outputs/Manuscript_work first.
 ################################################################################
 suppressPackageStartupMessages(library(dplyr))
 OUT  <- here::here("Outputs", "Manuscript")        # holds only numbered/ (shared in git)
-WORK <- here::here("Outputs", "Manuscript_work")   # where C1, C1b, C1c, A4b and C2 write their copies
+WORK <- here::here("Outputs", "Manuscript_work")   # where C1, C1m and C2 write their working copies
 O    <- function(...) here::here("Outputs", ...)
 MAIN <- "yield_main_default_total_agcros"
 FIGS <- "manuscript_figures_default_total_agcros"
@@ -35,47 +29,23 @@ if (length(loose)) {
   message("Moved ", length(loose), " file(s) from Outputs/Manuscript to Outputs/Manuscript_work")
 }
 
-# ---- the paper's current numbering (manuscript v5, 6 Nov 2026) --------------------------------
-# Display items were renumbered in order of first citation; the files above keep their
-# script names. This copies each one to Outputs/Manuscript/numbered/ under the number it
-# has in the paper, so what goes to the journal can be read off the file names.
+# ---- the paper's numbering (submission, 21 Nov 2026) -------------------------------------------
 NUM <- file.path(OUT, "numbered"); dir.create(NUM, showWarnings = FALSE)
 unlink(list.files(NUM, full.names = TRUE))   # start clean, so items renumbered or dropped leave no stale copies
 NUMBERED <- data.frame(stringsAsFactors = FALSE, rbind(
-  # 7 Nov 2026: three main figures (Nature 8-page budget). Fig. 1 merges old Figs 1b-d and 2a
-  # (C1); Fig. 2 = corn and soybean (B7 writes it as Fig3.png); Fig. 3 = N, age and the
-  # experiments (B7 writes it as Fig4.png). The path diagram and the validation scatterplots
-  # move to Extended Data, which is renumbered by first citation.
-  # 10 Nov 2026 layout: Fig. 1 SHMI and soil health; Fig. 2 label vs SHMI, data budget, parts
-  # (both from C1); Fig. 3 corn, soybean and good/bad years (B7's Fig3.png); Fig. 4 N, age and
-  # experiments (B7's Fig4.png). Extended Data: 1 SEM (drawn by hand; loadings), 2 practices do
-  # not add up (C1), 3 SHMI within label categories (C1g), 4 SHMI and SHAPE (C1h), 5 coarse records.
-  # 12 Nov 2026 (Nature Communications): six main figures, one per Results section, drawn by
-  # R/figures/F1-F6 from saved plot data and panels; the former Extended Data Figs 1-5 are now
-  # panels of Figs 1-3 and 6. Extended Data Table 1 keeps its file name until the
-  # Supplementary Information is renumbered.
-  # 16 Nov 2026: five main figures; the soil-health model (F1) and the principles by outcome
-  # (F6) move to the Supplementary Information. Supplementary Figs and Tables are numbered by
-  # first citation in the main text (tables: old 5 -> 3, old 6 -> 5, old 3 -> 6).
-  # 17 Nov 2026 (streamlined layout): Fig. 1 a SEM, b path diagram; Fig. 2 SHMI vs lv_SH (all,
-  # between, within); Fig. 3 corn and soybean, each experiment; Fig. 4 N, age, good and bad years;
-  # Fig. 5 simplified records. Table 2 SHMI against its parts (C1j + B2d), Table 3 practice
-  # effects from strict pairs (C1i + C1f). No Supplementary Figures. Supplementary Tables:
-  # 1 the ten experiments, 2 every treatment, 3 coarse-record scenarios.
-  c("Fig1.png",                  O("figures", "F1_soil_health_model.png")),  # SEM | path diagram
-  c("Fig2.png",                  O("figures", "F2_system_score.png")),       # SHMI vs soil health: all, between, within
-  c("Fig3.png",                  O("figures", "F3_yield.png")),              # corn and soybean | each experiment
-  c("Fig4.png",                  O("figures", "F4_yield_moderators.png")),   # N | age | good and bad years
-  c("Fig5.png",                  O("figures", "F5_records.png")),            # simplified records
-  # Table 1 = scores by system type (C2 still writes it as ED_Table1.csv); C1's example-systems
-  # Table1.csv left the paper on 17 Nov 2026 and is no longer copied.
-  c("Table1.csv",                file.path(WORK, "ED_Table1.csv")),          # scores by system type
-  c("Table2.csv",                file.path(WORK, "Table2.csv")),             # SHMI against its parts
-  c("Table3.csv",                file.path(WORK, "Table3.csv")),             # practice effects, strict pairs
-  # Supplementary Tables 1-3, staged here, then combined into one workbook below.
-  c("SuppTable1.csv",            file.path(WORK, "SuppTable1.csv")),                   # the ten experiments (B2)
-  c("SuppTable2.xlsx",           O("SHMI_study_treatments_with_yield.xlsx")),         # every treatment (B8, B8b)
-  c("SuppTable3.csv",            file.path(WORK, "SuppTable2.csv"))))                  # coarse-record scenarios (B9)
+  c("Fig1.png",        O("figures", "F1_soil_health_model.png")),  # a SEM | b path diagram
+  c("Fig2.png",        O("figures", "F2_system_score.png")),       # SHMI vs soil health: all, between, within
+  c("Fig3.png",        O("figures", "F3_yield.png")),              # corn and soybean | each experiment
+  c("Fig4.png",        O("figures", "F4_yield_moderators.png")),   # N | age | good and bad years
+  c("Table1.csv",      file.path(WORK, "ED_Table1.csv")),          # scores by system type (C2)
+  c("Table2.csv",      file.path(WORK, "Table2.csv")),             # SHMI against its parts (C2)
+  # Supplementary Tables 1-6, staged here, then combined into one workbook below
+  c("SuppTable1.csv",  file.path(WORK, "SuppTable_sites.csv")),            # NAPESHM sites (C1m)
+  c("SuppTable2.csv",  file.path(WORK, "SuppTable1.csv")),                 # the ten experiments (C2 from B2)
+  c("SuppTable3.xlsx", O("SHMI_study_treatments_with_yield.xlsx")),        # every treatment (B8, B8b)
+  c("SuppTable4.csv",  file.path(WORK, "SuppTable_sem.csv")),              # SEM (C1m from A1c)
+  c("SuppTable5.csv",  file.path(WORK, "SuppTable_commonality.csv")),      # commonality (C1m)
+  c("SuppTable6.csv",  file.path(WORK, "SuppTable_N_scenarios.csv"))))     # N accounting (C1m from B6)
 names(NUMBERED) <- c("file", "source")
 ok <- file.exists(NUMBERED$source)
 file.copy(NUMBERED$source[ok], file.path(NUM, NUMBERED$file[ok]), overwrite = TRUE, copy.date = TRUE)
@@ -86,25 +56,8 @@ for (f in file.path(NUM, NUMBERED$file[ok & grepl("\\.csv$", NUMBERED$file)])) {
   x <- readBin(f, "raw", file.size(f))
   if (length(x) < 3 || !identical(x[1:3], BOM)) writeBin(c(BOM, x), f)
 }
-# Extended Data Fig. 4 (9 Nov 2026): a = practice labels vs SHMI for soil health (C1e);
-# b = practice pairs for corn yield (B2h). Stacked here when both exist; else a alone.
-PAIRS_PNG <- O("yield_paired_budget", "Fig_practice_pairs.png")
-ED4_A     <- O("Practice_additivity", "Fig_labels_vs_SHMI.png")
-if (!exists("ED_PAIRS_PANEL")) ED_PAIRS_PANEL <- FALSE   # 10 Nov 2026: practice-pairs panel cut from the paper
-if (ED_PAIRS_PANEL && file.exists(PAIRS_PNG) && file.exists(ED4_A) && requireNamespace("magick", quietly = TRUE)) {
-  lab_ed <- function(img, letter) {
-    w <- magick::image_info(img)$width
-    img <- magick::image_append(c(magick::image_blank(w, 70, "white"), img), stack = TRUE)
-    magick::image_annotate(img, letter, size = 80, weight = 700, gravity = "northwest", location = "+15+0")
-  }
-  a  <- magick::image_read(ED4_A); b <- magick::image_read(PAIRS_PNG)
-  b  <- magick::image_scale(b, as.character(magick::image_info(a)$width))
-  ed4 <- magick::image_append(c(lab_ed(a, "a"), lab_ed(b, "b")), stack = TRUE)
-  magick::image_write(magick::image_background(ed4, "white"), file.path(NUM, "ED_Fig3.png"), format = "png", density = 300)
-  file.copy(O("yield_paired_budget", "practice_pairs_summary.csv"), file.path(NUM, "ED_Fig3b_practice_pairs.csv"), overwrite = TRUE)
-} else if (ED_PAIRS_PANEL && !file.exists(PAIRS_PNG)) message("Extended Data Fig. 4 without panel b: ", PAIRS_PNG, " not found (run B2h_practice_pairs.R)")
 NUMBERED$present <- file.exists(file.path(NUM, NUMBERED$file))
-# ---- Supplementary Tables 1-5 as one workbook (8 Nov 2026) ----------------------------------
+# ---- Supplementary Tables 1-6 as one workbook ------------------------------------------------
 # Nature takes Supplementary tables only as data files. The manuscript lists the five titles;
 # the tables go in numbered/Supplementary_Tables.xlsx, one sheet per table, with a Contents
 # sheet giving each title and its notes. Supplementary Table 1 also gets the corn-yield
@@ -112,15 +65,25 @@ NUMBERED$present <- file.exists(file.path(NUM, NUMBERED$file))
 # SHMI minus SHMI's, its range with each experiment left out, and the P of the score's slope.
 SUPP <- list(
   `Table 1` = c(
-    "Supplementary Table 1: The ten experiments and what drove their SHMI range.",
-    "Corn years, treatments and plots are those analysed (treatments with corn; rotation phases combined). N: fertilizer plus manure (total N) plus legume credit.",
-    "Share of SHMI spread: the share of each experiment's within-site SHMI variance from each part of SHMI (weight x Cover, Diversity and Inverse Disturbance, and the amendment bonus; cov(part, SHMI)/var(SHMI)); the four add to 100%, and a negative share means that part moved against SHMI. Experiments are ordered by their slope at 150 kg N ha-1, as in Fig. 3b. Slope: each experiment's own within-site model, averaged over its N rates and years."),
+    "Supplementary Table 1: The 74 NAPESHM sites used for SHMI and lv_SH.",
+    "Systems: NAPESHM treatments kept for SHMI and lv_SH (354 at 74 US sites), grouped as in the main-text Table 1. First treatment year: earliest treatment start among a site's systems; years under treatment: 2019 (NAPESHM sampling) minus that year. MAT, MAP: site mean annual temperature and precipitation from the NAPESHM site metadata.",
+    "Within-site contrasts: annual systems at the site differ in the NAPESHM treatment label for tillage, cover crops, rotation length or organic nutrient source; perennial vs annual: the site has both annual and perennial or reference systems. SHMI and lv_SH ranges: lowest-highest system value at the site."),
   `Table 2` = c(
-    "Supplementary Table 2: Every treatment in the ten experiments.",
-    "Description, SHMI and its parts (points from each sub-index = weight x sub-index), N, and mean corn and soybean yields, with notes on data corrections (IAAM7071 cover crops and harvest dates; INWLACRE 2004 planting dates). Further sheets of the treatment workbook follow as 'Table 2 ...'."),
+    "Supplementary Table 2: The ten long-term experiments used for the yield analysis.",
+    "Design and records: treatment structure and data sources. Years, treatments, plots and corn plot-years are those analysed (treatments with corn; rotation phases combined). N: fertilizer plus manure (total N) plus legume credit.",
+    "Share of SHMI spread: the share of each experiment's within-site SHMI variance from each part of SHMI (weight x Cover/Roots, Diversity and Inverse Disturbance, and the amendment bonus; cov(part, SHMI)/var(SHMI)); the four add to 100%, and a negative share means that part moved against SHMI. Experiments are ordered by their slope at 150 kg N ha⁻¹, as in Fig. 3b. Slope, experiment's own N and age: each experiment's own within-site model, averaged over its N rates and years. Slope at 150 kg N ha⁻¹ and the average age: the same model standardized with the pooled SHMI × N and SHMI × age coefficients, as plotted in Fig. 3b."),
   `Table 3` = c(
-    "Supplementary Table 3: Every coarse-record scenario and its results.",
-    "For each scenario, what was degraded, soil-health skill on the calibration's folds (correlation within sites, share of sites ranked in the right direction, correlation between site means, out-of-fold R2) and the within-site corn yield slope, as in Fig. 5."))
+    "Supplementary Table 3: Every treatment in the ten experiments.",
+    "Treatment design, SHMI and its sub-indices, and mean corn (grain dry matter) and soybean yields over the analysis period. Treatments that differ only in rotation phase are listed together. Treatments without corn (corn plot-years = 0) are not in the corn-yield analysis. Other factors: treatment factors SHMI does not score, entered as a covariate in the yield models. Full management records and the code that builds them are in the repository (Code availability)."),
+  `Table 4` = c(
+    "Supplementary Table 4: Structural equation model for soil health (lv_SH).",
+    "Estimates from the final model fitted to the 354 US NAPESHM systems (robust maximum likelihood, full-information maximum likelihood for missing values, standard errors clustered by site). Latent variances were fixed at 1; the two second-order loadings labelled a were constrained equal (likelihood-ratio test, P = 0.95). Standardized: completely standardized loadings; for residual covariances, the residual correlation. Indicators were adjusted for climate and texture and standardized before fitting (Methods)."),
+  `Table 5` = c(
+    "Supplementary Table 5: Commonality analysis of soil health (lv_SH) on the SHMI components.",
+    "Ordinary least-squares regression of lv_SH on Cover/Roots, Diversity, Inverse Disturbance and amendment frequency (share of years amended), across all 354 systems and within sites (lv_SH and every predictor centred on its site mean). Each part is a unique or shared contribution from Möbius inversion of the R² values of all 15 subset regressions; % of explained is the part divided by the full-model R². Negative parts indicate suppression between predictors."),
+  `Table 6` = c(
+    "Supplementary Table 6: Nitrogen-accounting alternatives for the corn-yield model.",
+    "Each row is the within-site corn-yield model refitted by maximum likelihood on the same 8,674 plot-years with N supply computed under one combination of legume credits and manure-N availability (Supplementary Methods). Mean N: mean N supply per corn plot-year. ΔAIC: difference from the best-fitting combination (default legume credits, manure N counted in full). SHMI slope at 150 kg N ha⁻¹ and the mean age. Models were fitted by maximum likelihood so that AICs are comparable; the SHMI slope for the selected accounting (204) therefore differs slightly from the REML estimate in the main text (208 kg ha⁻¹ per 10 points)."))
 # Readable column names for the tables B2 writes in raw form (Supplementary Tables 2 and 6)
 ci_txt <- function(x, lo, hi, d = 0) {
   r <- function(v) round(v, d) + 0   # + 0 turns -0 into 0
@@ -128,7 +91,7 @@ ci_txt <- function(x, lo, hi, d = 0) {
   ifelse(is.na(x), "", sprintf(paste0("%.", d, "f (%.", d, "f to %.", d, "f)"), x, lo, hi))
 }
 tidy_supp <- function(k, tab) {
-  if (k == 1 && all(c("site", "share_cover", "slope_adj") %in% names(tab))) {   # 17 Nov 2026: was Table 2
+  if (k == 2 && all(c("site", "share_cover", "slope_adj") %in% names(tab))) {   # the ten experiments (Supplementary Table 2)
     pct <- function(x) sprintf("%.0f", 100 * x)
     tab <- tab[order(tab$slope_adj, tab$site), ]     # 17 Nov 2026: Fig. 3b order (slope)
     tab <- data.frame(check.names = FALSE,

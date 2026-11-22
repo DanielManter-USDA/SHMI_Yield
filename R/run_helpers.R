@@ -127,8 +127,6 @@ python_needed <- function(p) {
   out <- character()
   if (isTRUE(p$run_napeshm_rebuild)) out <- c(out, "the NAPESHM workbook (A0)")
   if (conv_needed(p)) out <- c(out, "the AgCROS workbooks in Inputs/yield_workbooks (B0)")
-  if (!file.exists("Outputs/yield/soil_c.csv")) out <- c(out, "Outputs/yield/soil_c.csv (B0)")
-  if (isTRUE(p$run_coarse) && !dir.exists("Outputs/Coarse/napeshm")) out <- c(out, "the coarse-record workbooks (B9)")
   out
 }
 
@@ -151,17 +149,13 @@ required_inputs <- function(p) {
     c("Inputs/napeshm/plfa_ng.csv", "A1 NAPESHM PLFA", p$run_calibration),
     c("Inputs/SHAPE/batch_Combined_scores.csv", "A6 SHAPE app output (optional)", FALSE),
     # Part B
-    c(tab("meassoilchem.csv"), "B0 soil C (AgCROS)", conv_needed(p) || !file.exists("Outputs/yield/soil_c.csv")),
     c(tab("mgtplanting.csv"), "B0 AgCROS conversion", need_tables),
     c(tab("measyieldnutuptake.csv"), "B0 AgCROS conversion", need_tables),
     c("Inputs/yield_workbooks/SHMI_OHTVD_Ho.xlsx", "B2 Hoytville (hand-built from DRIVES)", p$run_yield),
     c("Inputs/yield_workbooks/SHMI_OHTVD_Wo.xlsx", "B2 Wooster (hand-built from DRIVES)", p$run_yield),
     c("Inputs/yield_workbooks/SHMI_WICST_ARS.xlsx", "B2 Arlington (hand-built from DRIVES)", p$run_yield),
     c("Inputs/climate/spei03.nc", "B1 SPEIbase 3-month SPEI (else data/cache/site_spei.csv)", p$run_yield && !file.exists("data/cache/site_spei.csv")),
-    c("Inputs/NAPESHM_rebuilt.xlsx", "B9 coarse records (NAPESHM)", isTRUE(p$run_coarse)),
-    c("Inputs/napeshm/treatments.csv", "B9 coarse records (irrigation)", isTRUE(p$run_coarse)),
-    c("Outputs/Final_plus/final_results.rds", "B9 coarse records (A3 output)", isTRUE(p$run_coarse) && !isTRUE(p$run_calibration)),
-    c("Outputs/site_climate_monthly.rds", "B9 coarse records (A1 output)", isTRUE(p$run_coarse) && !isTRUE(p$run_calibration)))
+    c("Inputs/napeshm/soildata.csv", "C1k ceiling (NAPESHM field replicates)", TRUE))
   rows <- c(rows, list(c(tab("metaunits.csv"), "B0 AgCROS conversion", need_tables)))
   if (!conv_needed(p)) {
     rows <- c(rows, lapply(conv, function(s) c(sprintf("Inputs/yield_workbooks/SHMI_%s.xlsx", s), "B2 converted workbook", p$run_yield)),
@@ -196,7 +190,6 @@ show_csv <- function(f, caption) {
 SEED_FILES <- c(
   "data/cache/nass_site_county_corn_yield.csv" = "Outputs/yield/nass_site_county_corn_yield.csv",  # NASS Quick Stats (no key needed)
   "data/cache/site_soils_ssurgo.csv"           = "Outputs/site_soils_ssurgo.csv",                  # gSSURGO soil groups
-  "data/soil_c.csv"                            = "Outputs/yield/soil_c.csv",                       # AgCROS soil C (derived)
   "data/SHAPE_by_unit_with_SHMI.csv"           = "Outputs/SHAPE/SHAPE_by_unit_with_SHMI.csv")      # SHAPE scores (A6 output)
 seed_outputs <- function(files = SEED_FILES) {
   done <- character()

@@ -10,7 +10,8 @@ SHMI study workbooks used by SHMI_yield_main.R, over each site's analysis period
 irrigation, other factors, notes) is reused for sites whose codes did not change
 (Ohio, WICST, NEMEIRR, NECCIRR). Counts and tillage passes are always recomputed.
 """
-import argparse, os, re, warnings
+import argparse
+import sys, os, re, warnings
 import pandas as pd
 
 warnings.filterwarnings("ignore")
@@ -172,7 +173,11 @@ def site_rows(site, cfg, wb_dir, units_dir, old):
 
 def describe(site, code, g, old):
     d = {}
-    if site in ("OHTVD_Ho", "OHTVD_Wo", "WICST_ARS", "NEMEIRR", "NECCIRR") and old is not None:
+    if site in ("OHTVD_Ho", "OHTVD_Wo", "WICST_ARS", "NEMEIRR", "NECCIRR"):
+        # hand-built (DRIVES) and supplemented sites: descriptions come only from --old
+        if old is None:
+            sys.exit("build_study_treatments.py: --old (data/SHMI_study_treatments_descriptions.xlsx) is needed "
+                     f"for the descriptions of {site}")
         o = old[(old.Site == site) & (old["Treatment code"] == code)]
         if len(o):
             o = o.iloc[0]
