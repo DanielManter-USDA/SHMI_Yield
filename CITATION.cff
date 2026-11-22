@@ -2,6 +2,7 @@ cff-version: 1.2.0
 message: "If you use this code or data, please cite the paper and this archive."
 title: "SHMI_Yield: analysis code and data for \"Scoring management as a system predicts soil health, an emergent property of agricultural soils\""
 version: 1.0.0
+doi: 10.5281/zenodo.24432549
 license: CC0-1.0
 repository-code: "https://github.com/DanielManter-USDA/SHMI_Yield"
 authors:

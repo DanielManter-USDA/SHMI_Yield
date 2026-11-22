@@ -1,5 +1,7 @@
 # SHMI_Yield
 
+[![DOI](https://zenodo.org/badge/1340463740.svg)](https://doi.org/10.5281/zenodo.24432549)
+
 Code and derived data for Moore & Manter, *Scoring management as a system predicts soil health, an emergent property of agricultural soils* (in review):
 
 - a structural equation model of soil health (lv_SH) from eleven indicators measured on 354 US management systems at 74 NAPESHM sites;
@@ -138,6 +140,8 @@ The raw AgCROS tables were used with permission and are not redistributed; the f
 
 Public domain (CC0 1.0; see `LICENSE.md`). The derived data keep the terms of their sources (NAPESHM, DRIVES, AgCROS, USDA-NASS, WorldClim, Daymet, SPEIbase).
 
-If you use this code or data, please cite the paper and this archive (`CITATION.cff`):
+If you use this code or data, please cite the paper and this archive (`CITATION.cff`). Archived versions: https://doi.org/10.5281/zenodo.24432549 (all versions).
 
 Moore JM, Manter DK. Scoring management as a system predicts soil health, an emergent property of agricultural soils. (in review)
+
+Moore JM, Manter DK. SHMI_Yield: analysis code and data. Zenodo. https://doi.org/10.5281/zenodo.24432549
