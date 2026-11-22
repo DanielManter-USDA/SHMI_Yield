@@ -5,14 +5,14 @@
   "description": "Code and derived data reproducing the analyses in Moore and Manter (in review): the soil-health structural equation model, calibration and leave-site-out cross-validation of the Soil Health Management Index (SHMI) on 354 US systems at 74 NAPESHM sites, comparisons of SHMI with its single-practice parts (lv_SH and SHAPE), the path model and commonality analysis, the replicate-based ceiling on explainable within-site variation and the within-site random-forest benchmark, the within-site corn and soybean yield analyses at ten long-term experiments (DRIVES and AgCROS), nitrogen, time and growing-condition tests, and all figures, tables and supplementary tables. Includes the SHMI workbooks for all experiments, cached public downloads (NASS, WorldClim, Daymet, SPEI), the rules and code that convert AgCROS tables to SHMI workbooks, and a targets pipeline that reruns the analyses. Raw AgCROS tables are not redistributed. Scores are computed with the SHMI R package, version 2.0.0.",
   "creators": [
     {
-      "name": "Moore, Jennifer M.",
-      "affiliation": "USDA-ARS, Forage Seed and Cereal Research, Corvallis, OR, USA",
-      "orcid": "0000-0001-5403-8184"
-    },
-    {
       "name": "Manter, Daniel K.",
       "affiliation": "USDA-ARS, Soil Management and Sugar Beet Research, Fort Collins, CO, USA",
       "orcid": "0000-0001-7729-7197"
+    },
+    {
+      "name": "Moore, Jennifer M.",
+      "affiliation": "USDA-ARS, Forage Seed and Cereal Research, Corvallis, OR, USA",
+      "orcid": "0000-0001-5403-8184"
     }
   ],
   "license": "cc0-1.0",

@@ -6,14 +6,14 @@ doi: 10.5281/zenodo.24432549
 license: CC0-1.0
 repository-code: "https://github.com/DanielManter-USDA/SHMI_Yield"
 authors:
-  - family-names: Moore
-    given-names: Jennifer M.
-    affiliation: "USDA-ARS, Forage Seed and Cereal Research, Corvallis, OR, USA"
-    orcid: "https://orcid.org/0000-0001-5403-8184"
   - family-names: Manter
     given-names: Daniel K.
     affiliation: "USDA-ARS, Soil Management and Sugar Beet Research, Fort Collins, CO, USA"
     orcid: "https://orcid.org/0000-0001-7729-7197"
+  - family-names: Moore
+    given-names: Jennifer M.
+    affiliation: "USDA-ARS, Forage Seed and Cereal Research, Corvallis, OR, USA"
+    orcid: "https://orcid.org/0000-0001-5403-8184"
 keywords:
   - soil health
   - management index
